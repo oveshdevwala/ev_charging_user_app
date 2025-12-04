@@ -153,3 +153,4 @@ This is a commercial template. Please refer to the license included with your pu
 ---
 
 Built with ❤️ using Flutter
+# ev_charging_user_app
