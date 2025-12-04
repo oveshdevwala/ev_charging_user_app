@@ -1,0 +1,142 @@
+/// File: lib/features/home/bloc/home_cubit.dart
+/// Purpose: Home page Cubit for managing all home screen data
+/// Belongs To: home feature
+/// Customization Guide:
+///    - Add new methods for additional section interactions
+///    - All async operations should handle errors properly
+library;
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../repositories/home_repository.dart';
+import '../../../repositories/station_repository.dart';
+import 'home_state.dart';
+
+/// Home page Cubit managing all section data.
+class HomeCubit extends Cubit<HomeState> {
+  HomeCubit({
+    required HomeRepository homeRepository,
+    required StationRepository stationRepository,
+  })  : _homeRepository = homeRepository,
+        _stationRepository = stationRepository,
+        super(HomeState.initial());
+
+  final HomeRepository _homeRepository;
+  final StationRepository _stationRepository;
+
+  /// Load all home data.
+  Future<void> loadHomeData({
+    double latitude = 37.7749,
+    double longitude = -122.4194,
+  }) async {
+    emit(state.copyWith(isLoading: true, error: null));
+
+    try {
+      // Fetch all data in parallel
+      final stationsFuture = _homeRepository.fetchNearbyStations(
+        latitude: latitude,
+        longitude: longitude,
+      );
+      final routesFuture = _homeRepository.fetchSavedRoutes();
+      final offersFuture = _homeRepository.fetchOffers();
+      final bundlesFuture = _homeRepository.fetchBundles();
+      final summaryFuture = _homeRepository.fetchActivitySummary();
+
+      final stations = await stationsFuture;
+      final routes = await routesFuture;
+      final offers = await offersFuture;
+      final bundles = await bundlesFuture;
+      final summary = await summaryFuture;
+
+      emit(state.copyWith(
+        isLoading: false,
+        nearbyStations: stations,
+        savedRoutes: routes,
+        offers: offers,
+        bundles: bundles,
+        activitySummary: summary,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      ));
+    }
+  }
+
+  /// Refresh all home data.
+  Future<void> refreshHomeData({
+    double latitude = 37.7749,
+    double longitude = -122.4194,
+  }) async {
+    emit(state.copyWith(isRefreshing: true, error: null));
+
+    try {
+      final stationsFuture = _homeRepository.fetchNearbyStations(
+        latitude: latitude,
+        longitude: longitude,
+      );
+      final routesFuture = _homeRepository.fetchSavedRoutes();
+      final offersFuture = _homeRepository.fetchOffers();
+      final bundlesFuture = _homeRepository.fetchBundles();
+      final summaryFuture = _homeRepository.fetchActivitySummary();
+
+      final stations = await stationsFuture;
+      final routes = await routesFuture;
+      final offers = await offersFuture;
+      final bundles = await bundlesFuture;
+      final summary = await summaryFuture;
+
+      emit(state.copyWith(
+        isRefreshing: false,
+        nearbyStations: stations,
+        savedRoutes: routes,
+        offers: offers,
+        bundles: bundles,
+        activitySummary: summary,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        isRefreshing: false,
+        error: e.toString(),
+      ));
+    }
+  }
+
+  /// Select an offer.
+  void selectOffer(String offerId) {
+    emit(state.copyWith(selectedOfferId: offerId));
+  }
+
+  /// Select a station.
+  void selectStation(String stationId) {
+    emit(state.copyWith(selectedStationId: stationId));
+  }
+
+  /// Toggle favorite for a station.
+  Future<void> toggleFavorite(String stationId) async {
+    await _stationRepository.toggleFavorite(stationId);
+
+    final updatedStations = state.nearbyStations.map((station) {
+      if (station.id == stationId) {
+        return station.copyWith(isFavorite: !station.isFavorite);
+      }
+      return station;
+    }).toList();
+
+    emit(state.copyWith(nearbyStations: updatedStations));
+  }
+
+  /// Clear selection.
+  void clearSelection() {
+    emit(state.copyWith(
+      selectedOfferId: null,
+      selectedStationId: null,
+    ));
+  }
+
+  /// Clear error.
+  void clearError() {
+    emit(state.copyWith(error: null));
+  }
+}

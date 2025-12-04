@@ -1,0 +1,303 @@
+# ===============================
+# EV CHARGING USER APP .cursorrules
+# ===============================
+
+# Project: EV Charging Flutter User App Template
+# Description: Flutter user app template using MVVM + BLoC + go_router + ScreenUtil + sqflite + Localization.
+
+# ===============================
+# ARCHITECTURE GOALS
+# ===============================
+
+# Build a clean, production-ready Flutter User App with:
+# - Flutter (Clean Architecture, MVVM + BLoC Single-State pattern)
+# - go_router (typed routing with AppRoutes enum)
+# - flutter_screenutil (responsive UI)
+# - sqflite (optional local cache)
+# - intl + ARB (localization)
+# - Barrel file exports everywhere
+# - App-wide constants — NO hard-coded strings/paths
+# - Reusable widgets, utils, wrappers
+
+# ===============================
+# PROJECT STRUCTURE
+# ===============================
+
+# Always follow this structure:
+# 
+# lib/
+#   core/
+#     constants/        # strings, assets, api paths
+#     theme/            # theme + manager (separate light/dark files)
+#     extensions/       # context, string, date, num extensions
+#     utils/            # helpers, validators
+#     local_db/         # sqflite helper
+#     di/               # dependency injection (GetIt)
+#   models/             # data models with copyWith + Equatable
+#   repositories/       # repository interfaces + dummy implementations
+#   routes/             # go_router setup with AppRoutes enum
+#   widgets/            # reusable components
+#   features/
+#     user_app/
+#       ui/
+#         pages/        # all screens
+#       bloc/           # bloc/cubit classes
+#       viewmodels/     # view models if needed
+#   l10n/               # ARB files
+#   bootstrap.dart      # initialization
+#   main.dart           # entry point
+#
+# Generate barrel files for every folder.
+
+# ===============================
+# BLoC RULES
+# ===============================
+
+# Single-state classes ONLY:
+# - Must extend Equatable
+# - Must include copyWith() method
+# - NO business logic inside UI
+# - Bloc does not hold mutable collections
+# - Always initialize state in constructor
+# - Handle error and loading states explicitly
+
+# Example state structure:
+# class XState extends Equatable {
+#   final bool isLoading;
+#   final List<Item> items;
+#   final String? error;
+#
+#   const XState({
+#     this.isLoading = false,
+#     this.items = const [],
+#     this.error,
+#   });
+#
+#   XState copyWith({...}) => XState(...);
+#
+#   @override
+#   List<Object?> get props => [isLoading, items, error];
+# }
+
+# ===============================
+# ROUTING RULES
+# ===============================
+
+# All routes defined via enum → typed path extension:
+# 
+# enum AppRoutes { splash, login, userHome, stationDetails, ... }
+# 
+# extension AppRoutePath on AppRoutes {
+#   String get path => '/$name';
+#   String id(String value) => '$path/$value';
+# }
+#
+# Usage:
+# context.go(AppRoutes.userHome.path);
+# context.push(AppRoutes.stationDetails.id(station.id));
+#
+# NEVER type route strings manually.
+# ALWAYS navigate using AppRoutes enum extension.
+
+# ===============================
+# LOCALIZATION RULES
+# ===============================
+
+# Add ANY user-visible string to:
+# - /core/constants/app_strings.dart
+# - /l10n/*.arb
+#
+# NEVER write any literal text into UI widgets.
+
+# ===============================
+# UI/UX RULES
+# ===============================
+
+# Use ScreenUtil sizing ONLY:
+# - Text: fontSize: 14.sp
+# - Width: width: 100.w
+# - Height: height: 50.h
+# - Radius/Padding: 16.r
+#
+# Icons not too small (min 20.r)
+# No text smaller than 12.sp
+# Buttons must follow tap target ≥ 48.h
+# Clean modern UI using reusable widgets only
+# No padding/margin hardcoded → make them params
+
+# ===============================
+# THEME ARCHITECTURE
+# ===============================
+
+# Inside lib/core/theme/ use separate files:
+# - app_theme.dart      → wraps light/dark
+# - light_theme.dart    → ThemeData.light()
+# - dark_theme.dart     → ThemeData.dark()
+# - theme_manager.dart  → handles switching + persistence
+# - app_colors.dart     → color palette
+# - app_text_styles.dart → typography system
+#
+# Never put ThemeData inside a single big file.
+# Use ScreenUtil for text sizing inside text styles.
+# All theme values configurable via constants (no hard-coded hex in widgets).
+
+# ===============================
+# CONTEXT EXTENSIONS
+# ===============================
+
+# Use context extensions instead of direct calls:
+#
+# Theme:
+# - context.theme → Theme.of(context)
+# - context.colors → theme.colorScheme
+# - context.text → theme.textTheme
+# - context.isDark → brightness check
+#
+# Navigation:
+# - context.goTo(AppRoutes.xxx)
+# - context.pushTo(AppRoutes.xxx)
+# - context.pushToWithId(AppRoutes.xxx, id)
+#
+# Sizing:
+# - context.w(8) → 8.w
+# - context.h(8) → 8.h
+# - context.sp(14) → 14.sp
+# - context.r(12) → 12.r
+
+# ===============================
+# REPOSITORY RULES
+# ===============================
+
+# Create interface first, then dummy implementation:
+# - Dummy implementation returns dummy model lists
+# - Later backend can replace easily (Envato requirement)
+# - Repos must NOT contain Flutter imports (pure Dart)
+
+# ===============================
+# REUSABLE WIDGET RULES
+# ===============================
+
+# All screens must use reusable components:
+# - CommonButton (filled, outlined, text, tonal)
+# - AppAppBar
+# - CommonTextField
+# - LoadingWrapper
+# - EmptyStateWidget
+# - StationCard
+# - BookingCard
+#
+# Each customizable via params.
+
+# ===============================
+# DOCUMENTATION REQUIREMENTS
+# ===============================
+
+# Every file must contain:
+# /// File: path/to/file.dart
+# /// Purpose: ...
+# /// Belongs To: user_app / shared
+# /// Route: ... (if applicable)
+# /// Customization Guide:
+# ///    - How to change X
+# ///    - How to change Y
+#
+# Add inline comments for non-obvious logic.
+
+# ===============================
+# SQFLITE RULES
+# ===============================
+
+# Use sqflite only through /core/local_db/sqflite_helper.dart
+# Caching flow:
+# 1. Fetch from local if exists
+# 2. Otherwise fetch from dummy repository
+# 3. Cache result
+
+# ===============================
+# CURSOR RULES - AUTOMATED CHECKS
+# ===============================
+
+# enforce-project-structure:
+#   Ensure correct folder modules.
+
+# require-copywith:
+#   Every State class must include copyWith and Equatable.
+#   Pattern: class\s+\w+State(?![\s\S]*copyWith)
+
+# require-equatable:
+#   All state classes must extend Equatable.
+#   Pattern: class\s+\w+State(?![\s\S]*extends\s+Equatable)
+
+# no-hardcoded-strings:
+#   Block writing string literals longer than 3 words in UI code.
+#   Use AppStrings or localization.
+
+# enforce-routing:
+#   Every new screen must have AppRoutes enum entry.
+
+# enforce-barrel-exports:
+#   Every folder must have a barrel export file.
+
+# enforce-screenutil:
+#   UI must use ScreenUtil for sizing.
+#   Pattern: (padding|margin|height|width|fontSize):\s*\d+
+#   Use .h/.w/.sp/.r instead.
+
+# ===============================
+# WHEN CREATING NEW SCREEN/FEATURE
+# ===============================
+
+# Cursor must automatically:
+# 1. Create UI page in features/user_app/ui/pages/
+# 2. Create Bloc (state/event) if needed
+# 3. Add Repository methods (dummy)
+# 4. Add Routes (enum + GoRoute)
+# 5. Update barrel file exports
+# 6. Add Localization strings
+# 7. Add file-level documentation
+# 8. Follow all architecture rules
+
+# ===============================
+# WHEN MODIFYING EXISTING FEATURE
+# ===============================
+
+# Cursor must:
+# - Only modify specific requested logic
+# - Preserve architecture rules
+# - Never remove routing / localization
+# - Never use hard-coded strings
+# - Maintain documentation
+
+# ===============================
+# NEVER DO
+# ===============================
+
+# - Never hardcode text in UI
+# - Never use magic numbers
+# - Never create widget without params
+# - Never skip documentation
+# - Never break MVVM/BLoC separation
+# - Never use setState for business logic
+# - Never use Theme.of(context) directly (use extensions)
+# - Never use MediaQuery.of(context) directly (use extensions)
+# - Never type raw route strings
+
+# ===============================
+# ALWAYS DO
+# ===============================
+
+# - Use AppRoutes.pageName for navigation
+# - Use context extensions for theme/navigation/sizing
+# - Use ScreenUtil (.sp, .h, .w, .r) for all sizing
+# - Use AppStrings for all text
+# - Use AppColors for all colors
+# - Create reusable widgets with parameters
+# - Add barrel file exports
+# - Document all files and methods
+# - Use Equatable + copyWith for states
+# - Keep UI code clean (no business logic)
+
+# ===============================
+# END OF RULES
+# ===============================
+

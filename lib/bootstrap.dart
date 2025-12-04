@@ -1,0 +1,49 @@
+/// File: lib/bootstrap.dart
+/// Purpose: App initialization and bootstrap logic
+/// Belongs To: shared
+/// Customization Guide:
+///    - Add additional initialization steps here
+///    - Configure error handling and logging
+
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'core/di/injection.dart';
+import 'core/utils/helpers.dart';
+
+/// Bootstrap the application.
+/// This function handles all initialization before runApp().
+Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+  // Ensure Flutter bindings are initialized
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Set preferred orientations
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  
+  // Set system UI overlay style
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
+  
+  // Initialize dependencies
+  await initializeDependencies();
+  
+  // Setup error handling
+  FlutterError.onError = (details) {
+    logError('Flutter Error', details.exception, details.stack);
+  };
+  
+  // Run the app
+  runApp(await builder());
+}
+

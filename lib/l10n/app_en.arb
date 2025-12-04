@@ -1,0 +1,307 @@
+{
+  "@@locale": "en",
+  "appName": "EV Charging",
+  "@appName": {
+    "description": "The name of the application"
+  },
+  "appTagline": "Power Your Journey",
+  
+  "ok": "OK",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "done": "Done",
+  "next": "Next",
+  "back": "Back",
+  "skip": "Skip",
+  "retry": "Retry",
+  "submit": "Submit",
+  "search": "Search",
+  "filter": "Filter",
+  "sort": "Sort",
+  "refresh": "Refresh",
+  "loading": "Loading...",
+  "seeAll": "See All",
+  "viewDetails": "View Details",
+  
+  "login": "Login",
+  "logout": "Logout",
+  "signUp": "Sign Up",
+  "signIn": "Sign In",
+  "forgotPassword": "Forgot Password?",
+  "resetPassword": "Reset Password",
+  "createAccount": "Create Account",
+  "email": "Email",
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
+  "fullName": "Full Name",
+  "phoneNumber": "Phone Number",
+  "rememberMe": "Remember Me",
+  "orContinueWith": "Or continue with",
+  "alreadyHaveAccount": "Already have an account?",
+  "dontHaveAccount": "Don't have an account?",
+  "welcomeBack": "Welcome Back!",
+  "createYourAccount": "Create your account",
+  "enterEmailToReset": "Enter your email to reset password",
+  
+  "home": "Home",
+  "nearbyStations": "Nearby Stations",
+  "findChargingStation": "Find Charging Station",
+  "searchForStations": "Search for stations...",
+  "favorites": "Favorites",
+  "myBookings": "My Bookings",
+  "profile": "Profile",
+  "settings": "Settings",
+  "notifications": "Notifications",
+  "history": "History",
+  "wallet": "Wallet",
+  "helpSupport": "Help & Support",
+  "aboutUs": "About Us",
+  "termsConditions": "Terms & Conditions",
+  "privacyPolicy": "Privacy Policy",
+  
+  "stationDetails": "Station Details",
+  "available": "Available",
+  "occupied": "Occupied",
+  "offline": "Offline",
+  "distance": "Distance",
+  "rating": "Rating",
+  "reviews": "Reviews",
+  "amenities": "Amenities",
+  "chargerTypes": "Charger Types",
+  "pricePerKwh": "Price per kWh",
+  "operatingHours": "Operating Hours",
+  "getDirections": "Get Directions",
+  "bookNow": "Book Now",
+  "addToFavorites": "Add to Favorites",
+  "removeFromFavorites": "Remove from Favorites",
+  
+  "selectCharger": "Select Charger",
+  "selectTimeSlot": "Select Time Slot",
+  "bookingConfirmation": "Booking Confirmation",
+  "bookingDetails": "Booking Details",
+  "bookingSuccessful": "Booking Successful!",
+  "bookingFailed": "Booking Failed",
+  "upcomingBookings": "Upcoming Bookings",
+  "pastBookings": "Past Bookings",
+  "cancelBooking": "Cancel Booking",
+  "startCharging": "Start Charging",
+  "stopCharging": "Stop Charging",
+  "chargingInProgress": "Charging in Progress",
+  "chargingComplete": "Charging Complete",
+  "estimatedTime": "Estimated Time",
+  "totalCost": "Total Cost",
+  "payNow": "Pay Now",
+  
+  "errorOccurred": "An error occurred",
+  "networkError": "Network error. Please check your connection.",
+  "serverError": "Server error. Please try again later.",
+  "sessionExpired": "Session expired. Please login again.",
+  "invalidCredentials": "Invalid email or password",
+  "emailRequired": "Email is required",
+  "passwordRequired": "Password is required",
+  "invalidEmail": "Please enter a valid email",
+  "passwordTooShort": "Password must be at least 8 characters",
+  "noDataFound": "No data found",
+  "noStationsFound": "No stations found",
+  "noBookingsFound": "No bookings found",
+  
+  "noFavorites": "No favorites yet",
+  "noNotifications": "No notifications",
+  "noReviews": "No reviews yet",
+  
+  "profileUpdated": "Profile updated successfully",
+  "passwordChanged": "Password changed successfully",
+  "bookingCancelled": "Booking cancelled successfully",
+  "paymentSuccessful": "Payment successful",
+  
+  "splash_appTitle": "EV Charge",
+  "@splash_appTitle": {
+    "description": "App title shown on splash screen"
+  },
+  "splash_loading": "Loading...",
+  "@splash_loading": {
+    "description": "Loading text on splash screen"
+  },
+  
+  "onb_title_1": "Find chargers fast",
+  "@onb_title_1": {
+    "description": "First onboarding page title"
+  },
+  "onb_desc_1": "Locate reliable charging stations near you in seconds.",
+  "@onb_desc_1": {
+    "description": "First onboarding page description"
+  },
+  "onb_title_2": "Reserve & Pay",
+  "@onb_title_2": {
+    "description": "Second onboarding page title"
+  },
+  "onb_desc_2": "Book charging slots and pay securely inside the app.",
+  "@onb_desc_2": {
+    "description": "Second onboarding page description"
+  },
+  "onb_title_3": "Manage Stations",
+  "@onb_title_3": {
+    "description": "Third onboarding page title"
+  },
+  "onb_desc_3": "Track usage, earnings and manage your station with ease.",
+  "@onb_desc_3": {
+    "description": "Third onboarding page description"
+  },
+  "onb_cta_getStarted": "Get Started",
+  "@onb_cta_getStarted": {
+    "description": "Get started button text on last onboarding page"
+  },
+  "onb_cta_next": "Next",
+  "@onb_cta_next": {
+    "description": "Next button text on onboarding pages"
+  },
+  "onb_cta_skip": "Skip",
+  "@onb_cta_skip": {
+    "description": "Skip button text on onboarding pages"
+  },
+  
+  "tripPlannerTitle": "Trip Planner",
+  "@tripPlannerTitle": {
+    "description": "Title for trip planner section on home screen"
+  },
+  "tripPlannerCta": "Plan a Trip",
+  "@tripPlannerCta": {
+    "description": "CTA button text for trip planner"
+  },
+  "bundlesTitle": "Value Packs",
+  "@bundlesTitle": {
+    "description": "Title for bundles section on home screen"
+  },
+  "offersTitle": "Offers & Rewards",
+  "@offersTitle": {
+    "description": "Title for offers carousel section"
+  },
+  "activityTitle": "Your Activity",
+  "@activityTitle": {
+    "description": "Title for activity summary section"
+  },
+  "categoriesTitle": "Quick Actions",
+  "@categoriesTitle": {
+    "description": "Title for categories grid section"
+  },
+  
+  "activitySessionsToday": "Sessions Today",
+  "@activitySessionsToday": {
+    "description": "Label for today's charging sessions stat"
+  },
+  "activityEnergy": "Energy Used",
+  "@activityEnergy": {
+    "description": "Label for energy used stat"
+  },
+  "activitySpent": "Spent Today",
+  "@activitySpent": {
+    "description": "Label for money spent stat"
+  },
+  "activityCo2Saved": "CO₂ Saved",
+  "@activityCo2Saved": {
+    "description": "Label for CO2 saved stat"
+  },
+  
+  "categoryFind": "Find Charger",
+  "@categoryFind": {
+    "description": "Label for find charger category button"
+  },
+  "categoryBook": "Book Slot",
+  "@categoryBook": {
+    "description": "Label for book slot category button"
+  },
+  "categoryBookings": "My Bookings",
+  "@categoryBookings": {
+    "description": "Label for my bookings category button"
+  },
+  "categoryVehicles": "My Vehicles",
+  "@categoryVehicles": {
+    "description": "Label for my vehicles category button"
+  },
+  "categoryHistory": "History",
+  "@categoryHistory": {
+    "description": "Label for charging history category button"
+  },
+  "categorySupport": "Support",
+  "@categorySupport": {
+    "description": "Label for support category button"
+  },
+  
+  "bundle_unlimited_title": "Unlimited",
+  "@bundle_unlimited_title": {
+    "description": "Title for unlimited charging bundle"
+  },
+  "bundle_unlimited_desc": "Charge unlimited with priority access",
+  "@bundle_unlimited_desc": {
+    "description": "Description for unlimited charging bundle"
+  },
+  "bundle_saver_title": "Monthly Saver",
+  "@bundle_saver_title": {
+    "description": "Title for monthly saver bundle"
+  },
+  "bundle_saver_desc": "200 kWh included monthly",
+  "@bundle_saver_desc": {
+    "description": "Description for monthly saver bundle"
+  },
+  "bundle_home_title": "Home Setup",
+  "@bundle_home_title": {
+    "description": "Title for home charging setup bundle"
+  },
+  "bundle_home_desc": "Complete home charger setup",
+  "@bundle_home_desc": {
+    "description": "Description for home charging setup bundle"
+  },
+  "bundle_business_title": "Business",
+  "@bundle_business_title": {
+    "description": "Title for business bundle"
+  },
+  "bundle_business_desc": "Fleet management solution",
+  "@bundle_business_desc": {
+    "description": "Description for business bundle"
+  },
+  "bundle_badge_best_value": "Best Value",
+  "@bundle_badge_best_value": {
+    "description": "Badge text for best value bundle"
+  },
+  "bundle_badge_popular": "Popular",
+  "@bundle_badge_popular": {
+    "description": "Badge text for popular bundle"
+  },
+  
+  "offer_flash_sale_title": "Flash Sale",
+  "@offer_flash_sale_title": {
+    "description": "Title for flash sale offer"
+  },
+  "offer_flash_sale_desc": "Limited time only! Charge now and save.",
+  "@offer_flash_sale_desc": {
+    "description": "Description for flash sale offer"
+  },
+  "offer_cashback_title": "Cashback",
+  "@offer_cashback_title": {
+    "description": "Title for cashback offer"
+  },
+  "offer_cashback_desc": "Earn cashback on every charging session.",
+  "@offer_cashback_desc": {
+    "description": "Description for cashback offer"
+  },
+  "offer_partner_title": "Partner Deal",
+  "@offer_partner_title": {
+    "description": "Title for partner offer"
+  },
+  "offer_partner_desc": "Special rates at partner locations.",
+  "@offer_partner_desc": {
+    "description": "Description for partner offer"
+  },
+  "offer_seasonal_title": "Seasonal Special",
+  "@offer_seasonal_title": {
+    "description": "Title for seasonal offer"
+  },
+  "offer_seasonal_desc": "Celebrate the season with savings!",
+  "@offer_seasonal_desc": {
+    "description": "Description for seasonal offer"
+  }
+}
+

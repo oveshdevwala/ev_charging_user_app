@@ -1,0 +1,66 @@
+name: ev_charging_user_app
+description: "EV Charging Multi-App Flutter Template - User, Station Owner, Admin"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State Management
+  flutter_bloc: ^8.1.6
+  equatable: ^2.0.5
+
+  # Navigation
+  go_router: ^14.6.2
+
+  # UI/Responsive
+  flutter_screenutil: ^5.9.3
+  cached_network_image: ^3.4.1
+  flutter_svg: ^2.0.10+1
+  shimmer: ^3.0.0
+
+  # Local Storage
+  sqflite: ^2.4.1
+  path: ^1.9.0
+  shared_preferences: ^2.3.3
+
+  # Utilities
+  intl: ^0.20.2
+  get_it: ^8.0.2
+  injectable: ^2.5.0
+  logger: ^2.4.0
+
+  # Icons
+  cupertino_icons: ^1.0.8
+  iconsax: ^0.0.8
+  fl_chart: ^1.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.13
+  injectable_generator: ^2.6.2
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/lottie/
+
+
+flutter_intl:
+  enabled: true
+  class_name: S
+  main_locale: en
+  arb_dir: lib/l10n
+  output_dir: lib/generated

@@ -1,0 +1,76 @@
+/// File: lib/features/stations/widgets/station_info_cards.dart
+/// Purpose: Station info cards widget
+/// Belongs To: stations feature
+library;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iconsax/iconsax.dart';
+
+import '../../../core/theme/app_colors.dart';
+import '../../../models/station_model.dart';
+
+/// Station info cards showing hours, chargers, and distance.
+class StationInfoCards extends StatelessWidget {
+  const StationInfoCards({super.key, required this.station});
+
+  final StationModel station;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: _InfoCard(icon: Iconsax.clock, title: 'Hours', value: station.operatingHours)),
+        SizedBox(width: 12.w),
+        Expanded(
+          child: _InfoCard(
+            icon: Iconsax.flash_1,
+            title: 'Chargers',
+            value: '${station.availableChargers}/${station.totalChargers}',
+          ),
+        ),
+        SizedBox(width: 12.w),
+        Expanded(
+          child: _InfoCard(
+            icon: Iconsax.location,
+            title: 'Distance',
+            value: '${station.distance?.toStringAsFixed(1) ?? '?'} km',
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _InfoCard extends StatelessWidget {
+  const _InfoCard({
+    required this.icon,
+    required this.title,
+    required this.value,
+  });
+
+  final IconData icon;
+  final String title;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(12.r),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceVariantLight,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, size: 24.r, color: AppColors.primary),
+          SizedBox(height: 8.h),
+          Text(title, style: TextStyle(fontSize: 11.sp, color: AppColors.textSecondaryLight)),
+          SizedBox(height: 2.h),
+          Text(value, style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600), textAlign: TextAlign.center),
+        ],
+      ),
+    );
+  }
+}
+
