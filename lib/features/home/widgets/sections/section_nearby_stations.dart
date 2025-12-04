@@ -11,16 +11,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../models/station_model.dart';
-import '../section_header.dart';
 import '../components/station_card_horizontal.dart';
+import '../section_header.dart';
 
 /// Nearby stations section with horizontal scrolling.
 class SectionNearbyStations extends StatelessWidget {
   const SectionNearbyStations({
-    super.key,
     required this.stations,
     required this.onStationTap,
     required this.onViewAllTap,
+    super.key,
     this.onFavoriteTap,
   });
 
@@ -38,7 +38,9 @@ class SectionNearbyStations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (stations.isEmpty) return const SizedBox.shrink();
+    if (stations.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +54,7 @@ class SectionNearbyStations extends StatelessWidget {
           height: 230.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
             physics: const BouncingScrollPhysics(),
             itemCount: stations.length,
             itemBuilder: (context, index) {
@@ -71,4 +73,3 @@ class SectionNearbyStations extends StatelessWidget {
     );
   }
 }
-

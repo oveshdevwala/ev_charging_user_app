@@ -16,13 +16,13 @@ class BookingsState extends Equatable {
     this.error,
   });
 
+  /// Initial state.
+  factory BookingsState.initial() => const BookingsState(isLoading: true);
+
   final bool isLoading;
   final List<BookingModel> upcomingBookings;
   final List<BookingModel> pastBookings;
   final String? error;
-
-  /// Initial state.
-  factory BookingsState.initial() => const BookingsState(isLoading: true);
 
   /// Copy with new values.
   BookingsState copyWith({

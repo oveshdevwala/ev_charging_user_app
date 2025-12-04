@@ -47,6 +47,42 @@ class ChargingSessionModel extends Equatable {
     this.stationImageUrl,
   });
 
+  /// Create from JSON map.
+  factory ChargingSessionModel.fromJson(Map<String, dynamic> json) {
+    return ChargingSessionModel(
+      id: json['id'] as String? ?? '',
+      stationId: json['stationId'] as String? ?? '',
+      stationName: json['stationName'] as String? ?? '',
+      chargerId: json['chargerId'] as String? ?? '',
+      chargerName: json['chargerName'] as String? ?? '',
+      startTime: json['startTime'] != null
+          ? DateTime.parse(json['startTime'] as String)
+          : DateTime.now(),
+      endTime: json['endTime'] != null
+          ? DateTime.parse(json['endTime'] as String)
+          : null,
+      energyKwh: (json['energyKwh'] as num?)?.toDouble() ?? 0.0,
+      cost: (json['cost'] as num?)?.toDouble() ?? 0.0,
+      duration: json['durationMinutes'] != null
+          ? Duration(minutes: json['durationMinutes'] as int)
+          : Duration.zero,
+      status: SessionStatus.values.firstWhere(
+        (s) => s.name == (json['status'] as String?),
+        orElse: () => SessionStatus.completed,
+      ),
+      paymentStatus: PaymentStatus.values.firstWhere(
+        (s) => s.name == (json['paymentStatus'] as String?),
+        orElse: () => PaymentStatus.paid,
+      ),
+      chargerType: json['chargerType'] as String?,
+      powerKw: (json['powerKw'] as num?)?.toDouble() ?? 0.0,
+      startBatteryPercent: json['startBatteryPercent'] as int?,
+      endBatteryPercent: json['endBatteryPercent'] as int?,
+      co2SavedKg: (json['co2SavedKg'] as num?)?.toDouble() ?? 0.0,
+      stationImageUrl: json['stationImageUrl'] as String?,
+    );
+  }
+
   final String id;
   final String stationId;
   final String stationName;
@@ -103,42 +139,6 @@ class ChargingSessionModel extends Equatable {
       return endBatteryPercent! - startBatteryPercent!;
     }
     return null;
-  }
-
-  /// Create from JSON map.
-  factory ChargingSessionModel.fromJson(Map<String, dynamic> json) {
-    return ChargingSessionModel(
-      id: json['id'] as String? ?? '',
-      stationId: json['stationId'] as String? ?? '',
-      stationName: json['stationName'] as String? ?? '',
-      chargerId: json['chargerId'] as String? ?? '',
-      chargerName: json['chargerName'] as String? ?? '',
-      startTime: json['startTime'] != null
-          ? DateTime.parse(json['startTime'] as String)
-          : DateTime.now(),
-      endTime: json['endTime'] != null
-          ? DateTime.parse(json['endTime'] as String)
-          : null,
-      energyKwh: (json['energyKwh'] as num?)?.toDouble() ?? 0.0,
-      cost: (json['cost'] as num?)?.toDouble() ?? 0.0,
-      duration: json['durationMinutes'] != null
-          ? Duration(minutes: json['durationMinutes'] as int)
-          : Duration.zero,
-      status: SessionStatus.values.firstWhere(
-        (s) => s.name == (json['status'] as String?),
-        orElse: () => SessionStatus.completed,
-      ),
-      paymentStatus: PaymentStatus.values.firstWhere(
-        (s) => s.name == (json['paymentStatus'] as String?),
-        orElse: () => PaymentStatus.paid,
-      ),
-      chargerType: json['chargerType'] as String?,
-      powerKw: (json['powerKw'] as num?)?.toDouble() ?? 0.0,
-      startBatteryPercent: json['startBatteryPercent'] as int?,
-      endBatteryPercent: json['endBatteryPercent'] as int?,
-      co2SavedKg: (json['co2SavedKg'] as num?)?.toDouble() ?? 0.0,
-      stationImageUrl: json['stationImageUrl'] as String?,
-    );
   }
 
   /// Convert to JSON map.

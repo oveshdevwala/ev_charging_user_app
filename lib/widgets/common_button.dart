@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Use ButtonVariant enum for different styles
 ///    - Customize via parameters (size, color, icon, etc.)
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,9 +29,7 @@ enum ButtonSize {
 /// Reusable button widget with multiple variants.
 class CommonButton extends StatelessWidget {
   const CommonButton({
-    super.key,
-    required this.label,
-    required this.onPressed,
+    required this.label, required this.onPressed, super.key,
     this.variant = ButtonVariant.filled,
     this.size = ButtonSize.medium,
     this.isLoading = false,
@@ -94,7 +93,7 @@ class CommonButton extends StatelessWidget {
     }
     
     // Build button content
-    Widget content = isLoading
+    final Widget content = isLoading
         ? SizedBox(
             width: iconSize,
             height: iconSize,
@@ -130,10 +129,10 @@ class CommonButton extends StatelessWidget {
           );
     
     // Build button based on variant
-    final bool effectiveDisabled = isDisabled || isLoading;
-    final VoidCallback? effectiveOnPressed = effectiveDisabled ? null : onPressed;
-    final BorderRadius effectiveBorderRadius = BorderRadius.circular(borderRadius ?? 12.r);
-    final EdgeInsets effectivePadding = padding ?? buttonPadding;
+    final effectiveDisabled = isDisabled || isLoading;
+    final effectiveOnPressed = effectiveDisabled ? null : onPressed;
+    final effectiveBorderRadius = BorderRadius.circular(borderRadius ?? 12.r);
+    final effectivePadding = padding ?? buttonPadding;
     
     Widget button;
     
@@ -220,10 +219,7 @@ enum IconPosition {
 /// Social login button.
 class SocialButton extends StatelessWidget {
   const SocialButton({
-    super.key,
-    required this.label,
-    required this.onPressed,
-    required this.icon,
+    required this.label, required this.onPressed, required this.icon, super.key,
     this.isLoading = false,
     this.backgroundColor,
     this.foregroundColor,
@@ -245,7 +241,7 @@ class SocialButton extends StatelessWidget {
         foregroundColor: foregroundColor ?? AppColors.textPrimaryLight,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
         minimumSize: Size(double.infinity, 52.h),
-        side: BorderSide(color: AppColors.outlineLight, width: 1),
+        side: const BorderSide(color: AppColors.outlineLight),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),

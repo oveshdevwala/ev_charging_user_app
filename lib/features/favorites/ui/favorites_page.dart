@@ -9,13 +9,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../routes/app_routes.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../models/station_model.dart';
 import '../../../repositories/station_repository.dart';
-import '../../../widgets/station_card.dart';
+import '../../../routes/app_routes.dart';
 import '../../../widgets/loading_wrapper.dart';
+import '../../../widgets/station_card.dart';
 
 /// Favorites page showing saved charging stations.
 class FavoritesPage extends StatefulWidget {
@@ -93,10 +93,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
               padding: EdgeInsets.only(bottom: 16.h),
               child: StationCard(
                 station: station,
-                onTap: () => context.push(AppRoutes.stationDetails.id(station.id)),
+                onTap: () =>
+                    context.push(AppRoutes.stationDetails.id(station.id)),
                 onFavoriteTap: () async {
                   await _stationRepository.toggleFavorite(station.id);
-                  _loadFavorites();
+                await  _loadFavorites();
                 },
               ),
             );
@@ -106,4 +107,3 @@ class _FavoritesPageState extends State<FavoritesPage> {
     );
   }
 }
-

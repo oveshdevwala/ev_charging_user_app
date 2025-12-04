@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../models/station_model.dart';
 
 /// Station amenities widget showing available amenities.
 class StationAmenities extends StatelessWidget {
-  const StationAmenities({super.key, required this.amenities});
+  const StationAmenities({required this.amenities, super.key});
 
   final List<Amenity> amenities;
 

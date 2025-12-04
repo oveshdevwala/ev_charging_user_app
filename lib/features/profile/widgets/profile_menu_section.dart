@@ -12,9 +12,7 @@ import 'profile_menu_item.dart';
 /// Profile menu section container.
 class ProfileMenuSection extends StatelessWidget {
   const ProfileMenuSection({
-    super.key,
-    required this.title,
-    required this.items,
+    required this.title, required this.items, super.key,
   });
 
   final String title;
@@ -34,7 +32,7 @@ class ProfileMenuSection extends StatelessWidget {
           ),
         ),
         SizedBox(height: 12.h),
-        Container(
+        DecoratedBox(
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16.r),

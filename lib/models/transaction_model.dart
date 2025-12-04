@@ -57,6 +57,38 @@ class TransactionModel extends Equatable {
     this.fee = 0.0,
   });
 
+  /// Create from JSON map.
+  factory TransactionModel.fromJson(Map<String, dynamic> json) {
+    return TransactionModel(
+      id: json['id'] as String? ?? '',
+      type: TransactionType.values.firstWhere(
+        (t) => t.name == (json['type'] as String?),
+        orElse: () => TransactionType.charging,
+      ),
+      amount: (json['amount'] as num?)?.toDouble() ?? 0.0,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
+      status: TransactionStatus.values.firstWhere(
+        (s) => s.name == (json['status'] as String?),
+        orElse: () => TransactionStatus.completed,
+      ),
+      paymentMethod: json['paymentMethod'] != null
+          ? PaymentMethod.values.firstWhere(
+              (p) => p.name == (json['paymentMethod'] as String),
+              orElse: () => PaymentMethod.wallet,
+            )
+          : null,
+      description: json['description'] as String?,
+      referenceId: json['referenceId'] as String?,
+      sessionId: json['sessionId'] as String?,
+      stationName: json['stationName'] as String?,
+      energyKwh: (json['energyKwh'] as num?)?.toDouble(),
+      currency: json['currency'] as String? ?? 'USD',
+      fee: (json['fee'] as num?)?.toDouble() ?? 0.0,
+    );
+  }
+
   final String id;
   final TransactionType type;
   final double amount;
@@ -148,38 +180,6 @@ class TransactionModel extends Equatable {
       case null:
         return 'Unknown';
     }
-  }
-
-  /// Create from JSON map.
-  factory TransactionModel.fromJson(Map<String, dynamic> json) {
-    return TransactionModel(
-      id: json['id'] as String? ?? '',
-      type: TransactionType.values.firstWhere(
-        (t) => t.name == (json['type'] as String?),
-        orElse: () => TransactionType.charging,
-      ),
-      amount: (json['amount'] as num?)?.toDouble() ?? 0.0,
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'] as String)
-          : DateTime.now(),
-      status: TransactionStatus.values.firstWhere(
-        (s) => s.name == (json['status'] as String?),
-        orElse: () => TransactionStatus.completed,
-      ),
-      paymentMethod: json['paymentMethod'] != null
-          ? PaymentMethod.values.firstWhere(
-              (p) => p.name == (json['paymentMethod'] as String),
-              orElse: () => PaymentMethod.wallet,
-            )
-          : null,
-      description: json['description'] as String?,
-      referenceId: json['referenceId'] as String?,
-      sessionId: json['sessionId'] as String?,
-      stationName: json['stationName'] as String?,
-      energyKwh: (json['energyKwh'] as num?)?.toDouble(),
-      currency: json['currency'] as String? ?? 'USD',
-      fee: (json['fee'] as num?)?.toDouble() ?? 0.0,
-    );
   }
 
   /// Convert to JSON map.

@@ -18,7 +18,7 @@ class BookingsCubit extends Cubit<BookingsState> {
 
   /// Load all bookings.
   Future<void> loadBookings() async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
 
     try {
       final upcoming = await _bookingRepository.getUpcomingBookings();

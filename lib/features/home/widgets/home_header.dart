@@ -12,9 +12,7 @@ import '../../../core/theme/app_colors.dart';
 /// Home header widget with greeting and actions.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({
-    super.key,
-    required this.userName,
-    required this.onNotificationTap,
+    required this.userName, required this.onNotificationTap, super.key,
   });
 
   final String userName;

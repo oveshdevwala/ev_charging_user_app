@@ -11,9 +11,7 @@ import '../../../core/theme/app_colors.dart';
 /// Booking duration selection widget.
 class BookingDurationSelection extends StatelessWidget {
   const BookingDurationSelection({
-    super.key,
-    required this.selectedDuration,
-    required this.onDurationChanged,
+    required this.selectedDuration, required this.onDurationChanged, super.key,
   });
 
   final int selectedDuration;
@@ -60,7 +58,9 @@ class BookingDurationSelection extends StatelessWidget {
   }
 
   String _formatDuration(int mins) {
-    if (mins < 60) return '$mins min';
+    if (mins < 60) {
+      return '$mins min';
+    }
     final hours = mins ~/ 60;
     final remainder = mins % 60;
     return remainder > 0 ? '${hours}h ${remainder}m' : '${hours}h';

@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Add new fields as needed
 ///    - Update copyWith and JSON methods accordingly
+library;
 
 import 'package:equatable/equatable.dart';
 
@@ -23,19 +24,6 @@ class ReviewModel extends Equatable {
     this.createdAt,
     this.updatedAt,
   });
-  
-  final String id;
-  final String userId;
-  final String stationId;
-  final double rating;
-  final String? userName;
-  final String? userAvatar;
-  final String? comment;
-  final List<String> images;
-  final bool isVerified;
-  final int helpfulCount;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
   
   /// Create from JSON map.
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
@@ -58,6 +46,19 @@ class ReviewModel extends Equatable {
           : null,
     );
   }
+  
+  final String id;
+  final String userId;
+  final String stationId;
+  final double rating;
+  final String? userName;
+  final String? userAvatar;
+  final String? comment;
+  final List<String> images;
+  final bool isVerified;
+  final int helpfulCount;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   
   /// Convert to JSON map.
   Map<String, dynamic> toJson() {

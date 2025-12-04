@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Add new fields for additional offer attributes
 ///    - Update copyWith and JSON methods accordingly
+library;
 
 import 'package:equatable/equatable.dart';
 
@@ -31,29 +32,6 @@ class OfferModel extends Equatable {
     this.isActive = true,
   });
 
-  final String id;
-  final String titleKey;
-  final String descKey;
-  final String bannerUrl;
-  final OfferType type;
-  final double? discountPercent;
-  final DateTime? validUntil;
-  final String? termsKey;
-  final String? actionUrl;
-  final bool isActive;
-
-  /// Check if offer is still valid.
-  bool get isValid {
-    if (validUntil == null) return isActive;
-    return isActive && DateTime.now().isBefore(validUntil!);
-  }
-
-  /// Days remaining for the offer.
-  int? get daysRemaining {
-    if (validUntil == null) return null;
-    return validUntil!.difference(DateTime.now()).inDays;
-  }
-
   /// Create from JSON map.
   factory OfferModel.fromJson(Map<String, dynamic> json) {
     return OfferModel(
@@ -73,6 +51,33 @@ class OfferModel extends Equatable {
       actionUrl: json['actionUrl'] as String?,
       isActive: json['isActive'] as bool? ?? true,
     );
+  }
+
+  final String id;
+  final String titleKey;
+  final String descKey;
+  final String bannerUrl;
+  final OfferType type;
+  final double? discountPercent;
+  final DateTime? validUntil;
+  final String? termsKey;
+  final String? actionUrl;
+  final bool isActive;
+
+  /// Check if offer is still valid.
+  bool get isValid {
+    if (validUntil == null) {
+      return isActive;
+    }
+    return isActive && DateTime.now().isBefore(validUntil!);
+  }
+
+  /// Days remaining for the offer.
+  int? get daysRemaining {
+    if (validUntil == null) {
+      return null;
+    }
+    return validUntil!.difference(DateTime.now()).inDays;
   }
 
   /// Convert to JSON map.

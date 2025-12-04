@@ -9,17 +9,18 @@ library;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/splash/splash.dart';
-import '../features/onboarding/onboarding.dart';
+import '../features/activity/activity.dart';
 import '../features/auth/auth.dart';
-import '../features/home/home.dart';
-import '../features/search/search.dart';
-import '../features/favorites/favorites.dart';
 import '../features/bookings/bookings.dart';
-import '../features/profile/profile.dart';
-import '../features/stations/stations.dart';
-import '../features/notifications/notifications.dart';
+import '../features/community/community.dart';
 import '../features/main_shell/main_shell.dart';
+import '../features/notifications/notifications.dart';
+import '../features/onboarding/onboarding.dart';
+import '../features/profile/profile.dart';
+import '../features/splash/splash.dart';
+import '../features/stations/stations.dart';
+import '../features/trip_planner/trip_planner.dart';
+import '../features/wallet/wallet.dart';
 
 // ============================================================
 // APP ROUTES ENUM
@@ -47,6 +48,14 @@ enum AppRoutes {
   userNotifications,
   userSettings,
   editProfile,
+  activityDetails,
+  tripPlanner,
+  tripSummary,
+  wallet,
+  walletRecharge,
+  stationCommunity,
+  leaveReview,
+  adminModeration,
 }
 
 // ============================================================
@@ -93,6 +102,22 @@ extension AppRoutePath on AppRoutes {
         return '/userSettings';
       case AppRoutes.editProfile:
         return '/editProfile';
+      case AppRoutes.activityDetails:
+        return '/activityDetails';
+      case AppRoutes.tripPlanner:
+        return '/tripPlanner';
+      case AppRoutes.tripSummary:
+        return '/tripSummary';
+      case AppRoutes.wallet:
+        return '/wallet';
+      case AppRoutes.walletRecharge:
+        return '/walletRecharge';
+      case AppRoutes.stationCommunity:
+        return '/stationCommunity';
+      case AppRoutes.leaveReview:
+        return '/leaveReview';
+      case AppRoutes.adminModeration:
+        return '/adminModeration';
     }
   }
 
@@ -143,36 +168,42 @@ class AppRouter {
         builder: (context, state) => const ForgotPasswordPage(),
       ),
 
-      // -------- User App Shell --------
-      ShellRoute(
-        builder: (context, state, child) => MainShellPage(child: child),
-        routes: [
-          GoRoute(
-            path: AppRoutes.userHome.path,
-            name: AppRoutes.userHome.name,
-            builder: (context, state) => const HomePage(),
-          ),
-          GoRoute(
-            path: AppRoutes.userSearch.path,
-            name: AppRoutes.userSearch.name,
-            builder: (context, state) => const SearchPage(),
-          ),
-          GoRoute(
-            path: AppRoutes.userFavorites.path,
-            name: AppRoutes.userFavorites.name,
-            builder: (context, state) => const FavoritesPage(),
-          ),
-          GoRoute(
-            path: AppRoutes.userBookings.path,
-            name: AppRoutes.userBookings.name,
-            builder: (context, state) => const BookingsPage(),
-          ),
-          GoRoute(
-            path: AppRoutes.userProfile.path,
-            name: AppRoutes.userProfile.name,
-            builder: (context, state) => const ProfilePage(),
-          ),
-        ],
+      // -------- User App Shell (Main Tabs) --------
+      // Single route for the main shell - tab navigation handled internally via IndexedStack
+      GoRoute(
+        path: AppRoutes.userHome.path,
+        name: AppRoutes.userHome.name,
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: MainShellPage(),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.userSearch.path,
+        name: AppRoutes.userSearch.name,
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: MainShellPage(initialIndex: 1),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.userFavorites.path,
+        name: AppRoutes.userFavorites.name,
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: MainShellPage(initialIndex: 2),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.userBookings.path,
+        name: AppRoutes.userBookings.name,
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: MainShellPage(initialIndex: 3),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.userProfile.path,
+        name: AppRoutes.userProfile.name,
+        pageBuilder: (context, state) => const NoTransitionPage(
+          child: MainShellPage(initialIndex: 4),
+        ),
       ),
 
       // -------- Station Details --------
@@ -224,6 +255,73 @@ class AppRouter {
         path: AppRoutes.editProfile.path,
         name: AppRoutes.editProfile.name,
         builder: (context, state) => const EditProfilePage(),
+      ),
+
+      // -------- Activity Details --------
+      GoRoute(
+        path: AppRoutes.activityDetails.path,
+        name: AppRoutes.activityDetails.name,
+        builder: (context, state) => const ActivityDetailsPage(),
+      ),
+
+      // -------- Trip Planner --------
+      GoRoute(
+        path: AppRoutes.tripPlanner.path,
+        name: AppRoutes.tripPlanner.name,
+        builder: (context, state) => const TripPlannerPage(),
+      ),
+
+      // -------- Trip Summary (Standalone) --------
+      GoRoute(
+        path: '${AppRoutes.tripSummary.path}/:tripId',
+        name: AppRoutes.tripSummary.name,
+        builder: (context, state) {
+          final tripId = state.pathParameters['tripId'] ?? '';
+          return StandaloneTripSummaryPage(tripId: tripId);
+        },
+      ),
+
+      // -------- Wallet --------
+      GoRoute(
+        path: AppRoutes.wallet.path,
+        name: AppRoutes.wallet.name,
+        builder: (context, state) => const WalletPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.walletRecharge.path,
+        name: AppRoutes.walletRecharge.name,
+        builder: (context, state) => const RechargePage(),
+      ),
+
+      // -------- Community --------
+      GoRoute(
+        path: '${AppRoutes.stationCommunity.path}/:stationId',
+        name: AppRoutes.stationCommunity.name,
+        builder: (context, state) {
+          final stationId = state.pathParameters['stationId'] ?? '';
+          final stationName = state.uri.queryParameters['name'] ?? 'Station';
+          return StationCommunityPage(
+            stationId: stationId,
+            stationName: stationName,
+          );
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.leaveReview.path}/:stationId',
+        name: AppRoutes.leaveReview.name,
+        builder: (context, state) {
+          final stationId = state.pathParameters['stationId'] ?? '';
+          final stationName = state.uri.queryParameters['name'] ?? 'Station';
+          return LeaveReviewPage(
+            stationId: stationId,
+            stationName: stationName,
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.adminModeration.path,
+        name: AppRoutes.adminModeration.name,
+        builder: (context, state) => const ModerationConsolePage(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

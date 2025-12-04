@@ -4,20 +4,19 @@
 /// Customization Guide:
 ///    - Use for loading, error, and empty states
 ///    - Customize loading indicator, error, and empty widgets
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../core/theme/app_colors.dart';
 import '../core/constants/app_strings.dart';
+import '../core/theme/app_colors.dart';
 import 'common_button.dart';
 
 /// Loading wrapper that handles loading, error, and empty states.
 class LoadingWrapper extends StatelessWidget {
   const LoadingWrapper({
-    super.key,
-    required this.isLoading,
-    required this.child,
+    required this.isLoading, required this.child, super.key,
     this.error,
     this.isEmpty = false,
     this.onRetry,
@@ -118,8 +117,7 @@ class LoadingIndicator extends StatelessWidget {
 /// Error state widget.
 class ErrorStateWidget extends StatelessWidget {
   const ErrorStateWidget({
-    super.key,
-    required this.message,
+    required this.message, super.key,
     this.onRetry,
     this.icon,
     this.title,
@@ -167,7 +165,6 @@ class ErrorStateWidget extends StatelessWidget {
               CommonButton(
                 label: AppStrings.retry,
                 onPressed: onRetry,
-                size: ButtonSize.medium,
                 isFullWidth: false,
                 icon: Icons.refresh,
               ),
@@ -182,8 +179,7 @@ class ErrorStateWidget extends StatelessWidget {
 /// Empty state widget.
 class EmptyStateWidget extends StatelessWidget {
   const EmptyStateWidget({
-    super.key,
-    required this.title,
+    required this.title, super.key,
     this.message,
     this.icon,
     this.image,
@@ -240,7 +236,6 @@ class EmptyStateWidget extends StatelessWidget {
               CommonButton(
                 label: actionLabel!,
                 onPressed: onAction,
-                size: ButtonSize.medium,
                 isFullWidth: false,
               ),
             ],
@@ -254,9 +249,7 @@ class EmptyStateWidget extends StatelessWidget {
 /// Shimmer loading placeholder.
 class ShimmerLoading extends StatelessWidget {
   const ShimmerLoading({
-    super.key,
-    required this.width,
-    required this.height,
+    required this.width, required this.height, super.key,
     this.borderRadius,
   });
   

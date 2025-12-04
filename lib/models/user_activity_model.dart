@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Add new metrics for enhanced gamification
 ///    - Update copyWith and JSON methods accordingly
+library;
 
 import 'package:equatable/equatable.dart';
 
@@ -24,6 +25,27 @@ class UserActivitySummary extends Equatable {
     this.xpPoints = 0,
     this.badges = const [],
   });
+
+  /// Create from JSON map.
+  factory UserActivitySummary.fromJson(Map<String, dynamic> json) {
+    return UserActivitySummary(
+      sessionsToday: json['sessionsToday'] as int? ?? 0,
+      energyUsedKwh: (json['energyUsedKwh'] as num?)?.toDouble() ?? 0.0,
+      moneySpent: (json['moneySpent'] as num?)?.toDouble() ?? 0.0,
+      co2SavedKg: (json['co2SavedKg'] as num?)?.toDouble() ?? 0.0,
+      streaks: json['streaks'] as int? ?? 0,
+      totalSessions: json['totalSessions'] as int? ?? 0,
+      totalEnergyKwh: (json['totalEnergyKwh'] as num?)?.toDouble() ?? 0.0,
+      totalSpent: (json['totalSpent'] as num?)?.toDouble() ?? 0.0,
+      favoriteStationId: json['favoriteStationId'] as String?,
+      lastChargingDate: json['lastChargingDate'] != null
+          ? DateTime.tryParse(json['lastChargingDate'] as String)
+          : null,
+      level: json['level'] as int? ?? 1,
+      xpPoints: json['xpPoints'] as int? ?? 0,
+      badges: (json['badges'] as List<dynamic>?)?.cast<String>() ?? [],
+    );
+  }
 
   final int sessionsToday;
   final double energyUsedKwh;
@@ -53,31 +75,16 @@ class UserActivitySummary extends Equatable {
 
   /// Get streak badge text.
   String get streakBadgeText {
-    if (streaks >= 30) return '🔥 30-day Streak!';
-    if (streaks >= 7) return '⚡ Weekly Warrior';
-    if (streaks >= 3) return '✨ Streak Started';
+    if (streaks >= 30) {
+      return '🔥 30-day Streak!';
+    }
+    if (streaks >= 7) {
+      return '⚡ Weekly Warrior';
+    }
+    if (streaks >= 3) {
+      return '✨ Streak Started';
+    }
     return '';
-  }
-
-  /// Create from JSON map.
-  factory UserActivitySummary.fromJson(Map<String, dynamic> json) {
-    return UserActivitySummary(
-      sessionsToday: json['sessionsToday'] as int? ?? 0,
-      energyUsedKwh: (json['energyUsedKwh'] as num?)?.toDouble() ?? 0.0,
-      moneySpent: (json['moneySpent'] as num?)?.toDouble() ?? 0.0,
-      co2SavedKg: (json['co2SavedKg'] as num?)?.toDouble() ?? 0.0,
-      streaks: json['streaks'] as int? ?? 0,
-      totalSessions: json['totalSessions'] as int? ?? 0,
-      totalEnergyKwh: (json['totalEnergyKwh'] as num?)?.toDouble() ?? 0.0,
-      totalSpent: (json['totalSpent'] as num?)?.toDouble() ?? 0.0,
-      favoriteStationId: json['favoriteStationId'] as String?,
-      lastChargingDate: json['lastChargingDate'] != null
-          ? DateTime.tryParse(json['lastChargingDate'] as String)
-          : null,
-      level: json['level'] as int? ?? 1,
-      xpPoints: json['xpPoints'] as int? ?? 0,
-      badges: (json['badges'] as List<dynamic>?)?.cast<String>() ?? [],
-    );
   }
 
   /// Convert to JSON map.

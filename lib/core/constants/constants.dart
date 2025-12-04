@@ -3,10 +3,10 @@
 /// Belongs To: shared
 /// Customization Guide:
 ///    - Add new constant file exports here
+library;
 
 export 'api_paths.dart';
 export 'app_assets.dart';
 export 'app_constants.dart';
 export 'app_strings.dart';
 export 'home_images.dart';
-

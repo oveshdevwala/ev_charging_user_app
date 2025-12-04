@@ -3,7 +3,8 @@
 /// Belongs To: shared
 /// Customization Guide:
 ///    - Register new dependencies here
-///    - Use sl<Type>() to get instances
+///    - Use sl< Type>() to get instances
+library;
 
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,22 +20,21 @@ final GetIt sl = GetIt.instance;
 Future<void> initializeDependencies() async {
   // ============ External Services ============
   final prefs = await SharedPreferences.getInstance();
-  sl.registerSingleton<SharedPreferences>(prefs);
-  
+  sl..registerSingleton<SharedPreferences>(prefs)
+
   // ============ Theme Manager ============
-  sl.registerLazySingleton<ThemeManager>(
+  ..registerLazySingleton<ThemeManager>(
     () => ThemeManager(prefs: sl<SharedPreferences>()),
-  );
-  
+  )
+
   // ============ Repositories ============
-  sl.registerLazySingleton<AuthRepository>(() => DummyAuthRepository());
-  sl.registerLazySingleton<StationRepository>(() => DummyStationRepository());
-  sl.registerLazySingleton<BookingRepository>(() => DummyBookingRepository());
-  sl.registerLazySingleton<UserRepository>(() => DummyUserRepository());
+  ..registerLazySingleton<AuthRepository>(DummyAuthRepository.new)
+  ..registerLazySingleton<StationRepository>(DummyStationRepository.new)
+  ..registerLazySingleton<BookingRepository>(DummyBookingRepository.new)
+  ..registerLazySingleton<UserRepository>(DummyUserRepository.new);
 }
 
 /// Reset all dependencies (for testing).
 Future<void> resetDependencies() async {
   await sl.reset();
 }
-

@@ -15,6 +15,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../models/bundle_model.dart';
+import '../../../models/charging_session_model.dart';
 import '../../../models/offer_model.dart';
 import '../../../models/station_model.dart';
 import '../../../models/trip_route_model.dart';
@@ -74,32 +75,31 @@ class _HomePageContent extends StatelessWidget {
                   // Header Section
                   SliverToBoxAdapter(child: _buildHeader(context)),
 
-                  // Offers Carousel
-                  if (state.offers.isNotEmpty)
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 24.h),
-                        child: SectionOffersCarousel(
-                          offers: state.offers,
-                          onOfferTap: (offer) => _onOfferTap(context, offer),
-                          onViewAllTap: () => _onOffersViewAll(context),
-                        ),
+                  // SECTION 1: Quick Actions (compact grid - FIRST after search)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 16.h),
+                      child: SectionCategoriesGrid(
+                        onCategoryTap: (category) =>
+                            _onCategoryTap(context, category),
                       ),
                     ),
+                  ),
 
-                  // Activity Summary
+                  // SECTION 2: Activity Summary
                   if (state.activitySummary != null)
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: EdgeInsets.only(top: 28.h),
-                        child: SectionActivitySummary(
+                        padding: EdgeInsets.only(top: 24.h),
+                        child: SectionActivityEnhanced(
                           summary: state.activitySummary!,
+                          weeklyData: _getWeeklyData(),
                           onViewDetailsTap: () => _onActivityDetails(context),
                         ),
                       ),
                     ),
 
-                  // Nearby Stations
+                  // SECTION 3: Nearby Stations
                   if (state.nearbyStations.isNotEmpty)
                     SliverToBoxAdapter(
                       child: Padding(
@@ -115,7 +115,7 @@ class _HomePageContent extends StatelessWidget {
                       ),
                     ),
 
-                  // Trip Planner
+                  // SECTION 4: Trip Planner
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.only(top: 28.h),
@@ -128,7 +128,7 @@ class _HomePageContent extends StatelessWidget {
                     ),
                   ),
 
-                  // Value Bundles
+                  // SECTION 5: Value Bundles
                   if (state.bundles.isNotEmpty)
                     SliverToBoxAdapter(
                       child: Padding(
@@ -142,16 +142,18 @@ class _HomePageContent extends StatelessWidget {
                       ),
                     ),
 
-                  // Categories Grid
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 28.h),
-                      child: SectionCategoriesGrid(
-                        onCategoryTap: (category) =>
-                            _onCategoryTap(context, category),
+                  // SECTION 6: Offers (simple list - LAST section)
+                  if (state.offers.isNotEmpty)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 28.h),
+                        child: SectionOffersCarousel(
+                          offers: state.offers,
+                          onOfferTap: (offer) => _onOfferTap(context, offer),
+                          onViewAllTap: () => _onOffersViewAll(context),
+                        ),
                       ),
                     ),
-                  ),
 
                   // Bottom spacing
                   SliverToBoxAdapter(child: SizedBox(height: 100.h)),
@@ -162,6 +164,23 @@ class _HomePageContent extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Generate weekly data for the activity chart.
+  List<DailyChargingSummary> _getWeeklyData() {
+    // For demo, return sample data - in production, fetch this in HomeCubit
+    final now = DateTime.now();
+    return List.generate(7, (index) {
+      final date = now.subtract(Duration(days: 6 - index));
+      return DailyChargingSummary(
+        date: date,
+        sessions: index == 6 ? 2 : (index % 3),
+        energyKwh: index == 6 ? 45.5 : (15.0 + (index * 8)),
+        cost: (15.0 + (index * 8)) * 0.35,
+        co2SavedKg: (15.0 + (index * 8)) * 0.5,
+        totalMinutes: 30 + (index * 10),
+      );
+    });
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -234,20 +253,17 @@ class _HomePageContent extends StatelessWidget {
   }
 
   // Navigation handlers
+  void _onActivityDetails(BuildContext context) {
+    context.push(AppRoutes.activityDetails.path);
+  }
+
   void _onOfferTap(BuildContext context, OfferModel offer) {
     context.read<HomeCubit>().selectOffer(offer.id);
-    // TODO: Navigate to offer details when page is created
-    context.showSnackBar('Offer: ${offer.titleKey}');
+    _showSnackBar(context, 'Offer: ${offer.titleKey}');
   }
 
   void _onOffersViewAll(BuildContext context) {
-    // TODO: Navigate to offers page when created
-    context.showSnackBar('View all offers');
-  }
-
-  void _onActivityDetails(BuildContext context) {
-    // TODO: Navigate to activity details page when created
-    context.showSnackBar('View activity details');
+    _showSnackBar(context, 'View all offers');
   }
 
   void _onStationTap(BuildContext context, StationModel station) {
@@ -259,28 +275,26 @@ class _HomePageContent extends StatelessWidget {
   }
 
   void _onRouteTap(BuildContext context, TripRouteModel route) {
-    // TODO: Navigate to trip details when page is created
-    context.showSnackBar('Route: ${route.displayName}');
+    // Navigate directly to standalone trip summary page
+    context.push(AppRoutes.tripSummary.id(route.id));
   }
 
   void _onPlanTrip(BuildContext context) {
-    // TODO: Navigate to trip planner when page is created
-    context.showSnackBar('Plan a new trip');
+    // Navigate to trip planner to create a new trip
+    context.push(AppRoutes.tripPlanner.path);
   }
 
   void _onTripsViewAll(BuildContext context) {
-    // TODO: Navigate to saved trips when page is created
-    context.showSnackBar('View all trips');
+    // Navigate to trip planner to see all saved trips
+    context.push(AppRoutes.tripPlanner.path);
   }
 
   void _onBundleTap(BuildContext context, BundleModel bundle) {
-    // TODO: Navigate to bundle details when page is created
-    context.showSnackBar('Bundle: ${bundle.titleKey}');
+    _showSnackBar(context, 'Bundle: ${bundle.titleKey}');
   }
 
   void _onBundlesViewAll(BuildContext context) {
-    // TODO: Navigate to bundles page when created
-    context.showSnackBar('View all bundles');
+    _showSnackBar(context, 'View all bundles');
   }
 
   void _onCategoryTap(BuildContext context, HomeCategory category) {
@@ -292,21 +306,16 @@ class _HomePageContent extends StatelessWidget {
       case HomeCategory.myBookings:
         context.go(AppRoutes.userBookings.path);
       case HomeCategory.myVehicles:
-        // TODO: Navigate to vehicles page when created
-        context.showSnackBar('My Vehicles');
+        _showSnackBar(context, 'My Vehicles');
       case HomeCategory.chargingHistory:
-        context.go(AppRoutes.userBookings.path);
-      case HomeCategory.support:
-        // TODO: Navigate to support page when created
-        context.showSnackBar('Support');
+        context.push(AppRoutes.activityDetails.path);
+      case HomeCategory.tripPlanner:
+        context.push(AppRoutes.tripPlanner.path);
     }
   }
-}
 
-/// Extension for showing snackbars.
-extension _SnackBarExt on BuildContext {
-  void showSnackBar(String message) {
-    ScaffoldMessenger.of(this).showSnackBar(
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,

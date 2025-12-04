@@ -10,8 +10,7 @@ class ProfileMenuItem {
   const ProfileMenuItem({
     required this.icon,
     required this.title,
-    this.trailing,
-    required this.onTap,
+    required this.onTap, this.trailing,
   });
 
   final IconData icon;

@@ -8,9 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/extensions/date_ext.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../models/notification_model.dart';
 import '../../../repositories/user_repository.dart';
 import '../../../widgets/app_app_bar.dart';
@@ -56,7 +55,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             TextButton(
               onPressed: () async {
                 await _userRepository.markAllNotificationsAsRead();
-                _loadNotifications();
+                await _loadNotifications();
               },
               child: Text('Mark all read', style: TextStyle(fontSize: 14.sp, color: AppColors.primary)),
             ),
@@ -72,7 +71,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           child: ListView.separated(
             padding: EdgeInsets.all(20.r),
             itemCount: _notifications.length,
-            separatorBuilder: (_, __) => SizedBox(height: 12.h),
+            separatorBuilder: (_, _) => SizedBox(height: 12.h),
             itemBuilder: (context, index) {
               final notification = _notifications[index];
               return NotificationItem(
@@ -80,7 +79,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 onTap: () async {
                   if (!notification.isRead) {
                     await _userRepository.markNotificationAsRead(notification.id);
-                    _loadNotifications();
+                 await   _loadNotifications();
                   }
                 },
               );

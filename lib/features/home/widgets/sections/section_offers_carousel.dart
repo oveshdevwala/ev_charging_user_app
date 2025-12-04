@@ -1,27 +1,26 @@
 /// File: lib/features/home/widgets/sections/section_offers_carousel.dart
-/// Purpose: Offers and rewards carousel section with auto-scroll
+/// Purpose: Simple offers list section (no carousel)
 /// Belongs To: home feature
 /// Customization Guide:
-///    - Customize banner appearance via OfferBanner
-///    - Adjust auto-scroll duration via _autoScrollDuration
+///    - Customize offer item appearance via _OfferListItem
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../models/offer_model.dart';
 import '../section_header.dart';
-import '../components/offer_banner.dart';
 
-/// Offers carousel section with auto-scroll.
+/// Simple offers list section.
 class SectionOffersCarousel extends StatelessWidget {
   const SectionOffersCarousel({
-    super.key,
     required this.offers,
     required this.onOfferTap,
     required this.onViewAllTap,
+    super.key,
   });
 
   /// List of offers.
@@ -35,97 +34,70 @@ class SectionOffersCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (offers.isEmpty) return const SizedBox.shrink();
+    if (offers.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SectionHeader(
-          title: AppStrings.offersTitle,
-          onViewAll: onViewAllTap,
-        ),
-        SizedBox(height: 16.h),
-        _OffersCarouselAnimated(
-          offers: offers,
-          onOfferTap: onOfferTap,
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SectionHeader(
+            title: AppStrings.offersTitle,
+            onViewAll: onViewAllTap,
+            showAction: false,
+          ),
+          SizedBox(height: 12.h),
+          ...offers
+              .take(3)
+              .map(
+                (offer) => Padding(
+                  padding: EdgeInsets.only(bottom: 8.h),
+                  child: _OfferListItem(
+                    offer: offer,
+                    onTap: () => onOfferTap(offer),
+                  ),
+                ),
+              ),
+        ],
+      ),
     );
   }
 }
 
-/// Animated carousel with auto-scroll capability.
-class _OffersCarouselAnimated extends StatefulWidget {
-  const _OffersCarouselAnimated({
-    required this.offers,
-    required this.onOfferTap,
-  });
+/// Simple offer list item.
+class _OfferListItem extends StatelessWidget {
+  const _OfferListItem({required this.offer, required this.onTap});
 
-  final List<OfferModel> offers;
-  final void Function(OfferModel offer) onOfferTap;
+  final OfferModel offer;
+  final VoidCallback onTap;
 
-  @override
-  State<_OffersCarouselAnimated> createState() =>
-      _OffersCarouselAnimatedState();
-}
-
-class _OffersCarouselAnimatedState extends State<_OffersCarouselAnimated> {
-  late final PageController _pageController;
-  int _currentPage = 0;
-  static const _autoScrollDuration = Duration(seconds: 5);
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(viewportFraction: 0.88);
-    _startAutoScroll();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void _startAutoScroll() {
-    Future.delayed(_autoScrollDuration, () {
-      if (mounted && widget.offers.length > 1) {
-        final nextPage = (_currentPage + 1) % widget.offers.length;
-        _pageController.animateToPage(
-          nextPage,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-        );
-        _startAutoScroll();
-      }
-    });
-  }
-
-  String _getOfferTitle(OfferModel offer) {
+  String _getOfferTitle() {
     switch (offer.titleKey) {
       case 'offer_flash_sale_title':
         return 'Flash Sale: ${offer.discountPercent?.toInt() ?? 0}% Off';
       case 'offer_cashback_title':
-        return 'Get ${offer.discountPercent?.toInt() ?? 0}% Cashback';
+        return '${offer.discountPercent?.toInt() ?? 0}% Cashback';
       case 'offer_partner_title':
-        return 'Partner Exclusive Deal';
+        return 'Partner Deal';
       case 'offer_seasonal_title':
-        return 'Seasonal Special Offer';
+        return 'Seasonal Special';
       default:
         return offer.titleKey;
     }
   }
 
-  String _getOfferSubtitle(OfferModel offer) {
+  String _getOfferSubtitle() {
     switch (offer.descKey) {
       case 'offer_flash_sale_desc':
-        return 'Limited time only! Charge now and save.';
+        return 'Limited time offer';
       case 'offer_cashback_desc':
-        return 'Earn cashback on every charging session.';
+        return 'On every session';
       case 'offer_partner_desc':
-        return 'Special rates at partner locations.';
+        return 'At partner stations';
       case 'offer_seasonal_desc':
-        return 'Celebrate the season with savings!';
+        return 'Season savings';
       default:
         return offer.descKey;
     }
@@ -133,50 +105,68 @@ class _OffersCarouselAnimatedState extends State<_OffersCarouselAnimated> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 160.h,
-          child: PageView.builder(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(() => _currentPage = index);
-            },
-            itemCount: widget.offers.length,
-            itemBuilder: (context, index) {
-              final offer = widget.offers[index];
-              return OfferBanner(
-                bannerUrl: offer.bannerUrl,
-                onTap: () => widget.onOfferTap(offer),
-                title: _getOfferTitle(offer),
-                subtitle: _getOfferSubtitle(offer),
-              );
-            },
-          ),
-        ),
-        if (widget.offers.length > 1) ...[
-          SizedBox(height: 12.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              widget.offers.length,
-              (index) => AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                margin: EdgeInsets.symmetric(horizontal: 3.w),
-                width: _currentPage == index ? 24.w : 8.w,
-                height: 8.h,
-                decoration: BoxDecoration(
-                  color: _currentPage == index
-                      ? AppColors.primary
-                      : AppColors.outlineLight,
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-              ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(10.r),
+        child: Container(
+          padding: EdgeInsets.all(12.r),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceLight,
+            borderRadius: BorderRadius.circular(10.r),
+            border: Border.all(
+              color: AppColors.outlineLight.withValues(alpha: 0.5),
             ),
           ),
-        ],
-      ],
+          child: Row(
+            children: [
+              Container(
+                width: 36.r,
+                height: 36.r,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Icon(
+                  Iconsax.discount_shape,
+                  size: 18.r,
+                  color: AppColors.primary,
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _getOfferTitle(),
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimaryLight,
+                      ),
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      _getOfferSubtitle(),
+                      style: TextStyle(
+                        fontSize: 11.sp,
+                        color: AppColors.textSecondaryLight,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Iconsax.arrow_right_3,
+                size: 16.r,
+                color: AppColors.textTertiaryLight,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
-

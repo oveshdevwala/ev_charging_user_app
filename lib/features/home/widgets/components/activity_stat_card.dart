@@ -14,10 +14,7 @@ import '../../../../core/theme/app_colors.dart';
 /// Activity stat card for displaying metrics.
 class ActivityStatCard extends StatelessWidget {
   const ActivityStatCard({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.value,
+    required this.icon, required this.label, required this.value, super.key,
     this.unit,
     this.iconColor,
     this.backgroundColor,
@@ -155,8 +152,7 @@ class ActivityStatCard extends StatelessWidget {
 /// Streak badge widget for gamification.
 class StreakBadge extends StatelessWidget {
   const StreakBadge({
-    super.key,
-    required this.streaks,
+    required this.streaks, super.key,
     this.onTap,
   });
 
@@ -168,7 +164,9 @@ class StreakBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (streaks <= 0) return const SizedBox.shrink();
+    if (streaks <= 0) {
+      return const SizedBox.shrink();
+    }
 
     return GestureDetector(
       onTap: onTap,

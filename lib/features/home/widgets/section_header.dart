@@ -9,14 +9,13 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
 
 /// Section header widget with title and optional view all action.
 class SectionHeader extends StatelessWidget {
   const SectionHeader({
-    super.key,
-    required this.title,
+    required this.title, super.key,
     this.onViewAll,
     this.actionText,
     this.showAction = true,

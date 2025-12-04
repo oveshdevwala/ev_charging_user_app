@@ -29,7 +29,7 @@ class HomeCubit extends Cubit<HomeState> {
     double latitude = 37.7749,
     double longitude = -122.4194,
   }) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
 
     try {
       // Fetch all data in parallel
@@ -69,7 +69,7 @@ class HomeCubit extends Cubit<HomeState> {
     double latitude = 37.7749,
     double longitude = -122.4194,
   }) async {
-    emit(state.copyWith(isRefreshing: true, error: null));
+    emit(state.copyWith(isRefreshing: true));
 
     try {
       final stationsFuture = _homeRepository.fetchNearbyStations(
@@ -130,13 +130,12 @@ class HomeCubit extends Cubit<HomeState> {
   /// Clear selection.
   void clearSelection() {
     emit(state.copyWith(
-      selectedOfferId: null,
-      selectedStationId: null,
+      
     ));
   }
 
   /// Clear error.
   void clearError() {
-    emit(state.copyWith(error: null));
+    emit(state.copyWith());
   }
 }

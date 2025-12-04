@@ -7,16 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/extensions/date_ext.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../models/notification_model.dart';
 
 /// Notification item widget.
 class NotificationItem extends StatelessWidget {
   const NotificationItem({
-    super.key,
-    required this.notification,
-    required this.onTap,
+    required this.notification, required this.onTap, super.key,
   });
 
   final NotificationModel notification;

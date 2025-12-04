@@ -11,16 +11,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../models/bundle_model.dart';
-import '../section_header.dart';
 import '../components/bundle_card.dart';
+import '../section_header.dart';
 
 /// Recommended bundles section.
 class SectionBundles extends StatelessWidget {
   const SectionBundles({
-    super.key,
     required this.bundles,
     required this.onBundleTap,
     required this.onViewAllTap,
+    super.key,
   });
 
   /// List of bundles.
@@ -34,21 +34,20 @@ class SectionBundles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (bundles.isEmpty) return const SizedBox.shrink();
+    if (bundles.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader(
-          title: AppStrings.bundlesTitle,
-          onViewAll: onViewAllTap,
-        ),
+        SectionHeader(title: AppStrings.bundlesTitle, onViewAll: onViewAllTap),
         SizedBox(height: 16.h),
         SizedBox(
-          height: 210.h,
+          height: 235.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
             physics: const BouncingScrollPhysics(),
             itemCount: bundles.length,
             itemBuilder: (context, index) {
@@ -67,4 +66,3 @@ class SectionBundles extends StatelessWidget {
     );
   }
 }
-

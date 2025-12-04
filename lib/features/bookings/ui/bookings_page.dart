@@ -9,11 +9,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../routes/app_routes.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../models/booking_model.dart';
 import '../../../repositories/booking_repository.dart';
+import '../../../routes/app_routes.dart';
 import '../../../widgets/booking_card.dart';
 import '../../../widgets/loading_wrapper.dart';
 
@@ -151,7 +151,7 @@ class _BookingsPageState extends State<BookingsPage>
               onCancelTap: isUpcoming
                   ? () async {
                       await _bookingRepository.cancelBooking(booking.id);
-                      _loadBookings();
+                     await _loadBookings();
                     }
                   : null,
             ),

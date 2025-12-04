@@ -3,6 +3,7 @@
 /// Belongs To: shared
 /// Customization Guide:
 ///    - Add new widget file exports here
+library;
 
 export 'app_app_bar.dart';
 export 'booking_card.dart';

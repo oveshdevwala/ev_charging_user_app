@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Add new fields as needed
 ///    - Update copyWith and JSON methods accordingly
+library;
 
 import 'package:equatable/equatable.dart';
 
@@ -44,6 +45,41 @@ class ChargerModel extends Equatable {
     this.updatedAt,
   });
   
+  /// Create from JSON map.
+  factory ChargerModel.fromJson(Map<String, dynamic> json) {
+    return ChargerModel(
+      id: json['id'] as String? ?? '',
+      stationId: json['stationId'] as String? ?? json['station_id'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      type: ChargerType.values.firstWhere(
+        (t) => t.name == (json['type'] as String?),
+        orElse: () => ChargerType.type2,
+      ),
+      power: (json['power'] as num?)?.toDouble() ?? 0.0,
+      status: ChargerStatus.values.firstWhere(
+        (s) => s.name == (json['status'] as String?),
+        orElse: () => ChargerStatus.available,
+      ),
+      pricePerKwh: (json['pricePerKwh'] as num?)?.toDouble() ?? 
+                  (json['price_per_kwh'] as num?)?.toDouble(),
+      pricePerMinute: (json['pricePerMinute'] as num?)?.toDouble() ??
+                     (json['price_per_minute'] as num?)?.toDouble(),
+      currentSessionId: json['currentSessionId'] as String? ?? 
+                       json['current_session_id'] as String?,
+      lastUsed: json['lastUsed'] != null 
+          ? DateTime.tryParse(json['lastUsed'] as String) 
+          : json['last_used'] != null
+              ? DateTime.tryParse(json['last_used'] as String)
+              : null,
+      createdAt: json['createdAt'] != null 
+          ? DateTime.tryParse(json['createdAt'] as String) 
+          : null,
+      updatedAt: json['updatedAt'] != null 
+          ? DateTime.tryParse(json['updatedAt'] as String) 
+          : null,
+    );
+  }
+  
   final String id;
   final String stationId;
   final String name;
@@ -83,41 +119,6 @@ class ChargerModel extends Equatable {
   
   /// Check if charger is in use.
   bool get isInUse => status == ChargerStatus.charging || status == ChargerStatus.occupied;
-  
-  /// Create from JSON map.
-  factory ChargerModel.fromJson(Map<String, dynamic> json) {
-    return ChargerModel(
-      id: json['id'] as String? ?? '',
-      stationId: json['stationId'] as String? ?? json['station_id'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      type: ChargerType.values.firstWhere(
-        (t) => t.name == (json['type'] as String?),
-        orElse: () => ChargerType.type2,
-      ),
-      power: (json['power'] as num?)?.toDouble() ?? 0.0,
-      status: ChargerStatus.values.firstWhere(
-        (s) => s.name == (json['status'] as String?),
-        orElse: () => ChargerStatus.available,
-      ),
-      pricePerKwh: (json['pricePerKwh'] as num?)?.toDouble() ?? 
-                  (json['price_per_kwh'] as num?)?.toDouble(),
-      pricePerMinute: (json['pricePerMinute'] as num?)?.toDouble() ??
-                     (json['price_per_minute'] as num?)?.toDouble(),
-      currentSessionId: json['currentSessionId'] as String? ?? 
-                       json['current_session_id'] as String?,
-      lastUsed: json['lastUsed'] != null 
-          ? DateTime.tryParse(json['lastUsed'] as String) 
-          : json['last_used'] != null
-              ? DateTime.tryParse(json['last_used'] as String)
-              : null,
-      createdAt: json['createdAt'] != null 
-          ? DateTime.tryParse(json['createdAt'] as String) 
-          : null,
-      updatedAt: json['updatedAt'] != null 
-          ? DateTime.tryParse(json['updatedAt'] as String) 
-          : null,
-    );
-  }
   
   /// Convert to JSON map.
   Map<String, dynamic> toJson() {

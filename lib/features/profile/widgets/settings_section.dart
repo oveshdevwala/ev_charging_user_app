@@ -11,9 +11,7 @@ import '../../../core/theme/app_colors.dart';
 /// Settings section container widget.
 class SettingsSection extends StatelessWidget {
   const SettingsSection({
-    super.key,
-    required this.title,
-    required this.children,
+    required this.title, required this.children, super.key,
   });
 
   final String title;
@@ -33,7 +31,7 @@ class SettingsSection extends StatelessWidget {
           ),
         ),
         SizedBox(height: 12.h),
-        Container(
+        DecoratedBox(
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16.r),

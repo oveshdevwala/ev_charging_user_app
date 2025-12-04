@@ -15,12 +15,12 @@ class FavoritesState extends Equatable {
     this.error,
   });
 
+  /// Initial state.
+  factory FavoritesState.initial() => const FavoritesState(isLoading: true);
+
   final bool isLoading;
   final List<StationModel> favorites;
   final String? error;
-
-  /// Initial state.
-  factory FavoritesState.initial() => const FavoritesState(isLoading: true);
 
   /// Copy with new values.
   FavoritesState copyWith({

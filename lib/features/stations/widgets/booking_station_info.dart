@@ -12,7 +12,7 @@ import '../../../models/station_model.dart';
 
 /// Booking station info card.
 class BookingStationInfo extends StatelessWidget {
-  const BookingStationInfo({super.key, required this.station});
+  const BookingStationInfo({required this.station, super.key});
 
   final StationModel station;
 

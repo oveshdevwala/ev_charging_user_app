@@ -3,6 +3,7 @@
 /// Belongs To: shared
 /// Customization Guide:
 ///    - Add new validation methods as needed
+library;
 
 import '../constants/app_constants.dart';
 
@@ -18,7 +19,7 @@ abstract final class Validators {
     }
     return null;
   }
-  
+
   /// Validate password.
   static String? password(String? value) {
     if (value == null || value.isEmpty) {
@@ -29,7 +30,7 @@ abstract final class Validators {
     }
     return null;
   }
-  
+
   /// Validate password confirmation.
   static String? confirmPassword(String? value, String password) {
     if (value == null || value.isEmpty) {
@@ -40,7 +41,7 @@ abstract final class Validators {
     }
     return null;
   }
-  
+
   /// Validate required field.
   static String? required(String? value, [String fieldName = 'This field']) {
     if (value == null || value.isEmpty) {
@@ -48,7 +49,7 @@ abstract final class Validators {
     }
     return null;
   }
-  
+
   /// Validate phone number.
   static String? phone(String? value) {
     if (value == null || value.isEmpty) {
@@ -59,7 +60,7 @@ abstract final class Validators {
     }
     return null;
   }
-  
+
   /// Validate name.
   static String? name(String? value) {
     if (value == null || value.isEmpty) {
@@ -73,7 +74,7 @@ abstract final class Validators {
     }
     return null;
   }
-  
+
   /// Validate OTP code.
   static String? otp(String? value) {
     if (value == null || value.isEmpty) {
@@ -88,4 +89,3 @@ abstract final class Validators {
     return null;
   }
 }
-

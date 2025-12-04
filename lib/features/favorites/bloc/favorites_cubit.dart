@@ -18,7 +18,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
 
   /// Load favorite stations.
   Future<void> loadFavorites() async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
 
     try {
       final favorites = await _stationRepository.getFavoriteStations();

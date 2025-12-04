@@ -10,9 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'bootstrap.dart';
+import 'core/di/injection.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_manager.dart';
-import 'core/di/injection.dart';
 import 'routes/app_routes.dart';
 
 void main() {

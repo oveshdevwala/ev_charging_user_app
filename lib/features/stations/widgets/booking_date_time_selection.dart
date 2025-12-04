@@ -7,17 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
 
 /// Booking date and time selection widget.
 class BookingDateTimeSelection extends StatelessWidget {
   const BookingDateTimeSelection({
-    super.key,
-    required this.selectedDate,
-    required this.selectedTime,
-    required this.onDateChanged,
-    required this.onTimeChanged,
+    required this.selectedDate, required this.selectedTime, required this.onDateChanged, required this.onTimeChanged, super.key,
   });
 
   final DateTime selectedDate;
@@ -52,7 +48,9 @@ class BookingDateTimeSelection extends StatelessWidget {
           firstDate: DateTime.now(),
           lastDate: DateTime.now().add(const Duration(days: 30)),
         );
-        if (date != null) onDateChanged(date);
+        if (date != null) {
+          onDateChanged(date);
+        }
       },
       child: _SelectionBox(
         icon: Iconsax.calendar_1,
@@ -65,7 +63,9 @@ class BookingDateTimeSelection extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         final time = await showTimePicker(context: context, initialTime: selectedTime);
-        if (time != null) onTimeChanged(time);
+        if (time != null) {
+          onTimeChanged(time);
+        }
       },
       child: _SelectionBox(icon: Iconsax.clock, label: selectedTime.format(context)),
     );

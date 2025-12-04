@@ -9,12 +9,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 import '../widgets/profile_header.dart';
-import '../widgets/profile_menu_section.dart';
 import '../widgets/profile_menu_item.dart';
+import '../widgets/profile_menu_section.dart';
 
 /// Profile page showing user information and settings.
 class ProfilePage extends StatelessWidget {
@@ -61,8 +61,8 @@ class ProfilePage extends StatelessWidget {
         ProfileMenuItem(
           icon: Iconsax.wallet,
           title: AppStrings.wallet,
-          trailing: '\$125.00',
-          onTap: () {},
+          trailing: r'$125.00',
+          onTap: () => context.push(AppRoutes.wallet.path),
         ),
         ProfileMenuItem(
           icon: Iconsax.car,
@@ -134,7 +134,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   void _showLogoutDialog(BuildContext context) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Logout'),
@@ -146,7 +146,7 @@ class ProfilePage extends StatelessWidget {
               Navigator.pop(ctx);
               context.go(AppRoutes.login.path);
             },
-            child: Text('Logout', style: TextStyle(color: AppColors.error)),
+            child: const Text('Logout', style: TextStyle(color: AppColors.error)),
           ),
         ],
       ),

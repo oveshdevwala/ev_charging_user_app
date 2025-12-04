@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Add additional initialization steps here
 ///    - Configure error handling and logging
+library;
 
 import 'dart:async';
 
@@ -18,13 +19,13 @@ import 'core/utils/helpers.dart';
 Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
   // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  
+
   // Set system UI overlay style
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -34,16 +35,15 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-  
+
   // Initialize dependencies
   await initializeDependencies();
-  
+
   // Setup error handling
   FlutterError.onError = (details) {
     logError('Flutter Error', details.exception, details.stack);
   };
-  
+
   // Run the app
   runApp(await builder());
 }
-

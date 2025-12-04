@@ -21,7 +21,7 @@ enum HomeCategory {
   myBookings,
   myVehicles,
   chargingHistory,
-  support,
+  tripPlanner,
 }
 
 /// Home page state with all section data.
@@ -38,6 +38,9 @@ class HomeState extends Equatable {
     this.selectedOfferId,
     this.selectedStationId,
   });
+
+  /// Initial loading state.
+  factory HomeState.initial() => const HomeState(isLoading: true);
 
   /// Loading state for initial load.
   final bool isLoading;
@@ -78,9 +81,6 @@ class HomeState extends Equatable {
 
   /// Check if there's an error.
   bool get hasError => error != null && error!.isNotEmpty;
-
-  /// Initial loading state.
-  factory HomeState.initial() => const HomeState(isLoading: true);
 
   /// Copy with new values.
   HomeState copyWith({

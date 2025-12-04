@@ -6,18 +6,17 @@
 ///    - Uses CachedNetworkImage for efficient loading
 library;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/theme/app_colors.dart';
 
 /// Offer banner widget for carousel display.
 class OfferBanner extends StatelessWidget {
   const OfferBanner({
-    super.key,
-    required this.bannerUrl,
-    required this.onTap,
+    required this.bannerUrl, required this.onTap, super.key,
     this.height,
     this.width,
     this.borderRadius,
@@ -64,11 +63,11 @@ class OfferBanner extends StatelessWidget {
         margin: margin ?? EdgeInsets.symmetric(horizontal: 8.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 16.r),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: AppColors.shadowLight,
               blurRadius: 12,
-              offset: const Offset(0, 4),
+              offset: Offset(0, 4),
             ),
           ],
         ),
@@ -77,35 +76,7 @@ class OfferBanner extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              CachedNetworkImage(
-                imageUrl: bannerUrl,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  color: AppColors.surfaceVariantLight,
-                  child: Center(
-                    child: SizedBox(
-                      width: 24.r,
-                      height: 24.r,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.r,
-                        valueColor: const AlwaysStoppedAnimation<Color>(
-                          AppColors.primary,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                errorWidget: (context, url, error) => Container(
-                  color: AppColors.surfaceVariantLight,
-                  child: Center(
-                    child: Icon(
-                      Icons.image_not_supported_outlined,
-                      size: 32.r,
-                      color: AppColors.textTertiaryLight,
-                    ),
-                  ),
-                ),
-              ),
+              _buildBannerImage(),
               if (showGradientOverlay)
                 Container(
                   decoration: BoxDecoration(
@@ -155,6 +126,75 @@ class OfferBanner extends StatelessWidget {
                   ),
                 ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Build banner image with URL validation.
+  Widget _buildBannerImage() {
+    // Check if URL is valid
+    final isValidUrl = bannerUrl.isNotEmpty &&
+        (bannerUrl.startsWith('http://') || bannerUrl.startsWith('https://'));
+
+    if (!isValidUrl) {
+      // Show placeholder for invalid/empty URLs
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColors.primary.withValues(alpha: 0.8),
+              AppColors.primaryDark,
+            ],
+          ),
+        ),
+        child: Center(
+          child: Icon(
+            Iconsax.discount_shape5,
+            size: 48.r,
+            color: Colors.white.withValues(alpha: 0.3),
+          ),
+        ),
+      );
+    }
+
+    return CachedNetworkImage(
+      imageUrl: bannerUrl,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => ColoredBox(
+        color: AppColors.surfaceVariantLight,
+        child: Center(
+          child: SizedBox(
+            width: 24.r,
+            height: 24.r,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.r,
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                AppColors.primary,
+              ),
+            ),
+          ),
+        ),
+      ),
+      errorWidget: (context, url, error) => Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColors.primary.withValues(alpha: 0.8),
+              AppColors.primaryDark,
+            ],
+          ),
+        ),
+        child: Center(
+          child: Icon(
+            Iconsax.discount_shape5,
+            size: 48.r,
+            color: Colors.white.withValues(alpha: 0.3),
           ),
         ),
       ),

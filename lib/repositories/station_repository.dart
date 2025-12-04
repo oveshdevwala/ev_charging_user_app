@@ -62,8 +62,7 @@ class DummyStationRepository implements StationRepository {
         longitude: -122.4094,
         description:
             'Fast charging station in the heart of downtown. Open 24/7 with excellent amenities.',
-        imageUrl:
-            'https://images.unsplash.com/photo-1593941707882-a5bba14938c7',
+        // imageUrl removed - using placeholder instead
         rating: 4.8,
         reviewCount: 124,
         pricePerKwh: 0.35,
@@ -107,7 +106,7 @@ class DummyStationRepository implements StationRepository {
         latitude: 37.7749,
         longitude: -122.4194,
         description: 'Eco-friendly charging station powered by solar energy.',
-        imageUrl: 'https://images.unsplash.com/photo-1558346648-9757f2fa4474',
+        // imageUrl removed - using placeholder instead
         rating: 4.5,
         reviewCount: 89,
         pricePerKwh: 0.30,
@@ -140,8 +139,7 @@ class DummyStationRepository implements StationRepository {
         longitude: -122.4084,
         description:
             'Tesla Supercharger with V3 technology for fastest charging speeds.',
-        imageUrl:
-            'https://images.unsplash.com/photo-1647166545674-ce28ce93bdca',
+        // imageUrl removed - using placeholder instead
         rating: 4.9,
         reviewCount: 256,
         pricePerKwh: 0.40,
@@ -196,8 +194,7 @@ class DummyStationRepository implements StationRepository {
         longitude: -122.4094,
         description:
             'Scenic charging location in the city park with beautiful views.',
-        imageUrl:
-            'https://images.unsplash.com/photo-1621004316532-9d3f5d2b2ad7',
+        // imageUrl removed - using placeholder instead
         rating: 4.3,
         reviewCount: 67,
         pricePerKwh: 0.28,
@@ -231,8 +228,7 @@ class DummyStationRepository implements StationRepository {
         longitude: -122.3994,
         description:
             'Convenient highway rest stop with multiple fast chargers.',
-        imageUrl:
-            'https://images.unsplash.com/photo-1617788138017-80ad40651399',
+        // imageUrl removed - using placeholder instead
         rating: 4.1,
         reviewCount: 203,
         pricePerKwh: 0.45,
@@ -269,6 +265,223 @@ class DummyStationRepository implements StationRepository {
         ],
         distance: 5.3,
       ),
+      // ========== Trip Planner Charging Stations ==========
+      const StationModel(
+        id: 'cs_gilroy',
+        name: 'Gilroy Supercharger',
+        address: '681 Leavesley Rd, Gilroy, CA 95020',
+        latitude: 37.0058,
+        longitude: -121.5683,
+        description: 'Tesla Supercharger with food nearby.',
+        rating: 4.6,
+        reviewCount: 89,
+        pricePerKwh: 0.38,
+        is24Hours: true,
+        amenities: [Amenity.restroom, Amenity.cafe, Amenity.parking],
+        chargers: [
+          ChargerModel(
+            id: 'cs_gilroy_1',
+            stationId: 'cs_gilroy',
+            name: 'V3-1',
+            type: ChargerType.tesla,
+            power: 250,
+          ),
+          ChargerModel(
+            id: 'cs_gilroy_2',
+            stationId: 'cs_gilroy',
+            name: 'V3-2',
+            type: ChargerType.tesla,
+            power: 250,
+          ),
+          ChargerModel(
+            id: 'cs_gilroy_3',
+            stationId: 'cs_gilroy',
+            name: 'V3-3',
+            type: ChargerType.tesla,
+            power: 250,
+          ),
+        ],
+        distance: 125,
+      ),
+      const StationModel(
+        id: 'cs_kettleman',
+        name: 'Kettleman City Station',
+        address: '33000 Bernard Dr, Kettleman City, CA 93239',
+        latitude: 35.9894,
+        longitude: -119.9616,
+        description: 'Large charging station with restaurant.',
+        rating: 4.4,
+        reviewCount: 156,
+        pricePerKwh: 0.35,
+        is24Hours: true,
+        amenities: [
+          Amenity.restroom,
+          Amenity.restaurant,
+          Amenity.parking,
+          Amenity.wifi,
+        ],
+        chargers: [
+          ChargerModel(
+            id: 'cs_kett_1',
+            stationId: 'cs_kettleman',
+            name: 'CCS-1',
+            type: ChargerType.ccs,
+            power: 150,
+          ),
+          ChargerModel(
+            id: 'cs_kett_2',
+            stationId: 'cs_kettleman',
+            name: 'CCS-2',
+            type: ChargerType.ccs,
+            power: 150,
+          ),
+          ChargerModel(
+            id: 'cs_kett_3',
+            stationId: 'cs_kettleman',
+            name: 'V3-1',
+            type: ChargerType.tesla,
+            power: 250,
+          ),
+        ],
+        distance: 310,
+      ),
+      const StationModel(
+        id: 'cs_tejon',
+        name: 'Tejon Ranch Supercharger',
+        address: '5701 Dennis McCarthy Dr, Lebec, CA 93243',
+        latitude: 34.9872,
+        longitude: -118.9486,
+        description: 'Mountain pass charging station.',
+        rating: 4.5,
+        reviewCount: 112,
+        pricePerKwh: 0.40,
+        is24Hours: true,
+        amenities: [Amenity.restroom, Amenity.cafe, Amenity.parking],
+        chargers: [
+          ChargerModel(
+            id: 'cs_tejon_1',
+            stationId: 'cs_tejon',
+            name: 'V3-1',
+            type: ChargerType.tesla,
+            power: 250,
+          ),
+          ChargerModel(
+            id: 'cs_tejon_2',
+            stationId: 'cs_tejon',
+            name: 'V3-2',
+            type: ChargerType.tesla,
+            power: 250,
+          ),
+        ],
+        distance: 520,
+      ),
+      const StationModel(
+        id: 'cs_sacramento',
+        name: 'Sacramento Supercharger',
+        address: '3560 N Freeway Blvd, Sacramento, CA 95834',
+        latitude: 38.5816,
+        longitude: -121.4944,
+        description: 'Capital city charging hub.',
+        rating: 4.7,
+        reviewCount: 98,
+        pricePerKwh: 0.36,
+        is24Hours: true,
+        amenities: [
+          Amenity.restroom,
+          Amenity.shopping,
+          Amenity.parking,
+          Amenity.cafe,
+        ],
+        chargers: [
+          ChargerModel(
+            id: 'cs_sac_1',
+            stationId: 'cs_sacramento',
+            name: 'V3-1',
+            type: ChargerType.tesla,
+            power: 250,
+          ),
+          ChargerModel(
+            id: 'cs_sac_2',
+            stationId: 'cs_sacramento',
+            name: 'V3-2',
+            type: ChargerType.tesla,
+            power: 250,
+          ),
+          ChargerModel(
+            id: 'cs_sac_3',
+            stationId: 'cs_sacramento',
+            name: 'CCS-1',
+            type: ChargerType.ccs,
+            power: 150,
+          ),
+        ],
+        distance: 140,
+      ),
+      const StationModel(
+        id: 'cs_barstow',
+        name: 'Barstow Supercharger',
+        address: '2812 Lenwood Rd, Barstow, CA 92311',
+        latitude: 34.8983,
+        longitude: -117.0225,
+        description: 'Desert highway charging station.',
+        rating: 4.3,
+        reviewCount: 201,
+        pricePerKwh: 0.38,
+        is24Hours: true,
+        amenities: [Amenity.restroom, Amenity.cafe, Amenity.parking],
+        chargers: [
+          ChargerModel(
+            id: 'cs_bar_1',
+            stationId: 'cs_barstow',
+            name: 'V3-1',
+            type: ChargerType.tesla,
+            power: 250,
+          ),
+          ChargerModel(
+            id: 'cs_bar_2',
+            stationId: 'cs_barstow',
+            name: 'V3-2',
+            type: ChargerType.tesla,
+            power: 250,
+          ),
+        ],
+        distance: 180,
+      ),
+      const StationModel(
+        id: 'cs_primm',
+        name: 'Primm Outlet Mall Charger',
+        address: '32100 S Las Vegas Blvd, Primm, NV 89019',
+        latitude: 35.6106,
+        longitude: -115.3889,
+        description: 'Outlet mall charging with shopping.',
+        rating: 4.2,
+        reviewCount: 87,
+        pricePerKwh: 0.42,
+        is24Hours: true,
+        amenities: [
+          Amenity.restroom,
+          Amenity.shopping,
+          Amenity.restaurant,
+          Amenity.parking,
+        ],
+        chargers: [
+          ChargerModel(
+            id: 'cs_pri_1',
+            stationId: 'cs_primm',
+            name: 'CCS-1',
+            type: ChargerType.ccs,
+            power: 150,
+          ),
+          ChargerModel(
+            id: 'cs_pri_2',
+            stationId: 'cs_primm',
+            name: 'CCS-2',
+            type: ChargerType.ccs,
+            power: 150,
+          ),
+        ],
+        distance: 360,
+      ),
     ];
   }
 
@@ -276,7 +489,9 @@ class DummyStationRepository implements StationRepository {
   Future<List<StationModel>> getStations({int page = 1, int limit = 20}) async {
     await Future.delayed(const Duration(milliseconds: 800));
     final start = (page - 1) * limit;
-    if (start >= _stations.length) return [];
+    if (start >= _stations.length) {
+      return [];
+    }
     final end = (start + limit) > _stations.length
         ? _stations.length
         : start + limit;
@@ -305,8 +520,8 @@ class DummyStationRepository implements StationRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 800));
     // In dummy, return all stations sorted by distance
-    final stations = List<StationModel>.from(_stations);
-    stations.sort((a, b) => (a.distance ?? 0).compareTo(b.distance ?? 0));
+    final stations = List<StationModel>.from(_stations)
+      ..sort((a, b) => (a.distance ?? 0).compareTo(b.distance ?? 0));
     return stations
         .map((s) => s.copyWith(isFavorite: _favorites.contains(s.id)))
         .toList();
@@ -315,7 +530,9 @@ class DummyStationRepository implements StationRepository {
   @override
   Future<List<StationModel>> searchStations(String query) async {
     await Future.delayed(const Duration(milliseconds: 600));
-    if (query.isEmpty) return [];
+    if (query.isEmpty) {
+      return [];
+    }
     final lowerQuery = query.toLowerCase();
     return _stations
         .where(

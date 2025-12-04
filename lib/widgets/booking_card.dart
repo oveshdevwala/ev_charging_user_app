@@ -4,21 +4,20 @@
 /// Customization Guide:
 ///    - Customize via parameters (compact, showActions, etc.)
 ///    - Used in booking lists
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../core/theme/app_colors.dart';
 import '../core/extensions/date_ext.dart';
+import '../core/theme/app_colors.dart';
 import '../models/booking_model.dart';
 
 /// Booking card widget for displaying booking info.
 class BookingCard extends StatelessWidget {
   const BookingCard({
-    super.key,
-    required this.booking,
-    required this.onTap,
+    required this.booking, required this.onTap, super.key,
     this.onCancelTap,
     this.compact = false,
     this.showActions = true,
@@ -39,7 +38,7 @@ class BookingCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: AppColors.outlineLight, width: 1),
+          border: Border.all(color: AppColors.outlineLight),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

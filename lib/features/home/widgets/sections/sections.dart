@@ -3,6 +3,7 @@
 /// Belongs To: home feature
 library;
 
+export 'section_activity_enhanced.dart';
 export 'section_activity_summary.dart';
 export 'section_bundles.dart';
 export 'section_categories_grid.dart';

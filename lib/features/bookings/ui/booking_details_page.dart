@@ -8,18 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/extensions/date_ext.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../models/booking_model.dart';
 import '../../../repositories/booking_repository.dart';
-import '../../../widgets/common_button.dart';
 import '../../../widgets/app_app_bar.dart';
+import '../../../widgets/common_button.dart';
 import '../../../widgets/loading_wrapper.dart';
 
 /// Booking details page showing full booking information.
 class BookingDetailsPage extends StatefulWidget {
-  const BookingDetailsPage({super.key, required this.bookingId});
+  const BookingDetailsPage({required this.bookingId, super.key});
 
   final String bookingId;
 
@@ -98,13 +98,20 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
           SizedBox(height: 16.h),
           Text(
             _getStatusText(_booking!.status),
-            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700, color: color),
+            style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
           ),
           if (_booking!.status == BookingStatus.confirmed) ...[
             SizedBox(height: 8.h),
             Text(
               'Starts at ${_booking!.startTime.formattedTime}',
-              style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: AppColors.textSecondaryLight,
+              ),
             ),
           ],
         ],
@@ -123,13 +130,32 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Booking Details', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
+          Text(
+            'Booking Details',
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+          ),
           SizedBox(height: 16.h),
-          _buildDetailRow(Iconsax.flash_1, 'Station', _booking!.stationName ?? '-'),
+          _buildDetailRow(
+            Iconsax.flash_1,
+            'Station',
+            _booking!.stationName ?? '-',
+          ),
           _buildDetailRow(Iconsax.cpu, 'Charger', _booking!.chargerName ?? '-'),
-          _buildDetailRow(Iconsax.calendar_1, 'Date', _booking!.startTime.formatted),
-          _buildDetailRow(Iconsax.clock, 'Time', _booking!.startTime.formattedTime),
-          _buildDetailRow(Iconsax.timer_1, 'Duration', _booking!.durationDisplay),
+          _buildDetailRow(
+            Iconsax.calendar_1,
+            'Date',
+            _booking!.startTime.formatted,
+          ),
+          _buildDetailRow(
+            Iconsax.clock,
+            'Time',
+            _booking!.startTime.formattedTime,
+          ),
+          _buildDetailRow(
+            Iconsax.timer_1,
+            'Duration',
+            _booking!.durationDisplay,
+          ),
           if (_booking!.energyDelivered != null)
             _buildDetailRow(
               Iconsax.battery_charging,
@@ -152,19 +178,35 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Payment', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
+          Text(
+            'Payment',
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+          ),
           SizedBox(height: 16.h),
-          _buildPaymentRow('Estimated Cost', '\$${_booking!.estimatedCost.toStringAsFixed(2)}'),
+          _buildPaymentRow(
+            'Estimated Cost',
+            '\$${_booking!.estimatedCost.toStringAsFixed(2)}',
+          ),
           if (_booking!.actualCost != null)
-            _buildPaymentRow('Actual Cost', '\$${_booking!.actualCost!.toStringAsFixed(2)}'),
+            _buildPaymentRow(
+              'Actual Cost',
+              '\$${_booking!.actualCost!.toStringAsFixed(2)}',
+            ),
           Divider(height: 24.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Total', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
+              Text(
+                'Total',
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+              ),
               Text(
                 _booking!.costDisplay,
-                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700, color: AppColors.primary),
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                ),
               ),
             ],
           ),
@@ -180,9 +222,18 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
         children: [
           Icon(icon, size: 20.r, color: AppColors.textSecondaryLight),
           SizedBox(width: 12.w),
-          Text(label, style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight)),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: AppColors.textSecondaryLight,
+            ),
+          ),
           const Spacer(),
-          Text(value, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500)),
+          Text(
+            value,
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+          ),
         ],
       ),
     );
@@ -194,8 +245,17 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight)),
-          Text(value, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500)),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: AppColors.textSecondaryLight,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+          ),
         ],
       ),
     );
@@ -251,24 +311,26 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
   }
 
   void _onCancelPressed() {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Cancel Booking'),
         content: const Text('Are you sure you want to cancel this booking?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('No')),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('No'),
+          ),
           TextButton(
             onPressed: () async {
               Navigator.pop(context);
               await _bookingRepository.cancelBooking(_booking!.id);
-              _loadBooking();
+             await _loadBooking();
             },
-            child: Text('Yes', style: TextStyle(color: AppColors.error)),
+            child: const Text('Yes', style: TextStyle(color: AppColors.error)),
           ),
         ],
       ),
     );
   }
 }
-

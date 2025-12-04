@@ -11,17 +11,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_strings.dart';
 import '../../../../models/trip_route_model.dart';
-import '../section_header.dart';
 import '../components/trip_card.dart';
+import '../section_header.dart';
 
 /// Trip planner section with saved routes.
 class SectionTripPlanner extends StatelessWidget {
   const SectionTripPlanner({
-    super.key,
     required this.savedRoutes,
     required this.onRouteTap,
     required this.onPlanTripTap,
     required this.onViewAllTap,
+    super.key,
   });
 
   /// List of saved routes.
@@ -51,7 +51,7 @@ class SectionTripPlanner extends StatelessWidget {
           height: 195.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
             physics: const BouncingScrollPhysics(),
             itemCount: savedRoutes.length + 1, // +1 for plan trip card
             itemBuilder: (context, index) {
@@ -59,10 +59,7 @@ class SectionTripPlanner extends StatelessWidget {
                 return TripPlannerCard(onPlanTripTap: onPlanTripTap);
               }
               final route = savedRoutes[index - 1];
-              return TripCard(
-                route: route,
-                onTap: () => onRouteTap(route),
-              );
+              return TripCard(route: route, onTap: () => onRouteTap(route));
             },
           ),
         ),
@@ -70,4 +67,3 @@ class SectionTripPlanner extends StatelessWidget {
     );
   }
 }
-

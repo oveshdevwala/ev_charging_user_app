@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Implement the interface with actual backend API
 ///    - Replace DummyUserRepository with real implementation
+library;
 
 import '../models/models.dart';
 
@@ -12,38 +13,38 @@ import '../models/models.dart';
 abstract class UserRepository {
   /// Get current user profile.
   Future<UserModel?> getProfile();
-  
+
   /// Update user profile.
   Future<UserModel?> updateProfile({
     String? fullName,
     String? phone,
     String? avatarUrl,
   });
-  
+
   /// Change password.
   Future<bool> changePassword({
     required String currentPassword,
     required String newPassword,
   });
-  
+
   /// Upload avatar.
   Future<String?> uploadAvatar(String filePath);
-  
+
   /// Delete account.
   Future<bool> deleteAccount();
-  
+
   /// Get user notifications.
   Future<List<NotificationModel>> getNotifications({
     int page = 1,
     int limit = 20,
   });
-  
+
   /// Mark notification as read.
   Future<bool> markNotificationAsRead(String notificationId);
-  
+
   /// Mark all notifications as read.
   Future<bool> markAllNotificationsAsRead();
-  
+
   /// Get unread notification count.
   Future<int> getUnreadNotificationCount();
 }
@@ -55,30 +56,28 @@ class DummyUserRepository implements UserRepository {
     email: 'john.doe@example.com',
     fullName: 'John Doe',
     phone: '+1234567890',
-    role: UserRole.user,
     isVerified: true,
   );
-  
+
   final List<NotificationModel> _notifications = _generateDummyNotifications();
-  
+
   static List<NotificationModel> _generateDummyNotifications() {
     return [
       NotificationModel(
         id: 'notif_1',
         userId: 'user_1',
         title: 'Booking Confirmed',
-        message: 'Your booking at Downtown EV Hub has been confirmed for today at 3:00 PM.',
+        message:
+            'Your booking at Downtown EV Hub has been confirmed for today at 3:00 PM.',
         type: NotificationType.booking,
-        isRead: false,
         createdAt: DateTime.now().subtract(const Duration(hours: 1)),
       ),
       NotificationModel(
         id: 'notif_2',
         userId: 'user_1',
         title: 'Charging Complete',
-        message: 'Your charging session is complete. Total cost: \$15.50',
+        message: r'Your charging session is complete. Total cost: $15.50',
         type: NotificationType.payment,
-        isRead: false,
         createdAt: DateTime.now().subtract(const Duration(days: 1)),
       ),
       NotificationModel(
@@ -95,19 +94,18 @@ class DummyUserRepository implements UserRepository {
         userId: 'user_1',
         title: 'New Station Nearby',
         message: 'A new charging station has opened near your location!',
-        type: NotificationType.system,
         isRead: true,
         createdAt: DateTime.now().subtract(const Duration(days: 5)),
       ),
     ];
   }
-  
+
   @override
   Future<UserModel?> getProfile() async {
     await Future.delayed(const Duration(milliseconds: 500));
     return _currentUser;
   }
-  
+
   @override
   Future<UserModel?> updateProfile({
     String? fullName,
@@ -116,6 +114,7 @@ class DummyUserRepository implements UserRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 800));
     if (_currentUser != null) {
+      // ignore: join_return_with_assignment
       _currentUser = _currentUser!.copyWith(
         fullName: fullName ?? _currentUser!.fullName,
         phone: phone ?? _currentUser!.phone,
@@ -126,7 +125,7 @@ class DummyUserRepository implements UserRepository {
     }
     return null;
   }
-  
+
   @override
   Future<bool> changePassword({
     required String currentPassword,
@@ -136,21 +135,21 @@ class DummyUserRepository implements UserRepository {
     // Dummy validation
     return currentPassword.isNotEmpty && newPassword.length >= 8;
   }
-  
+
   @override
   Future<String?> uploadAvatar(String filePath) async {
     await Future.delayed(const Duration(seconds: 2));
     // Return a dummy URL
     return 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e';
   }
-  
+
   @override
   Future<bool> deleteAccount() async {
     await Future.delayed(const Duration(seconds: 1));
     _currentUser = null;
     return true;
   }
-  
+
   @override
   Future<List<NotificationModel>> getNotifications({
     int page = 1,
@@ -158,11 +157,15 @@ class DummyUserRepository implements UserRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 500));
     final start = (page - 1) * limit;
-    if (start >= _notifications.length) return [];
-    final end = (start + limit) > _notifications.length ? _notifications.length : start + limit;
+    if (start >= _notifications.length) {
+      return [];
+    }
+    final end = (start + limit) > _notifications.length
+        ? _notifications.length
+        : start + limit;
     return _notifications.sublist(start, end);
   }
-  
+
   @override
   Future<bool> markNotificationAsRead(String notificationId) async {
     await Future.delayed(const Duration(milliseconds: 300));
@@ -173,7 +176,7 @@ class DummyUserRepository implements UserRepository {
     }
     return false;
   }
-  
+
   @override
   Future<bool> markAllNotificationsAsRead() async {
     await Future.delayed(const Duration(milliseconds: 500));
@@ -182,11 +185,10 @@ class DummyUserRepository implements UserRepository {
     }
     return true;
   }
-  
+
   @override
   Future<int> getUnreadNotificationCount() async {
     await Future.delayed(const Duration(milliseconds: 200));
     return _notifications.where((n) => !n.isRead).length;
   }
 }
-

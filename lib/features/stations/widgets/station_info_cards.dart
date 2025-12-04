@@ -12,7 +12,7 @@ import '../../../models/station_model.dart';
 
 /// Station info cards showing hours, chargers, and distance.
 class StationInfoCards extends StatelessWidget {
-  const StationInfoCards({super.key, required this.station});
+  const StationInfoCards({required this.station, super.key});
 
   final StationModel station;
 

@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Add new bundle types and pricing tiers
 ///    - Update copyWith and JSON methods accordingly
+library;
 
 import 'package:equatable/equatable.dart';
 
@@ -34,36 +35,6 @@ class BundleModel extends Equatable {
     this.color,
   });
 
-  final String id;
-  final String titleKey;
-  final String benefitKey;
-  final String iconUrl;
-  final BundleType type;
-  final double price;
-  final double? originalPrice;
-  final int duration;
-  final List<String> features;
-  final bool isPopular;
-  final bool isBestValue;
-  final String? badgeKey;
-  final String? color;
-
-  /// Check if bundle has discount.
-  bool get hasDiscount => originalPrice != null && originalPrice! > price;
-
-  /// Calculate discount percentage.
-  int get discountPercent {
-    if (!hasDiscount) return 0;
-    return (((originalPrice! - price) / originalPrice!) * 100).round();
-  }
-
-  /// Format duration as readable string.
-  String get durationText {
-    if (duration >= 365) return '${duration ~/ 365} Year';
-    if (duration >= 30) return '${duration ~/ 30} Month';
-    return '$duration Days';
-  }
-
   /// Create from JSON map.
   factory BundleModel.fromJson(Map<String, dynamic> json) {
     return BundleModel(
@@ -84,6 +55,42 @@ class BundleModel extends Equatable {
       badgeKey: json['badgeKey'] as String?,
       color: json['color'] as String?,
     );
+  }
+
+  final String id;
+  final String titleKey;
+  final String benefitKey;
+  final String iconUrl;
+  final BundleType type;
+  final double price;
+  final double? originalPrice;
+  final int duration;
+  final List<String> features;
+  final bool isPopular;
+  final bool isBestValue;
+  final String? badgeKey;
+  final String? color;
+
+  /// Check if bundle has discount.
+  bool get hasDiscount => originalPrice != null && originalPrice! > price;
+
+  /// Calculate discount percentage.
+  int get discountPercent {
+    if (!hasDiscount) {
+      return 0;
+    }
+    return (((originalPrice! - price) / originalPrice!) * 100).round();
+  }
+
+  /// Format duration as readable string.
+  String get durationText {
+    if (duration >= 365) {
+      return '${duration ~/ 365} Year';
+    }
+    if (duration >= 30) {
+      return '${duration ~/ 30} Month';
+    }
+    return '$duration Days';
   }
 
   /// Convert to JSON map.

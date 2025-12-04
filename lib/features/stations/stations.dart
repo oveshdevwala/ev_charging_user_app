@@ -3,6 +3,9 @@
 /// Belongs To: stations feature
 library;
 
+// BLoC
+export 'bloc/bloc.dart';
+
 // UI
 export 'ui/booking_page.dart';
 export 'ui/station_details_page.dart';

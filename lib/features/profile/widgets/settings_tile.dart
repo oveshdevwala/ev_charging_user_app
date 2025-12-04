@@ -11,11 +11,8 @@ import '../../../core/theme/app_colors.dart';
 /// Settings navigation tile.
 class SettingsTile extends StatelessWidget {
   const SettingsTile({
-    super.key,
-    required this.icon,
-    required this.title,
+    required this.icon, required this.title, required this.onTap, super.key,
     this.titleColor,
-    required this.onTap,
   });
 
   final IconData icon;

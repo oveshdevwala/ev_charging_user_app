@@ -4,10 +4,11 @@
 /// Customization Guide:
 ///    - Customize via parameters (compact, showDistance, etc.)
 ///    - Used in station lists and nearby stations
+library;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../core/theme/app_colors.dart';
@@ -16,9 +17,7 @@ import '../models/station_model.dart';
 /// Station card widget for displaying charging station info.
 class StationCard extends StatelessWidget {
   const StationCard({
-    super.key,
-    required this.station,
-    required this.onTap,
+    required this.station, required this.onTap, super.key,
     this.onFavoriteTap,
     this.compact = false,
     this.showDistance = true,
@@ -45,11 +44,11 @@ class StationCard extends StatelessWidget {
   Widget _buildFullCard(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: AppColors.outlineLight, width: 1),
+          border: Border.all(color: AppColors.outlineLight),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,31 +58,11 @@ class StationCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-                  child: CachedNetworkImage(
-                    imageUrl: station.imageUrl ?? '',
+                  child: _buildStationImage(
+                    station.imageUrl,
                     height: 140.h,
                     width: double.infinity,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: AppColors.outlineLight,
-                      child: Center(
-                        child: Icon(
-                          Iconsax.image,
-                          size: 32.r,
-                          color: AppColors.textTertiaryLight,
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: AppColors.outlineLight,
-                      child: Center(
-                        child: Icon(
-                          Iconsax.image,
-                          size: 32.r,
-                          color: AppColors.textTertiaryLight,
-                        ),
-                      ),
-                    ),
+                    iconSize: 32.r,
                   ),
                 ),
                 // Favorite button
@@ -95,14 +74,14 @@ class StationCard extends StatelessWidget {
                       onTap: onFavoriteTap,
                       child: Container(
                         padding: EdgeInsets.all(8.r),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
                               color: AppColors.shadowLight,
                               blurRadius: 8,
-                              offset: const Offset(0, 2),
+                              offset: Offset(0, 2),
                             ),
                           ],
                         ),
@@ -267,34 +246,18 @@ class StationCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: AppColors.outlineLight, width: 1),
+          border: Border.all(color: AppColors.outlineLight),
         ),
         child: Row(
           children: [
             // Image
             ClipRRect(
               borderRadius: BorderRadius.circular(8.r),
-              child: CachedNetworkImage(
-                imageUrl: station.imageUrl ?? '',
+              child: _buildStationImage(
+                station.imageUrl,
                 width: 72.w,
                 height: 72.h,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  color: AppColors.outlineLight,
-                  child: Icon(
-                    Iconsax.image,
-                    size: 24.r,
-                    color: AppColors.textTertiaryLight,
-                  ),
-                ),
-                errorWidget: (context, url, error) => Container(
-                  color: AppColors.outlineLight,
-                  child: Icon(
-                    Iconsax.image,
-                    size: 24.r,
-                    color: AppColors.textTertiaryLight,
-                  ),
-                ),
+                iconSize: 24.r,
               ),
             ),
             SizedBox(width: 12.w),
@@ -395,6 +358,69 @@ class StationCard extends StatelessWidget {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// Helper to build station image with proper null/empty URL handling.
+  Widget _buildStationImage(
+    String? imageUrl, {
+    double? width,
+    double? height,
+    double iconSize = 32,
+  }) {
+    // Check if URL is valid (not null, not empty, starts with http)
+    final isValidUrl = imageUrl != null && 
+        imageUrl.isNotEmpty && 
+        (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
+
+    if (!isValidUrl) {
+      // Return placeholder for invalid URLs
+      return Container(
+        width: width,
+        height: height,
+        color: AppColors.outlineLight,
+        child: Center(
+          child: Icon(
+            Iconsax.building_4,
+            size: iconSize,
+            color: AppColors.textTertiaryLight,
+          ),
+        ),
+      );
+    }
+
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      width: width,
+      height: height,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => Container(
+        width: width,
+        height: height,
+        color: AppColors.outlineLight,
+        child: Center(
+          child: SizedBox(
+            width: iconSize,
+            height: iconSize,
+            child: const CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation(AppColors.primary),
+            ),
+          ),
+        ),
+      ),
+      errorWidget: (context, url, error) => Container(
+        width: width,
+        height: height,
+        color: AppColors.outlineLight,
+        child: Center(
+          child: Icon(
+            Iconsax.image,
+            size: iconSize,
+            color: AppColors.textTertiaryLight,
+          ),
         ),
       ),
     );

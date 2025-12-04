@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
 
 /// Search bar widget that navigates to search page.
 class HomeSearchBar extends StatelessWidget {
-  const HomeSearchBar({super.key, required this.onTap});
+  const HomeSearchBar({required this.onTap, super.key});
 
   final VoidCallback onTap;
 

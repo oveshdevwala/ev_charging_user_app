@@ -12,10 +12,7 @@ import '../../../core/theme/app_colors.dart';
 /// Quick stats card showing user's charging stats.
 class QuickStatsCard extends StatelessWidget {
   const QuickStatsCard({
-    super.key,
-    required this.sessions,
-    required this.energy,
-    required this.spent,
+    required this.sessions, required this.energy, required this.spent, super.key,
   });
 
   final int sessions;

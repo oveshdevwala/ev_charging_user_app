@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Implement the interface with actual backend API
 ///    - Replace DummyBookingRepository with real implementation
+library;
 
 import '../models/models.dart';
 
@@ -83,7 +84,7 @@ class DummyBookingRepository implements BookingRepository {
         paymentStatus: PaymentStatus.paid,
         estimatedDuration: 30,
         actualDuration: 35,
-        estimatedCost: 14.00,
+        estimatedCost: 14,
         actualCost: 15.50,
         energyDelivered: 45.2,
         createdAt: DateTime.now().subtract(const Duration(days: 2, hours: 1)),
@@ -103,9 +104,9 @@ class DummyBookingRepository implements BookingRepository {
         paymentStatus: PaymentStatus.paid,
         estimatedDuration: 60,
         actualDuration: 58,
-        estimatedCost: 18.00,
+        estimatedCost: 18,
         actualCost: 17.40,
-        energyDelivered: 58.0,
+        energyDelivered: 58,
         createdAt: DateTime.now().subtract(const Duration(days: 5, hours: 2)),
       ),
       BookingModel(
@@ -135,7 +136,9 @@ class DummyBookingRepository implements BookingRepository {
   }) async {
     await Future.delayed(const Duration(milliseconds: 600));
     final start = (page - 1) * limit;
-    if (start >= _bookings.length) return [];
+    if (start >= _bookings.length) {
+      return [];
+    }
     final end = (start + limit) > _bookings.length ? _bookings.length : start + limit;
     return _bookings.sublist(start, end);
   }

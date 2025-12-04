@@ -18,7 +18,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   /// Load all stations.
   Future<void> loadStations() async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
 
     try {
       final stations = await _stationRepository.getStations();
@@ -30,7 +30,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   /// Search stations by query.
   Future<void> search(String query) async {
-    emit(state.copyWith(isLoading: true, query: query, error: null));
+    emit(state.copyWith(isLoading: true, query: query));
 
     try {
       final stations = query.isEmpty

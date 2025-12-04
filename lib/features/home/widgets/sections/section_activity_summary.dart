@@ -13,14 +13,13 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../models/user_activity_model.dart';
-import '../section_header.dart';
 import '../components/activity_stat_card.dart';
+import '../section_header.dart';
 
 /// Activity summary section with quick metrics.
 class SectionActivitySummary extends StatelessWidget {
   const SectionActivitySummary({
-    super.key,
-    required this.summary,
+    required this.summary, super.key,
     this.onViewDetailsTap,
   });
 

@@ -3,9 +3,9 @@
 /// Belongs To: shared
 /// Customization Guide:
 ///    - Add new extension file exports here
+library;
 
 export 'context_ext.dart';
 export 'date_ext.dart';
 export 'num_ext.dart';
 export 'string_ext.dart';
-

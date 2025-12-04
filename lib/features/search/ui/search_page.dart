@@ -9,14 +9,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../routes/app_routes.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../models/station_model.dart';
 import '../../../repositories/station_repository.dart';
-import '../../../widgets/station_card.dart';
+import '../../../routes/app_routes.dart';
 import '../../../widgets/common_text_field.dart';
 import '../../../widgets/loading_wrapper.dart';
+import '../../../widgets/station_card.dart';
 
 /// Search page for finding charging stations.
 class SearchPage extends StatefulWidget {
@@ -153,7 +153,7 @@ class _SearchPageState extends State<SearchPage> {
               onTap: () => context.push(AppRoutes.stationDetails.id(station.id)),
               onFavoriteTap: () async {
                 await _stationRepository.toggleFavorite(station.id);
-                _searchStations(_searchQuery);
+                await _searchStations(_searchQuery);
               },
             ),
           );

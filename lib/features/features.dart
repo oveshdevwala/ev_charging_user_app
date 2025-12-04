@@ -5,6 +5,7 @@ library;
 
 export 'auth/auth.dart';
 export 'bookings/bookings.dart';
+export 'community/community.dart';
 export 'favorites/favorites.dart';
 export 'home/home.dart';
 export 'main_shell/main_shell.dart';
@@ -14,4 +15,6 @@ export 'profile/profile.dart';
 export 'search/search.dart';
 export 'splash/splash.dart';
 export 'stations/stations.dart';
+export 'trip_planner/trip_planner.dart';
+export 'wallet/wallet.dart';
 

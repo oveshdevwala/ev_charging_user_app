@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../widgets/app_app_bar.dart';
 import '../../../widgets/common_button.dart';
 import '../../../widgets/common_text_field.dart';
-import '../../../widgets/app_app_bar.dart';
 
 /// Edit profile page for updating user information.
 class EditProfilePage extends StatefulWidget {
@@ -67,7 +67,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 controller: _nameController,
                 label: AppStrings.fullName,
                 prefixIcon: Iconsax.user,
-                validator: (v) => v?.isEmpty == true ? 'Name is required' : null,
+                validator: (v) => v?.isEmpty ?? false ? 'Name is required' : null,
               ),
               SizedBox(height: 16.h),
               CommonTextField(

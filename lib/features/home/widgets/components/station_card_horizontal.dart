@@ -6,9 +6,9 @@
 ///    - Shows key info: name, distance, price, availability
 library;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -65,33 +65,10 @@ class StationCardHorizontal extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(20.r),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: station.imageUrl ?? '',
+                  child: _buildStationImage(
+                    station.imageUrl,
                     height: 120.h,
                     width: double.infinity,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      height: 120.h,
-                      color: AppColors.surfaceVariantLight,
-                      child: Center(
-                        child: Icon(
-                          Iconsax.image,
-                          size: 32.r,
-                          color: AppColors.textTertiaryLight,
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      height: 120.h,
-                      color: AppColors.surfaceVariantLight,
-                      child: Center(
-                        child: Icon(
-                          Iconsax.image,
-                          size: 32.r,
-                          color: AppColors.textTertiaryLight,
-                        ),
-                      ),
-                    ),
                   ),
                 ),
 
@@ -294,6 +271,68 @@ class StationCardHorizontal extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// Helper to build station image with proper null/empty URL handling.
+  Widget _buildStationImage(
+    String? imageUrl, {
+    double? width,
+    double? height,
+  }) {
+    // Check if URL is valid (not null, not empty, starts with http)
+    final isValidUrl = imageUrl != null &&
+        imageUrl.isNotEmpty &&
+        (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
+
+    if (!isValidUrl) {
+      // Return placeholder for invalid URLs
+      return Container(
+        width: width,
+        height: height,
+        color: AppColors.surfaceVariantLight,
+        child: Center(
+          child: Icon(
+            Iconsax.building_4,
+            size: 32.r,
+            color: AppColors.textTertiaryLight,
+          ),
+        ),
+      );
+    }
+
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      width: width,
+      height: height,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => Container(
+        width: width,
+        height: height,
+        color: AppColors.surfaceVariantLight,
+        child: Center(
+          child: SizedBox(
+            width: 24.r,
+            height: 24.r,
+            child: const CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation(AppColors.primary),
+            ),
+          ),
+        ),
+      ),
+      errorWidget: (context, url, error) => Container(
+        width: width,
+        height: height,
+        color: AppColors.surfaceVariantLight,
+        child: Center(
+          child: Icon(
+            Iconsax.image,
+            size: 32.r,
+            color: AppColors.textTertiaryLight,
+          ),
         ),
       ),
     );

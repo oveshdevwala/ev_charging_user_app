@@ -12,8 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 import '../../../widgets/common_button.dart';
 import '../../../widgets/common_text_field.dart';
@@ -118,10 +118,13 @@ class _LoginPageState extends State<LoginPage> {
       hint: 'Enter your email',
       prefixIcon: Iconsax.sms,
       keyboardType: TextInputType.emailAddress,
-      textInputAction: TextInputAction.next,
       validator: (value) {
-        if (value == null || value.isEmpty) return AppStrings.emailRequired;
-        if (!value.contains('@')) return AppStrings.invalidEmail;
+        if (value == null || value.isEmpty) {
+          return AppStrings.emailRequired;
+        }
+        if (!value.contains('@')) {
+          return AppStrings.invalidEmail;
+        }
         return null;
       },
     );
@@ -136,8 +139,12 @@ class _LoginPageState extends State<LoginPage> {
       obscureText: true,
       textInputAction: TextInputAction.done,
       validator: (value) {
-        if (value == null || value.isEmpty) return AppStrings.passwordRequired;
-        if (value.length < 6) return AppStrings.passwordTooShort;
+        if (value == null || value.isEmpty) {
+          return AppStrings.passwordRequired;
+        }
+        if (value.length < 6) {
+          return AppStrings.passwordTooShort;
+        }
         return null;
       },
     );
@@ -192,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildDivider() {
     return Row(
       children: [
-        Expanded(child: Divider(color: AppColors.outlineLight)),
+        const Expanded(child: Divider(color: AppColors.outlineLight)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Text(
@@ -201,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                 TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
           ),
         ),
-        Expanded(child: Divider(color: AppColors.outlineLight)),
+        const Expanded(child: Divider(color: AppColors.outlineLight)),
       ],
     );
   }
@@ -237,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
             text: AppStrings.dontHaveAccount,
             style:
                 TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
-            children: [
+            children: const [
               TextSpan(
                 text: ' ${AppStrings.signUp}',
                 style: TextStyle(

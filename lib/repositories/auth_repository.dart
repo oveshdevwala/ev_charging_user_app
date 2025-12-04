@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Implement the interface with actual backend API
 ///    - Replace DummyAuthRepository with real implementation
+library;
 
 import '../models/user_model.dart';
 
@@ -16,12 +17,6 @@ class AuthResult {
     this.error,
     this.success = false,
   });
-  
-  final UserModel? user;
-  final String? accessToken;
-  final String? refreshToken;
-  final String? error;
-  final bool success;
   
   factory AuthResult.success({
     required UserModel user,
@@ -36,8 +31,13 @@ class AuthResult {
   
   factory AuthResult.failure(String error) => AuthResult(
     error: error,
-    success: false,
   );
+  
+  final UserModel? user;
+  final String? accessToken;
+  final String? refreshToken;
+  final String? error;
+  final bool success;
 }
 
 /// Authentication repository interface.
@@ -122,7 +122,6 @@ class DummyAuthRepository implements AuthRepository {
       email: email,
       fullName: 'John Doe',
       phone: '+1234567890',
-      role: UserRole.user,
       isVerified: true,
       createdAt: DateTime.now(),
     );
@@ -152,8 +151,6 @@ class DummyAuthRepository implements AuthRepository {
       email: email,
       fullName: fullName,
       phone: phone,
-      role: UserRole.user,
-      isVerified: false,
       createdAt: DateTime.now(),
     );
     
@@ -228,7 +225,6 @@ class DummyAuthRepository implements AuthRepository {
       id: 'user_${DateTime.now().millisecondsSinceEpoch}',
       email: 'social_${provider.toLowerCase()}@example.com',
       fullName: 'Social User',
-      role: UserRole.user,
       isVerified: true,
       createdAt: DateTime.now(),
     );

@@ -11,10 +11,7 @@ import '../../../core/theme/app_colors.dart';
 /// Booking summary card showing cost estimation.
 class BookingSummary extends StatelessWidget {
   const BookingSummary({
-    super.key,
-    required this.chargerName,
-    required this.duration,
-    required this.pricePerKwh,
+    required this.chargerName, required this.duration, required this.pricePerKwh, super.key,
   });
 
   final String chargerName;

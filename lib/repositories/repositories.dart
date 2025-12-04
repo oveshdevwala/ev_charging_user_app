@@ -3,7 +3,9 @@
 /// Belongs To: shared
 /// Customization Guide:
 ///    - Add new repository file exports here
+library;
 
+export 'activity_repository.dart';
 export 'auth_repository.dart';
 export 'booking_repository.dart';
 export 'home_repository.dart';

@@ -7,15 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../models/station_model.dart';
 
 /// Station header with name, address, rating, and price.
 class StationHeaderInfo extends StatelessWidget {
-  const StationHeaderInfo({super.key, required this.station});
+  const StationHeaderInfo({
+    required this.station, super.key,
+    this.onRatingTap,
+  });
 
   final StationModel station;
+  final VoidCallback? onRatingTap;
 
   @override
   Widget build(BuildContext context) {
@@ -81,20 +85,40 @@ class StationHeaderInfo extends StatelessWidget {
   Widget _buildRatingAndPrice() {
     return Row(
       children: [
-        Icon(Iconsax.star1, size: 18.r, color: AppColors.ratingActive),
-        SizedBox(width: 4.w),
-        Text(
-          station.rating.toStringAsFixed(1),
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
-        ),
-        Text(
-          ' (${station.reviewCount} reviews)',
-          style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+        GestureDetector(
+          onTap: onRatingTap,
+          behavior: HitTestBehavior.opaque,
+          child: Row(
+            children: [
+              Icon(Iconsax.star1, size: 18.r, color: AppColors.ratingActive),
+              SizedBox(width: 4.w),
+              Text(
+                station.rating.toStringAsFixed(1),
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
+              ),
+              Text(
+                ' (${station.reviewCount} ${AppStrings.reviews.toLowerCase()})',
+                style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+              ),
+              if (onRatingTap != null) ...[
+                SizedBox(width: 4.w),
+                Icon(
+                  Iconsax.arrow_right_3,
+                  size: 14.r,
+                  color: AppColors.textSecondaryLight,
+                ),
+              ],
+            ],
+          ),
         ),
         const Spacer(),
         Text(
           '\$${station.pricePerKwh.toStringAsFixed(2)}/kWh',
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700, color: AppColors.primary),
+          style: TextStyle(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w700,
+            color: AppColors.primary,
+          ),
         ),
       ],
     );

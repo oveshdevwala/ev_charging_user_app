@@ -11,12 +11,8 @@ import '../../../core/theme/app_colors.dart';
 /// Settings tile with switch control.
 class SettingsSwitchTile extends StatelessWidget {
   const SettingsSwitchTile({
-    super.key,
-    required this.icon,
-    required this.title,
+    required this.icon, required this.title, required this.value, required this.onChanged, super.key,
     this.subtitle,
-    required this.value,
-    required this.onChanged,
   });
 
   final IconData icon;

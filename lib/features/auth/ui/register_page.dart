@@ -12,12 +12,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
+import '../../../widgets/app_app_bar.dart';
 import '../../../widgets/common_button.dart';
 import '../../../widgets/common_text_field.dart';
-import '../../../widgets/app_app_bar.dart';
 
 /// Registration page for new users.
 class RegisterPage extends StatefulWidget {
@@ -133,8 +133,12 @@ class _RegisterPageState extends State<RegisterPage> {
       prefixIcon: Iconsax.user,
       textCapitalization: TextCapitalization.words,
       validator: (value) {
-        if (value == null || value.isEmpty) return 'Full name is required';
-        if (value.length < 2) return 'Name must be at least 2 characters';
+        if (value == null || value.isEmpty) {
+          return 'Full name is required';
+        }
+        if (value.length < 2) {
+          return 'Name must be at least 2 characters';
+        }
         return null;
       },
     );
@@ -148,8 +152,12 @@ class _RegisterPageState extends State<RegisterPage> {
       prefixIcon: Iconsax.sms,
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
-        if (value == null || value.isEmpty) return AppStrings.emailRequired;
-        if (!value.contains('@')) return AppStrings.invalidEmail;
+        if (value == null || value.isEmpty) {
+          return AppStrings.emailRequired;
+        }
+        if (!value.contains('@')) {
+          return AppStrings.invalidEmail;
+        }
         return null;
       },
     );
@@ -173,8 +181,12 @@ class _RegisterPageState extends State<RegisterPage> {
       prefixIcon: Iconsax.lock,
       obscureText: true,
       validator: (value) {
-        if (value == null || value.isEmpty) return AppStrings.passwordRequired;
-        if (value.length < 8) return AppStrings.passwordTooShort;
+        if (value == null || value.isEmpty) {
+          return AppStrings.passwordRequired;
+        }
+        if (value.length < 8) {
+          return AppStrings.passwordTooShort;
+        }
         return null;
       },
     );
@@ -189,8 +201,12 @@ class _RegisterPageState extends State<RegisterPage> {
       obscureText: true,
       textInputAction: TextInputAction.done,
       validator: (value) {
-        if (value == null || value.isEmpty) return 'Please confirm your password';
-        if (value != _passwordController.text) return 'Passwords do not match';
+        if (value == null || value.isEmpty) {
+          return 'Please confirm your password';
+        }
+        if (value != _passwordController.text) {
+          return 'Passwords do not match';
+        }
         return null;
       },
     );
@@ -219,7 +235,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   fontSize: 14.sp,
                   color: AppColors.textSecondaryLight,
                 ),
-                children: [
+                children: const [
                   TextSpan(
                     text: AppStrings.termsConditions,
                     style: TextStyle(
@@ -227,7 +243,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: AppColors.primary,
                     ),
                   ),
-                  const TextSpan(text: ' and '),
+                  TextSpan(text: ' and '),
                   TextSpan(
                     text: AppStrings.privacyPolicy,
                     style: TextStyle(
@@ -261,7 +277,7 @@ class _RegisterPageState extends State<RegisterPage> {
             text: AppStrings.alreadyHaveAccount,
             style:
                 TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
-            children: [
+            children: const [
               TextSpan(
                 text: ' ${AppStrings.signIn}',
                 style: TextStyle(

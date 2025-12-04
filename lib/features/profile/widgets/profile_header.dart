@@ -11,9 +11,7 @@ import '../../../core/theme/app_colors.dart';
 /// Profile header showing user avatar and info.
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({
-    super.key,
-    required this.name,
-    required this.email,
+    required this.name, required this.email, super.key,
   });
 
   final String name;

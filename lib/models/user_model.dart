@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Add new fields as needed
 ///    - Update copyWith and JSON methods accordingly
+library;
 
 import 'package:equatable/equatable.dart';
 
@@ -28,36 +29,12 @@ class UserModel extends Equatable {
     this.updatedAt,
   });
   
-  final String id;
-  final String email;
-  final String fullName;
-  final String? phone;
-  final String? avatarUrl;
-  final UserRole role;
-  final bool isVerified;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  
   /// Create empty user.
   factory UserModel.empty() => const UserModel(
     id: '',
     email: '',
     fullName: '',
   );
-  
-  /// Check if user is empty.
-  bool get isEmpty => id.isEmpty;
-  
-  /// Check if user is not empty.
-  bool get isNotEmpty => id.isNotEmpty;
-  
-  /// Get user initials.
-  String get initials {
-    final words = fullName.trim().split(' ');
-    if (words.isEmpty) return '';
-    if (words.length == 1) return words.first.isNotEmpty ? words.first[0].toUpperCase() : '';
-    return '${words.first[0]}${words.last[0]}'.toUpperCase();
-  }
   
   /// Create from JSON map.
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -83,6 +60,34 @@ class UserModel extends Equatable {
               ? DateTime.tryParse(json['updated_at'] as String) 
               : null,
     );
+  }
+  
+  final String id;
+  final String email;
+  final String fullName;
+  final String? phone;
+  final String? avatarUrl;
+  final UserRole role;
+  final bool isVerified;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  
+  /// Check if user is empty.
+  bool get isEmpty => id.isEmpty;
+  
+  /// Check if user is not empty.
+  bool get isNotEmpty => id.isNotEmpty;
+  
+  /// Get user initials.
+  String get initials {
+    final words = fullName.trim().split(' ');
+    if (words.isEmpty) {
+      return '';
+    }
+    if (words.length == 1) {
+      return words.first.isNotEmpty ? words.first[0].toUpperCase() : '';
+    }
+    return '${words.first[0]}${words.last[0]}'.toUpperCase();
   }
   
   /// Convert to JSON map.

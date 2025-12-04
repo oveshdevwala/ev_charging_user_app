@@ -11,11 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../widgets/app_app_bar.dart';
 import '../../../widgets/common_button.dart';
 import '../../../widgets/common_text_field.dart';
-import '../../../widgets/app_app_bar.dart';
 
 /// Forgot password page for password recovery.
 class ForgotPasswordPage extends StatefulWidget {
@@ -96,9 +96,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.done,
             validator: (value) {
-              if (value == null || value.isEmpty)
+              if (value == null || value.isEmpty) {
                 return AppStrings.emailRequired;
-              if (!value.contains('@')) return AppStrings.invalidEmail;
+              }
+              if (!value.contains('@')) {
+                return AppStrings.invalidEmail;
+              }
               return null;
             },
           ),

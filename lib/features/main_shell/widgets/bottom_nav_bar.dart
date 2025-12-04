@@ -1,29 +1,44 @@
 /// File: lib/features/main_shell/widgets/bottom_nav_bar.dart
-/// Purpose: Bottom navigation bar widget
+/// Purpose: Bottom navigation bar widget with instant tab switching
 /// Belongs To: main_shell feature
+/// Customization Guide:
+///    - Add/remove nav items by modifying _navItems list
+///    - Customize styling via AppColors and ScreenUtil
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../routes/app_routes.dart';
+import '../../../core/theme/app_colors.dart';
 
-/// Bottom navigation bar widget.
+/// Bottom navigation bar widget with index-based tab switching.
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key, required this.currentPath});
+  const BottomNavBar({
+    required this.currentIndex,
+    required this.onTabSelected,
+    super.key,
+  });
 
-  final String currentPath;
+  /// Currently selected tab index
+  final int currentIndex;
+
+  /// Callback when a tab is selected
+  final ValueChanged<int> onTabSelected;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        boxShadow: [BoxShadow(color: AppColors.shadowLight, blurRadius: 20, offset: const Offset(0, -5))],
+        boxShadow: const [
+          BoxShadow(
+            color: AppColors.shadowLight,
+            blurRadius: 20,
+            offset: Offset(0, -5),
+          ),
+        ],
       ),
       child: SafeArea(
         child: Padding(
@@ -35,36 +50,36 @@ class BottomNavBar extends StatelessWidget {
                 icon: Iconsax.home_2,
                 activeIcon: Iconsax.home_25,
                 label: AppStrings.home,
-                isActive: currentPath == AppRoutes.userHome.path,
-                onTap: () => context.go(AppRoutes.userHome.path),
+                isActive: currentIndex == 0,
+                onTap: () => onTabSelected(0),
               ),
               _NavItem(
                 icon: Iconsax.search_normal,
                 activeIcon: Iconsax.search_normal_1,
                 label: AppStrings.search,
-                isActive: currentPath == AppRoutes.userSearch.path,
-                onTap: () => context.go(AppRoutes.userSearch.path),
+                isActive: currentIndex == 1,
+                onTap: () => onTabSelected(1),
               ),
               _NavItem(
                 icon: Iconsax.heart,
                 activeIcon: Iconsax.heart5,
                 label: AppStrings.favorites,
-                isActive: currentPath == AppRoutes.userFavorites.path,
-                onTap: () => context.go(AppRoutes.userFavorites.path),
+                isActive: currentIndex == 2,
+                onTap: () => onTabSelected(2),
               ),
               _NavItem(
                 icon: Iconsax.calendar,
                 activeIcon: Iconsax.calendar_tick,
                 label: AppStrings.myBookings,
-                isActive: currentPath == AppRoutes.userBookings.path,
-                onTap: () => context.go(AppRoutes.userBookings.path),
+                isActive: currentIndex == 3,
+                onTap: () => onTabSelected(3),
               ),
               _NavItem(
                 icon: Iconsax.user,
                 activeIcon: Iconsax.user,
                 label: AppStrings.profile,
-                isActive: currentPath == AppRoutes.userProfile.path,
-                onTap: () => context.go(AppRoutes.userProfile.path),
+                isActive: currentIndex == 4,
+                onTap: () => onTabSelected(4),
               ),
             ],
           ),
@@ -123,4 +138,3 @@ class _NavItem extends StatelessWidget {
     );
   }
 }
-

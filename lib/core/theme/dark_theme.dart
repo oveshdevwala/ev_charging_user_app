@@ -78,7 +78,7 @@ class DarkTheme {
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.r),
-        side: const BorderSide(color: AppColors.outlineDark, width: 1),
+        side: const BorderSide(color: AppColors.outlineDark),
       ),
       margin: EdgeInsets.zero,
     ),
@@ -96,10 +96,7 @@ class DarkTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),
-        textStyle: TextStyle(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w700,
-        ),
+        textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
       ),
     ),
 
@@ -115,10 +112,7 @@ class DarkTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),
-        textStyle: TextStyle(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w700,
-        ),
+        textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
       ),
     ),
 
@@ -128,10 +122,7 @@ class DarkTheme {
         foregroundColor: AppColors.primaryLight,
         disabledForegroundColor: AppColors.textDisabledDark,
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-        textStyle: TextStyle(
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w600,
-        ),
+        textStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
       ),
     ),
 
@@ -170,7 +161,7 @@ class DarkTheme {
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
-        borderSide: const BorderSide(color: AppColors.errorLight, width: 1),
+        borderSide: const BorderSide(color: AppColors.errorLight),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
@@ -249,10 +240,7 @@ class DarkTheme {
       labelColor: AppColors.primaryLight,
       unselectedLabelColor: AppColors.textSecondaryDark,
       indicatorSize: TabBarIndicatorSize.label,
-      labelStyle: TextStyle(
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w600,
-      ),
+      labelStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
       unselectedLabelStyle: TextStyle(
         fontSize: 14.sp,
         fontWeight: FontWeight.w500,
@@ -314,7 +302,7 @@ class DarkTheme {
     ),
 
     // ============ Divider Theme ============
-    dividerTheme: DividerThemeData(
+    dividerTheme: const DividerThemeData(
       color: AppColors.dividerDark,
       thickness: 1,
       space: 1,

@@ -16,9 +16,7 @@ import '../../../../models/trip_route_model.dart';
 /// Trip route card widget.
 class TripCard extends StatelessWidget {
   const TripCard({
-    super.key,
-    required this.route,
-    required this.onTap,
+    required this.route, required this.onTap, super.key,
     this.width,
     this.isCompact = false,
   });
@@ -47,11 +45,11 @@ class TripCard extends StatelessWidget {
           color: AppColors.surfaceLight,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(color: AppColors.outlineLight),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: AppColors.shadowLight,
               blurRadius: 8,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
@@ -120,7 +118,6 @@ class TripCard extends StatelessWidget {
                                     shape: BoxShape.circle,
                                     border: Border.all(
                                       color: AppColors.surfaceLight,
-                                      width: 1,
                                     ),
                                   ),
                                 ),
@@ -244,8 +241,7 @@ class TripCard extends StatelessWidget {
 /// Quick trip planner card with CTA.
 class TripPlannerCard extends StatelessWidget {
   const TripPlannerCard({
-    super.key,
-    required this.onPlanTripTap,
+    required this.onPlanTripTap, super.key,
   });
 
   /// Callback when plan trip is tapped.

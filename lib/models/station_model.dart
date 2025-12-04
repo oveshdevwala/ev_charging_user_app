@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Add new fields as needed
 ///    - Update copyWith and JSON methods accordingly
+library;
 
 import 'package:equatable/equatable.dart';
 
@@ -56,47 +57,6 @@ class StationModel extends Equatable {
     this.updatedAt,
   });
   
-  final String id;
-  final String name;
-  final String address;
-  final double latitude;
-  final double longitude;
-  final String? ownerId;
-  final String? description;
-  final String? imageUrl;
-  final List<String> images;
-  final List<ChargerModel> chargers;
-  final List<Amenity> amenities;
-  final double rating;
-  final int reviewCount;
-  final double pricePerKwh;
-  final StationStatus status;
-  final String? openTime;
-  final String? closeTime;
-  final bool is24Hours;
-  final bool isFavorite;
-  final double? distance;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  
-  /// Get available chargers count.
-  int get availableChargers => chargers.where((c) => c.status == ChargerStatus.available).length;
-  
-  /// Get total chargers count.
-  int get totalChargers => chargers.length;
-  
-  /// Check if station has available chargers.
-  bool get hasAvailableChargers => availableChargers > 0;
-  
-  /// Get operating hours display string.
-  String get operatingHours {
-    if (is24Hours) return '24 Hours';
-    if (openTime != null && closeTime != null) {
-      return '$openTime - $closeTime';
-    }
-    return 'Not specified';
-  }
-  
   /// Create from JSON map.
   factory StationModel.fromJson(Map<String, dynamic> json) {
     return StationModel(
@@ -138,6 +98,49 @@ class StationModel extends Equatable {
           ? DateTime.tryParse(json['updatedAt'] as String) 
           : null,
     );
+  }
+  
+  final String id;
+  final String name;
+  final String address;
+  final double latitude;
+  final double longitude;
+  final String? ownerId;
+  final String? description;
+  final String? imageUrl;
+  final List<String> images;
+  final List<ChargerModel> chargers;
+  final List<Amenity> amenities;
+  final double rating;
+  final int reviewCount;
+  final double pricePerKwh;
+  final StationStatus status;
+  final String? openTime;
+  final String? closeTime;
+  final bool is24Hours;
+  final bool isFavorite;
+  final double? distance;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  
+  /// Get available chargers count.
+  int get availableChargers => chargers.where((c) => c.status == ChargerStatus.available).length;
+  
+  /// Get total chargers count.
+  int get totalChargers => chargers.length;
+  
+  /// Check if station has available chargers.
+  bool get hasAvailableChargers => availableChargers > 0;
+  
+  /// Get operating hours display string.
+  String get operatingHours {
+    if (is24Hours) {
+      return '24 Hours';
+    }
+    if (openTime != null && closeTime != null) {
+      return '$openTime - $closeTime';
+    }
+    return 'Not specified';
   }
   
   /// Convert to JSON map.

@@ -35,11 +35,21 @@ dependencies:
   get_it: ^8.0.2
   injectable: ^2.5.0
   logger: ^2.4.0
+  timeago: ^3.7.0
+  uuid: ^4.5.1
+
+  # Image Processing
+  image_picker: ^1.1.2
+  image: ^4.5.3
+  path_provider: ^2.1.4
 
   # Icons
   cupertino_icons: ^1.0.8
   iconsax: ^0.0.8
   fl_chart: ^1.1.1
+  
+  # URL Launcher
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:

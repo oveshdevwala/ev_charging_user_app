@@ -3,6 +3,7 @@
 /// Belongs To: shared
 /// Customization Guide:
 ///    - Customize via parameters (title, actions, leading, etc.)
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

@@ -15,10 +15,7 @@ import '../../../../core/theme/app_colors.dart';
 /// Category button widget for quick actions grid.
 class CategoryButton extends StatelessWidget {
   const CategoryButton({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.onTap,
+    required this.icon, required this.label, required this.onTap, super.key,
     this.iconColor,
     this.backgroundColor,
     this.labelStyle,
@@ -64,7 +61,6 @@ class CategoryButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
             color: AppColors.outlineLight.withValues(alpha: 0.5),
-            width: 1,
           ),
         ),
         child: Column(
@@ -107,10 +103,7 @@ class CategoryButton extends StatelessWidget {
 /// Horizontal category button with icon and label in a row.
 class CategoryButtonHorizontal extends StatelessWidget {
   const CategoryButtonHorizontal({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.onTap,
+    required this.icon, required this.label, required this.onTap, super.key,
     this.iconColor,
     this.backgroundColor,
     this.trailing,

@@ -16,11 +16,6 @@ class AuthState extends Equatable {
     this.error,
   });
 
-  final bool isLoading;
-  final bool isAuthenticated;
-  final UserModel? user;
-  final String? error;
-
   /// Initial state.
   factory AuthState.initial() => const AuthState();
 
@@ -35,6 +30,11 @@ class AuthState extends Equatable {
 
   /// Error state.
   factory AuthState.error(String message) => AuthState(error: message);
+
+  final bool isLoading;
+  final bool isAuthenticated;
+  final UserModel? user;
+  final String? error;
 
   /// Copy with new values.
   AuthState copyWith({

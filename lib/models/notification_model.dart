@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Add new notification types as needed
 ///    - Update copyWith and JSON methods accordingly
+library;
 
 import 'package:equatable/equatable.dart';
 
@@ -32,17 +33,6 @@ class NotificationModel extends Equatable {
     this.createdAt,
   });
   
-  final String id;
-  final String userId;
-  final String title;
-  final String message;
-  final NotificationType type;
-  final String? imageUrl;
-  final String? actionUrl;
-  final Map<String, dynamic>? data;
-  final bool isRead;
-  final DateTime? createdAt;
-  
   /// Create from JSON map.
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
@@ -63,6 +53,17 @@ class NotificationModel extends Equatable {
           : null,
     );
   }
+  
+  final String id;
+  final String userId;
+  final String title;
+  final String message;
+  final NotificationType type;
+  final String? imageUrl;
+  final String? actionUrl;
+  final Map<String, dynamic>? data;
+  final bool isRead;
+  final DateTime? createdAt;
   
   /// Convert to JSON map.
   Map<String, dynamic> toJson() {

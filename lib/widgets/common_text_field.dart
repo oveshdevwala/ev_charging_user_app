@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Use different input types via inputType parameter
 ///    - Customize via parameters (prefix, suffix, hint, etc.)
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +47,7 @@ class CommonTextField extends StatefulWidget {
     this.prefix,
     this.suffix,
   });
-  
+
   final TextEditingController? controller;
   final String? label;
   final String? hint;
@@ -77,25 +78,27 @@ class CommonTextField extends StatefulWidget {
   final double? borderRadius;
   final Widget? prefix;
   final Widget? suffix;
-  
+
   @override
   State<CommonTextField> createState() => _CommonTextFieldState();
 }
 
 class _CommonTextFieldState extends State<CommonTextField> {
   late bool _obscureText;
-  
+
   @override
   void initState() {
     super.initState();
     _obscureText = widget.obscureText;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final effectiveBorderRadius = BorderRadius.circular(widget.borderRadius ?? 12.r);
-    
+    final effectiveBorderRadius = BorderRadius.circular(
+      widget.borderRadius ?? 12.r,
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -129,17 +132,23 @@ class _CommonTextFieldState extends State<CommonTextField> {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w400,
-            color: widget.enabled ? AppColors.textPrimaryLight : AppColors.textDisabledLight,
+            color: widget.enabled
+                ? AppColors.textPrimaryLight
+                : AppColors.textDisabledLight,
           ),
           decoration: InputDecoration(
             hintText: widget.hint,
             helperText: widget.helperText,
             errorText: widget.errorText,
             filled: true,
-            fillColor: widget.fillColor ?? 
-                       (widget.enabled ? AppColors.surfaceVariantLight : AppColors.outlineLight.withValues(alpha: 0.3)),
-            contentPadding: widget.contentPadding ?? 
-                           EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            fillColor:
+                widget.fillColor ??
+                (widget.enabled
+                    ? AppColors.surfaceVariantLight
+                    : AppColors.outlineLight.withValues(alpha: 0.3)),
+            contentPadding:
+                widget.contentPadding ??
+                EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             border: OutlineInputBorder(
               borderRadius: effectiveBorderRadius,
               borderSide: BorderSide.none,
@@ -150,15 +159,18 @@ class _CommonTextFieldState extends State<CommonTextField> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: effectiveBorderRadius,
-              borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.5),
+              borderSide: BorderSide(
+                color: theme.colorScheme.primary,
+                width: 1.5,
+              ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: effectiveBorderRadius,
-              borderSide: BorderSide(color: AppColors.error, width: 1),
+              borderSide: const BorderSide(color: AppColors.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: effectiveBorderRadius,
-              borderSide: BorderSide(color: AppColors.error, width: 1.5),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.5),
             ),
             disabledBorder: OutlineInputBorder(
               borderRadius: effectiveBorderRadius,
@@ -178,12 +190,14 @@ class _CommonTextFieldState extends State<CommonTextField> {
       ],
     );
   }
-  
+
   Widget? _buildSuffixIcon() {
     if (widget.obscureText) {
       return IconButton(
         icon: Icon(
-          _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+          _obscureText
+              ? Icons.visibility_off_outlined
+              : Icons.visibility_outlined,
           size: 20.r,
           color: AppColors.textSecondaryLight,
         ),
@@ -212,7 +226,7 @@ class SearchTextField extends StatelessWidget {
     this.autofocus = false,
     this.enabled = true,
   });
-  
+
   final TextEditingController? controller;
   final String? hint;
   final ValueChanged<String>? onChanged;
@@ -220,20 +234,19 @@ class SearchTextField extends StatelessWidget {
   final VoidCallback? onClear;
   final bool autofocus;
   final bool enabled;
-  
+
   @override
   Widget build(BuildContext context) {
     return CommonTextField(
       controller: controller,
       hint: hint ?? 'Search...',
       prefixIcon: Icons.search,
-      suffixIcon: controller?.text.isNotEmpty == true ? Icons.close : null,
+      suffixIcon: controller?.text.isNotEmpty ?? false ? Icons.close : null,
       onSuffixTap: () {
         controller?.clear();
         onClear?.call();
         onChanged?.call('');
       },
-      keyboardType: TextInputType.text,
       textInputAction: TextInputAction.search,
       onChanged: onChanged,
       onSubmitted: onSubmitted,
@@ -246,16 +259,16 @@ class SearchTextField extends StatelessWidget {
 /// OTP input field.
 class OtpTextField extends StatelessWidget {
   const OtpTextField({
-    super.key,
     required this.length,
     required this.onCompleted,
+    super.key,
     this.onChanged,
   });
-  
+
   final int length;
   final ValueChanged<String> onCompleted;
   final ValueChanged<String>? onChanged;
-  
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -268,10 +281,7 @@ class OtpTextField extends StatelessWidget {
             textAlign: TextAlign.center,
             keyboardType: TextInputType.number,
             maxLength: 1,
-            style: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w600),
             decoration: InputDecoration(
               counterText: '',
               filled: true,
@@ -301,4 +311,3 @@ class OtpTextField extends StatelessWidget {
     );
   }
 }
-

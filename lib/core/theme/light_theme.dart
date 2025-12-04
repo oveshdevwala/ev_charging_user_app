@@ -25,7 +25,6 @@ class LightTheme {
     // ============ Color Scheme ============
     colorScheme: const ColorScheme.light(
       primary: AppColors.primary,
-      onPrimary: AppColors.onPrimary,
       primaryContainer: AppColors.primaryContainer,
       onPrimaryContainer: AppColors.onPrimaryContainer,
       secondary: AppColors.secondary,
@@ -37,10 +36,8 @@ class LightTheme {
       tertiaryContainer: AppColors.tertiaryContainer,
       onTertiaryContainer: AppColors.onTertiaryContainer,
       error: AppColors.error,
-      onError: AppColors.onError,
       errorContainer: AppColors.errorContainer,
       onErrorContainer: AppColors.onErrorContainer,
-      surface: AppColors.surfaceLight,
       onSurface: AppColors.textPrimaryLight,
       surfaceContainerHighest: AppColors.surfaceVariantLight,
       onSurfaceVariant: AppColors.textSecondaryLight,
@@ -78,7 +75,7 @@ class LightTheme {
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.r),
-        side: const BorderSide(color: AppColors.outlineLight, width: 1),
+        side: const BorderSide(color: AppColors.outlineLight),
       ),
       margin: EdgeInsets.zero,
     ),
@@ -96,10 +93,7 @@ class LightTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),
-        textStyle: TextStyle(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w700,
-        ),
+        textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
       ),
     ),
 
@@ -115,10 +109,7 @@ class LightTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),
-        textStyle: TextStyle(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w700,
-        ),
+        textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
       ),
     ),
 
@@ -128,10 +119,7 @@ class LightTheme {
         foregroundColor: AppColors.primary,
         disabledForegroundColor: AppColors.textDisabledLight,
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-        textStyle: TextStyle(
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w600,
-        ),
+        textStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
       ),
     ),
 
@@ -170,7 +158,7 @@ class LightTheme {
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
-        borderSide: const BorderSide(color: AppColors.error, width: 1),
+        borderSide: const BorderSide(color: AppColors.error),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
@@ -249,10 +237,7 @@ class LightTheme {
       labelColor: AppColors.primary,
       unselectedLabelColor: AppColors.textSecondaryLight,
       indicatorSize: TabBarIndicatorSize.label,
-      labelStyle: TextStyle(
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w600,
-      ),
+      labelStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
       unselectedLabelStyle: TextStyle(
         fontSize: 14.sp,
         fontWeight: FontWeight.w500,
@@ -314,7 +299,7 @@ class LightTheme {
     ),
 
     // ============ Divider Theme ============
-    dividerTheme: DividerThemeData(
+    dividerTheme: const DividerThemeData(
       color: AppColors.dividerLight,
       thickness: 1,
       space: 1,

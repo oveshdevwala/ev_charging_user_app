@@ -4,6 +4,7 @@
 /// Customization Guide:
 ///    - Add new fields for route optimization
 ///    - Extend TripStop for more charging details
+library;
 
 import 'package:equatable/equatable.dart';
 
@@ -22,17 +23,6 @@ class TripStop extends Equatable {
     this.chargerPowerKw = 50.0,
   });
 
-  final String id;
-  final String stationId;
-  final String stationName;
-  final String address;
-  final double latitude;
-  final double longitude;
-  final int estimatedChargeTimeMin;
-  final double estimatedCost;
-  final double distanceFromPrevious;
-  final double chargerPowerKw;
-
   /// Create from JSON map.
   factory TripStop.fromJson(Map<String, dynamic> json) {
     return TripStop(
@@ -49,6 +39,17 @@ class TripStop extends Equatable {
       chargerPowerKw: (json['chargerPowerKw'] as num?)?.toDouble() ?? 50.0,
     );
   }
+
+  final String id;
+  final String stationId;
+  final String stationName;
+  final String address;
+  final double latitude;
+  final double longitude;
+  final int estimatedChargeTimeMin;
+  final double estimatedCost;
+  final double distanceFromPrevious;
+  final double chargerPowerKw;
 
   /// Convert to JSON map.
   Map<String, dynamic> toJson() {
@@ -121,6 +122,20 @@ class TripEnergyEstimation extends Equatable {
     this.batteryEndPercent = 20,
   });
 
+  /// Create from JSON map.
+  factory TripEnergyEstimation.fromJson(Map<String, dynamic> json) {
+    return TripEnergyEstimation(
+      totalDistanceKm: (json['totalDistanceKm'] as num?)?.toDouble() ?? 0.0,
+      estimatedEnergyKwh:
+          (json['estimatedEnergyKwh'] as num?)?.toDouble() ?? 0.0,
+      estimatedCost: (json['estimatedCost'] as num?)?.toDouble() ?? 0.0,
+      estimatedTimeMin: json['estimatedTimeMin'] as int? ?? 0,
+      requiredStops: json['requiredStops'] as int? ?? 0,
+      batteryStartPercent: json['batteryStartPercent'] as int? ?? 80,
+      batteryEndPercent: json['batteryEndPercent'] as int? ?? 20,
+    );
+  }
+
   final double totalDistanceKm;
   final double estimatedEnergyKwh;
   final double estimatedCost;
@@ -137,20 +152,6 @@ class TripEnergyEstimation extends Equatable {
       return '${hours}h ${minutes}m';
     }
     return '${minutes}m';
-  }
-
-  /// Create from JSON map.
-  factory TripEnergyEstimation.fromJson(Map<String, dynamic> json) {
-    return TripEnergyEstimation(
-      totalDistanceKm: (json['totalDistanceKm'] as num?)?.toDouble() ?? 0.0,
-      estimatedEnergyKwh:
-          (json['estimatedEnergyKwh'] as num?)?.toDouble() ?? 0.0,
-      estimatedCost: (json['estimatedCost'] as num?)?.toDouble() ?? 0.0,
-      estimatedTimeMin: json['estimatedTimeMin'] as int? ?? 0,
-      requiredStops: json['requiredStops'] as int? ?? 0,
-      batteryStartPercent: json['batteryStartPercent'] as int? ?? 80,
-      batteryEndPercent: json['batteryEndPercent'] as int? ?? 20,
-    );
   }
 
   /// Convert to JSON map.
@@ -194,24 +195,6 @@ class TripRouteModel extends Equatable {
     this.name,
   });
 
-  final String id;
-  final String from;
-  final String to;
-  final String fromAddress;
-  final String toAddress;
-  final double distance;
-  final List<TripStop> stops;
-  final TripEnergyEstimation? estimation;
-  final DateTime? createdAt;
-  final bool isFavorite;
-  final String? name;
-
-  /// Display name for the route.
-  String get displayName => name ?? '$from → $to';
-
-  /// Total stops count.
-  int get stopsCount => stops.length;
-
   /// Create from JSON map.
   factory TripRouteModel.fromJson(Map<String, dynamic> json) {
     return TripRouteModel(
@@ -236,6 +219,24 @@ class TripRouteModel extends Equatable {
       name: json['name'] as String?,
     );
   }
+
+  final String id;
+  final String from;
+  final String to;
+  final String fromAddress;
+  final String toAddress;
+  final double distance;
+  final List<TripStop> stops;
+  final TripEnergyEstimation? estimation;
+  final DateTime? createdAt;
+  final bool isFavorite;
+  final String? name;
+
+  /// Display name for the route.
+  String get displayName => name ?? '$from → $to';
+
+  /// Total stops count.
+  int get stopsCount => stops.length;
 
   /// Convert to JSON map.
   Map<String, dynamic> toJson() {

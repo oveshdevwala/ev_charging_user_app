@@ -7,17 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../models/charger_model.dart';
 
 /// Booking charger selection widget.
 class BookingChargerSelection extends StatelessWidget {
   const BookingChargerSelection({
-    super.key,
-    required this.chargers,
-    required this.selectedCharger,
-    required this.onSelected,
+    required this.chargers, required this.selectedCharger, required this.onSelected, super.key,
   });
 
   final List<ChargerModel> chargers;

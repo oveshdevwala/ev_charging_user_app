@@ -16,13 +16,13 @@ class SearchState extends Equatable {
     this.error,
   });
 
+  /// Initial state.
+  factory SearchState.initial() => const SearchState();
+
   final bool isLoading;
   final List<StationModel> stations;
   final String query;
   final String? error;
-
-  /// Initial state.
-  factory SearchState.initial() => const SearchState();
 
   /// Copy with new values.
   SearchState copyWith({
