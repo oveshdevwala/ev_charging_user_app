@@ -64,6 +64,18 @@ enum AppRoutes {
   transactionDetail,
   tripHistory,
 
+  // -------- Profile Routes --------
+  changePassword,
+  paymentMethods,
+  addCard,
+  themeSettings,
+  languageSettings,
+  helpSupport,
+  contactUs,
+  privacyPolicy,
+  termsOfService,
+  deleteAccount,
+
   // -------- Nearby Offers Routes --------
   nearbyOffers,
   partnerMarketplace,
@@ -142,6 +154,28 @@ extension AppRoutePath on AppRoutes {
         return '/transactionDetail';
       case AppRoutes.tripHistory:
         return '/tripHistory';
+
+      // Profile Routes
+      case AppRoutes.changePassword:
+        return '/changePassword';
+      case AppRoutes.paymentMethods:
+        return '/paymentMethods';
+      case AppRoutes.addCard:
+        return '/addCard';
+      case AppRoutes.themeSettings:
+        return '/themeSettings';
+      case AppRoutes.languageSettings:
+        return '/languageSettings';
+      case AppRoutes.helpSupport:
+        return '/helpSupport';
+      case AppRoutes.contactUs:
+        return '/contactUs';
+      case AppRoutes.privacyPolicy:
+        return '/privacyPolicy';
+      case AppRoutes.termsOfService:
+        return '/termsOfService';
+      case AppRoutes.deleteAccount:
+        return '/deleteAccount';
 
       // Nearby Offers
       case AppRoutes.nearbyOffers:
@@ -286,6 +320,58 @@ class AppRouter {
         path: AppRoutes.editProfile.path,
         name: AppRoutes.editProfile.name,
         builder: (context, state) => const EditProfilePage(),
+      ),
+
+      // -------- Profile Routes --------
+      GoRoute(
+        path: AppRoutes.changePassword.path,
+        name: AppRoutes.changePassword.name,
+        builder: (context, state) => const ChangePasswordPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.paymentMethods.path,
+        name: AppRoutes.paymentMethods.name,
+        builder: (context, state) => const PaymentMethodsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.addCard.path,
+        name: AppRoutes.addCard.name,
+        builder: (context, state) => const AddCardPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.themeSettings.path,
+        name: AppRoutes.themeSettings.name,
+        builder: (context, state) => const ThemeSettingsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.languageSettings.path,
+        name: AppRoutes.languageSettings.name,
+        builder: (context, state) => const LanguageSettingsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.helpSupport.path,
+        name: AppRoutes.helpSupport.name,
+        builder: (context, state) => const HelpSupportPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.contactUs.path,
+        name: AppRoutes.contactUs.name,
+        builder: (context, state) => const ContactUsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.privacyPolicy.path,
+        name: AppRoutes.privacyPolicy.name,
+        builder: (context, state) => const PrivacyPolicyPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.termsOfService.path,
+        name: AppRoutes.termsOfService.name,
+        builder: (context, state) => const TermsOfServicePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.deleteAccount.path,
+        name: AppRoutes.deleteAccount.name,
+        builder: (context, state) => const DeleteAccountPage(),
       ),
 
       // -------- Activity Details --------

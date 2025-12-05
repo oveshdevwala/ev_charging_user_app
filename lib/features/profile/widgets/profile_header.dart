@@ -11,11 +11,15 @@ import '../../../core/theme/app_colors.dart';
 /// Profile header showing user avatar and info.
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({
-    required this.name, required this.email, super.key,
+    required this.name,
+    required this.email,
+    this.avatarUrl,
+    super.key,
   });
 
   final String name;
   final String email;
+  final String? avatarUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +27,23 @@ class ProfileHeader extends StatelessWidget {
     
     return Column(
       children: [
-        Container(
-          width: 100.r,
-          height: 100.r,
-          decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
-          child: Center(
-            child: Text(
-              initials,
-              style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.w700, color: Colors.white),
-            ),
-          ),
-        ),
+        avatarUrl != null && avatarUrl!.isNotEmpty
+            ? CircleAvatar(
+                radius: 50.r,
+                backgroundImage: NetworkImage(avatarUrl!),
+                onBackgroundImageError: (_, __) {},
+              )
+            : Container(
+                width: 100.r,
+                height: 100.r,
+                decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+                child: Center(
+                  child: Text(
+                    initials,
+                    style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.w700, color: Colors.white),
+                  ),
+                ),
+              ),
         SizedBox(height: 16.h),
         Text(
           name,

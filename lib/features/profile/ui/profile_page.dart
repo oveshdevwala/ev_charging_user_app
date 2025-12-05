@@ -1,17 +1,21 @@
 /// File: lib/features/profile/ui/profile_page.dart
-/// Purpose: User profile screen
+/// Purpose: User profile screen with BLoC integration
 /// Belongs To: profile feature
 /// Route: /userProfile
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/di/injection.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
+import '../bloc/bloc.dart';
+import '../repositories/repositories.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_menu_item.dart';
 import '../widgets/profile_menu_section.dart';
@@ -22,34 +26,60 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(20.r),
-          child: Column(
-            children: [
-              const ProfileHeader(name: 'John Doe', email: 'john.doe@example.com'),
-              SizedBox(height: 32.h),
-              _buildAccountSection(context),
-              SizedBox(height: 24.h),
-              _buildSettingsSection(context),
-              SizedBox(height: 24.h),
-              _buildSupportSection(context),
-              SizedBox(height: 24.h),
-              _buildLogoutButton(context),
-              SizedBox(height: 16.h),
-              Text(
-                'Version 1.0.0',
-                style: TextStyle(fontSize: 12.sp, color: AppColors.textTertiaryLight),
-              ),
-            ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProfileBloc(
+            repository: sl<ProfileRepository>(),
+          )..add(const LoadProfile()),
+        ),
+      ],
+      child: Scaffold(
+        body: SafeArea(
+          child: BlocBuilder<ProfileBloc, ProfileState>(
+            builder: (context, state) {
+              if (state.isLoading && state.profile == null) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              final profile = state.profile;
+              final name = profile?.name ?? 'User';
+              final email = profile?.email ?? 'user@example.com';
+              final avatarUrl = profile?.avatarUrl;
+
+              return SingleChildScrollView(
+                padding: EdgeInsets.all(20.r),
+                child: Column(
+                  children: [
+                    ProfileHeader(
+                      name: name,
+                      email: email,
+                      avatarUrl: avatarUrl,
+                    ),
+                    SizedBox(height: 32.h),
+                    _buildAccountSection(context, profile),
+                    SizedBox(height: 24.h),
+                    _buildSettingsSection(context),
+                    SizedBox(height: 24.h),
+                    _buildSupportSection(context),
+                    SizedBox(height: 24.h),
+                    _buildLogoutButton(context),
+                    SizedBox(height: 16.h),
+                    Text(
+                      'Version 1.0.0',
+                      style: TextStyle(fontSize: 12.sp, color: AppColors.textTertiaryLight),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget _buildAccountSection(BuildContext context) {
+  Widget _buildAccountSection(BuildContext context, profile) {
     return ProfileMenuSection(
       title: 'Account',
       items: [
@@ -65,9 +95,14 @@ class ProfilePage extends StatelessWidget {
           onTap: () => context.push(AppRoutes.wallet.path),
         ),
         ProfileMenuItem(
-          icon: Iconsax.car,
-          title: 'My Vehicles',
-          onTap: () {},
+          icon: Iconsax.card,
+          title: 'Payment Methods',
+          onTap: () => context.push(AppRoutes.paymentMethods.path),
+        ),
+        ProfileMenuItem(
+          icon: Iconsax.shield_tick,
+          title: 'Security',
+          onTap: () => context.push(AppRoutes.changePassword.path),
         ),
       ],
     );
@@ -83,15 +118,21 @@ class ProfilePage extends StatelessWidget {
           onTap: () => context.push(AppRoutes.userNotifications.path),
         ),
         ProfileMenuItem(
-          icon: Iconsax.setting_2,
-          title: AppStrings.settings,
-          onTap: () => context.push(AppRoutes.userSettings.path),
+          icon: Iconsax.moon,
+          title: 'Theme',
+          trailing: 'System',
+          onTap: () => context.push(AppRoutes.themeSettings.path),
         ),
         ProfileMenuItem(
           icon: Iconsax.global,
           title: 'Language',
           trailing: 'English',
-          onTap: () {},
+          onTap: () => context.push(AppRoutes.languageSettings.path),
+        ),
+        ProfileMenuItem(
+          icon: Iconsax.setting_2,
+          title: AppStrings.settings,
+          onTap: () => context.push(AppRoutes.userSettings.path),
         ),
       ],
     );
@@ -101,10 +142,31 @@ class ProfilePage extends StatelessWidget {
     return ProfileMenuSection(
       title: 'Support',
       items: [
-        ProfileMenuItem(icon: Iconsax.message_question, title: AppStrings.helpSupport, onTap: () {}),
-        ProfileMenuItem(icon: Iconsax.info_circle, title: AppStrings.aboutUs, onTap: () {}),
-        ProfileMenuItem(icon: Iconsax.document_text, title: AppStrings.termsConditions, onTap: () {}),
-        ProfileMenuItem(icon: Iconsax.shield_tick, title: AppStrings.privacyPolicy, onTap: () {}),
+        ProfileMenuItem(
+          icon: Iconsax.message_question,
+          title: AppStrings.helpSupport,
+          onTap: () => context.push(AppRoutes.helpSupport.path),
+        ),
+        ProfileMenuItem(
+          icon: Iconsax.message,
+          title: 'Contact Us',
+          onTap: () => context.push(AppRoutes.contactUs.path),
+        ),
+        ProfileMenuItem(
+          icon: Iconsax.info_circle,
+          title: AppStrings.aboutUs,
+          onTap: () {},
+        ),
+        ProfileMenuItem(
+          icon: Iconsax.document_text,
+          title: AppStrings.termsConditions,
+          onTap: () => context.push(AppRoutes.termsOfService.path),
+        ),
+        ProfileMenuItem(
+          icon: Iconsax.shield_tick,
+          title: AppStrings.privacyPolicy,
+          onTap: () => context.push(AppRoutes.privacyPolicy.path),
+        ),
       ],
     );
   }

@@ -36,8 +36,20 @@ class ThemeManager extends ChangeNotifier {
   /// Loads theme mode from storage.
   Future<void> _loadThemeMode() async {
     final prefs = _prefs ?? await SharedPreferences.getInstance();
-    final themeIndex = prefs.getInt(AppConstants.keyThemeMode) ?? 0;
-    _themeMode = ThemeMode.values[themeIndex];
+    // Handle both int and String storage (for migration)
+    var themeIndex = 0;
+    if (prefs.containsKey(AppConstants.keyThemeMode)) {
+      final value = prefs.get(AppConstants.keyThemeMode);
+      if (value is int) {
+        themeIndex = value;
+      } else if (value is String) {
+        // Try to parse as int, fallback to 0
+        themeIndex = int.tryParse(value) ?? 0;
+      }
+    }
+    if (themeIndex >= 0 && themeIndex < ThemeMode.values.length) {
+      _themeMode = ThemeMode.values[themeIndex];
+    }
     notifyListeners();
   }
 

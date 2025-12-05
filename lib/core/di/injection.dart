@@ -23,6 +23,7 @@ import '../theme/theme_manager.dart';
 import '../services/analytics_service.dart';
 import '../../features/nearby_offers/data/repositories/partner_repository.dart';
 import '../../features/nearby_offers/domain/usecases/usecases.dart';
+import '../../features/profile/repositories/repositories.dart';
 
 /// Global service locator instance.
 final GetIt sl = GetIt.instance;
@@ -44,6 +45,8 @@ Future<void> initializeDependencies() async {
     ..registerLazySingleton<BookingRepository>(DummyBookingRepository.new)
     ..registerLazySingleton<UserRepository>(DummyUserRepository.new)
     ..registerLazySingleton<PartnerRepository>(DummyPartnerRepository.new)
+    // ============ Profile Repository ============
+    ..registerLazySingleton<ProfileRepository>(DummyProfileRepository.new)
     // ============ Services ============
     ..registerLazySingleton<AnalyticsService>(DummyAnalyticsService.new)
     // ============ Nearby Offers Usecases ============

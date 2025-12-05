@@ -16,5 +16,5 @@ export 'search/search.dart';
 export 'splash/splash.dart';
 export 'stations/stations.dart';
 export 'trip_planner/trip_planner.dart';
-export 'wallet/wallet.dart';
+// export 'wallet/wallet.dart';
 
