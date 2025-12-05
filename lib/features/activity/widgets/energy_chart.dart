@@ -39,6 +39,23 @@ class EnergyChart extends StatelessWidget {
   /// Whether to animate.
   final bool animate;
 
+  /// Calculate label interval based on data length.
+  double _getLabelInterval() {
+    if (data.length <= 7) return 1;
+    if (data.length <= 14) return 2;
+    if (data.length <= 30) return 4;
+    return 7;
+  }
+
+  /// Determine if label should be shown at index.
+  bool _shouldShowLabel(int index) {
+    if (data.length <= 7) return true;
+    final interval = _getLabelInterval().toInt();
+    // Always show first and last
+    if (index == 0 || index == data.length - 1) return true;
+    return index % interval == 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (data.isEmpty) {
@@ -92,18 +109,24 @@ class EnergyChart extends StatelessWidget {
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
+                interval: _getLabelInterval(),
                 getTitlesWidget: (value, meta) {
-                  if (value.toInt() >= data.length) {
+                  final index = value.toInt();
+                  if (index >= data.length || index < 0) {
                     return const SizedBox();
                   }
-                  final day = data[value.toInt()];
+                  // Show fewer labels to avoid overlap
+                  if (!_shouldShowLabel(index)) {
+                    return const SizedBox();
+                  }
+                  final day = data[index];
                   return Padding(
                     padding: EdgeInsets.only(top: 8.h),
                     child: Text(
                       day.dayAbbrev,
                       style: TextStyle(
                         color: AppColors.textSecondaryLight,
-                        fontSize: 11.sp,
+                        fontSize: 10.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

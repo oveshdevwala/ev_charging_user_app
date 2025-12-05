@@ -13,6 +13,7 @@ import '../../../models/offer_model.dart';
 import '../../../models/station_model.dart';
 import '../../../models/trip_route_model.dart';
 import '../../../models/user_activity_model.dart';
+import '../../../features/nearby_offers/data/models/partner_offer_model.dart';
 
 /// Home category enum for quick actions grid.
 enum HomeCategory {
@@ -33,6 +34,7 @@ class HomeState extends Equatable {
     this.savedRoutes = const [],
     this.offers = const [],
     this.bundles = const [],
+    this.nearbyOffers = const [],
     this.activitySummary,
     this.error,
     this.selectedOfferId,
@@ -60,6 +62,9 @@ class HomeState extends Equatable {
   /// Recommended bundles/subscriptions.
   final List<BundleModel> bundles;
 
+  /// Nearby partner offers.
+  final List<PartnerOfferModel> nearbyOffers;
+
   /// User activity summary.
   final UserActivitySummary? activitySummary;
 
@@ -77,6 +82,7 @@ class HomeState extends Equatable {
       nearbyStations.isNotEmpty ||
       offers.isNotEmpty ||
       bundles.isNotEmpty ||
+      nearbyOffers.isNotEmpty ||
       activitySummary != null;
 
   /// Check if there's an error.
@@ -90,6 +96,7 @@ class HomeState extends Equatable {
     List<TripRouteModel>? savedRoutes,
     List<OfferModel>? offers,
     List<BundleModel>? bundles,
+    List<PartnerOfferModel>? nearbyOffers,
     UserActivitySummary? activitySummary,
     String? error,
     String? selectedOfferId,
@@ -102,6 +109,7 @@ class HomeState extends Equatable {
       savedRoutes: savedRoutes ?? this.savedRoutes,
       offers: offers ?? this.offers,
       bundles: bundles ?? this.bundles,
+      nearbyOffers: nearbyOffers ?? this.nearbyOffers,
       activitySummary: activitySummary ?? this.activitySummary,
       error: error,
       selectedOfferId: selectedOfferId ?? this.selectedOfferId,
@@ -117,6 +125,7 @@ class HomeState extends Equatable {
         savedRoutes,
         offers,
         bundles,
+        nearbyOffers,
         activitySummary,
         error,
         selectedOfferId,

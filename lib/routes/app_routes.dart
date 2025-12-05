@@ -19,8 +19,10 @@ import '../features/onboarding/onboarding.dart';
 import '../features/profile/profile.dart';
 import '../features/splash/splash.dart';
 import '../features/stations/stations.dart';
+import '../features/trip_history/trip_history.dart';
 import '../features/trip_planner/trip_planner.dart';
 import '../features/wallet/wallet.dart';
+import '../features/nearby_offers/presentation/screens/screens.dart';
 
 // ============================================================
 // APP ROUTES ENUM
@@ -56,6 +58,18 @@ enum AppRoutes {
   stationCommunity,
   leaveReview,
   adminModeration,
+  allSessions,
+  allTransactions,
+  sessionDetail,
+  transactionDetail,
+  tripHistory,
+
+  // -------- Nearby Offers Routes --------
+  nearbyOffers,
+  partnerMarketplace,
+  partnerDetail,
+  offerRedeem,
+  checkInSuccess,
 }
 
 // ============================================================
@@ -118,6 +132,28 @@ extension AppRoutePath on AppRoutes {
         return '/leaveReview';
       case AppRoutes.adminModeration:
         return '/adminModeration';
+      case AppRoutes.allSessions:
+        return '/allSessions';
+      case AppRoutes.allTransactions:
+        return '/allTransactions';
+      case AppRoutes.sessionDetail:
+        return '/sessionDetail';
+      case AppRoutes.transactionDetail:
+        return '/transactionDetail';
+      case AppRoutes.tripHistory:
+        return '/tripHistory';
+
+      // Nearby Offers
+      case AppRoutes.nearbyOffers:
+        return '/nearbyOffers';
+      case AppRoutes.partnerMarketplace:
+        return '/partnerMarketplace';
+      case AppRoutes.partnerDetail:
+        return '/partnerDetail';
+      case AppRoutes.offerRedeem:
+        return '/offerRedeem';
+      case AppRoutes.checkInSuccess:
+        return '/checkInSuccess';
     }
   }
 
@@ -173,37 +209,32 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.userHome.path,
         name: AppRoutes.userHome.name,
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: MainShellPage(),
-        ),
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: MainShellPage()),
       ),
       GoRoute(
         path: AppRoutes.userSearch.path,
         name: AppRoutes.userSearch.name,
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: MainShellPage(initialIndex: 1),
-        ),
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: MainShellPage(initialIndex: 1)),
       ),
       GoRoute(
         path: AppRoutes.userFavorites.path,
         name: AppRoutes.userFavorites.name,
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: MainShellPage(initialIndex: 2),
-        ),
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: MainShellPage(initialIndex: 2)),
       ),
       GoRoute(
         path: AppRoutes.userBookings.path,
         name: AppRoutes.userBookings.name,
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: MainShellPage(initialIndex: 3),
-        ),
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: MainShellPage(initialIndex: 3)),
       ),
       GoRoute(
         path: AppRoutes.userProfile.path,
         name: AppRoutes.userProfile.name,
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: MainShellPage(initialIndex: 4),
-        ),
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: MainShellPage(initialIndex: 4)),
       ),
 
       // -------- Station Details --------
@@ -322,6 +353,69 @@ class AppRouter {
         path: AppRoutes.adminModeration.path,
         name: AppRoutes.adminModeration.name,
         builder: (context, state) => const ModerationConsolePage(),
+      ),
+
+      // -------- Activity Sub-pages --------
+      GoRoute(
+        path: AppRoutes.allSessions.path,
+        name: AppRoutes.allSessions.name,
+        builder: (context, state) => const AllSessionsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.allTransactions.path,
+        name: AppRoutes.allTransactions.name,
+        builder: (context, state) => const AllTransactionsPage(),
+      ),
+      GoRoute(
+        path: '${AppRoutes.sessionDetail.path}/:id',
+        name: AppRoutes.sessionDetail.name,
+        builder: (context, state) {
+          final sessionId = state.pathParameters['id'] ?? '';
+          return SessionDetailPage(sessionId: sessionId);
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.transactionDetail.path}/:id',
+        name: AppRoutes.transactionDetail.name,
+        builder: (context, state) {
+          final transactionId = state.pathParameters['id'] ?? '';
+          return TransactionDetailPage(transactionId: transactionId);
+        },
+      ),
+
+      // -------- Trip History --------
+      GoRoute(
+        path: AppRoutes.tripHistory.path,
+        name: AppRoutes.tripHistory.name,
+        builder: (context, state) => const TripHistoryScreen(),
+      ),
+
+      // -------- Nearby Offers --------
+      GoRoute(
+        path: AppRoutes.nearbyOffers.path,
+        name: AppRoutes.nearbyOffers.name,
+        builder: (context, state) => const NearbyOffersScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.partnerMarketplace.path,
+        name: AppRoutes.partnerMarketplace.name,
+        builder: (context, state) => const PartnerMarketplaceScreen(),
+      ),
+      GoRoute(
+        path: '${AppRoutes.partnerDetail.path}/:id',
+        name: AppRoutes.partnerDetail.name,
+        builder: (context, state) {
+          final partnerId = state.pathParameters['id'] ?? '';
+          return PartnerDetailScreen(partnerId: partnerId);
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.offerRedeem.path}/:id',
+        name: AppRoutes.offerRedeem.name,
+        builder: (context, state) {
+          final offerId = state.pathParameters['id'] ?? '';
+          return OfferRedeemScreen(offerId: offerId);
+        },
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

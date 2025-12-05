@@ -91,6 +91,133 @@ class ActivityInsights {
 class DummyActivityRepository implements ActivityRepository {
   final _random = Random(42); // Fixed seed for consistent data
 
+  // Cached data for synchronous access
+  static List<ChargingSessionModel>? _cachedSessions;
+  static List<TransactionModel>? _cachedTransactions;
+
+  /// Get sessions synchronously (for list pages).
+  List<ChargingSessionModel> getSessions() {
+    _cachedSessions ??= _generateSessions(30);
+    return _cachedSessions!;
+  }
+
+  /// Get transactions synchronously (for list pages).
+  List<TransactionModel> getTransactions() {
+    _cachedTransactions ??= _generateTransactions(30);
+    return _cachedTransactions!;
+  }
+
+  /// Get session by ID.
+  ChargingSessionModel? getSessionById(String id) {
+    return getSessions().where((s) => s.id == id).firstOrNull;
+  }
+
+  /// Get transaction by ID.
+  TransactionModel? getTransactionById(String id) {
+    return getTransactions().where((t) => t.id == id).firstOrNull;
+  }
+
+  List<ChargingSessionModel> _generateSessions(int count) {
+    final random = Random(42);
+    final now = DateTime.now();
+    final stations = [
+      ('GreenCharge Downtown', HomeImages.station1),
+      ('PowerUp Station', HomeImages.station2),
+      ('EcoCharge Hub', HomeImages.station3),
+      ('QuickVolt Station', HomeImages.station4),
+      ('ChargeMaster Pro', HomeImages.station5),
+    ];
+    final chargerTypes = ['CCS', 'CHAdeMO', 'Type 2', 'Tesla'];
+
+    return List.generate(count, (index) {
+      final stationIndex = random.nextInt(stations.length);
+      final station = stations[stationIndex];
+      final hoursAgo = (index * 8) + random.nextInt(6);
+      final sessionTime = now.subtract(Duration(hours: hoursAgo));
+      final energy = 15.0 + random.nextDouble() * 50;
+      final duration = Duration(minutes: 20 + random.nextInt(60));
+      final power = [50.0, 100.0, 150.0, 250.0, 350.0][random.nextInt(5)];
+
+      return ChargingSessionModel(
+        id: 'session_${1000 + index}',
+        stationId: 'station_00${stationIndex + 1}',
+        stationName: station.$1,
+        chargerId: 'charger_${random.nextInt(5) + 1}',
+        chargerName: '${chargerTypes[random.nextInt(chargerTypes.length)]} Charger',
+        startTime: sessionTime,
+        endTime: sessionTime.add(duration),
+        energyKwh: energy,
+        cost: energy * 0.35 + random.nextDouble() * 2,
+        duration: duration,
+        chargerType: chargerTypes[random.nextInt(chargerTypes.length)],
+        powerKw: power,
+        startBatteryPercent: 15 + random.nextInt(30),
+        endBatteryPercent: 75 + random.nextInt(25),
+        co2SavedKg: energy * 0.5,
+        stationImageUrl: station.$2,
+      );
+    });
+  }
+
+  List<TransactionModel> _generateTransactions(int count) {
+    final random = Random(42);
+    final now = DateTime.now();
+    final transactions = <TransactionModel>[];
+
+    for (var i = 0; i < count; i++) {
+      final hoursAgo = (i * 12) + random.nextInt(8);
+      final txTime = now.subtract(Duration(hours: hoursAgo));
+
+      final typeRoll = random.nextInt(10);
+      TransactionType type;
+      double amount;
+      String? description;
+      String? stationName;
+      double? energyKwh;
+
+      if (typeRoll < 6) {
+        type = TransactionType.charging;
+        amount = 8.0 + random.nextDouble() * 25;
+        final stations = ['GreenCharge Downtown', 'PowerUp Station', 'EcoCharge Hub'];
+        stationName = stations[random.nextInt(stations.length)];
+        energyKwh = amount / 0.35;
+        description = 'Charging session at $stationName';
+      } else if (typeRoll < 7) {
+        type = TransactionType.subscription;
+        amount = [49.99, 99.99][random.nextInt(2)];
+        description = 'Monthly Unlimited Plan';
+      } else if (typeRoll < 8) {
+        type = TransactionType.topUp;
+        amount = [20.0, 50.0, 100.0][random.nextInt(3)];
+        description = 'Wallet top-up';
+      } else if (typeRoll < 9) {
+        type = TransactionType.reward;
+        amount = 2.0 + random.nextDouble() * 8;
+        description = 'Charging reward bonus';
+      } else {
+        type = TransactionType.referral;
+        amount = 10.0;
+        description = 'Referral bonus';
+      }
+
+      transactions.add(TransactionModel(
+        id: 'tx_${2000 + i}',
+        type: type,
+        amount: amount,
+        createdAt: txTime,
+        paymentMethod: PaymentMethod.values[random.nextInt(4)],
+        description: description,
+        referenceId: 'REF${100000 + i}',
+        sessionId: type == TransactionType.charging ? 'session_${1000 + i}' : null,
+        stationName: stationName,
+        energyKwh: energyKwh,
+        fee: type == TransactionType.charging ? 0.25 : 0.0,
+      ));
+    }
+
+    return transactions;
+  }
+
   @override
   Future<UserActivitySummary> fetchActivitySummary() async {
     await Future<void>.delayed(const Duration(milliseconds: 200));

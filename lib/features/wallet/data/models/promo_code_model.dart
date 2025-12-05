@@ -330,3 +330,5 @@ class PromoCodeResult extends Equatable {
   @override
   List<Object?> get props => [isValid, promo, discountAmount, errorMessage];
 }
+
+

@@ -74,6 +74,7 @@ abstract final class AppStrings {
   // ============ User App ============
   static const String home = 'Home';
   static const String nearbyStations = 'Nearby Stations';
+  static const String nearbyOffers = 'Nearby Offers';
   static const String findChargingStation = 'Find Charging Station';
   static const String searchForStations = 'Search for stations...';
   static const String favorites = 'Favorites';
@@ -463,4 +464,46 @@ abstract final class AppStrings {
   static const String moderationFilterPending = 'Pending';
   static const String moderationFilterHighPriority = 'High Priority';
   static const String moderationFilterResolved = 'Resolved';
+
+  // ============ Nearby Offers ============
+  static const String nearbyOffersTitle = 'Nearby Offers';
+  static const String partnerMarketplaceTitle = 'Partner Marketplace';
+  static const String partnerDetailTitle = 'Partner Details';
+  static const String offerRedeemTitle = 'Redeem Offer';
+  static const String checkInSuccessTitle = 'Check-in Successful!';
+
+  // Categories
+  static const String partner_category_food = 'Food & Dining';
+  static const String partner_category_shopping = 'Shopping';
+  static const String partner_category_movies = 'Movies & Entertainment';
+  static const String partner_category_services = 'Services';
+  static const String partner_category_entertainment = 'Entertainment';
+  static const String partner_category_wellness = 'Wellness';
+  static const String partner_category_all = 'All';
+
+  // Offer Types
+  static const String offer_type_discount = 'Discount';
+  static const String offer_type_cashback = 'Cashback';
+  static const String offer_type_free_item = 'Free Item';
+  static const String offer_type_bogo = 'Buy 1 Get 1';
+  static const String offer_type_perk = 'Perk';
+  static const String offer_type_voucher = 'Voucher';
+
+  // Actions
+  static const String checkInHere = 'Check In Here';
+  static const String claimOffer = 'Claim Offer';
+  static const String redeemNow = 'Redeem Now';
+  static const String showQRCode = 'Show QR Code';
+  static const String viewPartner = 'View Partner';
+  static const String viewOffers = 'View Offers';
+
+  // Messages
+  static const String noOffersFound = 'No offers found nearby';
+  static const String noPartnersFound = 'No partners found';
+  static const String checkInSuccessMessage = 'You earned credits for visiting';
+  static const String offerExpired = 'This offer has expired';
+  static const String offerRedeemed = 'Offer successfully redeemed';
+  static const String showToPartner = 'Show this QR code to the cashier';
+  static const String expiresIn = 'Expires in';
+  static const String validUntil = 'Valid until';
 }

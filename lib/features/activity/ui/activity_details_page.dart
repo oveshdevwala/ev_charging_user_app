@@ -10,10 +10,12 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../repositories/activity_repository.dart';
+import '../../../routes/app_routes.dart';
 import '../../../widgets/loading_wrapper.dart';
 import '../bloc/activity_cubit.dart';
 import '../bloc/activity_state.dart';
@@ -69,16 +71,23 @@ class _ActivityDetailsContent extends StatelessWidget {
     return SliverAppBar(
       expandedHeight: 200.h,
       pinned: true,
-      backgroundColor: AppColors.backgroundLight,
+      backgroundColor: AppColors.primary,
       surfaceTintColor: Colors.transparent,
+      title: const Text(
+        'Your Activity',
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
       leading: IconButton(
         icon: Container(
           padding: EdgeInsets.all(8.r),
           decoration: BoxDecoration(
-            color: AppColors.surfaceLight,
+            color: Colors.white.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12.r),
           ),
-          child: Icon(Iconsax.arrow_left, size: 20.r, color: AppColors.textPrimaryLight),
+          child: Icon(Iconsax.arrow_left, size: 20.r, color: Colors.white),
         ),
         onPressed: () => Navigator.of(context).pop(),
       ),
@@ -87,10 +96,10 @@ class _ActivityDetailsContent extends StatelessWidget {
           icon: Container(
             padding: EdgeInsets.all(8.r),
             decoration: BoxDecoration(
-              color: AppColors.surfaceLight,
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12.r),
             ),
-            child: Icon(Iconsax.export_3, size: 20.r, color: AppColors.textPrimaryLight),
+            child: Icon(Iconsax.export_3, size: 20.r, color: Colors.white),
           ),
           onPressed: () {
             // Export functionality
@@ -238,11 +247,14 @@ class _ActivityDetailsContent extends StatelessWidget {
           SizedBox(height: 16.h),
           ...state.sessions.take(5).map((session) => Padding(
                 padding: EdgeInsets.only(bottom: 12.h),
-                child: SessionCard(session: session),
+                child: SessionCard(
+                  session: session,
+                  onTap: () => context.push(AppRoutes.sessionDetail.id(session.id)),
+                ),
               )),
           if (state.sessions.length > 5)
             _buildViewAllButton('View All Sessions', () {
-              context.read<ActivityCubit>().setTab(ActivityTab.sessions);
+              context.push(AppRoutes.allSessions.path);
             }),
           SizedBox(height: 28.h),
 
@@ -251,11 +263,14 @@ class _ActivityDetailsContent extends StatelessWidget {
           SizedBox(height: 16.h),
           ...state.transactions.take(5).map((tx) => Padding(
                 padding: EdgeInsets.only(bottom: 10.h),
-                child: TransactionCard(transaction: tx),
+                child: TransactionCard(
+                  transaction: tx,
+                  onTap: () => context.push(AppRoutes.transactionDetail.id(tx.id)),
+                ),
               )),
           if (state.transactions.length > 5)
             _buildViewAllButton('View All Transactions', () {
-              context.read<ActivityCubit>().setTab(ActivityTab.transactions);
+              context.push(AppRoutes.allTransactions.path);
             }),
 
           SizedBox(height: 100.h),

@@ -78,13 +78,29 @@ class _BookingsPageState extends State<BookingsPage>
   Widget _buildHeader() {
     return Padding(
       padding: EdgeInsets.all(20.r),
-      child: Text(
-        AppStrings.myBookings,
-        style: TextStyle(
-          fontSize: 24.sp,
-          fontWeight: FontWeight.w700,
-          color: AppColors.textPrimaryLight,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            AppStrings.myBookings,
+            style: TextStyle(
+              fontSize: 24.sp,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimaryLight,
+            ),
+          ),
+          TextButton.icon(
+            onPressed: () => context.push(AppRoutes.tripHistory.path),
+            icon: Icon(Iconsax.chart_1, size: 18.r),
+            label: Text(
+              'Trip History',
+              style: TextStyle(fontSize: 14.sp),
+            ),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.primary,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -133,6 +149,10 @@ class _BookingsPageState extends State<BookingsPage>
             ? 'Book a charging session to get started'
             : 'Your completed sessions will appear here',
         icon: Iconsax.calendar,
+        onAction: !isUpcoming
+            ? () => context.push(AppRoutes.tripHistory.path)
+            : null,
+        actionLabel: !isUpcoming ? 'View Trip History' : null,
       );
     }
 

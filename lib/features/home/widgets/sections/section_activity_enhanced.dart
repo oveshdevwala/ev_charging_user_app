@@ -49,8 +49,8 @@ class SectionActivityEnhanced extends StatelessWidget {
             borderRadius: BorderRadius.circular(24.r),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF0F0F23).withValues(alpha: 0.4),
-                blurRadius: 20,
+                color: const Color(0xFF0F0F23).withValues(alpha: 0.2),
+                blurRadius: 6.r,
                 offset: const Offset(0, 8),
               ),
             ],
@@ -168,11 +168,11 @@ class SectionActivityEnhanced extends StatelessWidget {
                       ),
                       SizedBox(height: 20.h),
 
-                      // Mini chart
-                      _buildMiniChart(),
-                      SizedBox(height: 12.h),
+                      // // Mini chart
+                      // _buildMiniChart(),
+                      // SizedBox(height: 12.h),
 
-                      // Bottom row
+                      // // Bottom row
                       Row(
                         children: [
                           Icon(

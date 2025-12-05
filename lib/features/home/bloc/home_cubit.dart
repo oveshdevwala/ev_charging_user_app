@@ -8,6 +8,10 @@ library;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/di/injection.dart';
+import '../../../features/nearby_offers/data/datasources/partner_remote_datasource.dart';
+import '../../../features/nearby_offers/data/models/partner_offer_model.dart';
+import '../../../features/nearby_offers/domain/usecases/get_nearby_offers_usecase.dart';
 import '../../../repositories/home_repository.dart';
 import '../../../repositories/station_repository.dart';
 import 'home_state.dart';
@@ -41,12 +45,19 @@ class HomeCubit extends Cubit<HomeState> {
       final offersFuture = _homeRepository.fetchOffers();
       final bundlesFuture = _homeRepository.fetchBundles();
       final summaryFuture = _homeRepository.fetchActivitySummary();
+      
+      // Fetch nearby offers
+      final nearbyOffersFuture = _fetchNearbyOffers(
+        latitude: latitude,
+        longitude: longitude,
+      );
 
       final stations = await stationsFuture;
       final routes = await routesFuture;
       final offers = await offersFuture;
       final bundles = await bundlesFuture;
       final summary = await summaryFuture;
+      final nearbyOffers = await nearbyOffersFuture;
 
       emit(state.copyWith(
         isLoading: false,
@@ -54,6 +65,7 @@ class HomeCubit extends Cubit<HomeState> {
         savedRoutes: routes,
         offers: offers,
         bundles: bundles,
+        nearbyOffers: nearbyOffers,
         activitySummary: summary,
       ));
     } catch (e) {
@@ -80,12 +92,19 @@ class HomeCubit extends Cubit<HomeState> {
       final offersFuture = _homeRepository.fetchOffers();
       final bundlesFuture = _homeRepository.fetchBundles();
       final summaryFuture = _homeRepository.fetchActivitySummary();
+      
+      // Fetch nearby offers
+      final nearbyOffersFuture = _fetchNearbyOffers(
+        latitude: latitude,
+        longitude: longitude,
+      );
 
       final stations = await stationsFuture;
       final routes = await routesFuture;
       final offers = await offersFuture;
       final bundles = await bundlesFuture;
       final summary = await summaryFuture;
+      final nearbyOffers = await nearbyOffersFuture;
 
       emit(state.copyWith(
         isRefreshing: false,
@@ -93,6 +112,7 @@ class HomeCubit extends Cubit<HomeState> {
         savedRoutes: routes,
         offers: offers,
         bundles: bundles,
+        nearbyOffers: nearbyOffers,
         activitySummary: summary,
       ));
     } catch (e) {
@@ -100,6 +120,26 @@ class HomeCubit extends Cubit<HomeState> {
         isRefreshing: false,
         error: e.toString(),
       ));
+    }
+  }
+
+  /// Fetch nearby offers using the use case.
+  Future<List<PartnerOfferModel>> _fetchNearbyOffers({
+    required double latitude,
+    required double longitude,
+  }) async {
+    try {
+      final getNearbyOffers = sl<GetNearbyOffersUseCase>();
+      final params = OfferFilterParams(
+        latitude: latitude,
+        longitude: longitude,
+        radiusKm: 10.0, // 10km radius for home page
+        limit: 10, // Limit to 10 offers for home page
+      );
+      return await getNearbyOffers(params);
+    } catch (e) {
+      // Return empty list on error to not break home page
+      return [];
     }
   }
 

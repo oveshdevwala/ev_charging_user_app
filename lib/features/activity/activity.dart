@@ -9,6 +9,10 @@ export 'bloc/activity_state.dart';
 
 // UI
 export 'ui/activity_details_page.dart';
+export 'ui/all_sessions_page.dart';
+export 'ui/all_transactions_page.dart';
+export 'ui/session_detail_page.dart';
+export 'ui/transaction_detail_page.dart';
 
 // Widgets
 export 'widgets/energy_chart.dart';

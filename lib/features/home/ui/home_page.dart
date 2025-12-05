@@ -23,6 +23,7 @@ import '../../../repositories/home_repository.dart';
 import '../../../repositories/station_repository.dart';
 import '../../../routes/app_routes.dart';
 import '../../../widgets/loading_wrapper.dart';
+import '../../../features/nearby_offers/data/models/partner_offer_model.dart';
 import '../bloc/home_cubit.dart';
 import '../bloc/home_state.dart';
 import '../widgets/home_header.dart';
@@ -74,30 +75,26 @@ class _HomePageContent extends StatelessWidget {
                 slivers: [
                   // Header Section
                   SliverToBoxAdapter(child: _buildHeader(context)),
+                  // SECTION 1: Activity Summary
+                  if (state.activitySummary != null)
+                    SliverToBoxAdapter(
+                      child: SectionActivityEnhanced(
+                        summary: state.activitySummary!,
+                        weeklyData: _getWeeklyData(),
+                        onViewDetailsTap: () => _onActivityDetails(context),
+                      ),
+                    ),
 
-                  // SECTION 1: Quick Actions (compact grid - FIRST after search)
+                  // SECTION 2: Quick Actions (compact grid - FIRST after search)
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.only(top: 16.h),
+                      padding: EdgeInsets.only(top: 24.h),
                       child: SectionCategoriesGrid(
                         onCategoryTap: (category) =>
                             _onCategoryTap(context, category),
                       ),
                     ),
                   ),
-
-                  // SECTION 2: Activity Summary
-                  if (state.activitySummary != null)
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 24.h),
-                        child: SectionActivityEnhanced(
-                          summary: state.activitySummary!,
-                          weeklyData: _getWeeklyData(),
-                          onViewDetailsTap: () => _onActivityDetails(context),
-                        ),
-                      ),
-                    ),
 
                   // SECTION 3: Nearby Stations
                   if (state.nearbyStations.isNotEmpty)
@@ -111,6 +108,20 @@ class _HomePageContent extends StatelessWidget {
                           onViewAllTap: () => _onStationsViewAll(context),
                           onFavoriteTap: (id) =>
                               context.read<HomeCubit>().toggleFavorite(id),
+                        ),
+                      ),
+                    ),
+
+                  // SECTION 3.5: Nearby Offers
+                  if (state.nearbyOffers.isNotEmpty)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 28.h),
+                        child: SectionNearbyOffers(
+                          offers: state.nearbyOffers,
+                          onOfferTap: (offer) =>
+                              _onNearbyOfferTap(context, offer),
+                          onViewAllTap: () => _onNearbyOffersViewAll(context),
                         ),
                       ),
                     ),
@@ -285,8 +296,8 @@ class _HomePageContent extends StatelessWidget {
   }
 
   void _onTripsViewAll(BuildContext context) {
-    // Navigate to trip planner to see all saved trips
-    context.push(AppRoutes.tripPlanner.path);
+    // Navigate to trip history to see all completed trips
+    context.push(AppRoutes.tripHistory.path);
   }
 
   void _onBundleTap(BuildContext context, BundleModel bundle) {
@@ -312,6 +323,14 @@ class _HomePageContent extends StatelessWidget {
       case HomeCategory.tripPlanner:
         context.push(AppRoutes.tripPlanner.path);
     }
+  }
+
+  void _onNearbyOfferTap(BuildContext context, PartnerOfferModel offer) {
+    context.push(AppRoutes.partnerDetail.id(offer.partnerId));
+  }
+
+  void _onNearbyOffersViewAll(BuildContext context) {
+    context.push(AppRoutes.nearbyOffers.path);
   }
 
   void _showSnackBar(BuildContext context, String message) {
