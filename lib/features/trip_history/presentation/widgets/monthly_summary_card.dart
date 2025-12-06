@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../core/extensions/context_ext.dart';
 import '../../domain/entities/monthly_analytics.dart';
 
 class MonthlySummaryCard extends StatelessWidget {
@@ -17,7 +19,7 @@ class MonthlySummaryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: context.appColors.textPrimary.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -41,14 +43,14 @@ class MonthlySummaryCard extends StatelessWidget {
                 'Total Cost',
                 '₹${analytics.totalCost.toStringAsFixed(2)}',
                 Icons.attach_money,
-                Colors.green,
+                context.appColors.success,
               ),
               _buildStatItem(
                 context,
                 'Energy',
                 '${analytics.totalEnergy.toStringAsFixed(1)} kWh',
                 Icons.bolt,
-                Colors.orange,
+                context.appColors.warning,
               ),
             ],
           ),
@@ -61,14 +63,14 @@ class MonthlySummaryCard extends StatelessWidget {
                 'Efficiency',
                 '${analytics.avgEfficiency.toStringAsFixed(1)} km/kWh',
                 Icons.speed,
-                Colors.blue,
+                context.appColors.info,
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: isPositive
-                      ? Colors.red.withOpacity(0.1)
-                      : Colors.green.withOpacity(0.1),
+                      ? context.appColors.danger.withOpacity(0.1)
+                      : context.appColors.success.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Row(
@@ -76,13 +78,17 @@ class MonthlySummaryCard extends StatelessWidget {
                     Icon(
                       isPositive ? Icons.arrow_upward : Icons.arrow_downward,
                       size: 12.sp,
-                      color: isPositive ? Colors.red : Colors.green,
+                      color: isPositive
+                          ? context.appColors.danger
+                          : context.appColors.success,
                     ),
                     SizedBox(width: 4.w),
                     Text(
                       '${analytics.comparisonPercentage.abs().toStringAsFixed(1)}%',
                       style: TextStyle(
-                        color: isPositive ? Colors.red : Colors.green,
+                        color: isPositive
+                            ? context.appColors.danger
+                            : context.appColors.success,
                         fontWeight: FontWeight.bold,
                         fontSize: 12.sp,
                       ),
@@ -115,7 +121,9 @@ class MonthlySummaryCard extends StatelessWidget {
               label,
               style: Theme.of(
                 context,
-              ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+              ).textTheme.bodySmall?.copyWith(
+                    color: context.appColors.textTertiary,
+                  ),
             ),
           ],
         ),

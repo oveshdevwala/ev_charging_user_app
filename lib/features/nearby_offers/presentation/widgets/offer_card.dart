@@ -6,6 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/extensions/context_ext.dart';
 import '../../../../core/utils/date_formatter.dart';
 import '../../data/models/partner_offer_model.dart';
 import 'distance_chip.dart';
@@ -74,8 +75,8 @@ class OfferCard extends StatelessWidget {
                     right: 12.w,
                     child: DistanceChip(
                       distanceKm: offer.distance,
-                      color: Colors.black.withOpacity(0.6),
-                      textColor: Colors.white,
+                      color: context.appColors.textPrimary.withOpacity(0.6),
+                      textColor: context.appColors.surface,
                     ),
                   ),
               ],

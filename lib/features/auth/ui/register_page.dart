@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 import '../../../widgets/app_app_bar.dart';
@@ -69,7 +70,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
+      backgroundColor: colors.background,
       appBar: const AppAppBar(title: ''),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -79,7 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeader(),
+                _buildHeader(context),
                 SizedBox(height: 32.h),
                 _buildNameField(),
                 SizedBox(height: 16.h),
@@ -91,11 +95,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 SizedBox(height: 16.h),
                 _buildConfirmPasswordField(),
                 SizedBox(height: 20.h),
-                _buildTermsCheckbox(),
+                _buildTermsCheckbox(context),
                 SizedBox(height: 32.h),
                 _buildRegisterButton(),
                 SizedBox(height: 24.h),
-                _buildSignInLink(),
+                _buildSignInLink(context),
               ],
             ),
           ),
@@ -104,7 +108,9 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
+    final colors = context.appColors;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -113,13 +119,16 @@ class _RegisterPageState extends State<RegisterPage> {
           style: TextStyle(
             fontSize: 28.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         SizedBox(height: 8.h),
         Text(
           'Start your EV charging journey',
-          style: TextStyle(fontSize: 16.sp, color: AppColors.textSecondaryLight),
+          style: TextStyle(
+            fontSize: 16.sp,
+            color: colors.textSecondary,
+          ),
         ),
       ],
     );
@@ -212,7 +221,9 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildTermsCheckbox() {
+  Widget _buildTermsCheckbox(BuildContext context) {
+    final colors = context.appColors;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -221,7 +232,8 @@ class _RegisterPageState extends State<RegisterPage> {
           height: 24.h,
           child: Checkbox(
             value: _agreeToTerms,
-            onChanged: (value) => setState(() => _agreeToTerms = value ?? false),
+            onChanged: (value) =>
+                setState(() => _agreeToTerms = value ?? false),
           ),
         ),
         SizedBox(width: 8.w),
@@ -233,22 +245,22 @@ class _RegisterPageState extends State<RegisterPage> {
                 text: 'I agree to the ',
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: AppColors.textSecondaryLight,
+                  color: colors.textSecondary,
                 ),
-                children: const [
+                children: [
                   TextSpan(
                     text: AppStrings.termsConditions,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.primary,
+                      color: colors.primary,
                     ),
                   ),
-                  TextSpan(text: ' and '),
+                  const TextSpan(text: ' and '),
                   TextSpan(
                     text: AppStrings.privacyPolicy,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.primary,
+                      color: colors.primary,
                     ),
                   ),
                 ],
@@ -268,21 +280,25 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildSignInLink() {
+  Widget _buildSignInLink(BuildContext context) {
+    final colors = context.appColors;
+
     return Center(
       child: TextButton(
         onPressed: () => context.pop(),
         child: RichText(
           text: TextSpan(
             text: AppStrings.alreadyHaveAccount,
-            style:
-                TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
-            children: const [
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: colors.textSecondary,
+            ),
+            children: [
               TextSpan(
                 text: ' ${AppStrings.signIn}',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+                  color: colors.primary,
                 ),
               ),
             ],
@@ -292,4 +308,3 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
-

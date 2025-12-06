@@ -7,6 +7,7 @@
 library;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ev_charging_user_app/core/extensions/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
@@ -18,7 +19,8 @@ import '../models/models.dart';
 /// Question card widget.
 class QuestionCard extends StatelessWidget {
   const QuestionCard({
-    required this.question, super.key,
+    required this.question,
+    super.key,
     this.onTap,
     this.onUpvoteTap,
     this.showAnswers = false,
@@ -33,14 +35,16 @@ class QuestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardTheme.color,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: AppColors.outlineLight),
+          border: Border.all(color: colors.outline),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +59,7 @@ class QuestionCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15.sp,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
                 height: 1.4,
               ),
             ),
@@ -91,16 +95,18 @@ class QuestionCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final colors = context.appColors;
+
     return Row(
       children: [
         CircleAvatar(
           radius: 16.r,
-          backgroundColor: AppColors.outlineLight,
+          backgroundColor: colors.outline,
           backgroundImage: question.userAvatar != null
               ? CachedNetworkImageProvider(question.userAvatar!)
               : null,
           child: question.userAvatar == null
-              ? Icon(Iconsax.user, size: 16.r, color: AppColors.textSecondaryLight)
+              ? Icon(Iconsax.user, size: 16.r, color: colors.textSecondary)
               : null,
         ),
         SizedBox(width: 10.w),
@@ -113,17 +119,14 @@ class QuestionCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimaryLight,
+                  color: colors.textPrimary,
                 ),
               ),
               Text(
                 question.createdAt != null
                     ? timeago.format(question.createdAt!)
                     : 'Recently',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: AppColors.textTertiaryLight,
-                ),
+                style: TextStyle(fontSize: 11.sp, color: colors.textTertiary),
               ),
             ],
           ),
@@ -132,20 +135,20 @@ class QuestionCard extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             decoration: BoxDecoration(
-              color: AppColors.success.withValues(alpha: 0.1),
+              color: colors.success.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(4.r),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Iconsax.tick_circle, size: 12.r, color: AppColors.success),
+                Icon(Iconsax.tick_circle, size: 12.r, color: colors.success),
                 SizedBox(width: 4.w),
                 Text(
                   'Answered',
                   style: TextStyle(
                     fontSize: 10.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.success,
+                    color: colors.success,
                   ),
                 ),
               ],
@@ -156,6 +159,8 @@ class QuestionCard extends StatelessWidget {
   }
 
   Widget _buildStats(BuildContext context) {
+    final colors = context.appColors;
+
     return Row(
       children: [
         // Upvote button
@@ -166,11 +171,13 @@ class QuestionCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                question.isUpvotedByMe ? Iconsax.arrow_up_25 : Iconsax.arrow_up_2,
+                question.isUpvotedByMe
+                    ? Iconsax.arrow_up_25
+                    : Iconsax.arrow_up_2,
                 size: 18.r,
                 color: question.isUpvotedByMe
-                    ? AppColors.primary
-                    : AppColors.textSecondaryLight,
+                    ? colors.primary
+                    : colors.textSecondary,
               ),
               SizedBox(width: 4.w),
               Text(
@@ -179,8 +186,8 @@ class QuestionCard extends StatelessWidget {
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
                   color: question.isUpvotedByMe
-                      ? AppColors.primary
-                      : AppColors.textSecondaryLight,
+                      ? colors.primary
+                      : colors.textSecondary,
                 ),
               ),
             ],
@@ -192,18 +199,11 @@ class QuestionCard extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Iconsax.message,
-              size: 16.r,
-              color: AppColors.textSecondaryLight,
-            ),
+            Icon(Iconsax.message, size: 16.r, color: colors.textSecondary),
             SizedBox(width: 4.w),
             Text(
               '${question.answersCount} ${question.answersCount == 1 ? 'answer' : 'answers'}',
-              style: TextStyle(
-                fontSize: 13.sp,
-                color: AppColors.textSecondaryLight,
-              ),
+              style: TextStyle(fontSize: 13.sp, color: colors.textSecondary),
             ),
           ],
         ),
@@ -212,16 +212,13 @@ class QuestionCard extends StatelessWidget {
 
         // View answers arrow
         if (onTap != null)
-          Icon(
-            Iconsax.arrow_right_3,
-            size: 18.r,
-            color: AppColors.textTertiaryLight,
-          ),
+          Icon(Iconsax.arrow_right_3, size: 18.r, color: colors.textTertiary),
       ],
     );
   }
 
   Widget _buildAcceptedAnswerPreview(BuildContext context) {
+    final colors = context.appColors;
     final acceptedAnswer = question.acceptedAnswer;
     if (acceptedAnswer == null) {
       return const SizedBox.shrink();
@@ -230,44 +227,36 @@ class QuestionCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: AppColors.success.withValues(alpha: 0.05),
+        color: colors.success.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(
-          color: AppColors.success.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: colors.success.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Iconsax.tick_circle, size: 14.r, color: AppColors.success),
+              Icon(Iconsax.tick_circle, size: 14.r, color: colors.success),
               SizedBox(width: 6.w),
               Text(
                 'Accepted Answer',
                 style: TextStyle(
                   fontSize: 11.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.success,
+                  color: colors.success,
                 ),
               ),
               const Spacer(),
               Text(
                 acceptedAnswer.displayName,
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: AppColors.textSecondaryLight,
-                ),
+                style: TextStyle(fontSize: 11.sp, color: colors.textSecondary),
               ),
             ],
           ),
           SizedBox(height: 8.h),
           Text(
             acceptedAnswer.text,
-            style: TextStyle(
-              fontSize: 13.sp,
-              color: AppColors.textPrimaryLight,
-            ),
+            style: TextStyle(fontSize: 13.sp, color: colors.textPrimary),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -280,7 +269,8 @@ class QuestionCard extends StatelessWidget {
 /// Answer card widget.
 class AnswerCard extends StatelessWidget {
   const AnswerCard({
-    required this.answer, super.key,
+    required this.answer,
+    super.key,
     this.isQuestionOwner = false,
     this.onHelpfulTap,
     this.onAcceptTap,
@@ -293,17 +283,19 @@ class AnswerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
         color: answer.isAccepted
-            ? AppColors.success.withValues(alpha: 0.05)
-            : Theme.of(context).cardTheme.color,
+            ? colors.success.withValues(alpha: 0.05)
+            : colors.surface,
         borderRadius: BorderRadius.circular(10.r),
         border: Border.all(
           color: answer.isAccepted
-              ? AppColors.success.withValues(alpha: 0.3)
-              : AppColors.outlineLight,
+              ? colors.success.withValues(alpha: 0.3)
+              : colors.outline,
         ),
       ),
       child: Column(
@@ -314,12 +306,16 @@ class AnswerCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 14.r,
-                backgroundColor: AppColors.outlineLight,
+                backgroundColor: colors.outline,
                 backgroundImage: answer.userAvatar != null
                     ? CachedNetworkImageProvider(answer.userAvatar!)
                     : null,
                 child: answer.userAvatar == null
-                    ? Icon(Iconsax.user, size: 14.r, color: AppColors.textSecondaryLight)
+                    ? Icon(
+                        Iconsax.user,
+                        size: 14.r,
+                        color: colors.textSecondary,
+                      )
                     : null,
               ),
               SizedBox(width: 8.w),
@@ -334,7 +330,7 @@ class AnswerCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimaryLight,
+                            color: colors.textPrimary,
                           ),
                         ),
                         if (answer.isAccepted) ...[
@@ -342,7 +338,7 @@ class AnswerCard extends StatelessWidget {
                           Icon(
                             Iconsax.tick_circle,
                             size: 14.r,
-                            color: AppColors.success,
+                            color: colors.success,
                           ),
                         ],
                       ],
@@ -353,7 +349,7 @@ class AnswerCard extends StatelessWidget {
                           : 'Recently',
                       style: TextStyle(
                         fontSize: 10.sp,
-                        color: AppColors.textTertiaryLight,
+                        color: colors.textTertiary,
                       ),
                     ),
                   ],
@@ -368,7 +364,7 @@ class AnswerCard extends StatelessWidget {
             answer.text,
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
               height: 1.4,
             ),
           ),
@@ -403,8 +399,8 @@ class AnswerCard extends StatelessWidget {
                       answer.isHelpfulByMe ? Iconsax.like_15 : Iconsax.like_1,
                       size: 16.r,
                       color: answer.isHelpfulByMe
-                          ? AppColors.primary
-                          : AppColors.textSecondaryLight,
+                          ? colors.primary
+                          : colors.textSecondary,
                     ),
                     SizedBox(width: 4.w),
                     Text(
@@ -412,8 +408,8 @@ class AnswerCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11.sp,
                         color: answer.isHelpfulByMe
-                            ? AppColors.primary
-                            : AppColors.textSecondaryLight,
+                            ? colors.primary
+                            : colors.textSecondary,
                       ),
                     ),
                   ],
@@ -427,9 +423,12 @@ class AnswerCard extends StatelessWidget {
                 GestureDetector(
                   onTap: onAcceptTap,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 4.h,
+                    ),
                     decoration: BoxDecoration(
-                      color: AppColors.success.withValues(alpha: 0.1),
+                      color: colors.success.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4.r),
                     ),
                     child: Text(
@@ -437,7 +436,7 @@ class AnswerCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.success,
+                        color: colors.success,
                       ),
                     ),
                   ),
@@ -452,15 +451,14 @@ class AnswerCard extends StatelessWidget {
 
 /// Empty Q&A placeholder.
 class EmptyQAWidget extends StatelessWidget {
-  const EmptyQAWidget({
-    super.key,
-    this.onAskQuestion,
-  });
+  const EmptyQAWidget({super.key, this.onAskQuestion});
 
   final VoidCallback? onAskQuestion;
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Center(
       child: Padding(
         padding: EdgeInsets.all(32.r),
@@ -470,7 +468,7 @@ class EmptyQAWidget extends StatelessWidget {
             Icon(
               Iconsax.message_question,
               size: 64.r,
-              color: AppColors.outlineLight,
+              color: colors.textTertiary,
             ),
             SizedBox(height: 16.h),
             Text(
@@ -478,16 +476,13 @@ class EmptyQAWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
             ),
             SizedBox(height: 8.h),
             Text(
               'Ask a question about this station',
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
               textAlign: TextAlign.center,
             ),
             if (onAskQuestion != null) ...[
@@ -497,9 +492,12 @@ class EmptyQAWidget extends StatelessWidget {
                 icon: Icon(Iconsax.message_add, size: 18.r),
                 label: const Text('Ask a Question'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                  backgroundColor: colors.primary,
+                  foregroundColor: colors.onPrimaryContainer,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24.w,
+                    vertical: 12.h,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.r),
                   ),
@@ -512,4 +510,3 @@ class EmptyQAWidget extends StatelessWidget {
     );
   }
 }
-

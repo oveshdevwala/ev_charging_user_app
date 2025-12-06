@@ -16,7 +16,9 @@ import '../../../../models/trip_route_model.dart';
 /// Trip route card widget.
 class TripCard extends StatelessWidget {
   const TripCard({
-    required this.route, required this.onTap, super.key,
+    required this.route,
+    required this.onTap,
+    super.key,
     this.width,
     this.isCompact = false,
   });
@@ -35,6 +37,8 @@ class TripCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -42,14 +46,14 @@ class TripCard extends StatelessWidget {
         margin: EdgeInsets.only(right: 16.w),
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: AppColors.outlineLight),
-          boxShadow: const [
+          border: Border.all(color: colors.outline),
+          boxShadow: [
             BoxShadow(
-              color: AppColors.shadowLight,
+              color: colors.shadow,
               blurRadius: 8,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -66,18 +70,14 @@ class TripCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 if (route.isFavorite)
-                  Icon(
-                    Iconsax.heart5,
-                    size: 18.r,
-                    color: AppColors.error,
-                  ),
+                  Icon(Iconsax.heart5, size: 18.r, color: colors.danger),
               ],
             ),
             SizedBox(height: 14.h),
@@ -92,8 +92,8 @@ class TripCard extends StatelessWidget {
                     Container(
                       width: 12.r,
                       height: 12.r,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primary,
+                      decoration: BoxDecoration(
+                        color: colors.primary,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -101,7 +101,7 @@ class TripCard extends StatelessWidget {
                       width: 2.w,
                       height: 30.h,
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.3),
+                        color: colors.primary.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(1.r),
                       ),
                       child: route.stopsCount > 0
@@ -114,11 +114,9 @@ class TripCard extends StatelessWidget {
                                   height: 6.r,
                                   margin: EdgeInsets.symmetric(vertical: 2.h),
                                   decoration: BoxDecoration(
-                                    color: AppColors.secondary,
+                                    color: colors.secondary,
                                     shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: AppColors.surfaceLight,
-                                    ),
+                                    border: Border.all(color: colors.surface),
                                   ),
                                 ),
                               ),
@@ -129,12 +127,9 @@ class TripCard extends StatelessWidget {
                       width: 12.r,
                       height: 12.r,
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceLight,
+                        color: colors.surface,
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.primary,
-                          width: 2,
-                        ),
+                        border: Border.all(color: colors.primary, width: 2),
                       ),
                     ),
                   ],
@@ -151,7 +146,7 @@ class TripCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimaryLight,
+                          color: colors.textPrimary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -162,7 +157,7 @@ class TripCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimaryLight,
+                          color: colors.textPrimary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -178,31 +173,26 @@ class TripCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(10.r),
               decoration: BoxDecoration(
-                color: AppColors.surfaceVariantLight,
+                color: colors.surfaceVariant,
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _buildStat(
+                    context,
                     icon: Iconsax.routing_2,
                     value: '${route.distance.toStringAsFixed(0)} km',
                   ),
-                  Container(
-                    width: 1,
-                    height: 20.h,
-                    color: AppColors.outlineLight,
-                  ),
+                  Container(width: 1, height: 20.h, color: colors.outline),
                   _buildStat(
+                    context,
                     icon: Iconsax.flash_1,
                     value: '${route.stopsCount} stops',
                   ),
-                  Container(
-                    width: 1,
-                    height: 20.h,
-                    color: AppColors.outlineLight,
-                  ),
+                  Container(width: 1, height: 20.h, color: colors.outline),
                   _buildStat(
+                    context,
                     icon: Iconsax.clock,
                     value: route.estimation?.formattedTime ?? '--',
                   ),
@@ -215,22 +205,24 @@ class TripCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStat({required IconData icon, required String value}) {
+  Widget _buildStat(
+    BuildContext context, {
+    required IconData icon,
+    required String value,
+  }) {
+    final colors = context.appColors;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          icon,
-          size: 14.r,
-          color: AppColors.textSecondaryLight,
-        ),
+        Icon(icon, size: 14.r, color: colors.textSecondary),
         SizedBox(width: 4.w),
         Text(
           value,
           style: TextStyle(
             fontSize: 11.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
       ],
@@ -240,15 +232,16 @@ class TripCard extends StatelessWidget {
 
 /// Quick trip planner card with CTA.
 class TripPlannerCard extends StatelessWidget {
-  const TripPlannerCard({
-    required this.onPlanTripTap, super.key,
-  });
+  const TripPlannerCard({required this.onPlanTripTap, super.key});
 
   /// Callback when plan trip is tapped.
   final VoidCallback onPlanTripTap;
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: onPlanTripTap,
       child: Container(
@@ -256,18 +249,17 @@ class TripPlannerCard extends StatelessWidget {
         margin: EdgeInsets.only(right: 16.w),
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF2196F3),
-              Color(0xFF1976D2),
-            ],
+            colors: isDark
+                ? [colors.primary, colors.primaryContainer]
+                : [AppColors.info, colors.infoContainer],
           ),
           borderRadius: BorderRadius.circular(20.r),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF2196F3).withValues(alpha: 0.3),
+              color: colors.primary.withValues(alpha: 0.3),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -281,13 +273,13 @@ class TripPlannerCard extends StatelessWidget {
               width: 44.r,
               height: 44.r,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: colors.textPrimary.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Icon(
                 Iconsax.map,
                 size: 24.r,
-                color: Colors.white,
+                color: colors.textPrimary,
               ),
             ),
             SizedBox(height: 16.h),
@@ -296,7 +288,7 @@ class TripPlannerCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
-                color: Colors.white,
+                color: colors.textPrimary,
               ),
             ),
             SizedBox(height: 4.h),
@@ -304,7 +296,7 @@ class TripPlannerCard extends StatelessWidget {
               'Find optimal charging stops',
               style: TextStyle(
                 fontSize: 11.sp,
-                color: Colors.white.withValues(alpha: 0.85),
+                color: colors.textSecondary,
               ),
             ),
             SizedBox(height: 12.h),
@@ -315,14 +307,14 @@ class TripPlannerCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: colors.textPrimary,
                   ),
                 ),
                 SizedBox(width: 4.w),
                 Icon(
                   Iconsax.arrow_right_3,
                   size: 14.r,
-                  color: Colors.white,
+                  color: colors.textPrimary,
                 ),
               ],
             ),
@@ -332,4 +324,3 @@ class TripPlannerCard extends StatelessWidget {
     );
   }
 }
-

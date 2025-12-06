@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../core/extensions/context_ext.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../models/station_model.dart';
 
@@ -38,20 +39,22 @@ class StationCardHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: width ?? 280.w,
         margin: EdgeInsets.only(right: 16.w),
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: AppColors.outlineLight),
-          boxShadow: const [
+          border: Border.all(color: colors.outline),
+          boxShadow: [
             BoxShadow(
-              color: AppColors.shadowLight,
+              color: colors.shadow,
               blurRadius: 8,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -66,6 +69,7 @@ class StationCardHorizontal extends StatelessWidget {
                     top: Radius.circular(20.r),
                   ),
                   child: _buildStationImage(
+                    context,
                     station.imageUrl,
                     height: 120.h,
                     width: double.infinity,
@@ -81,22 +85,19 @@ class StationCardHorizontal extends StatelessWidget {
                       onTap: onFavoriteTap,
                       child: Container(
                         padding: EdgeInsets.all(8.r),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        decoration: BoxDecoration(
+                          color: colors.surface,
                           shape: BoxShape.circle,
                           boxShadow: [
-                            BoxShadow(
-                              color: AppColors.shadowMedium,
-                              blurRadius: 6,
-                            ),
+                            BoxShadow(color: colors.shadow, blurRadius: 6),
                           ],
                         ),
                         child: Icon(
                           station.isFavorite ? Iconsax.heart5 : Iconsax.heart,
                           size: 18.r,
                           color: station.isFavorite
-                              ? AppColors.error
-                              : AppColors.textSecondaryLight,
+                              ? colors.danger
+                              : colors.textSecondary,
                         ),
                       ),
                     ),
@@ -113,7 +114,7 @@ class StationCardHorizontal extends StatelessWidget {
                         vertical: 5.h,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.7),
+                        color: colors.scrim,
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: Row(
@@ -122,7 +123,7 @@ class StationCardHorizontal extends StatelessWidget {
                           Icon(
                             Iconsax.location,
                             size: 12.r,
-                            color: Colors.white,
+                            color: colors.textPrimary,
                           ),
                           SizedBox(width: 4.w),
                           Text(
@@ -130,7 +131,7 @@ class StationCardHorizontal extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 11.sp,
                               fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                              color: colors.textPrimary,
                             ),
                           ),
                         ],
@@ -149,8 +150,8 @@ class StationCardHorizontal extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: station.hasAvailableChargers
-                          ? AppColors.available
-                          : AppColors.occupied,
+                          ? colors.success
+                          : colors.warning,
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Text(
@@ -158,7 +159,7 @@ class StationCardHorizontal extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11.sp,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: colors.textPrimary,
                       ),
                     ),
                   ),
@@ -177,7 +178,7 @@ class StationCardHorizontal extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -188,7 +189,7 @@ class StationCardHorizontal extends StatelessWidget {
                       Icon(
                         Iconsax.location,
                         size: 12.r,
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                       ),
                       SizedBox(width: 4.w),
                       Expanded(
@@ -196,7 +197,7 @@ class StationCardHorizontal extends StatelessWidget {
                           station.address,
                           style: TextStyle(
                             fontSize: 11.sp,
-                            color: AppColors.textSecondaryLight,
+                            color: colors.textSecondary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -211,7 +212,7 @@ class StationCardHorizontal extends StatelessWidget {
                       Icon(
                         Iconsax.star1,
                         size: 14.r,
-                        color: AppColors.ratingActive,
+                        color: colors.warning,
                       ),
                       SizedBox(width: 3.w),
                       Text(
@@ -219,7 +220,7 @@ class StationCardHorizontal extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimaryLight,
+                          color: colors.textPrimary,
                         ),
                       ),
                       SizedBox(width: 4.w),
@@ -227,7 +228,7 @@ class StationCardHorizontal extends StatelessWidget {
                         '(${station.reviewCount})',
                         style: TextStyle(
                           fontSize: 11.sp,
-                          color: AppColors.textTertiaryLight,
+                          color: colors.textTertiary,
                         ),
                       ),
                       const Spacer(),
@@ -236,7 +237,7 @@ class StationCardHorizontal extends StatelessWidget {
                         Icon(
                           Iconsax.flash_1,
                           size: 12.r,
-                          color: AppColors.primary,
+                          color: colors.primary,
                         ),
                         SizedBox(width: 3.w),
                         Text(
@@ -244,7 +245,7 @@ class StationCardHorizontal extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 11.sp,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.textSecondaryLight,
+                            color: colors.textSecondary,
                           ),
                         ),
                         SizedBox(width: 10.w),
@@ -255,14 +256,14 @@ class StationCardHorizontal extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
+                          color: colors.primary,
                         ),
                       ),
                       Text(
                         '/kWh',
                         style: TextStyle(
                           fontSize: 10.sp,
-                          color: AppColors.textSecondaryLight,
+                          color: colors.textSecondary,
                         ),
                       ),
                     ],
@@ -278,12 +279,16 @@ class StationCardHorizontal extends StatelessWidget {
 
   /// Helper to build station image with proper null/empty URL handling.
   Widget _buildStationImage(
+    BuildContext context,
     String? imageUrl, {
     double? width,
     double? height,
   }) {
+    final colors = context.appColors;
+
     // Check if URL is valid (not null, not empty, starts with http)
-    final isValidUrl = imageUrl != null &&
+    final isValidUrl =
+        imageUrl != null &&
         imageUrl.isNotEmpty &&
         (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
 
@@ -292,12 +297,12 @@ class StationCardHorizontal extends StatelessWidget {
       return Container(
         width: width,
         height: height,
-        color: AppColors.surfaceVariantLight,
+        color: colors.surfaceVariant,
         child: Center(
           child: Icon(
             Iconsax.building_4,
             size: 32.r,
-            color: AppColors.textTertiaryLight,
+            color: colors.textTertiary,
           ),
         ),
       );
@@ -311,14 +316,14 @@ class StationCardHorizontal extends StatelessWidget {
       placeholder: (context, url) => Container(
         width: width,
         height: height,
-        color: AppColors.surfaceVariantLight,
+        color: colors.surfaceVariant,
         child: Center(
           child: SizedBox(
             width: 24.r,
             height: 24.r,
-            child: const CircularProgressIndicator(
+            child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(AppColors.primary),
+              valueColor: AlwaysStoppedAnimation(colors.primary),
             ),
           ),
         ),
@@ -326,13 +331,9 @@ class StationCardHorizontal extends StatelessWidget {
       errorWidget: (context, url, error) => Container(
         width: width,
         height: height,
-        color: AppColors.surfaceVariantLight,
+        color: colors.surfaceVariant,
         child: Center(
-          child: Icon(
-            Iconsax.image,
-            size: 32.r,
-            color: AppColors.textTertiaryLight,
-          ),
+          child: Icon(Iconsax.image, size: 32.r, color: colors.textTertiary),
         ),
       ),
     );

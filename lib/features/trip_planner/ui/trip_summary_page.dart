@@ -10,11 +10,14 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../routes/app_routes.dart';
 import '../../../widgets/app_app_bar.dart';
 import '../../../widgets/common_button.dart';
 import '../bloc/bloc.dart';
@@ -44,7 +47,7 @@ class TripSummaryPage extends StatelessWidget {
                 icon: Icon(
                   trip.isFavorite ? Iconsax.heart5 : Iconsax.heart,
                   size: 22.r,
-                  color: trip.isFavorite ? AppColors.error : null,
+                  color: trip.isFavorite ? context.appColors.danger : null,
                 ),
                 onPressed: () => context
                     .read<TripPlannerCubit>()
@@ -57,7 +60,7 @@ class TripSummaryPage extends StatelessWidget {
             ],
           ),
           body: SingleChildScrollView(
-            padding: EdgeInsets.all(16.r),
+            padding: EdgeInsets.all(12.r),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -72,26 +75,15 @@ class TripSummaryPage extends StatelessWidget {
                 SizedBox(height: 24.h),
                 // Battery preview
                 if (trip.batteryGraphData.isNotEmpty) ...[
-                  _buildSectionHeader('Battery Level Along Route'),
+                  _buildSectionHeader(context, 'Battery Level Along Route'),
                   SizedBox(height: 12.h),
-                  Container(
-                    padding: EdgeInsets.all(16.r),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(16.r),
-                      border: Border.all(color: AppColors.outlineLight),
-                    ),
-                    child: BatteryGraph(
-                      dataPoints: trip.batteryGraphData,
-                      reserveSocPercent: trip.vehicle.reserveSocPercent,
-                      height: 180.h,
-                    ),
-                  ),
+                  _buildBatteryCard(context),
                   SizedBox(height: 24.h),
                 ],
                 // Charging stops preview
                 if (trip.chargingStops.isNotEmpty) ...[
                   _buildSectionHeader(
+                    context,
                     '${trip.chargingStops.length} Charging Stops',
                     action: 'View All',
                     onAction: () =>
@@ -107,6 +99,9 @@ class TripSummaryPage extends StatelessWidget {
                           onNavigateTap: () => _openDirections(context, stop),
                           onReserveTap: () =>
                               _showReservationSnackbar(context, stop),
+                          onDetailsTap: () => context.push(
+                            AppRoutes.stationDetails.id(stop.stationId),
+                          ),
                         ),
                       ),
                   if (trip.chargingStops.length > 2) ...[
@@ -119,7 +114,7 @@ class TripSummaryPage extends StatelessWidget {
                           '+${trip.chargingStops.length - 2} more stops',
                           style: TextStyle(
                             fontSize: 13.sp,
-                            color: AppColors.primary,
+                            color: context.appColors.primary,
                           ),
                         ),
                       ),
@@ -129,20 +124,9 @@ class TripSummaryPage extends StatelessWidget {
                 ],
                 // Cost breakdown
                 if (trip.costBreakdown.isNotEmpty) ...[
-                  _buildSectionHeader('Cost Breakdown'),
+                  _buildSectionHeader(context, 'Cost Breakdown'),
                   SizedBox(height: 12.h),
-                  Container(
-                    padding: EdgeInsets.all(16.r),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(16.r),
-                      border: Border.all(color: AppColors.outlineLight),
-                    ),
-                    child: CostBarBreakdown(
-                      costBreakdown: trip.costBreakdown,
-                      totalCost: trip.estimates?.estimatedCost ?? 0,
-                    ),
-                  ),
+                  _buildCostCard(context, trip),
                   SizedBox(height: 24.h),
                 ],
                 // Save button
@@ -163,6 +147,7 @@ class TripSummaryPage extends StatelessWidget {
   }
 
   Widget _buildRouteHeader(BuildContext context, TripPlannerState state) {
+    final colors = context.appColors;
     final trip = state.currentTrip!;
 
     return Container(
@@ -172,12 +157,12 @@ class TripSummaryPage extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppColors.primary.withValues(alpha: 0.1),
-            AppColors.secondary.withValues(alpha: 0.05),
+            colors.primary.withValues(alpha: 0.1),
+            colors.secondary.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+        border: Border.all(color: colors.primary.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -187,10 +172,14 @@ class TripSummaryPage extends StatelessWidget {
                 width: 40.r,
                 height: 40.r,
                 decoration: BoxDecoration(
-                  color: AppColors.primary,
+                  color: colors.primary,
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Icon(Iconsax.location, size: 20.r, color: Colors.white),
+                child: Icon(
+                  Iconsax.location,
+                  size: 20.r,
+                  color: context.appColors.textPrimary,
+                ),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -201,7 +190,7 @@ class TripSummaryPage extends StatelessWidget {
                       'From',
                       style: TextStyle(
                         fontSize: 11.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                       ),
                     ),
                     Text(
@@ -209,7 +198,7 @@ class TripSummaryPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight,
+                        color: colors.textPrimary,
                       ),
                     ),
                   ],
@@ -224,11 +213,11 @@ class TripSummaryPage extends StatelessWidget {
                 Container(
                   width: 2,
                   height: 24.h,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [AppColors.primary, AppColors.error],
+                      colors: [colors.primary, colors.danger],
                     ),
                   ),
                 ),
@@ -241,10 +230,14 @@ class TripSummaryPage extends StatelessWidget {
                 width: 40.r,
                 height: 40.r,
                 decoration: BoxDecoration(
-                  color: AppColors.error,
+                  color: colors.danger,
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Icon(Iconsax.flag, size: 20.r, color: Colors.white),
+                child: Icon(
+                  Iconsax.flag,
+                  size: 20.r,
+                  color: context.appColors.textPrimary,
+                ),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -255,7 +248,7 @@ class TripSummaryPage extends StatelessWidget {
                       'To',
                       style: TextStyle(
                         fontSize: 11.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                       ),
                     ),
                     Text(
@@ -263,7 +256,7 @@ class TripSummaryPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight,
+                        color: colors.textPrimary,
                       ),
                     ),
                   ],
@@ -277,6 +270,7 @@ class TripSummaryPage extends StatelessWidget {
   }
 
   Widget _buildMainStats(BuildContext context, TripPlannerState state) {
+    final colors = context.appColors;
     final estimates = state.currentTrip!.estimates;
     if (estimates == null) {
       return const SizedBox.shrink();
@@ -288,31 +282,33 @@ class TripSummaryPage extends StatelessWidget {
           icon: Iconsax.routing_2,
           label: 'Distance',
           value: '${estimates.totalDistanceKm.toStringAsFixed(0)} km',
-          color: AppColors.primary,
+          color: colors.primary,
         ),
         TripStatData(
           icon: Iconsax.clock,
           label: 'Total Time',
           value: estimates.formattedTotalTime,
-          color: AppColors.secondary,
+          color: colors.secondary,
         ),
         TripStatData(
           icon: Iconsax.flash_1,
           label: 'Stops',
           value: '${estimates.requiredStops}',
-          color: AppColors.warning,
+          color: colors.warning,
         ),
         TripStatData(
           icon: Iconsax.dollar_circle,
           label: 'Est. Cost',
           value: '\$${estimates.estimatedCost.toStringAsFixed(0)}',
-          color: AppColors.primary,
+          color: colors.primary,
         ),
       ],
     );
   }
 
   Widget _buildQuickActions(BuildContext context, TripPlannerState state) {
+    final colors = context.appColors;
+
     return Row(
       children: [
         Expanded(
@@ -321,7 +317,7 @@ class TripSummaryPage extends StatelessWidget {
             icon: Iconsax.flash_1,
             label: 'Charging Stops',
             value: '${state.currentTrip!.chargingStops.length}',
-            color: AppColors.warning,
+            color: colors.warning,
             onTap: () => context.read<TripPlannerCubit>().goToChargingStops(),
           ),
         ),
@@ -332,7 +328,7 @@ class TripSummaryPage extends StatelessWidget {
             icon: Iconsax.chart_2,
             label: 'Trip Insights',
             value: 'View',
-            color: AppColors.tertiary,
+            color: context.appColors.tertiary,
             onTap: () => context.read<TripPlannerCubit>().goToInsights(),
           ),
         ),
@@ -343,7 +339,7 @@ class TripSummaryPage extends StatelessWidget {
             icon: Iconsax.map,
             label: 'Full Route',
             value: 'View',
-            color: AppColors.secondary,
+            color: colors.secondary,
             onTap: () => context.read<TripPlannerCubit>().goToDetail(),
           ),
         ),
@@ -359,6 +355,8 @@ class TripSummaryPage extends StatelessWidget {
     required Color color,
     required VoidCallback onTap,
   }) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -381,13 +379,13 @@ class TripSummaryPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 2.h),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11.sp,
-                color: AppColors.textSecondaryLight,
+            FittedBox(
+              child: Text(
+                label,
+                maxLines: 1,
+                style: TextStyle(fontSize: 11.sp, color: colors.textSecondary),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -396,10 +394,13 @@ class TripSummaryPage extends StatelessWidget {
   }
 
   Widget _buildSectionHeader(
+    BuildContext context,
     String title, {
     String? action,
     VoidCallback? onAction,
   }) {
+    final colors = context.appColors;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -408,7 +409,7 @@ class TripSummaryPage extends StatelessWidget {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         if (action != null && onAction != null)
@@ -419,7 +420,7 @@ class TripSummaryPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
-                color: AppColors.primary,
+                color: colors.primary,
               ),
             ),
           ),
@@ -427,18 +428,55 @@ class TripSummaryPage extends StatelessWidget {
     );
   }
 
+  Widget _buildBatteryCard(BuildContext context) {
+    final colors = context.appColors;
+    final trip = context.read<TripPlannerCubit>().state.currentTrip!;
+
+    return Container(
+      padding: EdgeInsets.all(16.r),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: colors.outline),
+      ),
+      child: BatteryGraph(
+        dataPoints: trip.batteryGraphData,
+        reserveSocPercent: trip.vehicle.reserveSocPercent,
+        height: 180.h,
+      ),
+    );
+  }
+
+  Widget _buildCostCard(BuildContext context, TripModel trip) {
+    final colors = context.appColors;
+
+    return Container(
+      padding: EdgeInsets.all(16.r),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: colors.outline),
+      ),
+      child: CostBarBreakdown(
+        costBreakdown: trip.costBreakdown,
+        totalCost: trip.estimates?.estimatedCost ?? 0,
+      ),
+    );
+  }
+
   Widget _buildBottomBar(BuildContext context, TripPlannerState state) {
+    final colors = context.appColors;
     final estimates = state.currentTrip!.estimates;
 
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        boxShadow: const [
+        color: colors.surface,
+        boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: colors.shadow,
             blurRadius: 10,
-            offset: Offset(0, -2),
+            offset: const Offset(0, -2),
           ),
         ],
       ),
@@ -454,7 +492,7 @@ class TripSummaryPage extends StatelessWidget {
                     'Arrival',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: colors.textSecondary,
                     ),
                   ),
                   Text(
@@ -462,7 +500,7 @@ class TripSummaryPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                   ),
                 ],
@@ -484,14 +522,20 @@ class TripSummaryPage extends StatelessWidget {
   }
 
   void _showSaveDialog(BuildContext context) {
+    final colors = context.appColors;
     final controller = TextEditingController();
 
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
+        backgroundColor: colors.surface,
         title: Text(
           'Save Trip',
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
+            color: colors.textPrimary,
+          ),
         ),
         content: TextField(
           controller: controller,
@@ -505,7 +549,10 @@ class TripSummaryPage extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(AppStrings.cancel),
+            child: Text(
+              AppStrings.cancel,
+              style: TextStyle(color: colors.textSecondary),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -568,6 +615,8 @@ class TripSummaryPage extends StatelessWidget {
 
   /// Open booking flow for the stop - navigates to charging stops page.
   void _showReservationSnackbar(BuildContext context, ChargingStopModel stop) {
+    final colors = context.appColors;
+
     // Navigate to charging stops page for full booking flow
     context.read<TripPlannerCubit>().goToChargingStops();
 
@@ -576,14 +625,18 @@ class TripSummaryPage extends StatelessWidget {
       SnackBar(
         content: Row(
           children: [
-            Icon(Iconsax.info_circle, color: Colors.white, size: 20.r),
+            Icon(
+              Iconsax.info_circle,
+              color: context.appColors.textPrimary,
+              size: 20.r,
+            ),
             SizedBox(width: 8.w),
             const Expanded(
               child: Text('Tap Reserve on the stop to complete booking'),
             ),
           ],
         ),
-        backgroundColor: AppColors.info,
+        backgroundColor: colors.info,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 3),
       ),

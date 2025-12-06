@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../widgets/app_app_bar.dart';
 import '../../../widgets/common_button.dart';
@@ -54,18 +55,25 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
+      backgroundColor: colors.background,
       appBar: const AppAppBar(title: ''),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(24.r),
-          child: _emailSent ? _buildSuccessView() : _buildFormView(),
+          child: _emailSent
+              ? _buildSuccessView(context)
+              : _buildFormView(context),
         ),
       ),
     );
   }
 
-  Widget _buildFormView() {
+  Widget _buildFormView(BuildContext context) {
+    final colors = context.appColors;
+
     return Form(
       key: _formKey,
       child: Column(
@@ -76,16 +84,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             style: TextStyle(
               fontSize: 28.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             AppStrings.enterEmailToReset,
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 16.sp, color: colors.textSecondary),
           ),
           SizedBox(height: 40.h),
           CommonTextField(
@@ -116,22 +121,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 
-  Widget _buildSuccessView() {
+  Widget _buildSuccessView(BuildContext context) {
+    final colors = context.appColors;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           width: 100.r,
           height: 100.r,
-          decoration: const BoxDecoration(
-            color: AppColors.successContainer,
+          decoration: BoxDecoration(
+            color: colors.successContainer,
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            Iconsax.tick_circle,
-            size: 48.r,
-            color: AppColors.success,
-          ),
+          child: Icon(Iconsax.tick_circle, size: 48.r, color: colors.success),
         ),
         SizedBox(height: 24.h),
         Text(
@@ -139,16 +142,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           style: TextStyle(
             fontSize: 24.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         SizedBox(height: 8.h),
         Text(
           'We have sent a password reset link to\n${_emailController.text}',
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: AppColors.textSecondaryLight,
-          ),
+          style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 32.h),
@@ -164,7 +164,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.primary,
+              color: colors.primary,
             ),
           ),
         ),

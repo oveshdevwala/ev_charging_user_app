@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../core/extensions/context_ext.dart';
 import '../../domain/entities/trip_record.dart';
 
 class TripListItem extends StatelessWidget {
-  final TripRecord trip;
 
-  const TripListItem({super.key, required this.trip});
+  const TripListItem({required this.trip, super.key});
+  final TripRecord trip;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class TripListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: context.appColors.textPrimary.withOpacity(0.03),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -56,22 +58,34 @@ class TripListItem extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Row(
                   children: [
-                    Icon(Icons.calendar_today, size: 12.sp, color: Colors.grey),
+                    Icon(
+                      Icons.calendar_today,
+                      size: 12.sp,
+                      color: context.appColors.textTertiary,
+                    ),
                     SizedBox(width: 4.w),
                     Text(
                       dateString,
                       style: Theme.of(
                         context,
-                      ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                      ).textTheme.bodySmall?.copyWith(
+                            color: context.appColors.textTertiary,
+                          ),
                     ),
                     SizedBox(width: 8.w),
-                    Icon(Icons.access_time, size: 12.sp, color: Colors.grey),
+                    Icon(
+                      Icons.access_time,
+                      size: 12.sp,
+                      color: context.appColors.textTertiary,
+                    ),
                     SizedBox(width: 4.w),
                     Text(
                       durationString,
                       style: Theme.of(
                         context,
-                      ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                      ).textTheme.bodySmall?.copyWith(
+                            color: context.appColors.textTertiary,
+                          ),
                     ),
                   ],
                 ),
@@ -92,7 +106,9 @@ class TripListItem extends StatelessWidget {
                 '${trip.energyConsumedKWh} kWh',
                 style: Theme.of(
                   context,
-                ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                ).textTheme.bodySmall?.copyWith(
+                      color: context.appColors.textTertiary,
+                    ),
               ),
             ],
           ),

@@ -43,6 +43,7 @@ class _ModerationConsolePageState extends State<ModerationConsolePage>
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Moderation Console'),
@@ -69,7 +70,7 @@ class _ModerationConsolePageState extends State<ModerationConsolePage>
         bottom: TabBar(
           controller: _tabController,
           labelColor: AppColors.primary,
-          unselectedLabelColor: AppColors.textSecondaryLight,
+          unselectedLabelColor: colors.textSecondary,
           indicatorColor: AppColors.primary,
           tabs: const [
             Tab(text: 'Reports'),
@@ -102,17 +103,15 @@ class _ModerationConsolePageState extends State<ModerationConsolePage>
   }
 
   Widget _buildFilterBar() {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(12.r),
-      color: AppColors.surfaceVariantLight,
+      color: colors.surfaceVariant,
       child: Row(
         children: [
           Text(
             'Filter:',
-            style: TextStyle(
-              fontSize: 13.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 13.sp, color: colors.textSecondary),
           ),
           SizedBox(width: 12.w),
           Expanded(
@@ -135,7 +134,7 @@ class _ModerationConsolePageState extends State<ModerationConsolePage>
                         fontSize: 12.sp,
                         color: isSelected
                             ? AppColors.primary
-                            : AppColors.textSecondaryLight,
+                            : colors.textSecondary,
                       ),
                     ),
                   );
@@ -171,7 +170,7 @@ class _ModerationConsolePageState extends State<ModerationConsolePage>
     return ListView.separated(
       padding: EdgeInsets.all(16.r),
       itemCount: filteredReports.length,
-      separatorBuilder: (_,_) => SizedBox(height: 12.h),
+      separatorBuilder: (_, _) => SizedBox(height: 12.h),
       itemBuilder: (context, index) {
         final report = filteredReports[index];
         return _ReportCard(
@@ -230,6 +229,7 @@ class _ModerationConsolePageState extends State<ModerationConsolePage>
   }
 
   Widget _buildEmptyState(String title, String subtitle) {
+    final colors = context.appColors;
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -243,10 +243,7 @@ class _ModerationConsolePageState extends State<ModerationConsolePage>
           SizedBox(height: 8.h),
           Text(
             subtitle,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
           ),
         ],
       ),
@@ -291,50 +288,51 @@ class _ModerationConsolePageState extends State<ModerationConsolePage>
   void _showBulkActionsSheet() {
     showModalBottomSheet<void>(
       context: context,
-      builder: (context) => Container(
-        padding: EdgeInsets.all(20.r),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Bulk Actions (${_selectedIds.length} selected)',
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
-            ),
-            SizedBox(height: 20.h),
-            ListTile(
-              leading: const Icon(
-                Iconsax.tick_circle,
-                color: AppColors.success,
+      builder: (context) {
+        final colors = context.appColors;
+        return Container(
+          padding: EdgeInsets.all(20.r),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Bulk Actions (${_selectedIds.length} selected)',
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w700,
+                  color: colors.textPrimary,
+                ),
               ),
-              title: const Text('Approve All'),
-              onTap: () {
-                Navigator.pop(context);
-                _bulkAction(ReportAction.approve);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Iconsax.trash, color: AppColors.error),
-              title: const Text('Remove All'),
-              onTap: () {
-                Navigator.pop(context);
-                _bulkAction(ReportAction.remove);
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Iconsax.close_circle,
-                color: AppColors.warning,
+              SizedBox(height: 20.h),
+              ListTile(
+                leading: Icon(Iconsax.tick_circle, color: colors.success),
+                title: const Text('Approve All'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _bulkAction(ReportAction.approve);
+                },
               ),
-              title: const Text('Reject All'),
-              onTap: () {
-                Navigator.pop(context);
-                _bulkAction(ReportAction.reject);
-              },
-            ),
-          ],
-        ),
-      ),
+              ListTile(
+                leading: Icon(Iconsax.trash, color: colors.danger),
+                title: const Text('Remove All'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _bulkAction(ReportAction.remove);
+                },
+              ),
+              ListTile(
+                leading: Icon(Iconsax.close_circle, color: colors.warning),
+                title: const Text('Reject All'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _bulkAction(ReportAction.reject);
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -451,6 +449,7 @@ class _ReportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: isSelected
@@ -458,7 +457,7 @@ class _ReportCard extends StatelessWidget {
             : Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: isSelected ? AppColors.primary : AppColors.outlineLight,
+          color: isSelected ? AppColors.primary : colors.outline,
           width: isSelected ? 2 : 1,
         ),
       ),
@@ -474,7 +473,7 @@ class _ReportCard extends StatelessWidget {
                   onChanged: (value) => onSelect(value ?? false),
                   activeColor: AppColors.primary,
                 ),
-                _buildPriorityBadge(),
+                _buildPriorityBadge(context),
                 SizedBox(width: 8.w),
                 Expanded(
                   child: Column(
@@ -491,13 +490,13 @@ class _ReportCard extends StatelessWidget {
                         'Ticket: ${report.ticketId ?? 'N/A'}',
                         style: TextStyle(
                           fontSize: 11.sp,
-                          color: AppColors.textTertiaryLight,
+                          color: colors.textTertiary,
                         ),
                       ),
                     ],
                   ),
                 ),
-                _buildStatusBadge(),
+                _buildStatusBadge(context),
               ],
             ),
           ),
@@ -508,10 +507,7 @@ class _ReportCard extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 12.w),
               child: Text(
                 report.description!,
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  color: AppColors.textSecondaryLight,
-                ),
+                style: TextStyle(fontSize: 13.sp, color: colors.textSecondary),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -524,7 +520,7 @@ class _ReportCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
-                color: AppColors.surfaceVariantLight,
+                color: colors.surfaceVariant,
                 borderRadius: BorderRadius.vertical(
                   bottom: Radius.circular(12.r),
                 ),
@@ -541,7 +537,7 @@ class _ReportCard extends StatelessWidget {
                   _buildActionButton(
                     'Remove',
                     Iconsax.trash,
-                    AppColors.error,
+                    colors.danger,
                     () => onAction(ReportAction.remove),
                   ),
                   _buildActionButton(
@@ -564,25 +560,26 @@ class _ReportCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPriorityBadge() {
+  Widget _buildPriorityBadge(BuildContext context) {
+    final colors = context.appColors;
     Color color;
     String label;
 
     switch (report.priority) {
       case ReportPriority.critical:
-        color = AppColors.error;
+        color = colors.danger;
         label = 'CRITICAL';
         break;
       case ReportPriority.high:
-        color = AppColors.warning;
+        color = colors.warning;
         label = 'HIGH';
         break;
       case ReportPriority.medium:
-        color = AppColors.info;
+        color = colors.info;
         label = 'MEDIUM';
         break;
       case ReportPriority.low:
-        color = AppColors.success;
+        color = colors.success;
         label = 'LOW';
         break;
     }
@@ -604,26 +601,27 @@ class _ReportCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusBadge() {
+  Widget _buildStatusBadge(BuildContext context) {
+    final colors = context.appColors;
     Color color;
     switch (report.status) {
       case ReportStatus.open:
-        color = AppColors.warning;
+        color = colors.warning;
         break;
       case ReportStatus.triaged:
-        color = AppColors.info;
+        color = colors.info;
         break;
       case ReportStatus.inProgress:
-        color = AppColors.primary;
+        color = colors.primary;
         break;
       case ReportStatus.resolved:
-        color = AppColors.success;
+        color = colors.success;
         break;
       case ReportStatus.rejected:
-        color = AppColors.textTertiaryLight;
+        color = colors.textTertiary;
         break;
       case ReportStatus.escalated:
-        color = AppColors.error;
+        color = colors.danger;
         break;
     }
 

@@ -6,12 +6,14 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/theme/app_colors.dart';
+import '../../../core/extensions/context_ext.dart';
 
 /// Booking duration selection widget.
 class BookingDurationSelection extends StatelessWidget {
   const BookingDurationSelection({
-    required this.selectedDuration, required this.onDurationChanged, super.key,
+    required this.selectedDuration,
+    required this.onDurationChanged,
+    super.key,
   });
 
   final int selectedDuration;
@@ -19,10 +21,18 @@ class BookingDurationSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Duration', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+        Text(
+          'Duration',
+          style: TextStyle(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
+            color: colors.textPrimary,
+          ),
+        ),
         SizedBox(height: 12.h),
         Row(
           children: [30, 60, 90, 120].map((mins) {
@@ -34,8 +44,10 @@ class BookingDurationSelection extends StatelessWidget {
                   margin: EdgeInsets.only(right: mins != 120 ? 8.w : 0),
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primary : Colors.white,
-                    border: Border.all(color: isSelected ? AppColors.primary : AppColors.outlineLight),
+                    color: isSelected ? colors.primary : colors.surface,
+                    border: Border.all(
+                      color: isSelected ? colors.primary : colors.outline,
+                    ),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Center(
@@ -44,7 +56,9 @@ class BookingDurationSelection extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
-                        color: isSelected ? Colors.white : AppColors.textPrimaryLight,
+                        color: isSelected
+                            ? colors.onPrimaryContainer
+                            : colors.textPrimary,
                       ),
                     ),
                   ),
@@ -66,4 +80,3 @@ class BookingDurationSelection extends StatelessWidget {
     return remainder > 0 ? '${hours}h ${remainder}m' : '${hours}h';
   }
 }
-

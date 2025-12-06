@@ -81,10 +81,7 @@ class _MainShellPageState extends State<MainShellPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _tabPages,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _tabPages),
       bottomNavigationBar: BottomNavBar(
         currentIndex: _currentIndex,
         onTabSelected: _onTabSelected,

@@ -12,6 +12,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../models/models.dart';
 
@@ -54,7 +55,7 @@ class _CostPieChartState extends State<CostPieChart> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final colors = context.appColors;
 
     if (widget.costBreakdown.isEmpty) {
       return SizedBox(
@@ -64,7 +65,7 @@ class _CostPieChartState extends State<CostPieChart> {
             'No cost data',
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
+              color: colors.textSecondary,
             ),
           ),
         ),
@@ -100,7 +101,7 @@ class _CostPieChartState extends State<CostPieChart> {
                   ),
                   sectionsSpace: 2,
                   centerSpaceRadius: chartSize * 0.35,
-                  sections: _buildSections(),
+                  sections: _buildSections(context),
                 ),
                 duration: widget.animate
                     ? const Duration(milliseconds: 500)
@@ -114,7 +115,7 @@ class _CostPieChartState extends State<CostPieChart> {
                     'Total',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: colors.textSecondary,
                     ),
                   ),
                   SizedBox(height: 2.h),
@@ -124,7 +125,7 @@ class _CostPieChartState extends State<CostPieChart> {
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w700,
-                      color: theme.colorScheme.primary,
+                      color: colors.primary,
                     ),
                   ),
                 ],
@@ -132,12 +133,14 @@ class _CostPieChartState extends State<CostPieChart> {
             ],
           ),
         ),
-        if (widget.showLegend) ...[SizedBox(height: 16.h), _buildLegend()],
+        if (widget.showLegend) ...[SizedBox(height: 16.h), _buildLegend(context)],
       ],
     );
   }
 
-  List<PieChartSectionData> _buildSections() {
+  List<PieChartSectionData> _buildSections(BuildContext context) {
+    final colors = context.appColors;
+
     return List.generate(widget.costBreakdown.length, (index) {
       final item = widget.costBreakdown[index];
       final isTouched = index == touchedIndex;
@@ -153,14 +156,16 @@ class _CostPieChartState extends State<CostPieChart> {
         titleStyle: TextStyle(
           fontSize: 12.sp,
           fontWeight: FontWeight.w600,
-          color: Colors.white,
+          color: colors.surface,
         ),
         titlePositionPercentageOffset: 0.6,
       );
     });
   }
 
-  Widget _buildLegend() {
+  Widget _buildLegend(BuildContext context) {
+    final colors = context.appColors;
+
     return Wrap(
       spacing: 16.w,
       runSpacing: 8.h,
@@ -182,7 +187,7 @@ class _CostPieChartState extends State<CostPieChart> {
               '${item.label} (\$${item.amount.toStringAsFixed(2)})',
               style: TextStyle(
                 fontSize: 12.sp,
-                color: AppColors.textSecondaryLight,
+                color: colors.textSecondary,
               ),
             ),
           ],
@@ -217,6 +222,8 @@ class CostBarBreakdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     if (costBreakdown.isEmpty || totalCost <= 0) {
       return const SizedBox.shrink();
     }
@@ -265,7 +272,7 @@ class CostBarBreakdown extends StatelessWidget {
                   item.label,
                   style: TextStyle(
                     fontSize: 11.sp,
-                    color: AppColors.textSecondaryLight,
+                    color: colors.textSecondary,
                   ),
                 ),
                 SizedBox(width: 4.w),
@@ -274,7 +281,7 @@ class CostBarBreakdown extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimaryLight,
+                    color: colors.textPrimary,
                   ),
                 ),
               ],

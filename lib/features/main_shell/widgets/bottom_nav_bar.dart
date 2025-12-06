@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// Bottom navigation bar widget with index-based tab switching.
@@ -29,14 +30,16 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        boxShadow: const [
+        color: colors.surface,
+        boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: colors.shadow,
             blurRadius: 20,
-            offset: Offset(0, -5),
+            offset: const Offset(0, -5),
           ),
         ],
       ),
@@ -106,13 +109,15 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.primaryContainer : Colors.transparent,
+          color: isActive ? colors.primaryContainer : Colors.transparent,
           borderRadius: BorderRadius.circular(16.r),
         ),
         child: Column(
@@ -121,7 +126,7 @@ class _NavItem extends StatelessWidget {
             Icon(
               isActive ? activeIcon : icon,
               size: 24.r,
-              color: isActive ? AppColors.primary : AppColors.textSecondaryLight,
+              color: isActive ? colors.primary : colors.textSecondary,
             ),
             SizedBox(height: 4.h),
             Text(
@@ -129,7 +134,7 @@ class _NavItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: 10.sp,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-                color: isActive ? AppColors.primary : AppColors.textSecondaryLight,
+                color: isActive ? colors.primary : colors.textSecondary,
               ),
             ),
           ],

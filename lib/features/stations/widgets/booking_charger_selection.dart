@@ -8,13 +8,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../models/charger_model.dart';
 
 /// Booking charger selection widget.
 class BookingChargerSelection extends StatelessWidget {
   const BookingChargerSelection({
-    required this.chargers, required this.selectedCharger, required this.onSelected, super.key,
+    required this.chargers,
+    required this.selectedCharger,
+    required this.onSelected,
+    super.key,
   });
 
   final List<ChargerModel> chargers;
@@ -23,10 +26,14 @@ class BookingChargerSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppStrings.selectCharger, style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+        Text(
+          AppStrings.selectCharger,
+          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600, color: colors.textPrimary),
+        ),
         SizedBox(height: 12.h),
         ...chargers.map((charger) {
           final isSelected = selectedCharger?.id == charger.id;
@@ -36,33 +43,57 @@ class BookingChargerSelection extends StatelessWidget {
               margin: EdgeInsets.only(bottom: 8.h),
               padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primaryContainer : Colors.white,
+                color: isSelected
+                    ? colors.primaryContainer
+                    : colors.surface,
                 border: Border.all(
-                  color: isSelected ? AppColors.primary : AppColors.outlineLight,
+                  color: isSelected
+                      ? colors.primary
+                      : colors.outline,
                   width: isSelected ? 2 : 1,
                 ),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Row(
                 children: [
-                  Icon(Iconsax.flash_1, color: isSelected ? AppColors.primary : AppColors.textSecondaryLight),
+                  Icon(
+                    Iconsax.flash_1,
+                    color: isSelected
+                        ? colors.primary
+                        : colors.textSecondary,
+                  ),
                   SizedBox(width: 12.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(charger.name, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
+                        Text(
+                          charger.name,
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                            color: colors.textPrimary,
+                          ),
+                        ),
                         Text(
                           '${charger.typeDisplayName} • ${charger.powerDisplay}',
-                          style: TextStyle(fontSize: 12.sp, color: AppColors.textSecondaryLight),
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: colors.textSecondary,
+                          ),
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.w,
+                      vertical: 4.h,
+                    ),
                     decoration: BoxDecoration(
-                      color: charger.isAvailable ? AppColors.successContainer : AppColors.surfaceVariantLight,
+                      color: charger.isAvailable
+                          ? colors.successContainer
+                          : colors.surfaceVariant,
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Text(
@@ -70,7 +101,9 @@ class BookingChargerSelection extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11.sp,
                         fontWeight: FontWeight.w600,
-                        color: charger.isAvailable ? AppColors.success : AppColors.textSecondaryLight,
+                        color: charger.isAvailable
+                            ? colors.success
+                            : colors.textSecondary,
                       ),
                     ),
                   ),
@@ -83,4 +116,3 @@ class BookingChargerSelection extends StatelessWidget {
     );
   }
 }
-

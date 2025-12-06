@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+
 import '../../routes/app_routes.dart';
+import '../theme/app_theme_extensions.dart';
 
 // ============================================================
 // Theme & Color Extensions
@@ -38,6 +40,36 @@ extension ContextThemeExt on BuildContext {
 
   /// Error color.
   Color get errorColor => colors.error;
+}
+
+/// Extension for AppColors ThemeExtension access.
+/// This provides semantic color tokens that adapt to light/dark themes.
+extension AppColorContextExt on BuildContext {
+  /// Access to AppColors ThemeExtension.
+  /// Returns the custom AppColors extension with semantic color tokens.
+  ///
+  /// Usage:
+  /// ```dart
+  /// Container(
+  ///   color: context.appColors.background,
+  ///   child: Text(
+  ///     'Hello',
+  ///     style: TextStyle(color: context.appColors.textPrimary),
+  ///   ),
+  /// )
+  /// ```
+  AppColors get appColors {
+    final appColors = theme.extension<AppColors>();
+    if (appColors == null) {
+      // Fallback to default light scheme if extension is not found
+      // This should never happen in production, but provides safety
+      throw StateError(
+        'AppColors extension not found in theme. '
+        'Ensure light_theme.dart and dark_theme.dart include the extension.',
+      );
+    }
+    return appColors;
+  }
 }
 
 // ============================================================
@@ -233,7 +265,7 @@ extension ContextMessengerExt on BuildContext {
   /// Show a success snackbar.
   void showSuccessSnackBar(String message) {
     ScaffoldMessenger.of(this).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Colors.green),
+      SnackBar(content: Text(message), backgroundColor: appColors.success),
     );
   }
 

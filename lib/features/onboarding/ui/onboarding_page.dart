@@ -91,6 +91,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   Widget _buildSkipButton() {
+    final colors = context.appColors;
     return Align(
       alignment: Alignment.centerRight,
       child: TextButton(
@@ -100,7 +101,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textSecondaryLight,
+            color: colors.textSecondary,
           ),
         ),
       ),
@@ -119,6 +120,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   Widget _buildIndicators() {
+    final colors = context.appColors;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(_items.length, (index) {
@@ -130,7 +132,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           decoration: BoxDecoration(
             color: _currentPage == index
                 ? AppColors.primary
-                : AppColors.outlineLight,
+                : colors.outline,
             borderRadius: BorderRadius.circular(4.r),
           ),
         );
@@ -139,6 +141,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   Widget _buildButtons() {
+    final colors = context.appColors;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
@@ -158,7 +161,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   text: AppStrings.alreadyHaveAccount,
                   style: TextStyle(
                     fontSize: 14.sp,
-                    color: AppColors.textSecondaryLight,
+                    color: colors.textSecondary,
                   ),
                   children: const [
                     TextSpan(
@@ -178,6 +181,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   Widget _buildPage(OnboardingItem item) {
+    final colors = context.appColors;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 32.w),
       child: Column(
@@ -186,8 +190,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
           Container(
             width: 160.r,
             height: 160.r,
-            decoration: const BoxDecoration(
-              color: AppColors.primaryContainer,
+            decoration:  BoxDecoration(
+              color: colors.primaryContainer,
               shape: BoxShape.circle,
             ),
             child: Icon(item.icon, size: 72.r, color: AppColors.primary),
@@ -198,7 +202,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             style: TextStyle(
               fontSize: 28.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -208,7 +212,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w400,
-              color: AppColors.textSecondaryLight,
+              color: colors.textSecondary,
               height: 1.5,
             ),
             textAlign: TextAlign.center,

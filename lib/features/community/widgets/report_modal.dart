@@ -8,6 +8,7 @@
 
 library;
 
+import 'package:ev_charging_user_app/core/extensions/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
@@ -107,7 +108,7 @@ class _ReportModalState extends State<ReportModal> {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: AppColors.outlineLight,
+                color: context.appColors.outline,
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
@@ -117,14 +118,14 @@ class _ReportModalState extends State<ReportModal> {
           // Title
           Row(
             children: [
-              Icon(Iconsax.flag, size: 24.r, color: AppColors.error),
+              Icon(Iconsax.flag, size: 24.r, color: context.appColors.danger),
               SizedBox(width: 12.w),
               Text(
                 'Report Issue',
                 style: TextStyle(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimaryLight,
+                  color: context.appColors.textPrimary,
                 ),
               ),
             ],
@@ -134,7 +135,7 @@ class _ReportModalState extends State<ReportModal> {
             'Help us improve by reporting issues',
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
+              color: context.appColors.textSecondary,
             ),
           ),
           SizedBox(height: 24.h),
@@ -145,7 +146,7 @@ class _ReportModalState extends State<ReportModal> {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimaryLight,
+              color: context.appColors.textPrimary,
             ),
           ),
           SizedBox(height: 12.h),
@@ -165,13 +166,13 @@ class _ReportModalState extends State<ReportModal> {
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.primary.withValues(alpha: 0.1)
-                        : AppColors.surfaceVariantLight,
+                        ? context.appColors.primary.withValues(alpha: 0.1)
+                        : context.appColors.surfaceVariant,
                     borderRadius: BorderRadius.circular(8.r),
                     border: Border.all(
                       color: isSelected
-                          ? AppColors.primary
-                          : AppColors.outlineLight,
+                          ? context.appColors.primary
+                          : context.appColors.outline,
                       width: isSelected ? 1.5 : 1,
                     ),
                   ),
@@ -182,8 +183,8 @@ class _ReportModalState extends State<ReportModal> {
                         _getCategoryIcon(category),
                         size: 16.r,
                         color: isSelected
-                            ? AppColors.primary
-                            : AppColors.textSecondaryLight,
+                            ? context.appColors.primary
+                            : context.appColors.textSecondary,
                       ),
                       SizedBox(width: 6.w),
                       Text(
@@ -194,8 +195,8 @@ class _ReportModalState extends State<ReportModal> {
                               ? FontWeight.w600
                               : FontWeight.w500,
                           color: isSelected
-                              ? AppColors.primary
-                              : AppColors.textPrimaryLight,
+                              ? context.appColors.primary
+                              : context.appColors.textPrimary,
                         ),
                       ),
                     ],
@@ -212,7 +213,7 @@ class _ReportModalState extends State<ReportModal> {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimaryLight,
+              color: context.appColors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
@@ -223,19 +224,19 @@ class _ReportModalState extends State<ReportModal> {
               hintText: 'Provide more details about the issue...',
               hintStyle: TextStyle(
                 fontSize: 14.sp,
-                color: AppColors.textTertiaryLight,
+                color: context.appColors.textTertiary,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.r),
-                borderSide: const BorderSide(color: AppColors.outlineLight),
+                borderSide: BorderSide(color: context.appColors.outline),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.r),
-                borderSide: const BorderSide(color: AppColors.outlineLight),
+                borderSide: BorderSide(color: context.appColors.outline),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.r),
-                borderSide: const BorderSide(color: AppColors.primary),
+                borderSide: BorderSide(color: context.appColors.primary),
               ),
               contentPadding: EdgeInsets.all(14.r),
             ),
@@ -246,7 +247,7 @@ class _ReportModalState extends State<ReportModal> {
           Container(
             padding: EdgeInsets.all(12.r),
             decoration: BoxDecoration(
-              color: AppColors.surfaceVariantLight,
+              color: context.appColors.surfaceVariant,
               borderRadius: BorderRadius.circular(10.r),
             ),
             child: Row(
@@ -254,7 +255,7 @@ class _ReportModalState extends State<ReportModal> {
                 Icon(
                   Iconsax.user_square,
                   size: 20.r,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
                 SizedBox(width: 12.w),
                 Expanded(
@@ -266,14 +267,14 @@ class _ReportModalState extends State<ReportModal> {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimaryLight,
+                          color: context.appColors.textPrimary,
                         ),
                       ),
                       Text(
                         'Your name will not be shown publicly',
                         style: TextStyle(
                           fontSize: 11.sp,
-                          color: AppColors.textSecondaryLight,
+                          color: context.appColors.textSecondary,
                         ),
                       ),
                     ],
@@ -284,7 +285,7 @@ class _ReportModalState extends State<ReportModal> {
                   onChanged: (value) {
                     setState(() => _isAnonymous = value);
                   },
-                  activeThumbColor: AppColors.primary,
+                  activeThumbColor: context.appColors.primary,
                 ),
               ],
             ),
@@ -299,21 +300,21 @@ class _ReportModalState extends State<ReportModal> {
                   ? null
                   : _submitReport,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.error,
-                foregroundColor: Colors.white,
+                backgroundColor: context.appColors.danger,
+                foregroundColor: context.appColors.surface,
                 padding: EdgeInsets.symmetric(vertical: 14.h),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                disabledBackgroundColor: AppColors.outlineLight,
+                disabledBackgroundColor: context.appColors.outline,
               ),
               child: _isSubmitting
                   ? SizedBox(
                       width: 20.r,
                       height: 20.r,
-                      child: const CircularProgressIndicator(
+                      child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: Colors.white,
+                        color: context.appColors.surface,
                       ),
                     )
                   : Text(
@@ -335,7 +336,7 @@ class _ReportModalState extends State<ReportModal> {
                 'Cancel',
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
               ),
             ),
@@ -356,13 +357,13 @@ class _ReportModalState extends State<ReportModal> {
             width: 80.r,
             height: 80.r,
             decoration: BoxDecoration(
-              color: AppColors.success.withValues(alpha: 0.1),
+              color: context.appColors.success.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Iconsax.tick_circle,
               size: 40.r,
-              color: AppColors.success,
+              color: context.appColors.success,
             ),
           ),
           SizedBox(height: 20.h),
@@ -371,7 +372,7 @@ class _ReportModalState extends State<ReportModal> {
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimaryLight,
+              color: context.appColors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
@@ -379,7 +380,7 @@ class _ReportModalState extends State<ReportModal> {
             "Thank you for your feedback. We'll review this and respond within 48 hours.",
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
+              color: context.appColors.textSecondary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -388,7 +389,7 @@ class _ReportModalState extends State<ReportModal> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
               decoration: BoxDecoration(
-                color: AppColors.surfaceVariantLight,
+                color: context.appColors.surfaceVariant,
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Row(
@@ -398,7 +399,7 @@ class _ReportModalState extends State<ReportModal> {
                     'Ticket ID: ',
                     style: TextStyle(
                       fontSize: 13.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: context.appColors.textSecondary,
                     ),
                   ),
                   Text(
@@ -406,7 +407,7 @@ class _ReportModalState extends State<ReportModal> {
                     style: TextStyle(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimaryLight,
+                      color: context.appColors.textPrimary,
                     ),
                   ),
                 ],
@@ -419,8 +420,8 @@ class _ReportModalState extends State<ReportModal> {
             child: ElevatedButton(
               onPressed: () => Navigator.of(context).pop(_submittedReport),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                backgroundColor: context.appColors.primary,
+                foregroundColor: context.appColors.surface,
                 padding: EdgeInsets.symmetric(vertical: 14.h),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.r),

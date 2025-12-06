@@ -71,7 +71,7 @@ class MapPreviewWidget extends StatelessWidget {
             bottom: 12.h,
             right: 12.w,
             child: FloatingActionButton.small(
-              heroTag: 'open_maps_fab_${latitude}_${longitude}',
+              heroTag: 'open_maps_fab_${latitude}_$longitude',
               onPressed: () {
                 // TODO: Launch maps app with coordinates
                 // final url = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';

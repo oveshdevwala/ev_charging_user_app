@@ -45,14 +45,18 @@ class TripPlannerHomePage extends StatelessWidget {
               : _buildContent(context, state),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () => _startNewTrip(context),
-            backgroundColor: AppColors.primary,
-            icon: Icon(Iconsax.add, color: Colors.white, size: 20.r),
+            backgroundColor: context.appColors.primary,
+            icon: Icon(
+              Iconsax.add,
+              color: context.appColors.surface,
+              size: 20.r,
+            ),
             label: Text(
               'Plan Trip',
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: context.appColors.surface,
               ),
             ),
           ),
@@ -75,34 +79,42 @@ class TripPlannerHomePage extends StatelessWidget {
             SizedBox(height: 24.h),
             // Recent trips
             if (state.recentTrips.isNotEmpty) ...[
-              _buildSectionHeader('Recent Trips', onSeeAll: () {}),
+              _buildSectionHeader(context, 'Recent Trips', onSeeAll: () {}),
               SizedBox(height: 12.h),
-              ...state.recentTrips.take(3).map((trip) => Padding(
-                    padding: EdgeInsets.only(bottom: 12.h),
-                    child: SavedTripCard(
-                      trip: trip,
-                      compact: true,
-                      onTap: () => _loadTrip(context, trip.id),
-                      onFavoriteTap: () =>
-                          context.read<TripPlannerCubit>().toggleTripFavorite(trip.id),
+              ...state.recentTrips
+                  .take(3)
+                  .map(
+                    (trip) => Padding(
+                      padding: EdgeInsets.only(bottom: 12.h),
+                      child: SavedTripCard(
+                        trip: trip,
+                        compact: true,
+                        onTap: () => _loadTrip(context, trip.id),
+                        onFavoriteTap: () => context
+                            .read<TripPlannerCubit>()
+                            .toggleTripFavorite(trip.id),
+                      ),
                     ),
-                  )),
+                  ),
               SizedBox(height: 16.h),
             ],
             // Favorite trips
             if (state.favoriteTrips.isNotEmpty) ...[
-              _buildSectionHeader('Favorite Trips'),
+              _buildSectionHeader(context, 'Favorite Trips'),
               SizedBox(height: 12.h),
-              ...state.favoriteTrips.map((trip) => Padding(
-                    padding: EdgeInsets.only(bottom: 12.h),
-                    child: SavedTripCard(
-                      trip: trip,
-                      onTap: () => _loadTrip(context, trip.id),
-                      onFavoriteTap: () =>
-                          context.read<TripPlannerCubit>().toggleTripFavorite(trip.id),
-                      onDeleteTap: () => _confirmDelete(context, trip.id),
-                    ),
-                  )),
+              ...state.favoriteTrips.map(
+                (trip) => Padding(
+                  padding: EdgeInsets.only(bottom: 12.h),
+                  child: SavedTripCard(
+                    trip: trip,
+                    onTap: () => _loadTrip(context, trip.id),
+                    onFavoriteTap: () => context
+                        .read<TripPlannerCubit>()
+                        .toggleTripFavorite(trip.id),
+                    onDeleteTap: () => _confirmDelete(context, trip.id),
+                  ),
+                ),
+              ),
             ],
             // Empty state
             if (state.savedTrips.isEmpty && state.recentTrips.isEmpty)
@@ -115,21 +127,20 @@ class TripPlannerHomePage extends StatelessWidget {
   }
 
   Widget _buildQuickActionCard(BuildContext context, TripPlannerState state) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary,
-            AppColors.primaryDark,
-          ],
-        ),
+        // gradient: LinearGradient(
+        //   begin: Alignment.topLeft,
+        //   end: Alignment.bottomRight,
+        //   colors: [colors.primary, colors.primaryContainer],
+        // ),
+        color: colors.primary,
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.3),
+            color: colors.primary.withValues(alpha: 0.3),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -144,13 +155,13 @@ class TripPlannerHomePage extends StatelessWidget {
                 width: 48.r,
                 height: 48.r,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: context.appColors.surface.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Icon(
                   Iconsax.routing_2,
                   size: 24.r,
-                  color: Colors.white,
+                  color: context.appColors.surface,
                 ),
               ),
               SizedBox(width: 16.w),
@@ -163,7 +174,7 @@ class TripPlannerHomePage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: context.appColors.surface,
                       ),
                     ),
                     SizedBox(height: 4.h),
@@ -171,7 +182,7 @@ class TripPlannerHomePage extends StatelessWidget {
                       'Find charging stops along your route',
                       style: TextStyle(
                         fontSize: 13.sp,
-                        color: Colors.white.withValues(alpha: 0.8),
+                        color: context.appColors.surface.withValues(alpha: 0.8),
                       ),
                     ),
                   ],
@@ -185,7 +196,7 @@ class TripPlannerHomePage extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
+                color: context.appColors.surface.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Row(
@@ -193,7 +204,7 @@ class TripPlannerHomePage extends StatelessWidget {
                   Icon(
                     Iconsax.car,
                     size: 20.r,
-                    color: Colors.white,
+                    color: context.appColors.surface,
                   ),
                   SizedBox(width: 10.w),
                   Expanded(
@@ -205,14 +216,16 @@ class TripPlannerHomePage extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: context.appColors.surface,
                           ),
                         ),
                         Text(
                           '${state.selectedVehicle!.currentSocPercent.toStringAsFixed(0)}% • ${state.selectedVehicle!.batteryCapacityKwh.toStringAsFixed(0)} kWh',
                           style: TextStyle(
                             fontSize: 11.sp,
-                            color: Colors.white.withValues(alpha: 0.7),
+                            color: context.appColors.surface.withValues(
+                              alpha: 0.7,
+                            ),
                           ),
                         ),
                       ],
@@ -221,7 +234,7 @@ class TripPlannerHomePage extends StatelessWidget {
                   Icon(
                     Iconsax.arrow_right_3,
                     size: 16.r,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: context.appColors.surface.withValues(alpha: 0.7),
                   ),
                 ],
               ),
@@ -230,8 +243,8 @@ class TripPlannerHomePage extends StatelessWidget {
           CommonButton(
             label: 'Start Planning',
             onPressed: () => _startNewTrip(context),
-            backgroundColor: Colors.white,
-            foregroundColor: AppColors.primary,
+            backgroundColor: colors.surface,
+            foregroundColor: colors.primary,
             icon: Iconsax.arrow_right_1,
             iconPosition: IconPosition.right,
           ),
@@ -240,7 +253,12 @@ class TripPlannerHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title, {VoidCallback? onSeeAll}) {
+  Widget _buildSectionHeader(
+    BuildContext context,
+    String title, {
+    VoidCallback? onSeeAll,
+  }) {
+    final colors = context.appColors;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -249,7 +267,7 @@ class TripPlannerHomePage extends StatelessWidget {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         if (onSeeAll != null)
@@ -260,7 +278,7 @@ class TripPlannerHomePage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
-                color: AppColors.primary,
+                color: colors.primary,
               ),
             ),
           ),
@@ -269,6 +287,7 @@ class TripPlannerHomePage extends StatelessWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(32.r),
       child: Column(
@@ -277,14 +296,10 @@ class TripPlannerHomePage extends StatelessWidget {
             width: 80.r,
             height: 80.r,
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
+              color: colors.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              Iconsax.routing_2,
-              size: 40.r,
-              color: AppColors.primary,
-            ),
+            child: Icon(Iconsax.routing_2, size: 40.r, color: colors.primary),
           ),
           SizedBox(height: 16.h),
           Text(
@@ -292,17 +307,14 @@ class TripPlannerHomePage extends StatelessWidget {
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             'Plan your first trip to find the best charging stops along your route',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
           ),
           SizedBox(height: 24.h),
           CommonButton(
@@ -347,9 +359,9 @@ class TripPlannerHomePage extends StatelessWidget {
               Navigator.pop(ctx);
               context.read<TripPlannerCubit>().deleteTrip(tripId);
             },
-            child: const Text(
+            child: Text(
               AppStrings.delete,
-              style: TextStyle(color: AppColors.error),
+              style: TextStyle(color: context.appColors.danger),
             ),
           ),
         ],
@@ -359,6 +371,7 @@ class TripPlannerHomePage extends StatelessWidget {
 
   void _showVehicleSettings(BuildContext context) {
     final cubit = context.read<TripPlannerCubit>();
+    final colors = context.appColors;
 
     showModalBottomSheet<void>(
       context: context,
@@ -369,7 +382,7 @@ class TripPlannerHomePage extends StatelessWidget {
         child: BlocBuilder<TripPlannerCubit, TripPlannerState>(
           builder: (sheetContext, state) => Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
+              color: colors.surface,
               borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
             ),
             padding: EdgeInsets.all(20.r),
@@ -382,7 +395,7 @@ class TripPlannerHomePage extends StatelessWidget {
                     width: 40.w,
                     height: 4.h,
                     decoration: BoxDecoration(
-                      color: AppColors.outlineLight,
+                      color: colors.outline,
                       borderRadius: BorderRadius.circular(2.r),
                     ),
                   ),
@@ -393,47 +406,53 @@ class TripPlannerHomePage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimaryLight,
+                    color: colors.textPrimary,
                   ),
                 ),
                 SizedBox(height: 16.h),
-                ...state.availableVehicles.map((vehicle) => ListTile(
-                      onTap: () {
-                        cubit.selectVehicle(vehicle);
-                        Navigator.pop(ctx);
-                      },
-                      leading: Container(
-                        width: 44.r,
-                        height: 44.r,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                        child: Icon(
-                          Iconsax.car,
-                          size: 22.r,
-                          color: AppColors.primary,
-                        ),
+                ...state.availableVehicles.map(
+                  (vehicle) => ListTile(
+                    onTap: () {
+                      cubit.selectVehicle(vehicle);
+                      Navigator.pop(ctx);
+                    },
+                    leading: Container(
+                      width: 44.r,
+                      height: 44.r,
+                      decoration: BoxDecoration(
+                        color: colors.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(10.r),
                       ),
-                      title: Text(
-                        vehicle.name,
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      child: Icon(
+                        Iconsax.car,
+                        size: 22.r,
+                        color: colors.primary,
                       ),
-                      subtitle: Text(
-                        '${vehicle.batteryCapacityKwh.toStringAsFixed(0)} kWh • ${vehicle.currentSocPercent.toStringAsFixed(0)}%',
-                        style: TextStyle(fontSize: 12.sp),
+                    ),
+                    title: Text(
+                      vehicle.name,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: colors.textPrimary,
                       ),
-                      trailing: state.selectedVehicle?.id == vehicle.id
-                          ? Icon(
-                              Iconsax.tick_circle5,
-                              size: 22.r,
-                              color: AppColors.primary,
-                            )
-                          : null,
-                    )),
+                    ),
+                    subtitle: Text(
+                      '${vehicle.batteryCapacityKwh.toStringAsFixed(0)} kWh • ${vehicle.currentSocPercent.toStringAsFixed(0)}%',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: colors.textSecondary,
+                      ),
+                    ),
+                    trailing: state.selectedVehicle?.id == vehicle.id
+                        ? Icon(
+                            Iconsax.tick_circle5,
+                            size: 22.r,
+                            color: colors.primary,
+                          )
+                        : null,
+                  ),
+                ),
                 SizedBox(height: 16.h),
               ],
             ),
@@ -443,4 +462,3 @@ class TripPlannerHomePage extends StatelessWidget {
     );
   }
 }
-

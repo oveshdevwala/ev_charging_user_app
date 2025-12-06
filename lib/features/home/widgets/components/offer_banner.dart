@@ -11,12 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../core/extensions/context_ext.dart';
 import '../../../../core/theme/app_colors.dart';
 
 /// Offer banner widget for carousel display.
 class OfferBanner extends StatelessWidget {
   const OfferBanner({
-    required this.bannerUrl, required this.onTap, super.key,
+    required this.bannerUrl,
+    required this.onTap,
+    super.key,
     this.height,
     this.width,
     this.borderRadius,
@@ -55,6 +58,8 @@ class OfferBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -63,11 +68,11 @@ class OfferBanner extends StatelessWidget {
         margin: margin ?? EdgeInsets.symmetric(horizontal: 8.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 16.r),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: AppColors.shadowLight,
+              color: colors.shadow,
               blurRadius: 12,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -76,17 +81,14 @@ class OfferBanner extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              _buildBannerImage(),
+              _buildBannerImage(context),
               if (showGradientOverlay)
                 Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withValues(alpha: 0.6),
-                      ],
+                      colors: [Colors.transparent, colors.scrim],
                     ),
                   ),
                 ),
@@ -105,7 +107,7 @@ class OfferBanner extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white,
+                            color: colors.textPrimary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -116,7 +118,7 @@ class OfferBanner extends StatelessWidget {
                           subtitle!,
                           style: TextStyle(
                             fontSize: 13.sp,
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: colors.textSecondary,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -133,21 +135,24 @@ class OfferBanner extends StatelessWidget {
   }
 
   /// Build banner image with URL validation.
-  Widget _buildBannerImage() {
+  Widget _buildBannerImage(BuildContext context) {
+    final colors = context.appColors;
+
     // Check if URL is valid
-    final isValidUrl = bannerUrl.isNotEmpty &&
+    final isValidUrl =
+        bannerUrl.isNotEmpty &&
         (bannerUrl.startsWith('http://') || bannerUrl.startsWith('https://'));
 
     if (!isValidUrl) {
       // Show placeholder for invalid/empty URLs
-      return Container(
+      return DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppColors.primary.withValues(alpha: 0.8),
-              AppColors.primaryDark,
+              colors.primary.withValues(alpha: 0.8),
+              colors.primaryContainer,
             ],
           ),
         ),
@@ -155,7 +160,7 @@ class OfferBanner extends StatelessWidget {
           child: Icon(
             Iconsax.discount_shape5,
             size: 48.r,
-            color: Colors.white.withValues(alpha: 0.3),
+            color: colors.textPrimary.withValues(alpha: 0.3),
           ),
         ),
       );
@@ -165,28 +170,26 @@ class OfferBanner extends StatelessWidget {
       imageUrl: bannerUrl,
       fit: BoxFit.cover,
       placeholder: (context, url) => ColoredBox(
-        color: AppColors.surfaceVariantLight,
+        color: colors.surfaceVariant,
         child: Center(
           child: SizedBox(
             width: 24.r,
             height: 24.r,
             child: CircularProgressIndicator(
               strokeWidth: 2.r,
-              valueColor: const AlwaysStoppedAnimation<Color>(
-                AppColors.primary,
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(colors.primary),
             ),
           ),
         ),
       ),
-      errorWidget: (context, url, error) => Container(
+      errorWidget: (context, url, error) => DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppColors.primary.withValues(alpha: 0.8),
-              AppColors.primaryDark,
+              colors.primary.withValues(alpha: 0.8),
+              colors.primaryContainer,
             ],
           ),
         ),
@@ -194,11 +197,10 @@ class OfferBanner extends StatelessWidget {
           child: Icon(
             Iconsax.discount_shape5,
             size: 48.r,
-            color: Colors.white.withValues(alpha: 0.3),
+            color: colors.textPrimary.withValues(alpha: 0.3),
           ),
         ),
       ),
     );
   }
 }
-

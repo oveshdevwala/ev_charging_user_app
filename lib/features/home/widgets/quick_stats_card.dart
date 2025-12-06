@@ -12,7 +12,10 @@ import '../../../core/theme/app_colors.dart';
 /// Quick stats card showing user's charging stats.
 class QuickStatsCard extends StatelessWidget {
   const QuickStatsCard({
-    required this.sessions, required this.energy, required this.spent, super.key,
+    required this.sessions,
+    required this.energy,
+    required this.spent,
+    super.key,
   });
 
   final int sessions;
@@ -29,21 +32,39 @@ class QuickStatsCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Expanded(child: _StatItem(icon: Iconsax.flash_1, value: '$sessions', label: 'Sessions')),
-          _buildDivider(),
-          Expanded(child: _StatItem(icon: Iconsax.battery_charging, value: energy, label: 'Energy')),
-          _buildDivider(),
-          Expanded(child: _StatItem(icon: Iconsax.wallet, value: spent, label: 'Spent')),
+          Expanded(
+            child: _StatItem(
+              icon: Iconsax.flash_1,
+              value: '$sessions',
+              label: 'Sessions',
+            ),
+          ),
+          _buildDivider(context   ),
+          Expanded(
+            child: _StatItem(
+              icon: Iconsax.battery_charging,
+              value: energy,
+              label: 'Energy',
+            ),
+          ),
+          _buildDivider(context),
+          Expanded(
+            child: _StatItem(
+              icon: Iconsax.wallet,
+              value: spent,
+              label: 'Spent',
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildDivider() {
+  Widget _buildDivider(BuildContext context) {
     return Container(
       width: 1,
       height: 48.h,
-      color: Colors.white.withValues(alpha: 0.3),
+      color: context.appColors.surface.withValues(alpha: 0.3),
     );
   }
 }
@@ -63,14 +84,14 @@ class _StatItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, size: 24.r, color: Colors.white),
+        Icon(icon, size: 24.r, color: context.appColors.surface),
         SizedBox(height: 8.h),
         Text(
           value,
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: context.appColors.surface,
           ),
         ),
         SizedBox(height: 2.h),
@@ -78,11 +99,10 @@ class _StatItem extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 11.sp,
-            color: Colors.white.withValues(alpha: 0.8),
+            color: context.appColors.surface.withValues(alpha: 0.8),
           ),
         ),
       ],
     );
   }
 }
-

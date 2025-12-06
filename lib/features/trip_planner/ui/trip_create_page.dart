@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../widgets/app_app_bar.dart';
 import '../../../widgets/common_button.dart';
@@ -133,7 +134,7 @@ class _TripCreatePageState extends State<TripCreatePage> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: context.appColors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,10 +145,14 @@ class _TripCreatePageState extends State<TripCreatePage> {
                 width: 48.r,
                 height: 48.r,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
+                  color: context.appColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12.r),
                 ),
-                child: Icon(Iconsax.car, size: 24.r, color: AppColors.primary),
+                child: Icon(
+                  Iconsax.car,
+                  size: 24.r,
+                  color: context.appColors.primary,
+                ),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -159,14 +164,14 @@ class _TripCreatePageState extends State<TripCreatePage> {
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight,
+                        color: context.appColors.textPrimary,
                       ),
                     ),
                     Text(
                       '${vehicle.batteryCapacityKwh.toStringAsFixed(0)} kWh battery',
                       style: TextStyle(
                         fontSize: 13.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: context.appColors.textSecondary,
                       ),
                     ),
                   ],
@@ -186,7 +191,7 @@ class _TripCreatePageState extends State<TripCreatePage> {
                 'Current Charge',
                 style: TextStyle(
                   fontSize: 13.sp,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
               ),
               const Spacer(),
@@ -195,7 +200,7 @@ class _TripCreatePageState extends State<TripCreatePage> {
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+                  color: context.appColors.primary,
                 ),
               ),
             ],
@@ -211,8 +216,8 @@ class _TripCreatePageState extends State<TripCreatePage> {
               value: vehicle.currentSocPercent,
               max: 100,
               divisions: 100,
-              activeColor: AppColors.primary,
-              inactiveColor: AppColors.outlineLight,
+              activeColor: context.appColors.primary,
+              inactiveColor: context.appColors.outline,
               onChanged: (value) =>
                   context.read<TripPlannerCubit>().updateVehicleSoc(value),
             ),
@@ -224,12 +229,15 @@ class _TripCreatePageState extends State<TripCreatePage> {
                 'Range: ~${vehicle.usableRangeKm.toStringAsFixed(0)} km',
                 style: TextStyle(
                   fontSize: 12.sp,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
               ),
               Text(
                 'Reserve: ${vehicle.reserveSocPercent.toStringAsFixed(0)}%',
-                style: TextStyle(fontSize: 12.sp, color: AppColors.warning),
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: context.appColors.warning,
+                ),
               ),
             ],
           ),
@@ -249,7 +257,7 @@ class _TripCreatePageState extends State<TripCreatePage> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: context.appColors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,7 +267,7 @@ class _TripCreatePageState extends State<TripCreatePage> {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimaryLight,
+              color: context.appColors.textPrimary,
             ),
           ),
           SizedBox(height: 16.h),
@@ -311,14 +319,14 @@ class _TripCreatePageState extends State<TripCreatePage> {
               label,
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppColors.textPrimaryLight,
+                color: context.appColors.textPrimary,
               ),
             ),
           ),
           Switch(
             value: value,
             onChanged: onChanged,
-            activeThumbColor: AppColors.primary,
+            activeThumbColor: context.appColors.primary,
           ),
         ],
       ),
@@ -334,7 +342,7 @@ class _TripCreatePageState extends State<TripCreatePage> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: context.appColors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,7 +352,7 @@ class _TripCreatePageState extends State<TripCreatePage> {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimaryLight,
+              color: context.appColors.textPrimary,
             ),
           ),
           SizedBox(height: 12.h),
@@ -369,13 +377,13 @@ class _TripCreatePageState extends State<TripCreatePage> {
                     ),
                     decoration: BoxDecoration(
                       color: state.departureTime != null
-                          ? AppColors.primary.withValues(alpha: 0.1)
-                          : AppColors.surfaceVariantLight,
+                          ? context.appColors.primary.withValues(alpha: 0.1)
+                          : context.appColors.surfaceVariant,
                       borderRadius: BorderRadius.circular(10.r),
                       border: Border.all(
                         color: state.departureTime != null
-                            ? AppColors.primary
-                            : AppColors.outlineLight,
+                            ? context.appColors.primary
+                            : context.appColors.outline,
                       ),
                     ),
                     child: Row(
@@ -385,8 +393,8 @@ class _TripCreatePageState extends State<TripCreatePage> {
                           Iconsax.clock,
                           size: 18.r,
                           color: state.departureTime != null
-                              ? AppColors.primary
-                              : AppColors.textSecondaryLight,
+                              ? context.appColors.primary
+                              : context.appColors.textSecondary,
                         ),
                         SizedBox(width: 8.w),
                         Text(
@@ -397,8 +405,8 @@ class _TripCreatePageState extends State<TripCreatePage> {
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: state.departureTime != null
-                                ? AppColors.primary
-                                : AppColors.textSecondaryLight,
+                                ? context.appColors.primary
+                                : context.appColors.textSecondary,
                           ),
                         ),
                       ],
@@ -425,11 +433,13 @@ class _TripCreatePageState extends State<TripCreatePage> {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primary.withValues(alpha: 0.1)
-              : AppColors.surfaceVariantLight,
+              ? context.appColors.primary.withValues(alpha: 0.1)
+              : context.appColors.surfaceVariant,
           borderRadius: BorderRadius.circular(10.r),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.outlineLight,
+            color: isSelected
+                ? context.appColors.primary
+                : context.appColors.outline,
           ),
         ),
         child: Center(
@@ -439,8 +449,8 @@ class _TripCreatePageState extends State<TripCreatePage> {
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
               color: isSelected
-                  ? AppColors.primary
-                  : AppColors.textSecondaryLight,
+                  ? context.appColors.primary
+                  : context.appColors.textSecondary,
             ),
           ),
         ),
@@ -449,15 +459,16 @@ class _TripCreatePageState extends State<TripCreatePage> {
   }
 
   Widget _buildBottomBar(BuildContext context, TripPlannerState state) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        boxShadow: const [
+        color: colors.surface,
+        boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: colors.shadow,
             blurRadius: 10,
-            offset: Offset(0, -2),
+            offset: const Offset(0, -2),
           ),
         ],
       ),
@@ -531,13 +542,22 @@ class _TripCreatePageState extends State<TripCreatePage> {
                       cubit.selectVehicle(vehicle);
                       Navigator.pop(ctx);
                     },
-                    leading: const Icon(Iconsax.car, color: AppColors.primary),
-                    title: Text(vehicle.name),
-                    subtitle: Text('${vehicle.batteryCapacityKwh} kWh'),
+                    leading: Icon(
+                      Iconsax.car,
+                      color: context.appColors.primary,
+                    ),
+                    title: Text(
+                      vehicle.name,
+                      style: TextStyle(color: context.appColors.textPrimary),
+                    ),
+                    subtitle: Text(
+                      '${vehicle.batteryCapacityKwh} kWh',
+                      style: TextStyle(color: context.appColors.textSecondary),
+                    ),
                     trailing: state.selectedVehicle?.id == vehicle.id
-                        ? const Icon(
+                        ? Icon(
                             Iconsax.tick_circle5,
-                            color: AppColors.primary,
+                            color: context.appColors.primary,
                           )
                         : null,
                   ),
@@ -619,7 +639,7 @@ class _SearchSheet extends StatelessWidget {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: AppColors.outlineLight,
+                color: context.appColors.outline,
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),

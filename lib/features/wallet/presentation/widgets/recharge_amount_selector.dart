@@ -14,14 +14,17 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../core/theme/app_colors.dart';
 
 /// Amount selector for wallet recharge.
-/// 
+///
 /// Features:
 /// - Predefined quick amounts grid
 /// - Custom amount input
 /// - Selection highlight
 class RechargeAmountSelector extends StatefulWidget {
   const RechargeAmountSelector({
-    required this.selectedAmount, required this.onAmountSelected, required this.onCustomAmountChanged, super.key,
+    required this.selectedAmount,
+    required this.onAmountSelected,
+    required this.onCustomAmountChanged,
+    super.key,
     this.quickAmounts = const [10, 25, 50, 100, 200, 500],
     this.currency = r'$',
     this.customAmount,
@@ -62,6 +65,7 @@ class _RechargeAmountSelectorState extends State<RechargeAmountSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
@@ -72,7 +76,9 @@ class _RechargeAmountSelectorState extends State<RechargeAmountSelector> {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
-            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+            color: isDark
+                ? colors.textPrimary
+                : colors.textPrimary,
           ),
         ),
         SizedBox(height: 12.h),
@@ -88,7 +94,8 @@ class _RechargeAmountSelectorState extends State<RechargeAmountSelector> {
           itemCount: widget.quickAmounts.length,
           itemBuilder: (context, index) {
             final amount = widget.quickAmounts[index];
-            final isSelected = widget.selectedAmount == amount && widget.customAmount == null;
+            final isSelected =
+                widget.selectedAmount == amount && widget.customAmount == null;
 
             return _AmountChip(
               amount: amount,
@@ -108,8 +115,10 @@ class _RechargeAmountSelectorState extends State<RechargeAmountSelector> {
   }
 
   Widget _buildCustomAmountInput(bool isDark) {
-    final hasCustomAmount = widget.customAmount != null && widget.customAmount! > 0;
+    final hasCustomAmount =
+        widget.customAmount != null && widget.customAmount! > 0;
 
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -117,18 +126,24 @@ class _RechargeAmountSelectorState extends State<RechargeAmountSelector> {
           'Or enter custom amount',
           style: TextStyle(
             fontSize: 12.sp,
-            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+            color: isDark
+                ? colors.textSecondary
+                : colors.textSecondary,
           ),
         ),
         SizedBox(height: 8.h),
         DecoratedBox(
           decoration: BoxDecoration(
-            color: isDark ? AppColors.surfaceVariantDark : AppColors.surfaceVariantLight,
+            color: isDark
+                ? colors.surfaceVariant
+                : colors.surfaceVariant,
             borderRadius: BorderRadius.circular(12.r),
             border: _isCustomFocused || hasCustomAmount
                 ? Border.all(color: AppColors.primary, width: 2)
                 : Border.all(
-                    color: isDark ? AppColors.outlineDark : AppColors.outlineLight,
+                    color: isDark
+                        ? colors.outline
+                        : colors.outline,
                   ),
           ),
           child: Row(
@@ -154,24 +169,35 @@ class _RechargeAmountSelectorState extends State<RechargeAmountSelector> {
               Expanded(
                 child: TextField(
                   controller: _customController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'^\d+\.?\d{0,2}'),
+                    ),
                   ],
                   style: TextStyle(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w600,
-                    color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                    color: isDark
+                        ? colors.textPrimary
+                        : colors.textPrimary,
                   ),
                   decoration: InputDecoration(
                     hintText: 'Enter amount',
                     hintStyle: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
-                      color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
+                      color: isDark
+                          ? colors.textTertiary
+                          : colors.textTertiary,
                     ),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 14.h,
+                    ),
                   ),
                   onTap: () {
                     setState(() => _isCustomFocused = true);
@@ -199,7 +225,9 @@ class _RechargeAmountSelectorState extends State<RechargeAmountSelector> {
                     padding: EdgeInsets.all(12.r),
                     child: Icon(
                       Iconsax.close_circle,
-                      color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
+                      color: isDark
+                          ? colors.textTertiary
+                          : colors.textTertiary,
                       size: 20.r,
                     ),
                   ),
@@ -212,7 +240,9 @@ class _RechargeAmountSelectorState extends State<RechargeAmountSelector> {
           'Min: ${widget.currency}${widget.minAmount.toStringAsFixed(0)} • Max: ${widget.currency}${widget.maxAmount.toStringAsFixed(0)}',
           style: TextStyle(
             fontSize: 11.sp,
-            color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
+            color: isDark
+                ? colors.textTertiary
+                : colors.textTertiary,
           ),
         ),
       ],
@@ -235,6 +265,7 @@ class _AmountChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
@@ -244,12 +275,16 @@ class _AmountChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.primary
-              : (isDark ? AppColors.surfaceVariantDark : AppColors.surfaceVariantLight),
+              : (isDark
+                    ? colors.surfaceVariant
+                    : colors.surfaceVariant),
           borderRadius: BorderRadius.circular(12.r),
           border: isSelected
               ? null
               : Border.all(
-                  color: isDark ? AppColors.outlineDark : AppColors.outlineLight,
+                  color: isDark
+                      ? colors.outline
+                      : colors.outline,
                 ),
           boxShadow: isSelected
               ? [
@@ -268,8 +303,10 @@ class _AmountChip extends StatelessWidget {
               fontSize: 18.sp,
               fontWeight: FontWeight.w700,
               color: isSelected
-                  ? Colors.white
-                  : (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
+                  ? context.appColors.surface
+                  : (isDark
+                        ? colors.textPrimary
+                        : colors.textPrimary),
             ),
           ),
         ),
@@ -277,4 +314,3 @@ class _AmountChip extends StatelessWidget {
     );
   }
 }
-

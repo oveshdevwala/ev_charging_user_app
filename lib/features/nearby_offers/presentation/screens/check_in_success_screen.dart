@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/extensions/context_ext.dart';
 import '../../data/models/check_in_model.dart';
 
 class CheckInSuccessScreen extends StatelessWidget {
@@ -30,13 +31,13 @@ class CheckInSuccessScreen extends StatelessWidget {
               Icon(
                 Icons.check_circle_outline,
                 size: 100.sp,
-                color: Colors.white,
+                color: context.appColors.surface,
               ),
               SizedBox(height: 24.h),
               Text(
                 'Check-in Successful!',
                 style: theme.textTheme.headlineMedium?.copyWith(
-                  color: Colors.white,
+                  color: context.appColors.surface,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
@@ -45,7 +46,7 @@ class CheckInSuccessScreen extends StatelessWidget {
               Text(
                 'You earned ${checkIn.creditsEarned} credits for visiting ${checkIn.partnerName}.',
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  color: Colors.white.withOpacity(0.9),
+                  color: context.appColors.surface.withOpacity(0.9),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -55,8 +56,8 @@ class CheckInSuccessScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => context.pop(),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: theme.colorScheme.primary,
+                    backgroundColor: context.appColors.surface,
+                    foregroundColor: context.appColors.primary,
                     padding: EdgeInsets.symmetric(vertical: 16.h),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.r),

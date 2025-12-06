@@ -8,21 +8,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/station_model.dart';
 
 /// Station header with name, address, rating, and price.
 class StationHeaderInfo extends StatelessWidget {
-  const StationHeaderInfo({
-    required this.station, super.key,
-    this.onRatingTap,
-  });
+  const StationHeaderInfo({required this.station, super.key, this.onRatingTap});
 
   final StationModel station;
   final VoidCallback? onRatingTap;
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,55 +34,65 @@ class StationHeaderInfo extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimaryLight,
+                  color: colors.textPrimary,
                 ),
               ),
             ),
-            _buildStatusBadge(),
+            _buildStatusBadge(context),
           ],
         ),
         SizedBox(height: 8.h),
-        _buildAddress(),
+        _buildAddress(context),
         SizedBox(height: 12.h),
-        _buildRatingAndPrice(),
+        _buildRatingAndPrice(context),
       ],
     );
   }
 
-  Widget _buildStatusBadge() {
+  Widget _buildStatusBadge(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: station.hasAvailableChargers ? AppColors.successContainer : AppColors.warningContainer,
+        color: station.hasAvailableChargers
+            ? colors.successContainer
+            : colors.warningContainer,
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Text(
-        station.hasAvailableChargers ? AppStrings.available : AppStrings.occupied,
+        station.hasAvailableChargers
+            ? AppStrings.available
+            : AppStrings.occupied,
         style: TextStyle(
           fontSize: 12.sp,
           fontWeight: FontWeight.w600,
-          color: station.hasAvailableChargers ? AppColors.success : AppColors.warning,
+          color: station.hasAvailableChargers ? colors.success : colors.warning,
         ),
       ),
     );
   }
 
-  Widget _buildAddress() {
+  Widget _buildAddress(BuildContext context) {
+    final colors = context.appColors;
+
     return Row(
       children: [
-        Icon(Iconsax.location, size: 16.r, color: AppColors.textSecondaryLight),
+        Icon(Iconsax.location, size: 16.r, color: colors.textSecondary),
         SizedBox(width: 4.w),
         Expanded(
           child: Text(
             station.address,
-            style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+            style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildRatingAndPrice() {
+  Widget _buildRatingAndPrice(BuildContext context) {
+    final colors = context.appColors;
+
     return Row(
       children: [
         GestureDetector(
@@ -90,22 +100,26 @@ class StationHeaderInfo extends StatelessWidget {
           behavior: HitTestBehavior.opaque,
           child: Row(
             children: [
-              Icon(Iconsax.star1, size: 18.r, color: AppColors.ratingActive),
+              Icon(Iconsax.star1, size: 18.r, color: colors.warning),
               SizedBox(width: 4.w),
               Text(
                 station.rating.toStringAsFixed(1),
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w700,
+                  color: colors.textPrimary,
+                ),
               ),
               Text(
                 ' (${station.reviewCount} ${AppStrings.reviews.toLowerCase()})',
-                style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+                style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
               ),
               if (onRatingTap != null) ...[
                 SizedBox(width: 4.w),
                 Icon(
                   Iconsax.arrow_right_3,
                   size: 14.r,
-                  color: AppColors.textSecondaryLight,
+                  color: colors.textSecondary,
                 ),
               ],
             ],
@@ -117,11 +131,10 @@ class StationHeaderInfo extends StatelessWidget {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.primary,
+            color: colors.primary,
           ),
         ),
       ],
     );
   }
 }
-

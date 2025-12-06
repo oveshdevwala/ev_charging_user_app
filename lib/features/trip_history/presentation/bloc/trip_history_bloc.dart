@@ -6,9 +6,6 @@ import 'trip_history_event.dart';
 import 'trip_history_state.dart';
 
 class TripHistoryBloc extends Bloc<TripHistoryEvent, TripHistoryState> {
-  final GetTripHistory getTripHistory;
-  final GetMonthlyAnalytics getMonthlyAnalytics;
-  final ExportTripReport exportTripReport;
 
   TripHistoryBloc({
     required this.getTripHistory,
@@ -19,6 +16,9 @@ class TripHistoryBloc extends Bloc<TripHistoryEvent, TripHistoryState> {
     on<FetchMonthlyAnalytics>(_onFetchMonthlyAnalytics);
     on<ExportReportPDF>(_onExportReportPDF);
   }
+  final GetTripHistory getTripHistory;
+  final GetMonthlyAnalytics getMonthlyAnalytics;
+  final ExportTripReport exportTripReport;
 
   Future<void> _onFetchTripHistory(
     FetchTripHistory event,

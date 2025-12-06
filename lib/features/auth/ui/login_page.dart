@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 import '../../../widgets/common_button.dart';
@@ -57,7 +58,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
+      backgroundColor: colors.background,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(24.r),
@@ -67,21 +71,21 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 32.h),
-                _buildHeader(),
+                _buildHeader(context),
                 SizedBox(height: 40.h),
                 _buildEmailField(),
                 SizedBox(height: 20.h),
                 _buildPasswordField(),
                 SizedBox(height: 16.h),
-                _buildRememberForgotRow(),
+                _buildRememberForgotRow(context),
                 SizedBox(height: 32.h),
                 _buildLoginButton(),
                 SizedBox(height: 24.h),
-                _buildDivider(),
+                _buildDivider(context),
                 SizedBox(height: 24.h),
                 _buildSocialButtons(),
                 SizedBox(height: 32.h),
-                _buildSignUpLink(),
+                _buildSignUpLink(context),
               ],
             ),
           ),
@@ -90,7 +94,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
+    final colors = context.appColors;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -99,13 +105,16 @@ class _LoginPageState extends State<LoginPage> {
           style: TextStyle(
             fontSize: 28.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         SizedBox(height: 8.h),
         Text(
           'Sign in to continue charging',
-          style: TextStyle(fontSize: 16.sp, color: AppColors.textSecondaryLight),
+          style: TextStyle(
+            fontSize: 16.sp,
+            color: colors.textSecondary,
+          ),
         ),
       ],
     );
@@ -150,7 +159,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildRememberForgotRow() {
+  Widget _buildRememberForgotRow(BuildContext context) {
+    final colors = context.appColors;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -168,8 +179,10 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(width: 8.w),
             Text(
               AppStrings.rememberMe,
-              style:
-                  TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: colors.textSecondary,
+              ),
             ),
           ],
         ),
@@ -180,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.primary,
+              color: colors.primary,
             ),
           ),
         ),
@@ -196,19 +209,23 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildDivider() {
+  Widget _buildDivider(BuildContext context) {
+    final colors = context.appColors;
+
     return Row(
       children: [
-        const Expanded(child: Divider(color: AppColors.outlineLight)),
+        Expanded(child: Divider(color: colors.outline)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Text(
             AppStrings.orContinueWith,
-            style:
-                TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: colors.textSecondary,
+            ),
           ),
         ),
-        const Expanded(child: Divider(color: AppColors.outlineLight)),
+        Expanded(child: Divider(color: colors.outline)),
       ],
     );
   }
@@ -235,21 +252,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildSignUpLink() {
+  Widget _buildSignUpLink(BuildContext context) {
+    final colors = context.appColors;
+
     return Center(
       child: TextButton(
         onPressed: () => context.push(AppRoutes.register.path),
         child: RichText(
           text: TextSpan(
             text: AppStrings.dontHaveAccount,
-            style:
-                TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
-            children: const [
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: colors.textSecondary,
+            ),
+            children: [
               TextSpan(
                 text: ' ${AppStrings.signUp}',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+                  color: colors.primary,
                 ),
               ),
             ],
@@ -259,4 +280,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-

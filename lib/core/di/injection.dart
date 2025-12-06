@@ -6,10 +6,14 @@
 ///    - Use sl< Type>() to get instances
 library;
 
+import 'package:ev_charging_user_app/features/value_packs/data/datasources/value_packs_remote_datasource.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../features/nearby_offers/data/repositories/partner_repository.dart';
+import '../../features/nearby_offers/domain/usecases/usecases.dart';
+import '../../features/profile/repositories/repositories.dart';
 import '../../features/trip_history/data/datasources/trip_local_datasource.dart';
 import '../../features/trip_history/data/datasources/trip_remote_datasource.dart';
 import '../../features/trip_history/data/repositories/trip_repository_impl.dart';
@@ -18,12 +22,15 @@ import '../../features/trip_history/domain/usecases/export_trip_report.dart';
 import '../../features/trip_history/domain/usecases/get_monthly_analytics.dart';
 import '../../features/trip_history/domain/usecases/get_trip_history.dart';
 import '../../features/trip_history/presentation/bloc/trip_history_bloc.dart';
+import '../../features/value_packs/data/datasources/value_packs_local_datasource.dart';
+import '../../features/value_packs/data/datasources/value_packs_remote_datasource_impl.dart';
+import '../../features/value_packs/data/repositories/value_packs_repository_impl.dart';
+import '../../features/value_packs/domain/repositories/value_packs_repository.dart';
+import '../../features/value_packs/domain/usecases/usecases.dart';
+import '../../features/value_packs/presentation/cubits/cubits.dart';
 import '../../repositories/repositories.dart';
-import '../theme/theme_manager.dart';
 import '../services/analytics_service.dart';
-import '../../features/nearby_offers/data/repositories/partner_repository.dart';
-import '../../features/nearby_offers/domain/usecases/usecases.dart';
-import '../../features/profile/repositories/repositories.dart';
+import '../theme/theme_manager.dart';
 
 /// Global service locator instance.
 final GetIt sl = GetIt.instance;
@@ -82,6 +89,42 @@ Future<void> initializeDependencies() async {
         exportTripReport: sl(),
       ),
     );
+
+  // ============ Value Packs Feature ============
+  final valuePacksBox = await Hive.openBox<String>('value_packs');
+
+  sl
+    // Datasources
+    ..registerLazySingleton<ValuePacksRemoteDataSource>(
+      ValuePacksRemoteDataSourceImpl.new,
+    )
+    ..registerLazySingleton<ValuePacksLocalDataSource>(
+      () => ValuePacksLocalDataSourceImpl(valuePacksBox),
+    )
+    // Repository
+    ..registerLazySingleton<ValuePacksRepository>(
+      () => ValuePacksRepositoryImpl(
+        remoteDataSource: sl(),
+        localDataSource: sl(),
+      ),
+    )
+    // Use Cases
+    ..registerLazySingleton(() => GetValuePacks(sl()))
+    ..registerLazySingleton(() => GetValuePackDetail(sl()))
+    ..registerLazySingleton(() => PurchaseValuePack(sl()))
+    ..registerLazySingleton(() => GetReviews(sl()))
+    ..registerLazySingleton(() => SubmitReview(sl()))
+    // Cubits
+    ..registerFactory(() => ValuePacksListCubit(sl<GetValuePacks>()))
+    ..registerFactory(() => ValuePackDetailCubit(
+          sl<GetValuePackDetail>(),
+          sl<GetValuePacks>(),
+        ))
+    ..registerFactory(() => PurchaseCubit(sl<PurchaseValuePack>()))
+    ..registerFactory(() => ReviewsCubit(
+          sl<GetReviews>(),
+          sl<SubmitReview>(),
+        ));
 }
 
 /// Reset all dependencies (for testing).

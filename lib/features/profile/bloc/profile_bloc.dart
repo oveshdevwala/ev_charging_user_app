@@ -29,13 +29,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     LoadProfile event,
     Emitter<ProfileState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
     try {
       final profile = await _repository.getProfile();
       emit(state.copyWith(
         isLoading: false,
         profile: profile,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -49,13 +48,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     UpdateProfile event,
     Emitter<ProfileState> emit,
   ) async {
-    emit(state.copyWith(isUpdating: true, error: null));
+    emit(state.copyWith(isUpdating: true));
     try {
       final updatedProfile = await _repository.updateProfile(event.profile);
       emit(state.copyWith(
         isUpdating: false,
         profile: updatedProfile,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -69,14 +67,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     UpdateAvatar event,
     Emitter<ProfileState> emit,
   ) async {
-    emit(state.copyWith(isUploadingAvatar: true, error: null));
+    emit(state.copyWith(isUploadingAvatar: true));
     try {
       final avatarUrl = await _repository.uploadAvatar(event.imagePath);
       final updatedProfile = state.profile?.copyWith(avatarUrl: avatarUrl);
       emit(state.copyWith(
         isUploadingAvatar: false,
         profile: updatedProfile,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -90,7 +87,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     ClearProfileError event,
     Emitter<ProfileState> emit,
   ) {
-    emit(state.copyWith(error: null));
+    emit(state.copyWith());
   }
 }
 

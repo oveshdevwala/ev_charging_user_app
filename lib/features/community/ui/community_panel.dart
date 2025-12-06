@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../bloc/bloc.dart';
 import '../models/models.dart';
@@ -85,7 +86,7 @@ class _CommunityPanelContent extends StatelessWidget {
     return BlocBuilder<CommunityCubit, CommunityState>(
       builder: (context, state) {
         if (state.isLoading) {
-          return _buildLoading();
+          return _buildLoading(context);
         }
 
         return Column(
@@ -112,7 +113,9 @@ class _CommunityPanelContent extends StatelessWidget {
     );
   }
 
-  Widget _buildLoading() {
+  Widget _buildLoading(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(40.r),
       child: Center(
@@ -122,10 +125,7 @@ class _CommunityPanelContent extends StatelessWidget {
             SizedBox(height: 16.h),
             Text(
               'Loading community...',
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
             ),
           ],
         ),
@@ -137,17 +137,19 @@ class _CommunityPanelContent extends StatelessWidget {
     BuildContext context,
     StationCommunitySummary summary,
   ) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppColors.primary.withValues(alpha: 0.1),
-            AppColors.primary.withValues(alpha: 0.05),
+            colors.primary.withValues(alpha: 0.1),
+            colors.primary.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+        border: Border.all(color: colors.primary.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
@@ -159,22 +161,19 @@ class _CommunityPanelContent extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 36.sp,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimaryLight,
+                  color: colors.textPrimary,
                 ),
               ),
               StarRatingCompact(rating: summary.avgRating, showCount: false),
               SizedBox(height: 4.h),
               Text(
                 '${summary.ratingCount} reviews',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: AppColors.textSecondaryLight,
-                ),
+                style: TextStyle(fontSize: 12.sp, color: colors.textSecondary),
               ),
             ],
           ),
           SizedBox(width: 20.w),
-          Container(width: 1, height: 60.h, color: AppColors.outlineLight),
+          Container(width: 1, height: 60.h, color: colors.outline),
           SizedBox(width: 20.w),
           // Stats
           Expanded(
@@ -182,21 +181,24 @@ class _CommunityPanelContent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildStatRow(
+                  context,
                   Iconsax.verify5,
                   '${(summary.verifiedRatio * 100).toInt()}% verified reviews',
-                  AppColors.primary,
+                  colors.primary,
                 ),
                 SizedBox(height: 8.h),
                 _buildStatRow(
+                  context,
                   Iconsax.gallery,
                   '${summary.photosCount} photos',
-                  AppColors.secondary,
+                  colors.secondary,
                 ),
                 SizedBox(height: 8.h),
                 _buildStatRow(
+                  context,
                   Iconsax.message_question,
                   '${summary.questionsCount} questions',
-                  AppColors.tertiary,
+                  colors.textTertiary,
                 ),
               ],
             ),
@@ -206,23 +208,29 @@ class _CommunityPanelContent extends StatelessWidget {
     );
   }
 
-  Widget _buildStatRow(IconData icon, String label, Color color) {
+  Widget _buildStatRow(
+    BuildContext context,
+    IconData icon,
+    String label,
+    Color color,
+  ) {
+    final colors = context.appColors;
+
     return Row(
       children: [
         Icon(icon, size: 16.r, color: color),
         SizedBox(width: 8.w),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12.sp,
-            color: AppColors.textSecondaryLight,
-          ),
+          style: TextStyle(fontSize: 12.sp, color: colors.textSecondary),
         ),
       ],
     );
   }
 
   Widget _buildQuickActions(BuildContext context) {
+    final colors = context.appColors;
+
     return Row(
       children: [
         Expanded(
@@ -246,7 +254,7 @@ class _CommunityPanelContent extends StatelessWidget {
             icon: Iconsax.flag,
             label: 'Report',
             onTap: onReportIssue,
-            color: AppColors.error,
+            color: colors.danger,
           ),
         ),
         SizedBox(width: 8.w),
@@ -264,6 +272,8 @@ class _CommunityPanelContent extends StatelessWidget {
   }
 
   Widget _buildTabSelector(BuildContext context, CommunityState state) {
+    final colors = context.appColors;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -278,9 +288,7 @@ class _CommunityPanelContent extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.primary
-                      : AppColors.surfaceVariantLight,
+                  color: isSelected ? colors.primary : colors.surfaceVariant,
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
@@ -288,9 +296,7 @@ class _CommunityPanelContent extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                    color: isSelected
-                        ? Colors.white
-                        : AppColors.textSecondaryLight,
+                    color: isSelected ? colors.surface : colors.textSecondary,
                   ),
                 ),
               ),
@@ -374,14 +380,13 @@ class _CommunityPanelContent extends StatelessWidget {
   }
 
   Widget _buildSortRow(BuildContext context, CommunityState state) {
+    final colors = context.appColors;
+
     return Row(
       children: [
         Text(
           'Sort by:',
-          style: TextStyle(
-            fontSize: 13.sp,
-            color: AppColors.textSecondaryLight,
-          ),
+          style: TextStyle(fontSize: 13.sp, color: colors.textSecondary),
         ),
         SizedBox(width: 8.w),
         PopupMenuButton<ReviewSortOption>(
@@ -392,7 +397,7 @@ class _CommunityPanelContent extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
             decoration: BoxDecoration(
-              color: AppColors.surfaceVariantLight,
+              color: colors.surfaceVariant,
               borderRadius: BorderRadius.circular(6.r),
             ),
             child: Row(
@@ -403,11 +408,15 @@ class _CommunityPanelContent extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.textPrimaryLight,
+                    color: colors.textPrimary,
                   ),
                 ),
                 SizedBox(width: 4.w),
-                Icon(Iconsax.arrow_down_1, size: 16.r),
+                Icon(
+                  Iconsax.arrow_down_1,
+                  size: 16.r,
+                  color: colors.textSecondary,
+                ),
               ],
             ),
           ),
@@ -516,27 +525,26 @@ class _CommunityPanelContent extends StatelessWidget {
   }
 
   Widget _buildIssuesTab(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(24.r),
       child: Column(
         children: [
-          Icon(Iconsax.flag, size: 48.r, color: AppColors.outlineLight),
+          Icon(Iconsax.flag, size: 48.r, color: colors.textTertiary),
           SizedBox(height: 16.h),
           Text(
             'Report an Issue',
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             'Help improve this station by reporting problems',
-            style: TextStyle(
-              fontSize: 13.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 13.sp, color: colors.textSecondary),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 20.h),
@@ -545,8 +553,8 @@ class _CommunityPanelContent extends StatelessWidget {
             icon: Icon(Iconsax.flag, size: 18.r),
             label: const Text('Report Issue'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-              foregroundColor: Colors.white,
+              backgroundColor: colors.danger,
+              foregroundColor: colors.surface,
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.r),
@@ -559,15 +567,27 @@ class _CommunityPanelContent extends StatelessWidget {
   }
 
   void _showFlagDialog(BuildContext context, String reviewId) {
+    final colors = context.appColors;
+
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Report Review'),
-        content: const Text('Are you sure you want to report this review?'),
+        backgroundColor: colors.surface,
+        title: Text(
+          'Report Review',
+          style: TextStyle(color: colors.textPrimary),
+        ),
+        content: Text(
+          'Are you sure you want to report this review?',
+          style: TextStyle(color: colors.textSecondary),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: colors.textSecondary),
+            ),
           ),
           TextButton(
             onPressed: () {
@@ -577,10 +597,7 @@ class _CommunityPanelContent extends StatelessWidget {
                 'User reported',
               );
             },
-            child: const Text(
-              'Report',
-              style: TextStyle(color: AppColors.error),
-            ),
+            child: Text('Report', style: TextStyle(color: colors.danger)),
           ),
         ],
       ),
@@ -604,25 +621,28 @@ class _QuickActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+    final buttonColor = color ?? colors.primary;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12.h),
         decoration: BoxDecoration(
-          color: (color ?? AppColors.primary).withValues(alpha: 0.1),
+          color: buttonColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10.r),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 22.r, color: color ?? AppColors.primary),
+            Icon(icon, size: 22.r, color: buttonColor),
             SizedBox(height: 4.h),
             Text(
               label,
               style: TextStyle(
                 fontSize: 11.sp,
                 fontWeight: FontWeight.w600,
-                color: color ?? AppColors.primary,
+                color: buttonColor,
               ),
             ),
           ],

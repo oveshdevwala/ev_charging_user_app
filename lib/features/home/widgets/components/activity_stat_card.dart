@@ -14,7 +14,10 @@ import '../../../../core/theme/app_colors.dart';
 /// Activity stat card for displaying metrics.
 class ActivityStatCard extends StatelessWidget {
   const ActivityStatCard({
-    required this.icon, required this.label, required this.value, super.key,
+    required this.icon,
+    required this.label,
+    required this.value,
+    super.key,
     this.unit,
     this.iconColor,
     this.backgroundColor,
@@ -52,14 +55,15 @@ class ActivityStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = iconColor ?? AppColors.primary;
+    final colors = context.appColors;
+    final color = iconColor ?? colors.primary;
 
     return Container(
       padding: EdgeInsets.all(isCompact ? 12.r : 16.r),
       decoration: BoxDecoration(
-        color: backgroundColor ?? AppColors.surfaceLight,
+        color: backgroundColor ?? colors.surface,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: colors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,21 +78,14 @@ class ActivityStatCard extends StatelessWidget {
                   color: color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Icon(
-                  icon,
-                  size: isCompact ? 18.r : 20.r,
-                  color: color,
-                ),
+                child: Icon(icon, size: isCompact ? 18.r : 20.r, color: color),
               ),
               if (trend != null) ...[
                 const Spacer(),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 6.w,
-                    vertical: 2.h,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
                   decoration: BoxDecoration(
-                    color: (trendPositive ? AppColors.success : AppColors.error)
+                    color: (trendPositive ? colors.success : colors.danger)
                         .withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(6.r),
                   ),
@@ -97,8 +94,9 @@ class ActivityStatCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 10.sp,
                       fontWeight: FontWeight.w600,
-                      color:
-                          trendPositive ? AppColors.successDark : AppColors.error,
+                      color: trendPositive
+                          ? colors.success
+                          : colors.danger,
                     ),
                   ),
                 ),
@@ -114,7 +112,7 @@ class ActivityStatCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: isCompact ? 18.sp : 22.sp,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimaryLight,
+                  color: colors.textPrimary,
                 ),
               ),
               if (unit != null) ...[
@@ -126,7 +124,7 @@ class ActivityStatCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: isCompact ? 11.sp : 12.sp,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.textSecondaryLight,
+                      color: colors.textSecondary,
                     ),
                   ),
                 ),
@@ -138,7 +136,7 @@ class ActivityStatCard extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: isCompact ? 11.sp : 12.sp,
-              color: AppColors.textSecondaryLight,
+              color: colors.textSecondary,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -151,10 +149,7 @@ class ActivityStatCard extends StatelessWidget {
 
 /// Streak badge widget for gamification.
 class StreakBadge extends StatelessWidget {
-  const StreakBadge({
-    required this.streaks, super.key,
-    this.onTap,
-  });
+  const StreakBadge({required this.streaks, super.key, this.onTap});
 
   /// Number of consecutive days.
   final int streaks;
@@ -164,6 +159,7 @@ class StreakBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     if (streaks <= 0) {
       return const SizedBox.shrink();
     }
@@ -173,13 +169,13 @@ class StreakBadge extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFFFF6B35), Color(0xFFFF9500)],
+          gradient: LinearGradient(
+            colors: [AppColors.warning, colors.warningContainer],
           ),
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
+              color: AppColors.warning.withValues(alpha: 0.3),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -188,10 +184,7 @@ class StreakBadge extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              '🔥',
-              style: TextStyle(fontSize: 18.sp),
-            ),
+            Text('🔥', style: TextStyle(fontSize: 18.sp)),
             SizedBox(width: 8.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,14 +195,14 @@ class StreakBadge extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: colors.textPrimary,
                   ),
                 ),
                 Text(
                   'Keep charging daily',
                   style: TextStyle(
                     fontSize: 10.sp,
-                    color: Colors.white.withValues(alpha: 0.85),
+                    color: colors.textSecondary,
                   ),
                 ),
               ],
@@ -220,4 +213,3 @@ class StreakBadge extends StatelessWidget {
     );
   }
 }
-

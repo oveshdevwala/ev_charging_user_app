@@ -27,16 +27,14 @@ class InsightsPage extends StatelessWidget {
       builder: (context, state) {
         final trip = state.currentTrip;
         if (trip == null) {
-          return const Scaffold(
-            body: Center(child: Text('No trip data')),
-          );
+          return const Scaffold(body: Center(child: Text('No trip data')));
         }
 
         return Scaffold(
+          backgroundColor: context.appColors.background,
           appBar: AppAppBar(
             title: 'Trip Insights',
-            onBackPressed: () =>
-                context.read<TripPlannerCubit>().goToSummary(),
+            onBackPressed: () => context.read<TripPlannerCubit>().goToSummary(),
           ),
           body: SingleChildScrollView(
             padding: EdgeInsets.all(16.r),
@@ -70,19 +68,17 @@ class InsightsPage extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context, TripPlannerState state) {
+    final colors = context.appColors;
     final trip = state.currentTrip!;
     final estimates = trip.estimates;
 
     return Container(
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.tertiary,
-            AppColors.tertiaryDark,
-          ],
+          colors: [AppColors.tertiary, colors.tertiaryContainer],
         ),
         borderRadius: BorderRadius.circular(20.r),
       ),
@@ -92,7 +88,7 @@ class InsightsPage extends StatelessWidget {
             'Trip Analysis',
             style: TextStyle(
               fontSize: 14.sp,
-              color: Colors.white.withValues(alpha: 0.8),
+              color: context.appColors.surface.withValues(alpha: 0.8),
             ),
           ),
           SizedBox(height: 8.h),
@@ -101,7 +97,7 @@ class InsightsPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: context.appColors.surface,
             ),
             textAlign: TextAlign.center,
           ),
@@ -112,24 +108,27 @@ class InsightsPage extends StatelessWidget {
               _buildHeaderStat(
                 estimates?.totalDistanceKm.toStringAsFixed(0) ?? '0',
                 'km',
+                context,
               ),
               Container(
                 width: 1,
                 height: 30.h,
-                color: Colors.white.withValues(alpha: 0.3),
+                color: context.appColors.surface.withValues(alpha: 0.3),
               ),
               _buildHeaderStat(
                 estimates?.formattedTotalTime ?? '--',
                 'total',
+                context,
               ),
               Container(
                 width: 1,
                 height: 30.h,
-                color: Colors.white.withValues(alpha: 0.3),
+                color: context.appColors.surface.withValues(alpha: 0.3),
               ),
               _buildHeaderStat(
                 '\$${estimates?.estimatedCost.toStringAsFixed(0) ?? '0'}',
                 'cost',
+                context,
               ),
             ],
           ),
@@ -138,7 +137,7 @@ class InsightsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderStat(String value, String label) {
+  Widget _buildHeaderStat(String value, String label, BuildContext context) {
     return Column(
       children: [
         Text(
@@ -146,14 +145,14 @@ class InsightsPage extends StatelessWidget {
           style: TextStyle(
             fontSize: 22.sp,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: context.appColors.surface,
           ),
         ),
         Text(
           label,
           style: TextStyle(
             fontSize: 12.sp,
-            color: Colors.white.withValues(alpha: 0.7),
+            color: context.appColors.surface.withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -178,11 +177,15 @@ class InsightsPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLegendItem('Driving', AppColors.primary),
+              _buildLegendItem(context, 'Driving', context.appColors.primary),
               SizedBox(width: 16.w),
-              _buildLegendItem('Charging', AppColors.secondary),
+              _buildLegendItem(
+                context,
+                'Charging',
+                context.appColors.secondary,
+              ),
               SizedBox(width: 16.w),
-              _buildLegendItem('Reserve', AppColors.warning),
+              _buildLegendItem(context, 'Reserve', context.appColors.warning),
             ],
           ),
         ],
@@ -191,6 +194,7 @@ class InsightsPage extends StatelessWidget {
   }
 
   Widget _buildTimeBreakdown(BuildContext context, TripPlannerState state) {
+    final colors = context.appColors;
     final estimates = state.currentTrip!.estimates;
     if (estimates == null) {
       return const SizedBox.shrink();
@@ -215,7 +219,7 @@ class InsightsPage extends StatelessWidget {
                 child: Container(
                   height: 32.h,
                   decoration: BoxDecoration(
-                    color: AppColors.primary,
+                    color: colors.primary,
                     borderRadius: BorderRadius.horizontal(
                       left: Radius.circular(8.r),
                     ),
@@ -226,7 +230,7 @@ class InsightsPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: colors.textPrimary,
                       ),
                     ),
                   ),
@@ -237,7 +241,7 @@ class InsightsPage extends StatelessWidget {
                 child: Container(
                   height: 32.h,
                   decoration: BoxDecoration(
-                    color: AppColors.secondary,
+                    color: colors.secondary,
                     borderRadius: BorderRadius.horizontal(
                       right: Radius.circular(8.r),
                     ),
@@ -248,7 +252,7 @@ class InsightsPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: colors.textPrimary,
                       ),
                     ),
                   ),
@@ -261,33 +265,28 @@ class InsightsPage extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildTimeItem(
+                  context,
                   'Driving',
                   estimates.formattedDriveTime,
-                  AppColors.primary,
+                  colors.primary,
                 ),
               ),
-              Container(
-                width: 1,
-                height: 40.h,
-                color: AppColors.outlineLight,
-              ),
+              Container(width: 1, height: 40.h, color: colors.outline),
               Expanded(
                 child: _buildTimeItem(
+                  context,
                   'Charging',
                   estimates.formattedChargingTime,
-                  AppColors.secondary,
+                  colors.secondary,
                 ),
               ),
-              Container(
-                width: 1,
-                height: 40.h,
-                color: AppColors.outlineLight,
-              ),
+              Container(width: 1, height: 40.h, color: colors.outline),
               Expanded(
                 child: _buildTimeItem(
+                  context,
                   'Total',
                   estimates.formattedTotalTime,
-                  AppColors.textPrimaryLight,
+                  colors.textPrimary,
                 ),
               ),
             ],
@@ -297,7 +296,14 @@ class InsightsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeItem(String label, String value, Color color) {
+  Widget _buildTimeItem(
+    BuildContext context,
+    String label,
+    String value,
+    Color color,
+  ) {
+    final colors = context.appColors;
+
     return Column(
       children: [
         Text(
@@ -311,10 +317,7 @@ class InsightsPage extends StatelessWidget {
         SizedBox(height: 2.h),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12.sp,
-            color: AppColors.textSecondaryLight,
-          ),
+          style: TextStyle(fontSize: 12.sp, color: colors.textSecondary),
         ),
       ],
     );
@@ -339,6 +342,7 @@ class InsightsPage extends StatelessWidget {
     final trip = state.currentTrip!;
     final estimates = trip.estimates;
     final vehicle = trip.vehicle;
+    final colors = context.appColors;
 
     return _buildCard(
       context,
@@ -350,17 +354,19 @@ class InsightsPage extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildStatBox(
+                  context,
                   'Energy Used',
                   '${estimates?.estimatedEnergyKwh.toStringAsFixed(1) ?? '0'} kWh',
-                  AppColors.primary,
+                  colors.primary,
                 ),
               ),
               SizedBox(width: 12.w),
               Expanded(
                 child: _buildStatBox(
+                  context,
                   'Efficiency',
                   '${vehicle.consumptionKwhPer100Km.toStringAsFixed(1)} kWh/100km',
-                  AppColors.secondary,
+                  colors.secondary,
                 ),
               ),
             ],
@@ -370,20 +376,22 @@ class InsightsPage extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildStatBox(
+                  context,
                   'Start SOC',
                   '${vehicle.currentSocPercent.toStringAsFixed(0)}%',
-                  AppColors.success,
+                  colors.success,
                 ),
               ),
               SizedBox(width: 12.w),
               Expanded(
                 child: _buildStatBox(
+                  context,
                   'End SOC',
                   '${estimates?.arrivalSocPercent.toStringAsFixed(0) ?? '0'}%',
                   estimates?.arrivalSocPercent != null &&
                           estimates!.arrivalSocPercent < 20
-                      ? AppColors.warning
-                      : AppColors.success,
+                      ? colors.warning
+                      : colors.success,
                 ),
               ),
             ],
@@ -393,7 +401,14 @@ class InsightsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildStatBox(String label, String value, Color color) {
+  Widget _buildStatBox(
+    BuildContext context,
+    String label,
+    String value,
+    Color color,
+  ) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(14.r),
       decoration: BoxDecoration(
@@ -406,10 +421,7 @@ class InsightsPage extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 12.sp, color: colors.textSecondary),
           ),
           SizedBox(height: 4.h),
           Text(
@@ -426,7 +438,10 @@ class InsightsPage extends StatelessWidget {
   }
 
   Widget _buildEnvironmentalImpact(
-      BuildContext context, TripPlannerState state) {
+    BuildContext context,
+    TripPlannerState state,
+  ) {
+    final colors = context.appColors;
     final estimates = state.currentTrip!.estimates;
     if (estimates == null) {
       return const SizedBox.shrink();
@@ -447,30 +462,23 @@ class InsightsPage extends StatelessWidget {
             label: 'CO₂ Saved vs Gas Car',
             value: co2Saved.toStringAsFixed(1),
             unit: 'kg',
-            color: AppColors.success,
+            color: colors.success,
           ),
           SizedBox(height: 16.h),
           Container(
             padding: EdgeInsets.all(12.r),
             decoration: BoxDecoration(
-              color: AppColors.success.withValues(alpha: 0.1),
+              color: colors.success.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10.r),
             ),
             child: Row(
               children: [
-                Icon(
-                  Iconsax.info_circle,
-                  size: 18.r,
-                  color: AppColors.success,
-                ),
+                Icon(Iconsax.info_circle, size: 18.r, color: colors.success),
                 SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
                     'Equivalent to planting ${(co2Saved / 21).toStringAsFixed(1)} trees per year',
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: AppColors.success,
-                    ),
+                    style: TextStyle(fontSize: 13.sp, color: colors.success),
                   ),
                 ),
               ],
@@ -487,26 +495,28 @@ class InsightsPage extends StatelessWidget {
     required IconData icon,
     required Widget child,
   }) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: colors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, size: 20.r, color: AppColors.primary),
+              Icon(icon, size: 20.r, color: colors.primary),
               SizedBox(width: 8.w),
               Text(
                 title,
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimaryLight,
+                  color: colors.textPrimary,
                 ),
               ),
             ],
@@ -518,7 +528,9 @@ class InsightsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLegendItem(String label, Color color) {
+  Widget _buildLegendItem(BuildContext context, String label, Color color) {
+    final colors = context.appColors;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -533,13 +545,9 @@ class InsightsPage extends StatelessWidget {
         SizedBox(width: 6.w),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12.sp,
-            color: AppColors.textSecondaryLight,
-          ),
+          style: TextStyle(fontSize: 12.sp, color: colors.textSecondary),
         ),
       ],
     );
   }
 }
-

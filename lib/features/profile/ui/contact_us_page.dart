@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/di/injection.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/validators.dart';
 import '../../../widgets/common_button.dart';
@@ -38,14 +39,13 @@ class _ContactUsPageState extends State<ContactUsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return BlocProvider(
-      create: (context) => SupportBloc(
-        repository: sl<ProfileRepository>(),
-      ),
+      create: (context) => SupportBloc(repository: sl<ProfileRepository>()),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Contact Us'),
-        ),
+        backgroundColor: colors.background,
+        appBar: AppBar(title: const Text('Contact Us')),
         body: BlocListener<SupportBloc, SupportState>(
           listener: (context, state) {
             if (state.submittedTicket != null) {
@@ -54,9 +54,14 @@ class _ContactUsPageState extends State<ContactUsPage> {
                 builder: (dialogContext) => BlocProvider.value(
                   value: context.read<SupportBloc>(),
                   child: AlertDialog(
-                    title: const Text('Ticket Submitted'),
+                    backgroundColor: colors.surface,
+                    title: Text(
+                      'Ticket Submitted',
+                      style: TextStyle(color: colors.textPrimary),
+                    ),
                     content: Text(
                       'Your ticket has been submitted successfully.\n\nTicket ID: ${state.submittedTicket!.ticketNumber ?? state.submittedTicket!.id}',
+                      style: TextStyle(color: colors.textSecondary),
                     ),
                     actions: [
                       TextButton(
@@ -64,7 +69,10 @@ class _ContactUsPageState extends State<ContactUsPage> {
                           Navigator.pop(dialogContext);
                           context.pop();
                         },
-                        child: const Text('OK'),
+                        child: Text(
+                          'OK',
+                          style: TextStyle(color: colors.primary),
+                        ),
                       ),
                     ],
                   ),
@@ -72,9 +80,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
               );
             }
             if (state.error != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.error!)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.error!)));
             }
           },
           child: SingleChildScrollView(
@@ -85,8 +93,11 @@ class _ContactUsPageState extends State<ContactUsPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'We\'re here to help! Send us a message and we\'ll get back to you as soon as possible.',
-                    style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+                    "We're here to help! Send us a message and we'll get back to you as soon as possible.",
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: context.appColors.textSecondary,
+                    ),
                   ),
                   SizedBox(height: 24.h),
                   CommonTextField(
@@ -113,11 +124,11 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             : () {
                                 if (_formKey.currentState!.validate()) {
                                   context.read<SupportBloc>().add(
-                                        SubmitTicket(
-                                          subject: _subjectController.text,
-                                          message: _messageController.text,
-                                        ),
-                                      );
+                                    SubmitTicket(
+                                      subject: _subjectController.text,
+                                      message: _messageController.text,
+                                    ),
+                                  );
                                 }
                               },
                         isLoading: state.isSubmitting,
@@ -133,4 +144,3 @@ class _ContactUsPageState extends State<ContactUsPage> {
     );
   }
 }
-

@@ -67,7 +67,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 controller: _nameController,
                 label: AppStrings.fullName,
                 prefixIcon: Iconsax.user,
-                validator: (v) => v?.isEmpty ?? false ? 'Name is required' : null,
+                validator: (v) =>
+                    v?.isEmpty ?? false ? 'Name is required' : null,
               ),
               SizedBox(height: 16.h),
               CommonTextField(
@@ -85,7 +86,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 keyboardType: TextInputType.phone,
               ),
               SizedBox(height: 32.h),
-              CommonButton(label: AppStrings.save, onPressed: _onSave, isLoading: _isLoading),
+              CommonButton(
+                label: AppStrings.save,
+                onPressed: _onSave,
+                isLoading: _isLoading,
+              ),
             ],
           ),
         ),
@@ -100,11 +105,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
           Container(
             width: 100.r,
             height: 100.r,
-            decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+            decoration: BoxDecoration(
+              color: context.appColors.primary,
+              shape: BoxShape.circle,
+            ),
             child: Center(
               child: Text(
                 'JD',
-                style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.w700, color: Colors.white),
+                style: TextStyle(
+                  fontSize: 32.sp,
+                  fontWeight: FontWeight.w700,
+                  color: context.appColors.surface,
+                ),
               ),
             ),
           ),
@@ -114,11 +126,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
             child: Container(
               padding: EdgeInsets.all(8.r),
               decoration: BoxDecoration(
-                color: AppColors.secondary,
+                color: context.appColors.secondary,
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
+                border: Border.all(color: context.appColors.surface, width: 2),
               ),
-              child: Icon(Iconsax.camera, size: 16.r, color: Colors.white),
+              child: Icon(
+                Iconsax.camera,
+                size: 16.r,
+                color: context.appColors.surface,
+              ),
             ),
           ),
         ],
@@ -126,4 +142,3 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 }
-

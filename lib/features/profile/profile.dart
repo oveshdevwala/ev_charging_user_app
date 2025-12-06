@@ -5,13 +5,10 @@ library;
 
 // BLoC
 export 'bloc/bloc.dart';
-
 // Models
 export 'models/models.dart';
-
 // Repositories
 export 'repositories/repositories.dart';
-
 // UI
 export 'ui/add_card_page.dart';
 export 'ui/change_password_page.dart';
@@ -24,9 +21,8 @@ export 'ui/payment_methods_page.dart';
 export 'ui/privacy_policy_page.dart';
 export 'ui/profile_page.dart';
 export 'ui/settings_page.dart';
-export 'ui/theme_settings_page.dart';
 export 'ui/terms_of_service_page.dart';
-
+export 'ui/theme_settings_page.dart';
 // Widgets
 export 'widgets/profile_header.dart';
 export 'widgets/profile_menu_item.dart';

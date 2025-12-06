@@ -99,9 +99,8 @@ class DummyProfileRepository implements ProfileRepository {
       name: 'John Doe',
       email: 'john.doe@example.com',
       phone: '+1234567890',
-      avatarUrl: null,
       joinedAt: DateTime.now().subtract(const Duration(days: 365)),
-      vehicleInfo: {
+      vehicleInfo: const {
         'make': 'Tesla',
         'model': 'Model 3',
         'battery': '75 kWh',
@@ -153,7 +152,7 @@ class DummyProfileRepository implements ProfileRepository {
   Future<List<PaymentMethodModel>> getPaymentMethods() async {
     await Future.delayed(const Duration(seconds: 1));
     return [
-      PaymentMethodModel(
+      const PaymentMethodModel(
         id: 'pm_1',
         brand: 'Visa',
         last4: '4242',
@@ -162,13 +161,12 @@ class DummyProfileRepository implements ProfileRepository {
         isDefault: true,
         gatewayToken: 'tok_visa_123',
       ),
-      PaymentMethodModel(
+      const PaymentMethodModel(
         id: 'pm_2',
         brand: 'Mastercard',
         last4: '5555',
         expMonth: 6,
         expYear: 2026,
-        isDefault: false,
         gatewayToken: 'tok_mc_456',
       ),
     ];
@@ -189,7 +187,6 @@ class DummyProfileRepository implements ProfileRepository {
       last4: last4,
       expMonth: expMonth,
       expYear: expYear,
-      isDefault: false,
       gatewayToken: gatewayToken,
     );
   }
@@ -209,12 +206,11 @@ class DummyProfileRepository implements ProfileRepository {
     await Future.delayed(const Duration(seconds: 1));
     return WalletModel(
       balance: 125.50,
-      currency: 'USD',
       transactions: [
         WalletTransactionModel(
           id: 'tx_1',
           type: WalletTransactionType.credit,
-          amount: 50.0,
+          amount: 50,
           description: 'Wallet Top-up',
           createdAt: DateTime.now().subtract(const Duration(days: 5)),
           referenceId: 'ref_123',
@@ -333,7 +329,6 @@ For questions, contact us at support@example.com.
       subject: subject,
       message: message,
       attachments: attachments ?? [],
-      status: TicketStatus.open,
       createdAt: DateTime.now(),
       ticketNumber: 'TKT-${DateTime.now().millisecondsSinceEpoch}',
     );

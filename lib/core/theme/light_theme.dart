@@ -1,5 +1,5 @@
 /// File: lib/core/theme/light_theme.dart
-/// Purpose: Light theme configuration for the app
+/// Purpose: Light theme configuration for the app (WCAG AA compliant)
 /// Belongs To: shared
 /// Customization Guide:
 ///    - Modify colors in AppColors
@@ -12,8 +12,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app_colors.dart';
+import 'color_schemes.dart';
 
 /// Light theme configuration for the EV Charging app.
+/// All colors follow WCAG AA contrast guidelines for accessibility.
 class LightTheme {
   LightTheme._();
 
@@ -21,6 +23,9 @@ class LightTheme {
   static ThemeData get theme => ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
+    extensions: const [
+      lightColorScheme,
+    ],
 
     // ============ Color Scheme ============
     colorScheme: const ColorScheme.light(
@@ -43,6 +48,8 @@ class LightTheme {
       onSurfaceVariant: AppColors.textSecondaryLight,
       outline: AppColors.outlineLight,
       outlineVariant: AppColors.outlineVariantLight,
+      shadow: AppColors.shadowLight,
+      scrim: AppColors.scrim,
     ),
 
     // ============ Scaffold ============
@@ -56,7 +63,11 @@ class LightTheme {
       backgroundColor: AppColors.surfaceLight,
       foregroundColor: AppColors.textPrimaryLight,
       surfaceTintColor: Colors.transparent,
-      systemOverlayStyle: SystemUiOverlayStyle.dark,
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
       titleTextStyle: TextStyle(
         fontSize: 18.sp,
         fontWeight: FontWeight.w600,
@@ -142,15 +153,15 @@ class LightTheme {
     // ============ Input Decoration Theme ============
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.surfaceVariantLight,
+      fillColor: AppColors.surfaceLight,
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
-        borderSide: BorderSide.none,
+        borderSide: const BorderSide(color: AppColors.outlineLight),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
-        borderSide: BorderSide.none,
+        borderSide: const BorderSide(color: AppColors.outlineLight),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),

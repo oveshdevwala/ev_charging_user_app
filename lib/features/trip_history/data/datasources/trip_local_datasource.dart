@@ -1,7 +1,9 @@
 import 'dart:convert';
+
 import 'package:hive/hive.dart';
-import '../models/trip_record_model.dart';
+
 import '../models/monthly_analytics_model.dart';
+import '../models/trip_record_model.dart';
 
 abstract class TripLocalDataSource {
   Future<void> cacheTripHistory(List<TripRecordModel> trips);

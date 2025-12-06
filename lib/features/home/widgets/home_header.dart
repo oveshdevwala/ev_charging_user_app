@@ -7,12 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// Home header widget with greeting and actions.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({
-    required this.userName, required this.onNotificationTap, super.key,
+    required this.userName,
+    required this.onNotificationTap,
+    super.key,
   });
 
   final String userName;
@@ -20,6 +23,8 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -28,7 +33,7 @@ class HomeHeader extends StatelessWidget {
           children: [
             Text(
               'Good Morning! 👋',
-              style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
             ),
             SizedBox(height: 4.h),
             Text(
@@ -36,7 +41,7 @@ class HomeHeader extends StatelessWidget {
               style: TextStyle(
                 fontSize: 22.sp,
                 fontWeight: FontWeight.w700,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
             ),
           ],
@@ -49,20 +54,22 @@ class HomeHeader extends StatelessWidget {
               hasBadge: true,
             ),
             SizedBox(width: 12.w),
-            _buildAvatar(),
+            _buildAvatar(context),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildAvatar() {
+  Widget _buildAvatar(BuildContext context) {
+    final colors = context.appColors;
     final initials = userName.split(' ').take(2).map((n) => n[0]).join();
+
     return Container(
       width: 44.r,
       height: 44.r,
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: colors.primary,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Center(
@@ -71,7 +78,7 @@ class HomeHeader extends StatelessWidget {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: colors.textPrimary,
           ),
         ),
       ),
@@ -92,18 +99,22 @@ class _IconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: 44.r,
         height: 44.r,
         decoration: BoxDecoration(
-          color: AppColors.surfaceVariantLight,
+          color: colors.surfaceVariant,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Stack(
           children: [
-            Center(child: Icon(icon, size: 22.r, color: AppColors.textPrimaryLight)),
+            Center(
+              child: Icon(icon, size: 22.r, color: colors.textPrimary),
+            ),
             if (hasBadge)
               Positioned(
                 top: 10.h,
@@ -111,8 +122,8 @@ class _IconButton extends StatelessWidget {
                 child: Container(
                   width: 8.r,
                   height: 8.r,
-                  decoration: const BoxDecoration(
-                    color: AppColors.error,
+                  decoration: BoxDecoration(
+                    color: colors.danger,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -123,4 +134,3 @@ class _IconButton extends StatelessWidget {
     );
   }
 }
-

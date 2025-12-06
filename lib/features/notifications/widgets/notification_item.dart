@@ -14,7 +14,9 @@ import '../../../models/notification_model.dart';
 /// Notification item widget.
 class NotificationItem extends StatelessWidget {
   const NotificationItem({
-    required this.notification, required this.onTap, super.key,
+    required this.notification,
+    required this.onTap,
+    super.key,
   });
 
   final NotificationModel notification;
@@ -22,21 +24,24 @@ class NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: notification.isRead ? Colors.white : AppColors.primaryContainer.withValues(alpha: 0.3),
+          color: notification.isRead
+              ? context.appColors.surface
+              : colors.primaryContainer.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: AppColors.outlineLight),
+          border: Border.all(color: colors.outline),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildIcon(),
             SizedBox(width: 12.w),
-            Expanded(child: _buildContent()),
+            Expanded(child: _buildContent(context)),
             if (!notification.isRead) _buildUnreadIndicator(),
           ],
         ),
@@ -53,11 +58,16 @@ class NotificationItem extends StatelessWidget {
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12.r),
       ),
-      child: Icon(_getNotificationIcon(notification.type), size: 22.r, color: color),
+      child: Icon(
+        _getNotificationIcon(notification.type),
+        size: 22.r,
+        color: color,
+      ),
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -71,14 +81,17 @@ class NotificationItem extends StatelessWidget {
         SizedBox(height: 4.h),
         Text(
           notification.message,
-          style: TextStyle(fontSize: 13.sp, color: AppColors.textSecondaryLight),
+          style: TextStyle(
+            fontSize: 13.sp,
+            color: colors.textSecondary,
+          ),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
         SizedBox(height: 8.h),
         Text(
           notification.createdAt?.relative ?? '',
-          style: TextStyle(fontSize: 11.sp, color: AppColors.textTertiaryLight),
+          style: TextStyle(fontSize: 11.sp, color: colors.textTertiary),
         ),
       ],
     );
@@ -88,7 +101,10 @@ class NotificationItem extends StatelessWidget {
     return Container(
       width: 8.r,
       height: 8.r,
-      decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+      decoration: const BoxDecoration(
+        color: AppColors.primary,
+        shape: BoxShape.circle,
+      ),
     );
   }
 
@@ -126,4 +142,3 @@ class NotificationItem extends StatelessWidget {
     }
   }
 }
-

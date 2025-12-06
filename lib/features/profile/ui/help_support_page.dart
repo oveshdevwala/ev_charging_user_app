@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/di/injection.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 import '../bloc/bloc.dart';
@@ -22,18 +23,19 @@ class HelpSupportPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => SupportBloc(
-            repository: sl<ProfileRepository>(),
-          )..add(const LoadFAQ()),
+          create: (context) =>
+              SupportBloc(repository: sl<ProfileRepository>())
+                ..add(const LoadFAQ()),
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Help & Support'),
-        ),
+        backgroundColor: colors.background,
+        appBar: AppBar(title: const Text('Help & Support')),
         body: BlocBuilder<SupportBloc, SupportState>(
           builder: (context, state) {
             return SingleChildScrollView(
@@ -45,7 +47,11 @@ class HelpSupportPage extends StatelessWidget {
                   SizedBox(height: 24.h),
                   Text(
                     'Frequently Asked Questions',
-                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w700,
+                      color: colors.textPrimary,
+                    ),
                   ),
                   SizedBox(height: 16.h),
                   if (state.isLoadingFAQ)
@@ -53,7 +59,10 @@ class HelpSupportPage extends StatelessWidget {
                   else if (state.faq.isEmpty)
                     Text(
                       'No FAQs available',
-                      style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: colors.textSecondary,
+                      ),
                     )
                   else
                     ...state.faq.map((faq) => _buildFAQCard(context, faq)),
@@ -67,6 +76,8 @@ class HelpSupportPage extends StatelessWidget {
   }
 
   Widget _buildContactCard(BuildContext context) {
+    final colors = context.appColors;
+
     return Card(
       child: Padding(
         padding: EdgeInsets.all(16.r),
@@ -75,18 +86,29 @@ class HelpSupportPage extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Iconsax.message_question, size: 24.r, color: AppColors.primary),
+                Icon(
+                  Iconsax.message_question,
+                  size: 24.r,
+                  color: colors.primary,
+                ),
                 SizedBox(width: 12.w),
                 Text(
                   'Need Help?',
-                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    color: colors.textPrimary,
+                  ),
                 ),
               ],
             ),
             SizedBox(height: 12.h),
             Text(
-              'Can\'t find what you\'re looking for? Contact our support team.',
-              style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+              "Can't find what you're looking for? Contact our support team.",
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: colors.textSecondary,
+              ),
             ),
             SizedBox(height: 16.h),
             ElevatedButton.icon(
@@ -101,19 +123,28 @@ class HelpSupportPage extends StatelessWidget {
   }
 
   Widget _buildFAQCard(BuildContext context, Map<String, String> faq) {
+    final colors = context.appColors;
+
     return Card(
       margin: EdgeInsets.only(bottom: 12.h),
       child: ExpansionTile(
         title: Text(
           faq['question'] ?? '',
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+            color: colors.textPrimary,
+          ),
         ),
         children: [
           Padding(
             padding: EdgeInsets.all(16.r),
             child: Text(
               faq['answer'] ?? '',
-              style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: colors.textSecondary,
+              ),
             ),
           ),
         ],
@@ -121,4 +152,3 @@ class HelpSupportPage extends StatelessWidget {
     );
   }
 }
-

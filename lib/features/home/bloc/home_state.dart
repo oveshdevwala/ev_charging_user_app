@@ -8,12 +8,12 @@ library;
 
 import 'package:equatable/equatable.dart';
 
+import '../../../features/nearby_offers/data/models/partner_offer_model.dart';
 import '../../../models/bundle_model.dart';
 import '../../../models/offer_model.dart';
 import '../../../models/station_model.dart';
 import '../../../models/trip_route_model.dart';
 import '../../../models/user_activity_model.dart';
-import '../../../features/nearby_offers/data/models/partner_offer_model.dart';
 
 /// Home category enum for quick actions grid.
 enum HomeCategory {

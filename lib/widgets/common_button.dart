@@ -63,6 +63,7 @@ class CommonButton extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final theme = Theme.of(context);
     
     // Determine sizes based on button size
@@ -143,8 +144,8 @@ class CommonButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: backgroundColor ?? theme.colorScheme.primary,
             foregroundColor: foregroundColor ?? AppColors.onPrimary,
-            disabledBackgroundColor: AppColors.outlineLight,
-            disabledForegroundColor: AppColors.textDisabledLight,
+            disabledBackgroundColor: colors.outline,
+            disabledForegroundColor: colors.textDisabled,
             elevation: elevation ?? 0,
             padding: effectivePadding,
             minimumSize: Size(isFullWidth ? double.infinity : 0, height),
@@ -159,12 +160,12 @@ class CommonButton extends StatelessWidget {
           onPressed: effectiveOnPressed,
           style: OutlinedButton.styleFrom(
             foregroundColor: foregroundColor ?? theme.colorScheme.primary,
-            disabledForegroundColor: AppColors.textDisabledLight,
+            disabledForegroundColor: colors.textDisabled,
             padding: effectivePadding,
             minimumSize: Size(isFullWidth ? double.infinity : 0, height),
             side: BorderSide(
               color: effectiveDisabled
-                  ? AppColors.outlineLight
+                  ? colors.outline
                   : borderColor ?? theme.colorScheme.primary,
               width: 1.5,
             ),
@@ -179,7 +180,7 @@ class CommonButton extends StatelessWidget {
           onPressed: effectiveOnPressed,
           style: TextButton.styleFrom(
             foregroundColor: foregroundColor ?? theme.colorScheme.primary,
-            disabledForegroundColor: AppColors.textDisabledLight,
+            disabledForegroundColor: colors.textDisabled,
             padding: effectivePadding,
             minimumSize: Size(isFullWidth ? double.infinity : 0, height),
             shape: RoundedRectangleBorder(borderRadius: effectiveBorderRadius),
@@ -194,8 +195,8 @@ class CommonButton extends StatelessWidget {
           style: FilledButton.styleFrom(
             backgroundColor: backgroundColor ?? theme.colorScheme.primaryContainer,
             foregroundColor: foregroundColor ?? theme.colorScheme.onPrimaryContainer,
-            disabledBackgroundColor: AppColors.outlineLight,
-            disabledForegroundColor: AppColors.textDisabledLight,
+            disabledBackgroundColor: colors.outline,
+            disabledForegroundColor: colors.textDisabled,
             elevation: elevation ?? 0,
             padding: effectivePadding,
             minimumSize: Size(isFullWidth ? double.infinity : 0, height),
@@ -234,14 +235,15 @@ class SocialButton extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return OutlinedButton(
       onPressed: isLoading ? null : onPressed,
       style: OutlinedButton.styleFrom(
         backgroundColor: backgroundColor,
-        foregroundColor: foregroundColor ?? AppColors.textPrimaryLight,
+        foregroundColor: foregroundColor ?? colors.textPrimary,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
         minimumSize: Size(double.infinity, 52.h),
-        side: const BorderSide(color: AppColors.outlineLight),
+        side: BorderSide(color: colors.outline),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),

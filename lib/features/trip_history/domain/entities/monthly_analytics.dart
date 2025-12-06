@@ -1,12 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class MonthlyAnalytics extends Equatable {
-  final String month; // YYYY-MM
-  final double totalCost;
-  final double totalEnergy;
-  final double avgEfficiency;
-  final double comparisonPercentage;
-  final List<DailyBreakdown> trendData;
 
   const MonthlyAnalytics({
     required this.month,
@@ -16,6 +10,12 @@ class MonthlyAnalytics extends Equatable {
     required this.comparisonPercentage,
     required this.trendData,
   });
+  final String month; // YYYY-MM
+  final double totalCost;
+  final double totalEnergy;
+  final double avgEfficiency;
+  final double comparisonPercentage;
+  final List<DailyBreakdown> trendData;
 
   @override
   List<Object?> get props => [
@@ -29,15 +29,15 @@ class MonthlyAnalytics extends Equatable {
 }
 
 class DailyBreakdown extends Equatable {
-  final DateTime date;
-  final double cost;
-  final double energy;
 
   const DailyBreakdown({
     required this.date,
     required this.cost,
     required this.energy,
   });
+  final DateTime date;
+  final double cost;
+  final double energy;
 
   @override
   List<Object?> get props => [date, cost, energy];

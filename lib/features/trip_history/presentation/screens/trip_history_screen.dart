@@ -45,7 +45,7 @@ class TripHistoryScreen extends StatelessWidget {
                 if (state is TripHistoryExporting) {
                   return const Center(
                     child: Padding(
-                      padding: EdgeInsets.only(right: 16.0),
+                      padding: EdgeInsets.only(right: 16),
                       child: SizedBox(
                         width: 20,
                         height: 20,

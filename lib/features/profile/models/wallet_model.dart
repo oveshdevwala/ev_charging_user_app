@@ -74,7 +74,7 @@ class WalletTransactionModel extends Equatable {
 
   static String _typeToJson(WalletTransactionType type) => type.name;
 
-  static DateTime _dateTimeFromJson(dynamic value) {
+  static DateTime _dateTimeFromJson(value) {
     if (value is String) {
       return DateTime.parse(value);
     }

@@ -70,7 +70,7 @@ class _SettingsPageState extends State<SettingsPage> {
               SettingsTile(
                 icon: Iconsax.trash,
                 title: 'Delete Account',
-                titleColor: AppColors.error,
+                titleColor: context.appColors.danger,
                 onTap: () {},
               ),
             ],

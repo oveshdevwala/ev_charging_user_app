@@ -42,13 +42,14 @@ class StationCard extends StatelessWidget {
   }
   
   Widget _buildFullCard(BuildContext context) {
+    final colors = context.appColors;
     return GestureDetector(
       onTap: onTap,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: AppColors.outlineLight),
+          border: Border.all(color: colors.outline),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,6 +61,7 @@ class StationCard extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
                   child: _buildStationImage(
                     station.imageUrl,
+                    context: context,
                     height: 140.h,
                     width: double.infinity,
                     iconSize: 32.r,
@@ -74,21 +76,23 @@ class StationCard extends StatelessWidget {
                       onTap: onFavoriteTap,
                       child: Container(
                         padding: EdgeInsets.all(8.r),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        decoration: BoxDecoration(
+                          color: context.appColors.surface,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.shadowLight,
+                              color: context.appColors.textPrimary.withOpacity(0.1),
                               blurRadius: 8,
-                              offset: Offset(0, 2),
+                              offset: const Offset(0, 2),
                             ),
                           ],
                         ),
                         child: Icon(
                           station.isFavorite ? Iconsax.heart5 : Iconsax.heart,
                           size: 20.r,
-                          color: station.isFavorite ? AppColors.error : AppColors.textSecondaryLight,
+                          color: station.isFavorite
+                              ? context.appColors.danger
+                              : context.appColors.textSecondary,
                         ),
                       ),
                     ),
@@ -101,7 +105,7 @@ class StationCard extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.7),
+                        color: context.appColors.textPrimary.withOpacity(0.7),
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: Row(
@@ -110,7 +114,7 @@ class StationCard extends StatelessWidget {
                           Icon(
                             Iconsax.location,
                             size: 12.r,
-                            color: Colors.white,
+                            color: context.appColors.surface,
                           ),
                           SizedBox(width: 4.w),
                           Text(
@@ -118,7 +122,7 @@ class StationCard extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 11.sp,
                               fontWeight: FontWeight.w500,
-                              color: Colors.white,
+                              color: context.appColors.surface,
                             ),
                           ),
                         ],
@@ -138,7 +142,7 @@ class StationCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -149,7 +153,7 @@ class StationCard extends StatelessWidget {
                       Icon(
                         Iconsax.location,
                         size: 14.r,
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                       ),
                       SizedBox(width: 4.w),
                       Expanded(
@@ -157,7 +161,7 @@ class StationCard extends StatelessWidget {
                           station.address,
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: AppColors.textSecondaryLight,
+                            color: colors.textSecondary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -173,7 +177,7 @@ class StationCard extends StatelessWidget {
                         Icon(
                           Iconsax.star1,
                           size: 14.r,
-                          color: AppColors.ratingActive,
+                          color: colors.warning,
                         ),
                         SizedBox(width: 4.w),
                         Text(
@@ -181,14 +185,14 @@ class StationCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimaryLight,
+                            color: colors.textPrimary,
                           ),
                         ),
                         Text(
                           ' (${station.reviewCount})',
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: AppColors.textSecondaryLight,
+                            color: colors.textSecondary,
                           ),
                         ),
                         SizedBox(width: 12.w),
@@ -200,8 +204,8 @@ class StationCard extends StatelessWidget {
                           height: 8.r,
                           decoration: BoxDecoration(
                             color: station.hasAvailableChargers 
-                                ? AppColors.available 
-                                : AppColors.occupied,
+                                ? colors.success 
+                                : colors.warning,
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -212,8 +216,8 @@ class StationCard extends StatelessWidget {
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w500,
                             color: station.hasAvailableChargers 
-                                ? AppColors.available 
-                                : AppColors.textSecondaryLight,
+                                ? colors.success 
+                                : colors.textSecondary,
                           ),
                         ),
                       ],
@@ -239,6 +243,7 @@ class StationCard extends StatelessWidget {
   }
   
   Widget _buildCompactCard(BuildContext context) {
+    final colors = context.appColors;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -246,7 +251,7 @@ class StationCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: AppColors.outlineLight),
+          border: Border.all(color: colors.outline),
         ),
         child: Row(
           children: [
@@ -255,6 +260,7 @@ class StationCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.r),
               child: _buildStationImage(
                 station.imageUrl,
+                context: context,
                 width: 72.w,
                 height: 72.h,
                 iconSize: 24.r,
@@ -271,7 +277,7 @@ class StationCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -281,7 +287,7 @@ class StationCard extends StatelessWidget {
                     station.address,
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: colors.textSecondary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -293,7 +299,7 @@ class StationCard extends StatelessWidget {
                         Icon(
                           Iconsax.star1,
                           size: 12.r,
-                          color: AppColors.ratingActive,
+                          color: colors.warning,
                         ),
                         SizedBox(width: 2.w),
                         Text(
@@ -309,14 +315,14 @@ class StationCard extends StatelessWidget {
                         Icon(
                           Iconsax.location,
                           size: 12.r,
-                          color: AppColors.textSecondaryLight,
+                          color: colors.textSecondary,
                         ),
                         SizedBox(width: 2.w),
                         Text(
                           '${station.distance!.toStringAsFixed(1)} km',
                           style: TextStyle(
                             fontSize: 11.sp,
-                            color: AppColors.textSecondaryLight,
+                            color: colors.textSecondary,
                           ),
                         ),
                       ],
@@ -336,7 +342,7 @@ class StationCard extends StatelessWidget {
                     child: Icon(
                       station.isFavorite ? Iconsax.heart5 : Iconsax.heart,
                       size: 20.r,
-                      color: station.isFavorite ? AppColors.error : AppColors.textSecondaryLight,
+                      color: station.isFavorite ? colors.danger : colors.textSecondary,
                     ),
                   ),
                 if (onFavoriteTap != null) SizedBox(height: 8.h),
@@ -352,7 +358,7 @@ class StationCard extends StatelessWidget {
                   '/kWh',
                   style: TextStyle(
                     fontSize: 10.sp,
-                    color: AppColors.textSecondaryLight,
+                    color: colors.textSecondary,
                   ),
                 ),
               ],
@@ -366,10 +372,12 @@ class StationCard extends StatelessWidget {
   /// Helper to build station image with proper null/empty URL handling.
   Widget _buildStationImage(
     String? imageUrl, {
+    required BuildContext context,
     double? width,
     double? height,
     double iconSize = 32,
   }) {
+    final colors = context.appColors;
     // Check if URL is valid (not null, not empty, starts with http)
     final isValidUrl = imageUrl != null && 
         imageUrl.isNotEmpty && 
@@ -380,12 +388,12 @@ class StationCard extends StatelessWidget {
       return Container(
         width: width,
         height: height,
-        color: AppColors.outlineLight,
+        color: colors.outline,
         child: Center(
           child: Icon(
             Iconsax.building_4,
             size: iconSize,
-            color: AppColors.textTertiaryLight,
+            color: colors.textTertiary,
           ),
         ),
       );
@@ -399,7 +407,7 @@ class StationCard extends StatelessWidget {
       placeholder: (context, url) => Container(
         width: width,
         height: height,
-        color: AppColors.outlineLight,
+        color: colors.outline,
         child: Center(
           child: SizedBox(
             width: iconSize,
@@ -414,12 +422,12 @@ class StationCard extends StatelessWidget {
       errorWidget: (context, url, error) => Container(
         width: width,
         height: height,
-        color: AppColors.outlineLight,
+        color: colors.outline,
         child: Center(
           child: Icon(
             Iconsax.image,
             size: iconSize,
-            color: AppColors.textTertiaryLight,
+            color: colors.textTertiary,
           ),
         ),
       ),

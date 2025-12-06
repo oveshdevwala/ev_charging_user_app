@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/station_model.dart';
 
@@ -18,10 +19,12 @@ class BookingStationInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariantLight,
+        color: colors.surfaceVariant,
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Row(
@@ -30,20 +33,34 @@ class BookingStationInfo extends StatelessWidget {
             width: 56.r,
             height: 56.r,
             decoration: BoxDecoration(
-              color: AppColors.primaryContainer,
+              color: colors.primaryContainer,
               borderRadius: BorderRadius.circular(12.r),
             ),
-            child: Icon(Iconsax.flash_1, color: AppColors.primary, size: 28.r),
+            child: Icon(
+              Iconsax.flash_1,
+              color: colors.primary,
+              size: 28.r,
+            ),
           ),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(station.name, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
+                Text(
+                  station.name,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: colors.textPrimary,
+                  ),
+                ),
                 Text(
                   station.address,
-                  style: TextStyle(fontSize: 13.sp, color: AppColors.textSecondaryLight),
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: colors.textSecondary,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -55,4 +72,3 @@ class BookingStationInfo extends StatelessWidget {
     );
   }
 }
-

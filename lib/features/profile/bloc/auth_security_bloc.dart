@@ -27,7 +27,7 @@ class AuthSecurityBloc extends Bloc<AuthSecurityEvent, AuthSecurityState> {
     ChangePassword event,
     Emitter<AuthSecurityState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
     try {
       await _repository.changePassword(
         currentPassword: event.currentPassword,
@@ -36,13 +36,11 @@ class AuthSecurityBloc extends Bloc<AuthSecurityEvent, AuthSecurityState> {
       emit(state.copyWith(
         isLoading: false,
         successMessage: 'Password changed successfully',
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
         error: e.toString(),
-        successMessage: null,
       ));
     }
   }
@@ -51,14 +49,13 @@ class AuthSecurityBloc extends Bloc<AuthSecurityEvent, AuthSecurityState> {
     Toggle2FA event,
     Emitter<AuthSecurityState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
     try {
       // TODO: Implement 2FA toggle with backend
       await Future.delayed(const Duration(seconds: 1));
       emit(state.copyWith(
         isLoading: false,
         is2FAEnabled: event.enable,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -72,7 +69,7 @@ class AuthSecurityBloc extends Bloc<AuthSecurityEvent, AuthSecurityState> {
     Reauthenticate event,
     Emitter<AuthSecurityState> emit,
   ) async {
-    emit(state.copyWith(isReauthenticating: true, error: null));
+    emit(state.copyWith(isReauthenticating: true));
     try {
       final isValid = await _repository.reauthenticate(event.password);
       emit(state.copyWith(
@@ -93,13 +90,12 @@ class AuthSecurityBloc extends Bloc<AuthSecurityEvent, AuthSecurityState> {
     DeleteAccount event,
     Emitter<AuthSecurityState> emit,
   ) async {
-    emit(state.copyWith(isDeleting: true, error: null));
+    emit(state.copyWith(isDeleting: true));
     try {
       await _repository.deleteAccount(event.reason);
       emit(state.copyWith(
         isDeleting: false,
         isAccountDeleted: true,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -113,7 +109,7 @@ class AuthSecurityBloc extends Bloc<AuthSecurityEvent, AuthSecurityState> {
     ClearAuthError event,
     Emitter<AuthSecurityState> emit,
   ) {
-    emit(state.copyWith(error: null, successMessage: null));
+    emit(state.copyWith());
   }
 }
 

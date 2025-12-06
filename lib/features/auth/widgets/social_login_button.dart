@@ -6,6 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// Social login button for OAuth providers.
@@ -23,11 +24,13 @@ class SocialLoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
         padding: EdgeInsets.symmetric(vertical: 14.h),
-        side: const BorderSide(color: AppColors.outlineLight),
+        side: BorderSide(color: colors.outline),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),
@@ -35,11 +38,15 @@ class SocialLoginButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 24.r),
+          Icon(icon, size: 24.r, color: colors.textPrimary),
           SizedBox(width: 8.w),
           Text(
             label,
-            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              color: colors.textPrimary,
+            ),
           ),
         ],
       ),

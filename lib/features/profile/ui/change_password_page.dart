@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/di/injection.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/validators.dart';
 import '../../../widgets/common_button.dart';
@@ -45,26 +46,26 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return BlocProvider(
-      create: (context) => AuthSecurityBloc(
-        repository: sl<ProfileRepository>(),
-      ),
+      create: (context) =>
+          AuthSecurityBloc(repository: sl<ProfileRepository>()),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Change Password'),
-        ),
+        backgroundColor: colors.background,
+        appBar: AppBar(title: const Text('Change Password')),
         body: BlocListener<AuthSecurityBloc, AuthSecurityState>(
           listener: (context, state) {
             if (state.successMessage != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.successMessage!)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.successMessage!)));
               context.pop();
             }
             if (state.error != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.error!)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.error!)));
             }
           },
           child: SingleChildScrollView(
@@ -76,7 +77,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 children: [
                   Text(
                     'Enter your current password and choose a new one',
-                    style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: context.appColors.textSecondary,
+                    ),
                   ),
                   SizedBox(height: 24.h),
                   CommonTextField(
@@ -86,7 +90,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     obscureText: _obscureCurrentPassword,
                     suffix: IconButton(
                       icon: Icon(
-                        _obscureCurrentPassword ? Iconsax.eye_slash : Iconsax.eye,
+                        _obscureCurrentPassword
+                            ? Iconsax.eye_slash
+                            : Iconsax.eye,
                         size: 20.r,
                       ),
                       onPressed: () {
@@ -124,7 +130,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     obscureText: _obscureConfirmPassword,
                     suffix: IconButton(
                       icon: Icon(
-                        _obscureConfirmPassword ? Iconsax.eye_slash : Iconsax.eye,
+                        _obscureConfirmPassword
+                            ? Iconsax.eye_slash
+                            : Iconsax.eye,
                         size: 20.r,
                       ),
                       onPressed: () {
@@ -148,13 +156,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         onPressed: state.isLoading
                             ? null
                             : () {
-                                if (_formKey.currentState!.validate()) {
+                                if (_formKey.currentState?.validate() ?? false) {
                                   context.read<AuthSecurityBloc>().add(
-                                        ChangePassword(
-                                          currentPassword: _currentPasswordController.text,
-                                          newPassword: _newPasswordController.text,
-                                        ),
-                                      );
+                                    ChangePassword(
+                                      currentPassword:
+                                          _currentPasswordController.text,
+                                      newPassword: _newPasswordController.text,
+                                    ),
+                                  );
                                 }
                               },
                         isLoading: state.isLoading,
@@ -170,4 +179,3 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
 }
-

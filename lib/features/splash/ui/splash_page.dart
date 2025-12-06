@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 
@@ -43,13 +44,15 @@ class _SplashPageState extends State<SplashPage>
       duration: AppConstants.animationSlow,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
 
     _controller.forward();
   }
@@ -71,15 +74,17 @@ class _SplashPageState extends State<SplashPage>
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [AppColors.primary, AppColors.primaryDark],
+            colors: [colors.primary, colors.primaryContainer],
           ),
         ),
         child: Center(
@@ -94,11 +99,11 @@ class _SplashPageState extends State<SplashPage>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildLogo(),
+                _buildLogo(context),
                 SizedBox(height: 24.h),
-                _buildAppName(),
+                _buildAppName(context),
                 SizedBox(height: 8.h),
-                _buildTagline(),
+                _buildTagline(context),
               ],
             ),
           ),
@@ -107,44 +112,54 @@ class _SplashPageState extends State<SplashPage>
     );
   }
 
-  Widget _buildLogo() {
+  Widget _buildLogo(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       width: 100.r,
       height: 100.r,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: colors.shadow,
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
         ],
       ),
-      child: Icon(Icons.ev_station_rounded, size: 56.r, color: AppColors.primary),
+      child: Icon(
+        Icons.ev_station_rounded,
+        size: 56.r,
+        color: colors.primary,
+      ),
     );
   }
 
-  Widget _buildAppName() {
+  Widget _buildAppName(BuildContext context) {
+    final colors = context.appColors;
+
     return Text(
       AppStrings.appName,
       style: TextStyle(
         fontSize: 32.sp,
         fontWeight: FontWeight.w700,
-        color: Colors.white,
+        color: colors.textPrimary,
         letterSpacing: 1,
       ),
     );
   }
 
-  Widget _buildTagline() {
+  Widget _buildTagline(BuildContext context) {
+    final colors = context.appColors;
+
     return Text(
       AppStrings.appTagline,
       style: TextStyle(
         fontSize: 14.sp,
         fontWeight: FontWeight.w400,
-        color: Colors.white.withValues(alpha: 0.8),
+        color: colors.textSecondary,
         letterSpacing: 0.5,
       ),
     );

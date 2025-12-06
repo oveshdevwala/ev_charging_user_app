@@ -14,7 +14,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../data/models/promo_code_model.dart';
 
 /// Promo code input field with apply button.
-/// 
+///
 /// Features:
 /// - Auto-uppercase input
 /// - Loading state during validation
@@ -22,7 +22,8 @@ import '../../data/models/promo_code_model.dart';
 /// - Error state with message
 class PromoCodeInputField extends StatefulWidget {
   const PromoCodeInputField({
-    required this.onApply, super.key,
+    required this.onApply,
+    super.key,
     this.onRemove,
     this.isLoading = false,
     this.appliedPromo,
@@ -62,6 +63,7 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // If promo is applied, show success state
@@ -74,10 +76,12 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
       children: [
         DecoratedBox(
           decoration: BoxDecoration(
-            color: isDark ? AppColors.surfaceVariantDark : AppColors.surfaceVariantLight,
+            color: isDark
+                ? colors.surfaceVariant
+                : colors.surfaceVariant,
             borderRadius: BorderRadius.circular(12.r),
             border: widget.errorMessage != null
-                ? Border.all(color: AppColors.error, width: 1.5)
+                ? Border.all(color: colors.danger, width: 1.5)
                 : null,
           ),
           child: Row(
@@ -85,7 +89,9 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
               SizedBox(width: 12.w),
               Icon(
                 Iconsax.ticket_discount,
-                color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
+                color: isDark
+                    ? colors.textTertiary
+                    : colors.textTertiary,
                 size: 20.r,
               ),
               SizedBox(width: 8.w),
@@ -98,7 +104,9 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1,
-                    color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                    color: isDark
+                        ? colors.textPrimary
+                        : colors.textPrimary,
                   ),
                   decoration: InputDecoration(
                     hintText: widget.hintText,
@@ -106,7 +114,9 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w400,
                       letterSpacing: 0,
-                      color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
+                      color: isDark
+                          ? colors.textTertiary
+                          : colors.textTertiary,
                     ),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(vertical: 14.h),
@@ -123,15 +133,12 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
           SizedBox(height: 6.h),
           Row(
             children: [
-              Icon(Iconsax.info_circle, size: 14.r, color: AppColors.error),
+              Icon(Iconsax.info_circle, size: 14.r, color: colors.danger),
               SizedBox(width: 4.w),
               Expanded(
                 child: Text(
                   widget.errorMessage!,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: AppColors.error,
-                  ),
+                  style: TextStyle(fontSize: 12.sp, color: colors.danger),
                 ),
               ),
             ],
@@ -169,7 +176,7 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
           style: TextStyle(
             fontSize: 13.sp,
             fontWeight: FontWeight.w600,
-            color: Colors.white,
+            color: context.appColors.surface,
           ),
         ),
       ),
@@ -179,10 +186,11 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
   Widget _buildAppliedState(bool isDark) {
     final promo = widget.appliedPromo!;
 
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: AppColors.successContainer,
+        color: colors.successContainer,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(color: AppColors.success.withValues(alpha: 0.3)),
       ),
@@ -213,7 +221,7 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.successDark,
+                        color: colors.successContainer,
                         letterSpacing: 1,
                       ),
                     ),
@@ -232,12 +240,12 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
                 child: Container(
                   padding: EdgeInsets.all(6.r),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: context.appColors.surface,
                     borderRadius: BorderRadius.circular(6.r),
                   ),
                   child: Icon(
                     Iconsax.close_circle,
-                    color: AppColors.error,
+                    color: colors.danger,
                     size: 16.r,
                   ),
                 ),
@@ -248,7 +256,7 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: context.appColors.surface,
               borderRadius: BorderRadius.circular(6.r),
             ),
             child: Row(
@@ -258,7 +266,7 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
                   'You save: ',
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: AppColors.textSecondaryLight,
+                    color: colors.textSecondary,
                   ),
                 ),
                 Text(
@@ -288,7 +296,9 @@ class _PromoCodeInputFieldState extends State<PromoCodeInputField> {
 /// Available promo code card for selection
 class PromoCodeCard extends StatelessWidget {
   const PromoCodeCard({
-    required this.promo, required this.onApply, super.key,
+    required this.promo,
+    required this.onApply,
+    super.key,
     this.isSelected = false,
   });
 
@@ -298,6 +308,7 @@ class PromoCodeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
@@ -306,13 +317,17 @@ class PromoCodeCard extends StatelessWidget {
         padding: EdgeInsets.all(12.r),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primaryContainer
-              : (isDark ? AppColors.surfaceVariantDark : AppColors.surfaceVariantLight),
+              ? colors.primaryContainer
+              : (isDark
+                    ? colors.surfaceVariant
+                    : colors.surfaceVariant),
           borderRadius: BorderRadius.circular(12.r),
           border: isSelected
               ? Border.all(color: AppColors.primary, width: 2)
               : Border.all(
-                  color: isDark ? AppColors.outlineDark : AppColors.outlineLight,
+                  color: isDark
+                      ? colors.outline
+                      : colors.outline,
                 ),
         ),
         child: Row(
@@ -339,7 +354,9 @@ class PromoCodeCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w700,
-                      color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                      color: isDark
+                          ? colors.textPrimary
+                          : colors.textPrimary,
                       letterSpacing: 1,
                     ),
                   ),
@@ -348,7 +365,9 @@ class PromoCodeCard extends StatelessWidget {
                     promo.title ?? promo.description ?? promo.formattedDiscount,
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                      color: isDark
+                          ? colors.textSecondary
+                          : colors.textSecondary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -367,7 +386,7 @@ class PromoCodeCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11.sp,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: context.appColors.surface,
                 ),
               ),
             ),
@@ -377,4 +396,3 @@ class PromoCodeCard extends StatelessWidget {
     );
   }
 }
-

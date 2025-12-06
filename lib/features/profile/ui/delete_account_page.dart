@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/di/injection.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/validators.dart';
 import '../../../routes/app_routes.dart';
@@ -42,18 +43,18 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => AuthSecurityBloc(
-            repository: sl<ProfileRepository>(),
-          ),
+          create: (context) =>
+              AuthSecurityBloc(repository: sl<ProfileRepository>()),
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Delete Account'),
-        ),
+        backgroundColor: colors.background,
+        appBar: AppBar(title: const Text('Delete Account')),
         body: BlocListener<AuthSecurityBloc, AuthSecurityState>(
           listener: (context, state) {
             if (state.isReauthenticated) {
@@ -68,15 +69,25 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
                 builder: (dialogContext) => BlocProvider.value(
                   value: context.read<AuthSecurityBloc>(),
                   child: AlertDialog(
-                    title: const Text('Account Deleted'),
-                    content: const Text('Your account has been permanently deleted.'),
+                    backgroundColor: colors.surface,
+                    title: Text(
+                      'Account Deleted',
+                      style: TextStyle(color: colors.textPrimary),
+                    ),
+                    content: Text(
+                      'Your account has been permanently deleted.',
+                      style: TextStyle(color: colors.textSecondary),
+                    ),
                     actions: [
                       TextButton(
                         onPressed: () {
                           Navigator.pop(dialogContext);
                           context.go(AppRoutes.login.path);
                         },
-                        child: const Text('OK'),
+                        child: Text(
+                          'OK',
+                          style: TextStyle(color: colors.primary),
+                        ),
                       ),
                     ],
                   ),
@@ -84,9 +95,9 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
               );
             }
             if (state.error != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.error!)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.error!)));
             }
           },
           child: SingleChildScrollView(
@@ -96,21 +107,24 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Icon(
-                    Iconsax.warning_2,
-                    size: 64.r,
-                    color: AppColors.error,
-                  ),
+                  Icon(Iconsax.warning_2, size: 64.r, color: colors.danger),
                   SizedBox(height: 16.h),
                   Text(
                     'Delete Account',
-                    style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w700,
+                      color: colors.textPrimary,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 16.h),
                   Text(
                     'This action cannot be undone. All your data will be permanently deleted.',
-                    style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: colors.textSecondary,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 32.h),
@@ -125,15 +139,15 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
                     SizedBox(height: 16.h),
                     BlocBuilder<AuthSecurityBloc, AuthSecurityState>(
                       builder: (context, state) {
-                      return CommonButton(
-                        label: 'Verify Password',
+                        return CommonButton(
+                          label: 'Verify Password',
                           onPressed: state.isReauthenticating
                               ? null
                               : () {
                                   if (_formKey.currentState!.validate()) {
                                     context.read<AuthSecurityBloc>().add(
-                                          Reauthenticate(_passwordController.text),
-                                        );
+                                      Reauthenticate(_passwordController.text),
+                                    );
                                   }
                                 },
                           isLoading: state.isReauthenticating,
@@ -155,19 +169,21 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
                     SizedBox(height: 32.h),
                     BlocBuilder<AuthSecurityBloc, AuthSecurityState>(
                       builder: (context, state) {
-                      return CommonButton(
-                        label: 'Delete Account',
+                        return CommonButton(
+                          label: 'Delete Account',
                           onPressed: state.isDeleting
                               ? null
                               : () {
                                   if (_formKey.currentState!.validate()) {
                                     context.read<AuthSecurityBloc>().add(
-                                          DeleteAccount(_confirmTextController.text),
-                                        );
+                                      DeleteAccount(
+                                        _confirmTextController.text,
+                                      ),
+                                    );
                                   }
                                 },
                           isLoading: state.isDeleting,
-                          backgroundColor: AppColors.error,
+                          backgroundColor: colors.danger,
                         );
                       },
                     ),
@@ -181,4 +197,3 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
     );
   }
 }
-

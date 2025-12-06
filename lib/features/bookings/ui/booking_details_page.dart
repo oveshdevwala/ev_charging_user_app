@@ -4,6 +4,7 @@
 /// Route: /bookingDetails/:id
 library;
 
+import 'package:ev_charging_user_app/core/extensions/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
@@ -50,33 +51,38 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
+      backgroundColor: colors.background,
       appBar: const AppAppBar(title: AppStrings.bookingDetails),
       body: LoadingWrapper(
         isLoading: _isLoading,
         error: _booking == null && !_isLoading ? 'Booking not found' : null,
-        child: _booking != null ? _buildContent() : const SizedBox(),
+        child: _booking != null ? _buildContent(context) : const SizedBox(),
       ),
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
+    final colors = context.appColors;
+
     return SingleChildScrollView(
       padding: EdgeInsets.all(20.r),
       child: Column(
         children: [
-          _buildStatusCard(),
+          _buildStatusCard(context),
           SizedBox(height: 20.h),
-          _buildDetailsCard(),
+          _buildDetailsCard(context),
           SizedBox(height: 20.h),
-          _buildPaymentCard(),
+          _buildPaymentCard(context),
           SizedBox(height: 32.h),
           if (_booking!.isUpcoming)
             CommonButton(
               label: AppStrings.cancelBooking,
               variant: ButtonVariant.outlined,
-              foregroundColor: AppColors.error,
-              borderColor: AppColors.error,
+              foregroundColor: colors.danger,
+              borderColor: colors.danger,
               onPressed: _onCancelPressed,
             ),
         ],
@@ -84,8 +90,10 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
     );
   }
 
-  Widget _buildStatusCard() {
-    final color = _getStatusColor(_booking!.status);
+  Widget _buildStatusCard(BuildContext context) {
+    final colors = context.appColors;
+    final color = _getStatusColor(context, _booking!.status);
+
     return Container(
       padding: EdgeInsets.all(24.r),
       decoration: BoxDecoration(
@@ -108,10 +116,7 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
             SizedBox(height: 8.h),
             Text(
               'Starts at ${_booking!.startTime.formattedTime}',
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
             ),
           ],
         ],
@@ -119,93 +124,140 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
     );
   }
 
-  Widget _buildDetailsCard() {
+  Widget _buildDetailsCard(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: colors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Booking Details',
-            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600,
+              color: colors.textPrimary,
+            ),
           ),
           SizedBox(height: 16.h),
           _buildDetailRow(
+            context,
             Iconsax.flash_1,
             'Station',
             _booking!.stationName ?? '-',
           ),
-          _buildDetailRow(Iconsax.cpu, 'Charger', _booking!.chargerName ?? '-'),
           _buildDetailRow(
+            context,
+            Iconsax.cpu,
+            'Charger',
+            _booking!.chargerName ?? '-',
+          ),
+          _buildDetailRow(
+            context,
             Iconsax.calendar_1,
             'Date',
             _booking!.startTime.formatted,
           ),
           _buildDetailRow(
+            context,
             Iconsax.clock,
             'Time',
-            _booking!.startTime.formattedTime,
+            '${_booking!.startTime.formattedTime} - ${_booking!.endTime?.formattedTime}',
           ),
           _buildDetailRow(
+            context,
             Iconsax.timer_1,
             'Duration',
-            _booking!.durationDisplay,
+            '${_booking!.durationDisplay} minutes',
           ),
-          if (_booking!.energyDelivered != null)
-            _buildDetailRow(
-              Iconsax.battery_charging,
-              'Energy',
-              '${_booking!.energyDelivered!.toStringAsFixed(1)} kWh',
-            ),
         ],
       ),
     );
   }
 
-  Widget _buildPaymentCard() {
+  Widget _buildDetailRow(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
+    final colors = context.appColors;
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: 16.h),
+      child: Row(
+        children: [
+          Icon(icon, size: 20.r, color: colors.textSecondary),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: colors.textSecondary,
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                    color: colors.textPrimary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPaymentCard(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: colors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Payment',
-            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600,
+              color: colors.textPrimary,
+            ),
           ),
           SizedBox(height: 16.h),
-          _buildPaymentRow(
-            'Estimated Cost',
-            '\$${_booking!.estimatedCost.toStringAsFixed(2)}',
-          ),
-          if (_booking!.actualCost != null)
-            _buildPaymentRow(
-              'Actual Cost',
-              '\$${_booking!.actualCost!.toStringAsFixed(2)}',
-            ),
-          Divider(height: 24.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Total',
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+                'Total Cost',
+                style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
               ),
               Text(
-                _booking!.costDisplay,
+                '\$${_booking!.actualCost?.toStringAsFixed(2) ?? '0.00'}',
                 style: TextStyle(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
+                  color: colors.primary,
                 ),
               ),
             ],
@@ -215,122 +267,60 @@ class _BookingDetailsPageState extends State<BookingDetailsPage> {
     );
   }
 
-  Widget _buildDetailRow(IconData icon, String label, String value) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        children: [
-          Icon(icon, size: 20.r, color: AppColors.textSecondaryLight),
-          SizedBox(width: 12.w),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
-            ),
-          ),
-          const Spacer(),
-          Text(
-            value,
-            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
-          ),
-        ],
-      ),
-    );
-  }
+  Color _getStatusColor(BuildContext context, BookingStatus status) {
+    final colors = context.appColors;
 
-  Widget _buildPaymentRow(String label, String value) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Color _getStatusColor(BookingStatus status) {
     switch (status) {
-      case BookingStatus.pending:
-        return AppColors.warning;
       case BookingStatus.confirmed:
-        return AppColors.info;
-      case BookingStatus.inProgress:
-        return AppColors.charging;
-      case BookingStatus.completed:
-        return AppColors.success;
+        return colors.success;
       case BookingStatus.cancelled:
+        return colors.danger;
+      case BookingStatus.completed:
+        return colors.primary;
+      case BookingStatus.pending:
+        return colors.warning;
+      case BookingStatus.inProgress:
+        return colors.primary;
       case BookingStatus.failed:
-        return AppColors.error;
+        return colors.danger;
     }
   }
 
   IconData _getStatusIcon(BookingStatus status) {
     switch (status) {
-      case BookingStatus.pending:
-        return Iconsax.clock;
       case BookingStatus.confirmed:
         return Iconsax.tick_circle;
-      case BookingStatus.inProgress:
-        return Iconsax.flash_1;
+      case BookingStatus.cancelled:
+        return Iconsax.close_circle;
       case BookingStatus.completed:
         return Iconsax.tick_circle;
-      case BookingStatus.cancelled:
+      case BookingStatus.pending:
+        return Iconsax.clock;
+      case BookingStatus.inProgress:
+        return Iconsax.flash_1;
       case BookingStatus.failed:
-        return Iconsax.close_circle;
+        return Iconsax.danger;
     }
   }
 
   String _getStatusText(BookingStatus status) {
     switch (status) {
-      case BookingStatus.pending:
-        return 'Pending';
       case BookingStatus.confirmed:
         return 'Confirmed';
-      case BookingStatus.inProgress:
-        return 'Charging';
-      case BookingStatus.completed:
-        return 'Completed';
       case BookingStatus.cancelled:
         return 'Cancelled';
+      case BookingStatus.completed:
+        return 'Completed';
+      case BookingStatus.pending:
+        return 'Pending';
+      case BookingStatus.inProgress:
+        return 'In Progress';
       case BookingStatus.failed:
         return 'Failed';
     }
   }
 
   void _onCancelPressed() {
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Cancel Booking'),
-        content: const Text('Are you sure you want to cancel this booking?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('No'),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await _bookingRepository.cancelBooking(_booking!.id);
-             await _loadBooking();
-            },
-            child: const Text('Yes', style: TextStyle(color: AppColors.error)),
-          ),
-        ],
-      ),
-    );
+    // TODO: Implement cancel booking
   }
 }

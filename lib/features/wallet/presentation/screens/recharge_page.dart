@@ -21,7 +21,7 @@ import '../blocs/blocs.dart';
 import '../widgets/widgets.dart';
 
 /// Recharge page for adding money to wallet.
-/// 
+///
 /// Flow:
 /// 1. Select amount (quick or custom)
 /// 2. Apply promo code (optional)
@@ -33,9 +33,9 @@ class RechargePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RechargeCubit(
-        walletRepository: DummyWalletRepository(),
-      )..loadPromoCodes(),
+      create: (context) =>
+          RechargeCubit(walletRepository: DummyWalletRepository())
+            ..loadPromoCodes(),
       child: const _RechargePageContent(),
     );
   }
@@ -46,6 +46,7 @@ class _RechargePageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return BlocConsumer<RechargeCubit, RechargeState>(
@@ -56,10 +57,12 @@ class _RechargePageContent extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+          backgroundColor: isDark
+              ? colors.background
+              : colors.background,
           appBar: const AppAppBar(title: 'Recharge Wallet'),
           body: state.isProcessingPayment
-              ? _buildProcessingState()
+              ? _buildProcessingState(context)
               : _buildContent(context, state, isDark),
           bottomNavigationBar: state.isSuccess
               ? null
@@ -69,7 +72,8 @@ class _RechargePageContent extends StatelessWidget {
     );
   }
 
-  Widget _buildProcessingState() {
+  Widget _buildProcessingState(BuildContext context) {
+    final colors = context.appColors;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -85,17 +89,14 @@ class _RechargePageContent extends StatelessWidget {
           SizedBox(height: 24.h),
           Text(
             'Processing Payment...',
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
           ),
           SizedBox(height: 8.h),
           Text(
             'Please wait while we process your payment',
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
+              color: colors.textSecondary,
             ),
           ),
         ],
@@ -138,15 +139,18 @@ class _RechargePageContent extends StatelessWidget {
           SizedBox(height: 24.h),
 
           // Order Summary
-          if (state.hasValidAmount)
-            _buildOrderSummary(state, isDark),
+          if (state.hasValidAmount) _buildOrderSummary(context, state, isDark),
         ],
       ),
     );
   }
 
   Widget _buildPromoSection(
-      BuildContext context, RechargeState state, bool isDark) {
+    BuildContext context,
+    RechargeState state,
+    bool isDark,
+  ) {
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -155,7 +159,9 @@ class _RechargePageContent extends StatelessWidget {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
-            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+            color: isDark
+                ? colors.textPrimary
+                : colors.textPrimary,
           ),
         ),
         SizedBox(height: 12.h),
@@ -180,11 +186,15 @@ class _RechargePageContent extends StatelessWidget {
             style: TextStyle(
               fontSize: 13.sp,
               fontWeight: FontWeight.w500,
-              color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+              color: isDark
+                  ? colors.textSecondary
+                  : colors.textSecondary,
             ),
           ),
           SizedBox(height: 8.h),
-          ...state.availablePromos.take(3).map(
+          ...state.availablePromos
+              .take(3)
+              .map(
                 (promo) => Padding(
                   padding: EdgeInsets.only(bottom: 8.h),
                   child: PromoCodeCard(
@@ -201,7 +211,11 @@ class _RechargePageContent extends StatelessWidget {
   }
 
   Widget _buildPaymentMethods(
-      BuildContext context, RechargeState state, bool isDark) {
+    BuildContext context,
+    RechargeState state,
+    bool isDark,
+  ) {
+    final colors = context.appColors;
     final methods = [
       _PaymentMethodData(
         id: 'credit_card',
@@ -243,7 +257,9 @@ class _RechargePageContent extends StatelessWidget {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
-            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+            color: isDark
+                ? colors.textPrimary
+                : colors.textPrimary,
           ),
         ),
         SizedBox(height: 12.h),
@@ -261,11 +277,14 @@ class _RechargePageContent extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderSummary(RechargeState state, bool isDark) {
+  Widget _buildOrderSummary(BuildContext context, RechargeState state, bool isDark) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceVariantDark : AppColors.surfaceVariantLight,
+        color: isDark
+            ? colors.surfaceVariant
+            : colors.surfaceVariant,
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
@@ -276,18 +295,20 @@ class _RechargePageContent extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+              color: isDark
+                  ? colors.textPrimary
+                  : colors.textPrimary,
             ),
           ),
           SizedBox(height: 16.h),
-          _buildSummaryRow(
+          _buildSummaryRow(context,
             'Recharge Amount',
             '\$${state.effectiveAmount.toStringAsFixed(2)}',
             isDark,
           ),
           if (state.hasPromo) ...[
             SizedBox(height: 8.h),
-            _buildSummaryRow(
+            _buildSummaryRow(context,
               'Discount (${state.appliedPromo!.code})',
               '-\$${state.discountAmount.toStringAsFixed(2)}',
               isDark,
@@ -296,10 +317,10 @@ class _RechargePageContent extends StatelessWidget {
           ],
           SizedBox(height: 8.h),
           Divider(
-            color: isDark ? AppColors.outlineDark : AppColors.outlineLight,
+            color: isDark ? colors.outline : colors.outline,
           ),
           SizedBox(height: 8.h),
-          _buildSummaryRow(
+          _buildSummaryRow(context,
             'Total',
             '\$${state.finalAmount.toStringAsFixed(2)}',
             isDark,
@@ -311,12 +332,13 @@ class _RechargePageContent extends StatelessWidget {
   }
 
   Widget _buildSummaryRow(
+    BuildContext context,
     String label,
     String value,
     bool isDark, {
     Color? valueColor,
     bool isBold = false,
-  }) {
+  }) {final colors = context.appColors;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -325,7 +347,9 @@ class _RechargePageContent extends StatelessWidget {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: isBold ? FontWeight.w600 : FontWeight.w400,
-            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+            color: isDark
+                ? colors.textSecondary
+                : colors.textSecondary,
           ),
         ),
         Text(
@@ -333,7 +357,11 @@ class _RechargePageContent extends StatelessWidget {
           style: TextStyle(
             fontSize: isBold ? 18.sp : 14.sp,
             fontWeight: isBold ? FontWeight.w700 : FontWeight.w600,
-            color: valueColor ?? (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
+            color:
+                valueColor ??
+                (isDark
+                    ? colors.textPrimary
+                    : colors.textPrimary),
           ),
         ),
       ],
@@ -341,11 +369,14 @@ class _RechargePageContent extends StatelessWidget {
   }
 
   Widget _buildBottomBar(
-      BuildContext context, RechargeState state, bool isDark) {
+    BuildContext context,
+    RechargeState state,
+    bool isDark,
+  ) {final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+        color: isDark ? colors.surface : colors.surface,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -366,7 +397,9 @@ class _RechargePageContent extends StatelessWidget {
                     'Total Amount',
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                      color: isDark
+                          ? colors.textSecondary
+                          : colors.textSecondary,
                     ),
                   ),
                   Text(
@@ -416,7 +449,6 @@ class _RechargePageContent extends StatelessWidget {
 }
 
 class _PaymentMethodData {
-
   _PaymentMethodData({
     required this.id,
     required this.name,
@@ -444,6 +476,7 @@ class _PaymentMethodTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -452,13 +485,15 @@ class _PaymentMethodTile extends StatelessWidget {
         padding: EdgeInsets.all(14.r),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primaryContainer
-              : (isDark ? AppColors.surfaceVariantDark : AppColors.surfaceLight),
+              ? colors.primaryContainer
+              : (isDark
+                    ? colors.surfaceVariant
+                    : colors.surface),
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
             color: isSelected
                 ? AppColors.primary
-                : (isDark ? AppColors.outlineDark : AppColors.outlineLight),
+                : (isDark ? colors.outline : colors.outline),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -469,14 +504,18 @@ class _PaymentMethodTile extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primary.withValues(alpha: 0.1)
-                    : (isDark ? AppColors.surfaceDark : AppColors.surfaceVariantLight),
+                    : (isDark
+                          ? colors.surface
+                          : colors.surfaceVariant),
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: Icon(
                 method.icon,
                 color: isSelected
                     ? AppColors.primary
-                    : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight),
+                    : (isDark
+                          ? colors.textSecondary
+                          : colors.textSecondary),
                 size: 22.r,
               ),
             ),
@@ -490,14 +529,18 @@ class _PaymentMethodTile extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                      color: isDark
+                          ? colors.textPrimary
+                          : colors.textPrimary,
                     ),
                   ),
                   Text(
                     method.subtitle,
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
+                      color: isDark
+                          ? colors.textTertiary
+                          : colors.textTertiary,
                     ),
                   ),
                 ],
@@ -512,7 +555,7 @@ class _PaymentMethodTile extends StatelessWidget {
                 ),
                 child: Icon(
                   Icons.check,
-                  color: Colors.white,
+                  color: context.appColors.surface,
                   size: 14.r,
                 ),
               ),
@@ -536,6 +579,7 @@ class _SuccessBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(24.r),
       child: Column(
@@ -544,8 +588,8 @@ class _SuccessBottomSheet extends StatelessWidget {
           Container(
             width: 80.r,
             height: 80.r,
-            decoration: const BoxDecoration(
-              color: AppColors.successContainer,
+            decoration:  BoxDecoration(
+              color: colors.successContainer,
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -557,43 +601,36 @@ class _SuccessBottomSheet extends StatelessWidget {
           SizedBox(height: 24.h),
           Text(
             'Payment Successful!',
-            style: TextStyle(
-              fontSize: 22.sp,
-              fontWeight: FontWeight.w700,
-            ),
+            style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w700),
           ),
           SizedBox(height: 8.h),
           Text(
             '\$${amount.toStringAsFixed(2)} added to your wallet',
             style: TextStyle(
               fontSize: 16.sp,
-              color: AppColors.textSecondaryLight,
+              color: colors.textSecondary,
             ),
           ),
           SizedBox(height: 16.h),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             decoration: BoxDecoration(
-              color: AppColors.surfaceVariantLight,
+              color: colors.surfaceVariant,
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Text(
               'Transaction ID: $transactionId',
               style: TextStyle(
                 fontSize: 12.sp,
-                color: AppColors.textTertiaryLight,
+                color: colors.textTertiary,
               ),
             ),
           ),
           SizedBox(height: 32.h),
-          CommonButton(
-            label: 'Done',
-            onPressed: onDone,
-          ),
+          CommonButton(label: 'Done', onPressed: onDone),
           SizedBox(height: 16.h),
         ],
       ),
     );
   }
 }
-

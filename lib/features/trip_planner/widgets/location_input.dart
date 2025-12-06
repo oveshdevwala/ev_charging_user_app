@@ -10,20 +10,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../models/models.dart';
 
 /// Location input type.
-enum LocationInputType {
-  origin,
-  destination,
-  waypoint,
-}
+enum LocationInputType { origin, destination, waypoint }
 
 /// Location input widget with search and autocomplete.
 class LocationInput extends StatelessWidget {
   const LocationInput({
-    required this.type, required this.onTap, super.key,
+    required this.type,
+    required this.onTap,
+    super.key,
     this.location,
     this.onClear,
     this.placeholder,
@@ -39,26 +38,27 @@ class LocationInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final hasLocation = location != null;
-    
+
     final IconData icon;
     final Color iconColor;
     final String defaultPlaceholder;
-    
+
     switch (type) {
       case LocationInputType.origin:
         icon = Iconsax.location;
-        iconColor = AppColors.primary;
+        iconColor = context.appColors.primary;
         defaultPlaceholder = 'Enter origin';
         break;
       case LocationInputType.destination:
         icon = Iconsax.flag;
-        iconColor = AppColors.error;
+        iconColor = context.appColors.danger;
         defaultPlaceholder = 'Enter destination';
         break;
       case LocationInputType.waypoint:
         icon = Iconsax.add_circle;
-        iconColor = AppColors.secondary;
+        iconColor = context.appColors.secondary;
         defaultPlaceholder = 'Add waypoint';
         break;
     }
@@ -70,12 +70,12 @@ class LocationInput extends StatelessWidget {
         decoration: BoxDecoration(
           color: enabled
               ? Theme.of(context).cardColor
-              : AppColors.surfaceVariantLight,
+              : context.appColors.surfaceVariant,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
             color: hasLocation
                 ? iconColor.withValues(alpha: 0.5)
-                : AppColors.outlineLight,
+                : context.appColors.outline,
             width: 1.5,
           ),
         ),
@@ -88,11 +88,7 @@ class LocationInput extends StatelessWidget {
                 color: iconColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8.r),
               ),
-              child: Icon(
-                icon,
-                size: 18.r,
-                color: iconColor,
-              ),
+              child: Icon(icon, size: 18.r, color: iconColor),
             ),
             SizedBox(width: 12.w),
             Expanded(
@@ -106,7 +102,7 @@ class LocationInput extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight,
+                        color: context.appColors.textPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -117,7 +113,7 @@ class LocationInput extends StatelessWidget {
                         location!.address!,
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: AppColors.textSecondaryLight,
+                          color: context.appColors.textSecondary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -128,7 +124,7 @@ class LocationInput extends StatelessWidget {
                       placeholder ?? defaultPlaceholder,
                       style: TextStyle(
                         fontSize: 14.sp,
-                        color: AppColors.textTertiaryLight,
+                        color: colors.textTertiary,
                       ),
                     ),
                   ],
@@ -143,7 +139,7 @@ class LocationInput extends StatelessWidget {
                   child: Icon(
                     Iconsax.close_circle,
                     size: 20.r,
-                    color: AppColors.textSecondaryLight,
+                    color: context.appColors.textSecondary,
                   ),
                 ),
               ),
@@ -157,7 +153,9 @@ class LocationInput extends StatelessWidget {
 /// Origin/Destination input pair with swap button.
 class LocationInputPair extends StatelessWidget {
   const LocationInputPair({
-    required this.onOriginTap, required this.onDestinationTap, super.key,
+    required this.onOriginTap,
+    required this.onDestinationTap,
+    super.key,
     this.origin,
     this.destination,
     this.onSwap,
@@ -196,13 +194,13 @@ class LocationInputPair extends StatelessWidget {
                     Container(
                       width: 2,
                       height: 16.h,
-                      decoration: const BoxDecoration(
+                      decoration:  BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            AppColors.primary,
-                            AppColors.error,
+                            context.appColors.primary,
+                            context.appColors.danger,
                           ],
                         ),
                       ),
@@ -230,16 +228,14 @@ class LocationInputPair extends StatelessWidget {
                 width: 40.r,
                 height: 40.r,
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceVariantLight,
+                  color: context.appColors.surfaceVariant,
                   borderRadius: BorderRadius.circular(10.r),
-                  border: Border.all(
-                    color: AppColors.outlineLight,
-                  ),
+                  border: Border.all(color: context.appColors.outline),
                 ),
                 child: Icon(
                   Iconsax.arrow_swap_horizontal,
                   size: 18.r,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
               ),
             ),
@@ -253,7 +249,9 @@ class LocationInputPair extends StatelessWidget {
 /// Location search results list.
 class LocationSearchResults extends StatelessWidget {
   const LocationSearchResults({
-    required this.results, required this.onLocationSelected, super.key,
+    required this.results,
+    required this.onLocationSelected,
+    super.key,
     this.isLoading = false,
   });
 
@@ -263,13 +261,14 @@ class LocationSearchResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     if (isLoading) {
       return Padding(
         padding: EdgeInsets.all(24.r),
-        child: const Center(
+        child:  Center(
           child: CircularProgressIndicator(
             strokeWidth: 2,
-            color: AppColors.primary,
+            color: context.appColors.primary,
           ),
         ),
       );
@@ -283,7 +282,7 @@ class LocationSearchResults extends StatelessWidget {
             'No locations found',
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
+              color: context.appColors.textSecondary,
             ),
           ),
         ),
@@ -294,10 +293,8 @@ class LocationSearchResults extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: results.length,
-      separatorBuilder: (_, _) => const Divider(
-        height: 1,
-        color: AppColors.outlineLight,
-      ),
+      separatorBuilder: (_, _) =>
+          Divider(height: 1, color: context.appColors.outline),
       itemBuilder: (context, index) {
         final location = results[index];
         return ListTile(
@@ -306,13 +303,13 @@ class LocationSearchResults extends StatelessWidget {
             width: 36.r,
             height: 36.r,
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
+              color: context.appColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Icon(
               Iconsax.location,
               size: 18.r,
-              color: AppColors.primary,
+              color: context.appColors.primary,
             ),
           ),
           title: Text(
@@ -320,7 +317,7 @@ class LocationSearchResults extends StatelessWidget {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
-              color: AppColors.textPrimaryLight,
+              color: context.appColors.textPrimary,
             ),
           ),
           subtitle: location.address != null
@@ -328,7 +325,7 @@ class LocationSearchResults extends StatelessWidget {
                   location.address!,
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: AppColors.textSecondaryLight,
+                    color: context.appColors.textSecondary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -337,7 +334,7 @@ class LocationSearchResults extends StatelessWidget {
           trailing: Icon(
             Iconsax.arrow_right_3,
             size: 16.r,
-            color: AppColors.textTertiaryLight,
+            color: colors.textTertiary,
           ),
           contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
         );
@@ -345,4 +342,3 @@ class LocationSearchResults extends StatelessWidget {
     );
   }
 }
-

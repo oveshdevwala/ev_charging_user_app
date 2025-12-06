@@ -16,7 +16,10 @@ import '../../../repositories/activity_repository.dart';
 /// Large stat card with icon and trend.
 class InsightStatCard extends StatelessWidget {
   const InsightStatCard({
-    required this.title, required this.value, required this.icon, super.key,
+    required this.title,
+    required this.value,
+    required this.icon,
+    super.key,
     this.subtitle,
     this.trend,
     this.trendPositive = true,
@@ -35,19 +38,20 @@ class InsightStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = iconColor ?? AppColors.primary;
+    final colors = context.appColors;
+    final color = iconColor ?? colors.primary;
 
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: backgroundColor ?? AppColors.surfaceLight,
+        color: backgroundColor ?? colors.surface,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: AppColors.outlineLight),
-        boxShadow: const [
+        border: Border.all(color: colors.outline),
+        boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: colors.shadow,
             blurRadius: 8,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -70,7 +74,7 @@ class InsightStatCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                   decoration: BoxDecoration(
-                    color: (trendPositive ? AppColors.success : AppColors.error)
+                    color: (trendPositive ? colors.success : colors.danger)
                         .withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
@@ -80,7 +84,7 @@ class InsightStatCard extends StatelessWidget {
                       Icon(
                         trendPositive ? Iconsax.arrow_up_3 : Iconsax.arrow_down,
                         size: 12.r,
-                        color: trendPositive ? AppColors.success : AppColors.error,
+                        color: trendPositive ? colors.success : colors.danger,
                       ),
                       SizedBox(width: 2.w),
                       Text(
@@ -88,7 +92,7 @@ class InsightStatCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 11.sp,
                           fontWeight: FontWeight.w600,
-                          color: trendPositive ? AppColors.success : AppColors.error,
+                          color: trendPositive ? colors.success : colors.danger,
                         ),
                       ),
                     ],
@@ -103,26 +107,20 @@ class InsightStatCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 26.sp,
               fontWeight: FontWeight.w800,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
               height: 1,
             ),
           ),
           SizedBox(height: 4.h),
           Text(
             title,
-            style: TextStyle(
-              fontSize: 13.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 13.sp, color: colors.textSecondary),
           ),
           if (subtitle != null) ...[
             SizedBox(height: 2.h),
             Text(
               subtitle!,
-              style: TextStyle(
-                fontSize: 11.sp,
-                color: AppColors.textTertiaryLight,
-              ),
+              style: TextStyle(fontSize: 11.sp, color: colors.textTertiary),
             ),
           ],
         ],
@@ -134,7 +132,9 @@ class InsightStatCard extends StatelessWidget {
 /// Horizontal insight card.
 class InsightRow extends StatelessWidget {
   const InsightRow({
-    required this.label, required this.value, super.key,
+    required this.label,
+    required this.value,
+    super.key,
     this.icon,
     this.iconColor,
   });
@@ -146,25 +146,20 @@ class InsightRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
           if (icon != null) ...[
-            Icon(
-              icon,
-              size: 18.r,
-              color: iconColor ?? AppColors.textSecondaryLight,
-            ),
+            Icon(icon, size: 18.r, color: iconColor ?? colors.textSecondary),
             SizedBox(width: 10.w),
           ],
           Expanded(
             child: Text(
               label,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
             ),
           ),
           Text(
@@ -172,7 +167,7 @@ class InsightRow extends StatelessWidget {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
         ],
@@ -183,29 +178,30 @@ class InsightRow extends StatelessWidget {
 
 /// Insights summary panel.
 class InsightsPanel extends StatelessWidget {
-  const InsightsPanel({
-    required this.insights, super.key,
-  });
+  const InsightsPanel({required this.insights, super.key});
 
   final ActivityInsights insights;
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? colors.textPrimary : Colors.white;
+
     return Container(
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF1A1A2E),
-            Color(0xFF16213E),
-          ],
+          colors: isDark
+              ? [colors.surfaceVariant, colors.surface]
+              : [const Color(0xFF0F0F23), const Color(0xFF1A1A3E)],
         ),
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF1A1A2E).withValues(alpha: 0.3),
+            color: colors.shadow.withValues(alpha: 0.3),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -220,14 +216,10 @@ class InsightsPanel extends StatelessWidget {
                 width: 40.r,
                 height: 40.r,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
+                  color: textColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Icon(
-                  Iconsax.chart_2,
-                  size: 20.r,
-                  color: Colors.white,
-                ),
+                child: Icon(Iconsax.chart_2, size: 20.r, color: textColor),
               ),
               SizedBox(width: 12.w),
               Text(
@@ -235,7 +227,7 @@ class InsightsPanel extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: textColor,
                 ),
               ),
             ],
@@ -247,17 +239,21 @@ class InsightsPanel extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildInsightItem(
+                  context: context,
                   icon: Iconsax.flash_1,
                   label: 'Avg Energy',
-                  value: '${insights.averageEnergyPerSession.toStringAsFixed(1)} kWh',
+                  value:
+                      '${insights.averageEnergyPerSession.toStringAsFixed(1)} kWh',
                 ),
               ),
               SizedBox(width: 16.w),
               Expanded(
                 child: _buildInsightItem(
+                  context: context,
                   icon: Iconsax.wallet_2,
                   label: 'Avg Cost',
-                  value: '\$${insights.averageCostPerSession.toStringAsFixed(2)}',
+                  value:
+                      '\$${insights.averageCostPerSession.toStringAsFixed(2)}',
                 ),
               ),
             ],
@@ -267,6 +263,7 @@ class InsightsPanel extends StatelessWidget {
             children: [
               Expanded(
                 child: _buildInsightItem(
+                  context: context,
                   icon: Iconsax.clock,
                   label: 'Peak Hour',
                   value: insights.peakHourFormatted,
@@ -275,6 +272,7 @@ class InsightsPanel extends StatelessWidget {
               SizedBox(width: 16.w),
               Expanded(
                 child: _buildInsightItem(
+                  context: context,
                   icon: Iconsax.chart_21,
                   label: 'Efficiency',
                   value: '${insights.chargingEfficiency.toStringAsFixed(0)}%',
@@ -288,12 +286,12 @@ class InsightsPanel extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(14.r),
             decoration: BoxDecoration(
-              color: AppColors.success.withValues(alpha: 0.15),
+              color: colors.success.withValues(alpha: isDark ? 0.15 : 0.2),
               borderRadius: BorderRadius.circular(14.r),
             ),
             child: Row(
               children: [
-                Icon(Iconsax.tree, size: 24.r, color: AppColors.successLight),
+                Icon(Iconsax.tree, size: 24.r, color: colors.success),
                 SizedBox(width: 12.w),
                 Expanded(
                   child: Column(
@@ -304,14 +302,14 @@ class InsightsPanel extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          color: textColor,
                         ),
                       ),
                       Text(
                         '${insights.carbonFootprintReduction.toStringAsFixed(0)} kg CO₂ reduced',
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: Colors.white.withValues(alpha: 0.7),
+                          color: textColor.withValues(alpha: 0.8),
                         ),
                       ),
                     ],
@@ -329,31 +327,36 @@ class InsightsPanel extends StatelessWidget {
     required IconData icon,
     required String label,
     required String value,
+    required BuildContext context,
   }) {
+    final colors = context.appColors;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? colors.textPrimary : Colors.white;
+
     return Container(
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: textColor.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 18.r, color: Colors.white.withValues(alpha: 0.7)),
+          Icon(icon, size: 18.r, color: textColor.withValues(alpha: 0.8)),
           SizedBox(height: 8.h),
           Text(
             value,
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: textColor,
             ),
           ),
           Text(
             label,
             style: TextStyle(
               fontSize: 11.sp,
-              color: Colors.white.withValues(alpha: 0.6),
+              color: textColor.withValues(alpha: 0.7),
             ),
           ),
         ],
@@ -365,7 +368,9 @@ class InsightsPanel extends StatelessWidget {
 /// Environmental impact card.
 class EnvironmentalImpactCard extends StatelessWidget {
   const EnvironmentalImpactCard({
-    required this.co2SavedKg, required this.treesEquivalent, super.key,
+    required this.co2SavedKg,
+    required this.treesEquivalent,
+    super.key,
   });
 
   final double co2SavedKg;
@@ -373,21 +378,22 @@ class EnvironmentalImpactCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? colors.textPrimary : Colors.white;
+
     return Container(
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.success,
-            AppColors.successDark,
-          ],
+          colors: [AppColors.primary, AppColors.primaryDark],
         ),
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-            color: AppColors.success.withValues(alpha: 0.3),
+            color: colors.success.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -398,14 +404,14 @@ class EnvironmentalImpactCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Iconsax.tree, size: 28.r, color: Colors.white),
+              Icon(Iconsax.tree, size: 28.r, color: textColor),
               SizedBox(width: 12.w),
               Text(
                 'Environmental Impact',
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: textColor,
                 ),
               ),
             ],
@@ -422,14 +428,14 @@ class EnvironmentalImpactCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 32.sp,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: textColor,
                       ),
                     ),
                     Text(
                       'kg CO₂ saved',
                       style: TextStyle(
                         fontSize: 13.sp,
-                        color: Colors.white.withValues(alpha: 0.85),
+                        color: textColor.withValues(alpha: 0.9),
                       ),
                     ),
                   ],
@@ -438,7 +444,7 @@ class EnvironmentalImpactCard extends StatelessWidget {
               Container(
                 width: 1,
                 height: 50.h,
-                color: Colors.white.withValues(alpha: 0.3),
+                color: textColor.withValues(alpha: 0.3),
               ),
               SizedBox(width: 16.w),
               Expanded(
@@ -453,15 +459,12 @@ class EnvironmentalImpactCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 32.sp,
                             fontWeight: FontWeight.w800,
-                            color: Colors.white,
+                            color: textColor,
                           ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(bottom: 4.h),
-                          child: Text(
-                            ' 🌳',
-                            style: TextStyle(fontSize: 20.sp),
-                          ),
+                          child: Text(' 🌳', style: TextStyle(fontSize: 20.sp)),
                         ),
                       ],
                     ),
@@ -469,7 +472,7 @@ class EnvironmentalImpactCard extends StatelessWidget {
                       'trees equivalent',
                       style: TextStyle(
                         fontSize: 13.sp,
-                        color: Colors.white.withValues(alpha: 0.85),
+                        color: textColor.withValues(alpha: 0.9),
                       ),
                     ),
                   ],
@@ -482,4 +485,3 @@ class EnvironmentalImpactCard extends StatelessWidget {
     );
   }
 }
-

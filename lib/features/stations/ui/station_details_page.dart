@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/models.dart';
 import '../../../repositories/station_repository.dart';
@@ -62,14 +63,14 @@ class _StationDetailsPageState extends State<StationDetailsPage> {
         error: _station == null && !_isLoading ? 'Station not found' : null,
         child: _station != null ? _buildContent() : const SizedBox(),
       ),
-      bottomSheet: _station != null ? _buildBottomBar() : null,
+      bottomSheet: _station != null ? _buildBottomBar(context) : null,
     );
   }
 
   Widget _buildContent() {
     return CustomScrollView(
       slivers: [
-        _buildAppBar(),
+        _buildAppBar(context),
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.all(20.r),
@@ -87,7 +88,7 @@ class _StationDetailsPageState extends State<StationDetailsPage> {
                 SizedBox(height: 24.h),
                 StationAmenities(amenities: _station!.amenities),
                 SizedBox(height: 24.h),
-                _buildCommunitySection(),
+                _buildCommunitySection(context),
                 SizedBox(height: 100.h),
               ],
             ),
@@ -97,7 +98,9 @@ class _StationDetailsPageState extends State<StationDetailsPage> {
     );
   }
 
-  Widget _buildCommunitySection() {
+  Widget _buildCommunitySection(BuildContext context) {
+    final colors = context.appColors;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -110,7 +113,7 @@ class _StationDetailsPageState extends State<StationDetailsPage> {
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w700,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
             ),
             GestureDetector(
@@ -122,14 +125,14 @@ class _StationDetailsPageState extends State<StationDetailsPage> {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.primary,
+                      color: colors.primary,
                     ),
                   ),
                   SizedBox(width: 4.w),
                   Icon(
                     Iconsax.arrow_right_3,
                     size: 16.r,
-                    color: AppColors.primary,
+                    color: colors.primary,
                   ),
                 ],
               ),
@@ -195,32 +198,40 @@ class _StationDetailsPageState extends State<StationDetailsPage> {
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return SliverAppBar(
       expandedHeight: 250.h,
       pinned: true,
-      leading: _buildBackButton(),
-      actions: [_buildFavoriteButton()],
-      flexibleSpace: FlexibleSpaceBar(background: _buildHeaderImage()),
+      leading: _buildBackButton(context),
+      actions: [_buildFavoriteButton(context)],
+      flexibleSpace: FlexibleSpaceBar(background: _buildHeaderImage(context)),
     );
   }
 
-  Widget _buildBackButton() {
+  Widget _buildBackButton(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: () => Navigator.pop(context),
       child: Container(
         margin: EdgeInsets.all(8.r),
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: colors.surface,
           shape: BoxShape.circle,
-          boxShadow: [BoxShadow(color: AppColors.shadowLight, blurRadius: 8)],
+          boxShadow: [BoxShadow(color: colors.shadow, blurRadius: 8)],
         ),
-        child: Icon(Icons.arrow_back_ios_new_rounded, size: 18.r),
+        child: Icon(
+          Icons.arrow_back_ios_new_rounded,
+          size: 18.r,
+          color: colors.textPrimary,
+        ),
       ),
     );
   }
 
-  Widget _buildFavoriteButton() {
+  Widget _buildFavoriteButton(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: () async {
         await _stationRepository.toggleFavorite(_station!.id);
@@ -229,32 +240,32 @@ class _StationDetailsPageState extends State<StationDetailsPage> {
       child: Container(
         margin: EdgeInsets.all(8.r),
         padding: EdgeInsets.all(10.r),
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: colors.surface,
           shape: BoxShape.circle,
-          boxShadow: [BoxShadow(color: AppColors.shadowLight, blurRadius: 8)],
+          boxShadow: [BoxShadow(color: colors.shadow, blurRadius: 8)],
         ),
         child: Icon(
           _station!.isFavorite ? Iconsax.heart5 : Iconsax.heart,
           size: 20.r,
-          color: _station!.isFavorite
-              ? AppColors.error
-              : AppColors.textSecondaryLight,
+          color: _station!.isFavorite ? colors.danger : colors.textSecondary,
         ),
       ),
     );
   }
 
-  Widget _buildBottomBar() {
+  Widget _buildBottomBar(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(20.r),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: colors.surface,
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: colors.shadow,
             blurRadius: 20,
-            offset: Offset(0, -5),
+            offset: const Offset(0, -5),
           ),
         ],
       ),
@@ -263,7 +274,7 @@ class _StationDetailsPageState extends State<StationDetailsPage> {
           children: [
             Expanded(
               child: CommonButton(
-                label: AppStrings.getDirections,
+                label: AppStrings.getLocation,
                 variant: ButtonVariant.outlined,
                 icon: Iconsax.location,
                 onPressed: () {},
@@ -284,7 +295,8 @@ class _StationDetailsPageState extends State<StationDetailsPage> {
     );
   }
 
-  Widget _buildHeaderImage() {
+  Widget _buildHeaderImage(BuildContext context) {
+    final colors = context.appColors;
     final imageUrl = _station?.imageUrl;
 
     // Check if URL is valid
@@ -295,12 +307,12 @@ class _StationDetailsPageState extends State<StationDetailsPage> {
 
     if (!isValidUrl) {
       return ColoredBox(
-        color: AppColors.surfaceVariantLight,
+        color: colors.surfaceVariant,
         child: Center(
           child: Icon(
             Iconsax.building_4,
             size: 64.r,
-            color: AppColors.textTertiaryLight,
+            color: colors.textTertiary,
           ),
         ),
       );
@@ -309,14 +321,10 @@ class _StationDetailsPageState extends State<StationDetailsPage> {
     return CachedNetworkImage(
       imageUrl: imageUrl,
       fit: BoxFit.cover,
-      placeholder: (_, __) => Container(color: AppColors.outlineLight),
+      placeholder: (_, __) => Container(color: colors.outline),
       errorWidget: (_, __, ___) => ColoredBox(
-        color: AppColors.outlineLight,
-        child: Icon(
-          Iconsax.image,
-          size: 48.r,
-          color: AppColors.textTertiaryLight,
-        ),
+        color: colors.outline,
+        child: Icon(Iconsax.image, size: 48.r, color: colors.textTertiary),
       ),
     );
   }

@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/charging_session_model.dart';
 import '../../../repositories/activity_repository.dart';
@@ -105,19 +106,25 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
+      backgroundColor: colors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundLight,
+        backgroundColor: colors.surface,
         surfaceTintColor: Colors.transparent,
         leading: IconButton(
           icon: Container(
             padding: EdgeInsets.all(8.r),
             decoration: BoxDecoration(
-              color: AppColors.surfaceLight,
+              color: colors.surfaceVariant,
               borderRadius: BorderRadius.circular(12.r),
             ),
-            child: Icon(Iconsax.arrow_left, size: 20.r, color: AppColors.textPrimaryLight),
+            child: Icon(
+              Iconsax.arrow_left,
+              size: 20.r,
+              color: colors.textPrimary,
+            ),
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
@@ -126,7 +133,7 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         centerTitle: false,
@@ -134,12 +141,11 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
       body: Column(
         children: [
           // Filter & Sort Bar
-          _buildFilterSortBar(),
-
+          _buildFilterSortBar(context),
           // Sessions List
           Expanded(
             child: _filteredSessions.isEmpty
-                ? _buildEmptyState()
+                ? _buildEmptyState(context)
                 : ListView.separated(
                     padding: EdgeInsets.all(20.r),
                     itemCount: _filteredSessions.length,
@@ -160,20 +166,21 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
     );
   }
 
-  Widget _buildFilterSortBar() {
+  Widget _buildFilterSortBar(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
-        border: Border(
-          bottom: BorderSide(color: AppColors.outlineLight),
-        ),
+        color: colors.surface,
+        border: Border(bottom: BorderSide(color: colors.outline)),
       ),
       child: Row(
         children: [
           // Filter Button
           Expanded(
             child: _buildFilterChip(
+              context,
               icon: Iconsax.filter,
               label: _filterStatus.label,
               onTap: _showFilterSheet,
@@ -183,6 +190,7 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
           // Sort Button
           Expanded(
             child: _buildFilterChip(
+              context,
               icon: Iconsax.sort,
               label: _sortOption.label,
               onTap: _showSortSheet,
@@ -193,13 +201,16 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
     );
   }
 
-  Widget _buildFilterChip({
+  Widget _buildFilterChip(
+    BuildContext context, {
     required IconData icon,
     required String label,
     required VoidCallback onTap,
   }) {
+    final colors = context.appColors;
+
     return Material(
-      color: AppColors.surfaceVariantLight,
+      color: colors.surfaceVariant,
       borderRadius: BorderRadius.circular(10.r),
       child: InkWell(
         onTap: onTap,
@@ -209,7 +220,7 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 18.r, color: AppColors.textSecondaryLight),
+              Icon(icon, size: 18.r, color: colors.textSecondary),
               SizedBox(width: 8.w),
               Flexible(
                 child: Text(
@@ -217,13 +228,17 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.textPrimaryLight,
+                    color: colors.textPrimary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               SizedBox(width: 4.w),
-              Icon(Iconsax.arrow_down_1, size: 14.r, color: AppColors.textTertiaryLight),
+              Icon(
+                Iconsax.arrow_down_1,
+                size: 14.r,
+                color: colors.textTertiary,
+              ),
             ],
           ),
         ),
@@ -231,28 +246,27 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
+    final colors = context.appColors;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Iconsax.flash_slash, size: 64.r, color: AppColors.textTertiaryLight),
+          Icon(Iconsax.flash_slash, size: 64.r, color: colors.textTertiary),
           SizedBox(height: 16.h),
           Text(
             'No sessions found',
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textSecondaryLight,
+              color: colors.textSecondary,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             'Try adjusting your filters',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textTertiaryLight,
-            ),
+            style: TextStyle(fontSize: 14.sp, color: colors.textTertiary),
           ),
         ],
       ),
@@ -260,12 +274,14 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
   }
 
   void _showFilterSheet() {
+    final colors = context.appColors;
+
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
+      builder: (context) => DecoratedBox(
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: colors.surface,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         child: Column(
@@ -276,7 +292,7 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
               height: 4.h,
               margin: EdgeInsets.only(top: 12.h),
               decoration: BoxDecoration(
-                color: AppColors.outlineLight,
+                color: colors.outline,
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
@@ -290,12 +306,13 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                   ),
                   SizedBox(height: 16.h),
                   ...SessionFilterStatus.values.map(
                     (status) => _buildOptionTile(
+                      context,
                       label: status.label,
                       isSelected: _filterStatus == status,
                       onTap: () {
@@ -316,12 +333,14 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
   }
 
   void _showSortSheet() {
+    final colors = context.appColors;
+
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
+      builder: (context) => DecoratedBox(
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: colors.surface,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         child: Column(
@@ -332,7 +351,7 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
               height: 4.h,
               margin: EdgeInsets.only(top: 12.h),
               decoration: BoxDecoration(
-                color: AppColors.outlineLight,
+                color: colors.outline,
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
@@ -346,12 +365,13 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                   ),
                   SizedBox(height: 16.h),
                   ...SessionSortOption.values.map(
                     (option) => _buildOptionTile(
+                      context,
                       label: option.label,
                       isSelected: _sortOption == option,
                       onTap: () {
@@ -371,11 +391,14 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
     );
   }
 
-  Widget _buildOptionTile({
+  Widget _buildOptionTile(
+    BuildContext context, {
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final colors = context.appColors;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -390,12 +413,12 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
                   style: TextStyle(
                     fontSize: 15.sp,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                    color: isSelected ? AppColors.primary : AppColors.textPrimaryLight,
+                    color: isSelected ? colors.primary : colors.textPrimary,
                   ),
                 ),
               ),
               if (isSelected)
-                Icon(Iconsax.tick_circle5, size: 22.r, color: AppColors.primary),
+                Icon(Iconsax.tick_circle5, size: 22.r, color: colors.primary),
             ],
           ),
         ),
@@ -403,4 +426,3 @@ class _AllSessionsPageState extends State<AllSessionsPage> {
     );
   }
 }
-

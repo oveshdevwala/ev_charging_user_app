@@ -9,6 +9,7 @@
 
 library;
 
+import 'package:ev_charging_user_app/core/extensions/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -105,7 +106,7 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.successMessage!),
-              backgroundColor: AppColors.success,
+              backgroundColor: context.appColors.success,
             ),
           );
           context.read<CommunityCubit>().clearMessages();
@@ -115,7 +116,7 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.error!),
-              backgroundColor: AppColors.error,
+              backgroundColor: context.appColors.danger,
             ),
           );
           context.read<CommunityCubit>().clearMessages();
@@ -128,9 +129,9 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
             centerTitle: true,
             bottom: TabBar(
               controller: _tabController,
-              labelColor: AppColors.primary,
-              unselectedLabelColor: AppColors.textSecondaryLight,
-              indicatorColor: AppColors.primary,
+              labelColor: context.appColors.primary,
+              unselectedLabelColor: context.appColors.textSecondary,
+              indicatorColor: context.appColors.primary,
               labelStyle: TextStyle(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w600,
@@ -169,14 +170,14 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
       case CommunityTab.reviews:
         return FloatingActionButton.extended(
           onPressed: () => _navigateToReview(context),
-          backgroundColor: AppColors.primary,
+          backgroundColor: context.appColors.primary,
           icon: Icon(Iconsax.edit, size: 20.r),
           label: const Text('Write Review'),
         );
       case CommunityTab.qa:
         return FloatingActionButton.extended(
           onPressed: () => _showAskQuestionSheet(context),
-          backgroundColor: AppColors.primary,
+          backgroundColor: context.appColors.primary,
           icon: Icon(Iconsax.message_add, size: 20.r),
           label: const Text('Ask Question'),
         );
@@ -185,7 +186,7 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
           onPressed: () {
             // TODO: Implement photo upload
           },
-          backgroundColor: AppColors.primary,
+          backgroundColor: context.appColors.primary,
           child: Icon(Iconsax.camera, size: 24.r),
         );
       default:
@@ -276,60 +277,74 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
       return const SizedBox.shrink();
     }
 
-    return Container(
-      margin: EdgeInsets.all(16.r),
-      padding: EdgeInsets.all(20.r),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.primary.withValues(alpha: 0.1),
-            AppColors.primary.withValues(alpha: 0.05),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Row(
-        children: [
-          Column(
+    return Builder(
+      builder: (context) {
+        final colors = context.appColors;
+        return Container(
+          margin: EdgeInsets.all(16.r),
+          padding: EdgeInsets.all(20.r),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                colors.primary.withValues(alpha: 0.1),
+                colors.primary.withValues(alpha: 0.05),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          child: Row(
             children: [
-              Text(
-                summary.avgRating.toStringAsFixed(1),
-                style: TextStyle(fontSize: 42.sp, fontWeight: FontWeight.w700),
+              Column(
+                children: [
+                  Text(
+                    summary.avgRating.toStringAsFixed(1),
+                    style: TextStyle(
+                      fontSize: 42.sp,
+                      fontWeight: FontWeight.w700,
+                      color: colors.textPrimary,
+                    ),
+                  ),
+                  StarRatingCompact(
+                    rating: summary.avgRating,
+                    size: 16,
+                    showCount: false,
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    '${summary.ratingCount} reviews',
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      color: context.appColors.textSecondary,
+                    ),
+                  ),
+                ],
               ),
-              StarRatingCompact(
-                rating: summary.avgRating,
-                size: 16,
-                showCount: false,
-              ),
-              SizedBox(height: 4.h),
-              Text(
-                '${summary.ratingCount} reviews',
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  color: AppColors.textSecondaryLight,
+              SizedBox(width: 24.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildRatingBar(context, '5', 0.7, colors.success),
+                    _buildRatingBar(context, '4', 0.5, colors.success),
+                    _buildRatingBar(context, '3', 0.2, colors.warning),
+                    _buildRatingBar(context, '2', 0.1, colors.warning),
+                    _buildRatingBar(context, '1', 0.05, colors.danger),
+                  ],
                 ),
               ),
             ],
           ),
-          SizedBox(width: 24.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildRatingBar('5', 0.7, AppColors.success),
-                _buildRatingBar('4', 0.5, AppColors.success),
-                _buildRatingBar('3', 0.2, AppColors.warning),
-                _buildRatingBar('2', 0.1, AppColors.warning),
-                _buildRatingBar('1', 0.05, AppColors.error),
-              ],
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildRatingBar(String label, double ratio, Color color) {
+  Widget _buildRatingBar(
+    BuildContext context,
+    String label,
+    double ratio,
+    Color color,
+  ) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 2.h),
       child: Row(
@@ -338,7 +353,7 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
             label,
             style: TextStyle(
               fontSize: 11.sp,
-              color: AppColors.textSecondaryLight,
+              color: context.appColors.textSecondary,
             ),
           ),
           SizedBox(width: 8.w),
@@ -346,7 +361,7 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
             child: Container(
               height: 6.h,
               decoration: BoxDecoration(
-                color: AppColors.outlineLight,
+                color: context.appColors.outline,
                 borderRadius: BorderRadius.circular(3.r),
               ),
               child: FractionallySizedBox(
@@ -373,7 +388,7 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
           'Sort by:',
           style: TextStyle(
             fontSize: 13.sp,
-            color: AppColors.textSecondaryLight,
+            color: context.appColors.textSecondary,
           ),
         ),
         SizedBox(width: 8.w),
@@ -385,7 +400,7 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
             decoration: BoxDecoration(
-              color: AppColors.surfaceVariantLight,
+              color: context.appColors.surfaceVariant,
               borderRadius: BorderRadius.circular(6.r),
             ),
             child: Row(
@@ -483,7 +498,7 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Iconsax.flag, size: 64.r, color: AppColors.outlineLight),
+            Icon(Iconsax.flag, size: 64.r, color: context.appColors.outline),
             SizedBox(height: 20.h),
             Text(
               'Report an Issue',
@@ -494,7 +509,7 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
               'Help improve this station by reporting problems like broken sockets, slow charging, or payment issues.',
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
+                color: context.appColors.textSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -504,8 +519,8 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
               icon: Icon(Iconsax.flag, size: 20.r),
               label: const Text('Report Issue'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.error,
-                foregroundColor: Colors.white,
+                backgroundColor: context.appColors.danger,
+                foregroundColor: context.appColors.surface,
                 padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 14.h),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.r),
@@ -594,9 +609,9 @@ class _StationCommunityContentState extends State<_StationCommunityContent>
                 'User reported',
               );
             },
-            child: const Text(
+            child: Text(
               'Report',
-              style: TextStyle(color: AppColors.error),
+              style: TextStyle(color: context.appColors.danger),
             ),
           ),
         ],
@@ -649,7 +664,7 @@ class _AskQuestionSheetState extends State<_AskQuestionSheet> {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: AppColors.outlineLight,
+                color: context.appColors.outline,
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
@@ -681,15 +696,15 @@ class _AskQuestionSheetState extends State<_AskQuestionSheet> {
                       _isAnonymous ? Iconsax.tick_square : Iconsax.square,
                       size: 20.r,
                       color: _isAnonymous
-                          ? AppColors.primary
-                          : AppColors.textSecondaryLight,
+                          ? context.appColors.primary
+                          : context.appColors.textSecondary,
                     ),
                     SizedBox(width: 8.w),
                     Text(
                       'Ask anonymously',
                       style: TextStyle(
                         fontSize: 14.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: context.appColors.textSecondary,
                       ),
                     ),
                   ],
@@ -711,8 +726,8 @@ class _AskQuestionSheetState extends State<_AskQuestionSheet> {
                       );
                     },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                backgroundColor: context.appColors.primary,
+                foregroundColor: context.appColors.surface,
                 padding: EdgeInsets.symmetric(vertical: 14.h),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.r),
@@ -722,8 +737,8 @@ class _AskQuestionSheetState extends State<_AskQuestionSheet> {
                   ? SizedBox(
                       width: 20.r,
                       height: 20.r,
-                      child: const CircularProgressIndicator(
-                        color: Colors.white,
+                      child: CircularProgressIndicator(
+                        color: context.appColors.surface,
                         strokeWidth: 2,
                       ),
                     )

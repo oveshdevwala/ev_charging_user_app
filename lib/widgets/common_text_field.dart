@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../core/extensions/context_ext.dart';
 import '../core/theme/app_colors.dart';
 
 /// Common text field widget with validation support.
@@ -94,6 +95,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final theme = Theme.of(context);
     final effectiveBorderRadius = BorderRadius.circular(
       widget.borderRadius ?? 12.r,
@@ -109,7 +111,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
@@ -133,8 +135,8 @@ class _CommonTextFieldState extends State<CommonTextField> {
             fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             color: widget.enabled
-                ? AppColors.textPrimaryLight
-                : AppColors.textDisabledLight,
+                ? colors.textPrimary
+                : colors.textDisabled,
           ),
           decoration: InputDecoration(
             hintText: widget.hint,
@@ -144,8 +146,8 @@ class _CommonTextFieldState extends State<CommonTextField> {
             fillColor:
                 widget.fillColor ??
                 (widget.enabled
-                    ? AppColors.surfaceVariantLight
-                    : AppColors.outlineLight.withValues(alpha: 0.3)),
+                    ? colors.surfaceVariant
+                    : colors.outline.withValues(alpha: 0.3)),
             contentPadding:
                 widget.contentPadding ??
                 EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
@@ -166,11 +168,11 @@ class _CommonTextFieldState extends State<CommonTextField> {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: effectiveBorderRadius,
-              borderSide: const BorderSide(color: AppColors.error),
+              borderSide: BorderSide(color: colors.danger),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: effectiveBorderRadius,
-              borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+              borderSide: BorderSide(color: colors.danger, width: 1.5),
             ),
             disabledBorder: OutlineInputBorder(
               borderRadius: effectiveBorderRadius,
@@ -179,7 +181,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
             prefixIcon: widget.prefixIcon != null
                 ? Icon(widget.prefixIcon, size: 20.r)
                 : widget.prefix,
-            suffixIcon: _buildSuffixIcon(),
+            suffixIcon: _buildSuffixIcon(context),
             counterText: '',
           ),
           onChanged: widget.onChanged,
@@ -191,7 +193,8 @@ class _CommonTextFieldState extends State<CommonTextField> {
     );
   }
 
-  Widget? _buildSuffixIcon() {
+  Widget? _buildSuffixIcon(BuildContext context) {
+    final colors = context.appColors;
     if (widget.obscureText) {
       return IconButton(
         icon: Icon(
@@ -199,7 +202,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
               ? Icons.visibility_off_outlined
               : Icons.visibility_outlined,
           size: 20.r,
-          color: AppColors.textSecondaryLight,
+          color: colors.textSecondary,
         ),
         onPressed: () => setState(() => _obscureText = !_obscureText),
       );
@@ -271,6 +274,7 @@ class OtpTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(length, (index) {
@@ -285,7 +289,7 @@ class OtpTextField extends StatelessWidget {
             decoration: InputDecoration(
               counterText: '',
               filled: true,
-              fillColor: AppColors.surfaceVariantLight,
+              fillColor: colors.surfaceVariant,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.r),
                 borderSide: BorderSide.none,

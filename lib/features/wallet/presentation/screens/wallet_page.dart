@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../core/extensions/context_ext.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../widgets/app_app_bar.dart';
@@ -82,12 +83,10 @@ class _WalletPageContentState extends State<_WalletPageContent>
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = context.appColors;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? AppColors.backgroundDark
-          : AppColors.backgroundLight,
+      backgroundColor: colors.background,
       appBar: AppAppBar(
         title: 'Wallet',
         actions: [
@@ -103,7 +102,7 @@ class _WalletPageContentState extends State<_WalletPageContent>
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.error!),
-                backgroundColor: AppColors.error,
+                backgroundColor: colors.danger,
               ),
             );
             context.read<WalletBloc>().add(const ClearWalletError());
@@ -143,7 +142,7 @@ class _WalletPageContentState extends State<_WalletPageContent>
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: _buildCreditsPreview(state, isDark),
+                      child: _buildCreditsPreview(context, state),
                     ),
                   ),
 
@@ -153,11 +152,9 @@ class _WalletPageContentState extends State<_WalletPageContent>
                   delegate: _SliverTabBarDelegate(
                     TabBar(
                       controller: _tabController,
-                      labelColor: AppColors.primary,
-                      unselectedLabelColor: isDark
-                          ? AppColors.textSecondaryDark
-                          : AppColors.textSecondaryLight,
-                      indicatorColor: AppColors.primary,
+                      labelColor: colors.primary,
+                      unselectedLabelColor: colors.textSecondary,
+                      indicatorColor: colors.primary,
                       indicatorWeight: 3,
                       labelStyle: TextStyle(
                         fontSize: 14.sp,
@@ -168,19 +165,18 @@ class _WalletPageContentState extends State<_WalletPageContent>
                         Tab(text: 'Credits'),
                       ],
                     ),
-                    isDark: isDark,
                   ),
                 ),
 
                 // Filter chips for transactions tab
                 if (state.selectedTab == WalletTab.transactions)
-                  SliverToBoxAdapter(child: _buildFilterChips(state, isDark)),
+                  SliverToBoxAdapter(child: _buildFilterChips(context, state)),
 
                 // Content based on tab
                 if (state.selectedTab == WalletTab.transactions)
-                  _buildTransactionsList(state, isDark)
+                  _buildTransactionsList(context, state)
                 else
-                  _buildCreditsList(state, isDark),
+                  _buildCreditsList(context, state),
 
                 // Bottom padding
                 SliverToBoxAdapter(child: SizedBox(height: 100.h)),
@@ -191,21 +187,22 @@ class _WalletPageContentState extends State<_WalletPageContent>
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push(AppRoutes.walletRecharge.path),
-        backgroundColor: AppColors.primary,
-        icon: Icon(Iconsax.add, color: Colors.white, size: 20.r),
+        backgroundColor: colors.primary,
+        icon: Icon(Iconsax.add, color: colors.textPrimary, size: 20.r),
         label: Text(
           'Recharge',
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
-            color: Colors.white,
+            color: colors.onPrimaryContainer,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildCreditsPreview(WalletState state, bool isDark) {
+  Widget _buildCreditsPreview(BuildContext context, WalletState state) {
+    final colors = context.appColors;
     final summary = state.creditsSummary!;
 
     return GestureDetector(
@@ -214,21 +211,21 @@ class _WalletPageContentState extends State<_WalletPageContent>
         margin: EdgeInsets.only(bottom: 16.h),
         padding: EdgeInsets.all(14.r),
         decoration: BoxDecoration(
-          color: isDark ? AppColors.surfaceVariantDark : AppColors.surfaceLight,
+          color: colors.surfaceVariant,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: AppColors.tertiary.withValues(alpha: 0.2)),
+          border: Border.all(color: colors.tertiary.withValues(alpha: 0.2)),
         ),
         child: Row(
           children: [
             Container(
               padding: EdgeInsets.all(10.r),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.tertiary, AppColors.tertiaryDark],
+                gradient: LinearGradient(
+                  colors: [colors.tertiary, colors.tertiaryContainer],
                 ),
                 borderRadius: BorderRadius.circular(12.r),
               ),
-              child: Icon(Iconsax.star, color: Colors.white, size: 20.r),
+              child: Icon(Iconsax.star, color: colors.surface, size: 20.r),
             ),
             SizedBox(width: 12.w),
             Expanded(
@@ -240,35 +237,26 @@ class _WalletPageContentState extends State<_WalletPageContent>
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
-                      color: isDark
-                          ? AppColors.textPrimaryDark
-                          : AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                   ),
                   Text(
                     'Worth ${summary.formattedAvailableValue}',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: AppColors.tertiary,
-                    ),
+                    style: TextStyle(fontSize: 12.sp, color: colors.tertiary),
                   ),
                 ],
               ),
             ),
-            Icon(
-              Iconsax.arrow_right_3,
-              color: isDark
-                  ? AppColors.textTertiaryDark
-                  : AppColors.textTertiaryLight,
-              size: 20.r,
-            ),
+            Icon(Iconsax.arrow_right_3, color: colors.textTertiary, size: 20.r),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildFilterChips(WalletState state, bool isDark) {
+  Widget _buildFilterChips(BuildContext context, WalletState state) {
+    final colors = context.appColors;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -283,24 +271,16 @@ class _WalletPageContentState extends State<_WalletPageContent>
               onSelected: (_) {
                 context.read<WalletBloc>().add(ChangeTransactionFilter(filter));
               },
-              backgroundColor: isDark
-                  ? AppColors.surfaceVariantDark
-                  : AppColors.surfaceLight,
-              selectedColor: AppColors.primaryContainer,
-              checkmarkColor: AppColors.primary,
+              backgroundColor: colors.surfaceVariant,
+              selectedColor: colors.primaryContainer,
+              checkmarkColor: colors.primary,
               labelStyle: TextStyle(
                 fontSize: 12.sp,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected
-                    ? AppColors.primary
-                    : (isDark
-                          ? AppColors.textSecondaryDark
-                          : AppColors.textSecondaryLight),
+                color: isSelected ? colors.primary : colors.textSecondary,
               ),
               side: BorderSide(
-                color: isSelected
-                    ? AppColors.primary
-                    : (isDark ? AppColors.outlineDark : AppColors.outlineLight),
+                color: isSelected ? colors.primary : colors.outline,
               ),
               padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             ),
@@ -325,16 +305,16 @@ class _WalletPageContentState extends State<_WalletPageContent>
     }
   }
 
-  Widget _buildTransactionsList(WalletState state, bool isDark) {
+  Widget _buildTransactionsList(BuildContext context, WalletState state) {
     final transactions = state.filteredTransactions;
 
     if (transactions.isEmpty) {
       return SliverFillRemaining(
         child: _buildEmptyState(
+          context,
           icon: Iconsax.document_text,
           title: 'No transactions yet',
           subtitle: 'Your wallet transactions will appear here',
-          isDark: isDark,
         ),
       );
     }
@@ -370,7 +350,9 @@ class _WalletPageContentState extends State<_WalletPageContent>
     );
   }
 
-  Widget _buildCreditsList(WalletState state, bool isDark) {
+  Widget _buildCreditsList(BuildContext context, WalletState state) {
+    final colors = context.appColors;
+
     if (state.creditsSummary != null) {
       return SliverPadding(
         padding: EdgeInsets.all(16.r),
@@ -383,9 +365,7 @@ class _WalletPageContentState extends State<_WalletPageContent>
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
-                color: isDark
-                    ? AppColors.textPrimaryDark
-                    : AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
             ),
             SizedBox(height: 12.h),
@@ -397,51 +377,40 @@ class _WalletPageContentState extends State<_WalletPageContent>
 
     return SliverFillRemaining(
       child: _buildEmptyState(
+        context,
         icon: Iconsax.star,
         title: 'No credits yet',
         subtitle: 'Start charging to earn credits',
-        isDark: isDark,
       ),
     );
   }
 
-  Widget _buildEmptyState({
+  Widget _buildEmptyState(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String subtitle,
-    required bool isDark,
   }) {
+    final colors = context.appColors;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 64.r,
-            color: isDark
-                ? AppColors.textTertiaryDark
-                : AppColors.textTertiaryLight,
-          ),
+          Icon(icon, size: 64.r, color: colors.textTertiary),
           SizedBox(height: 16.h),
           Text(
             title,
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: isDark
-                  ? AppColors.textSecondaryDark
-                  : AppColors.textSecondaryLight,
+              color: colors.textSecondary,
             ),
           ),
           SizedBox(height: 4.h),
           Text(
             subtitle,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: isDark
-                  ? AppColors.textTertiaryDark
-                  : AppColors.textTertiaryLight,
-            ),
+            style: TextStyle(fontSize: 14.sp, color: colors.textTertiary),
           ),
         ],
       ),
@@ -450,10 +419,9 @@ class _WalletPageContentState extends State<_WalletPageContent>
 }
 
 class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverTabBarDelegate(this.tabBar, {required this.isDark});
+  _SliverTabBarDelegate(this.tabBar);
 
   final TabBar tabBar;
-  final bool isDark;
 
   @override
   double get minExtent => tabBar.preferredSize.height;
@@ -467,10 +435,9 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return ColoredBox(
-      color: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
-      child: tabBar,
-    );
+    final colors = context.appColors;
+
+    return ColoredBox(color: colors.background, child: tabBar);
   }
 
   @override

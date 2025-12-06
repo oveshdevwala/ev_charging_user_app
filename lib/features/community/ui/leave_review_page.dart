@@ -7,6 +7,7 @@
 ///    - Customize photo upload flow
 library;
 
+import 'package:ev_charging_user_app/core/extensions/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -79,7 +80,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.error!),
-              backgroundColor: AppColors.error,
+              backgroundColor: context.appColors.danger,
             ),
           );
           context.read<ReviewEditorCubit>().clearError();
@@ -87,9 +88,9 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
 
         if (state.submitSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Review submitted successfully!'),
-              backgroundColor: AppColors.success,
+            SnackBar(
+              content: const Text('Review submitted successfully!'),
+              backgroundColor: context.appColors.success,
             ),
           );
           Navigator.of(context).pop();
@@ -155,7 +156,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
     return Container(
       padding: EdgeInsets.all(14.r),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariantLight,
+        color: context.appColors.surfaceVariant,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Row(
@@ -164,10 +165,10 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
             width: 48.r,
             height: 48.r,
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
+              color: context.appColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10.r),
             ),
-            child: Icon(Iconsax.flash_1, size: 24.r, color: AppColors.primary),
+            child: Icon(Iconsax.flash_1, size: 24.r, color: context.appColors.primary),
           ),
           SizedBox(width: 12.w),
           Expanded(
@@ -178,7 +179,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
                   'Reviewing',
                   style: TextStyle(
                     fontSize: 11.sp,
-                    color: AppColors.textSecondaryLight,
+                    color: context.appColors.textSecondary,
                   ),
                 ),
                 Text(
@@ -186,7 +187,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
                   style: TextStyle(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimaryLight,
+                    color: context.appColors.textPrimary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -207,7 +208,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryLight,
+            color: context.appColors.textPrimary,
           ),
         ),
         SizedBox(height: 16.h),
@@ -233,7 +234,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
+                color: context.appColors.textPrimary,
               ),
             ),
             SizedBox(width: 6.w),
@@ -241,7 +242,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
               '(optional)',
               style: TextStyle(
                 fontSize: 12.sp,
-                color: AppColors.textTertiaryLight,
+                color: context.appColors.textTertiary,
               ),
             ),
           ],
@@ -256,19 +257,19 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
             hintText: 'Summarize your experience',
             hintStyle: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textTertiaryLight,
+              color: context.appColors.textTertiary,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
-              borderSide: const BorderSide(color: AppColors.outlineLight),
+              borderSide: BorderSide(color: context.appColors.outline),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
-              borderSide: const BorderSide(color: AppColors.outlineLight),
+              borderSide: BorderSide(color: context.appColors.outline),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
-              borderSide: const BorderSide(color: AppColors.primary),
+              borderSide: BorderSide(color: context.appColors.primary),
             ),
             contentPadding: EdgeInsets.all(14.r),
           ),
@@ -289,7 +290,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryLight,
+            color: context.appColors.textPrimary,
           ),
         ),
         SizedBox(height: 8.h),
@@ -303,19 +304,19 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
             hintText: 'Share details about your charging experience...',
             hintStyle: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textTertiaryLight,
+              color: context.appColors.textTertiary,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
-              borderSide: const BorderSide(color: AppColors.outlineLight),
+              borderSide: BorderSide(color: context.appColors.outline),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
-              borderSide: const BorderSide(color: AppColors.outlineLight),
+              borderSide: BorderSide(color: context.appColors.outline),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
-              borderSide: const BorderSide(color: AppColors.primary),
+              borderSide: BorderSide(color: context.appColors.primary),
             ),
             contentPadding: EdgeInsets.all(14.r),
           ),
@@ -329,8 +330,8 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
               style: TextStyle(
                 fontSize: 11.sp,
                 color: isValid
-                    ? AppColors.success
-                    : AppColors.textTertiaryLight,
+                    ? context.appColors.success
+                    : context.appColors.textTertiary,
               ),
             ),
             Text(
@@ -338,8 +339,8 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
               style: TextStyle(
                 fontSize: 11.sp,
                 color: isValid
-                    ? AppColors.success
-                    : AppColors.textTertiaryLight,
+                    ? context.appColors.success
+                    : context.appColors.textTertiary,
               ),
             ),
           ],
@@ -359,7 +360,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
+                color: context.appColors.textPrimary,
               ),
             ),
             SizedBox(width: 6.w),
@@ -367,7 +368,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
               '(up to 6)',
               style: TextStyle(
                 fontSize: 12.sp,
-                color: AppColors.textTertiaryLight,
+                color: context.appColors.textTertiary,
               ),
             ),
           ],
@@ -387,9 +388,9 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
                     height: 80.h,
                     margin: EdgeInsets.only(right: 12.w),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceVariantLight,
+                      color: context.appColors.surfaceVariant,
                       borderRadius: BorderRadius.circular(10.r),
-                      border: Border.all(color: AppColors.outlineLight),
+                      border: Border.all(color: context.appColors.outline),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -397,14 +398,14 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
                         Icon(
                           Iconsax.camera,
                           size: 24.r,
-                          color: AppColors.textSecondaryLight,
+                          color: context.appColors.textSecondary,
                         ),
                         SizedBox(height: 4.h),
                         Text(
                           'Add',
                           style: TextStyle(
                             fontSize: 11.sp,
-                            color: AppColors.textSecondaryLight,
+                            color: context.appColors.textSecondary,
                           ),
                         ),
                       ],
@@ -420,7 +421,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
                   margin: EdgeInsets.only(right: 12.w),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.r),
-                    color: AppColors.outlineLight,
+                    color: context.appColors.outline,
                   ),
                   child: Stack(
                     fit: StackFit.expand,
@@ -444,14 +445,14 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
                           child: Container(
                             width: 22.r,
                             height: 22.r,
-                            decoration: const BoxDecoration(
-                              color: Colors.black54,
+                            decoration: BoxDecoration(
+                              color: context.appColors.scrim,
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               Iconsax.close_circle,
                               size: 14.r,
-                              color: Colors.white,
+                              color: context.appColors.surface,
                             ),
                           ),
                         ),
@@ -474,12 +475,12 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
         Container(
           padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
-            color: AppColors.surfaceVariantLight,
+            color: context.appColors.surfaceVariant,
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Row(
             children: [
-              Icon(Iconsax.verify5, size: 20.r, color: AppColors.primary),
+              Icon(Iconsax.verify5, size: 20.r, color: context.appColors.primary),
               SizedBox(width: 12.w),
               Expanded(
                 child: Column(
@@ -490,14 +491,14 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight,
+                        color: context.appColors.textPrimary,
                       ),
                     ),
                     Text(
                       'Verified reviews are weighted higher',
                       style: TextStyle(
                         fontSize: 11.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: context.appColors.textSecondary,
                       ),
                     ),
                   ],
@@ -510,7 +511,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
                     value: value,
                   );
                 },
-                activeThumbColor: AppColors.primary,
+                activeThumbColor: context.appColors.primary,
               ),
             ],
           ),
@@ -521,7 +522,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
         Container(
           padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
-            color: AppColors.surfaceVariantLight,
+            color: context.appColors.surfaceVariant,
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Row(
@@ -529,7 +530,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
               Icon(
                 Iconsax.user_square,
                 size: 20.r,
-                color: AppColors.textSecondaryLight,
+                color: context.appColors.textSecondary,
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -541,14 +542,14 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight,
+                        color: context.appColors.textPrimary,
                       ),
                     ),
                     Text(
                       'Your name will not be shown publicly',
                       style: TextStyle(
                         fontSize: 11.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: context.appColors.textSecondary,
                       ),
                     ),
                   ],
@@ -561,7 +562,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
                     value: value,
                   );
                 },
-                activeThumbColor: AppColors.primary,
+                activeThumbColor: context.appColors.primary,
               ),
             ],
           ),
@@ -577,7 +578,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
         color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.appColors.shadow,
             blurRadius: 10,
             offset: const Offset(0, -4),
           ),
@@ -603,7 +604,7 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
 
   Future<void> _pickPhoto(BuildContext context) async {
     // Simplified photo picker - in production use image_picker package
-   await showModalBottomSheet<void>(
+    await showModalBottomSheet<void>(
       context: context,
       builder: (ctx) => Container(
         padding: EdgeInsets.all(20.r),
@@ -657,9 +658,9 @@ class _LeaveReviewContentState extends State<_LeaveReviewContent> {
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
-              child: const Text(
+              child: Text(
                 'Discard',
-                style: TextStyle(color: AppColors.error),
+                style: TextStyle(color: context.appColors.danger),
               ),
             ),
           ],

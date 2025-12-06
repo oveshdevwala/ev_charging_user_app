@@ -1,48 +1,70 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/extensions/context_ext.dart';
 import '../../domain/entities/monthly_analytics.dart';
 
 class EnergyBarChart extends StatelessWidget {
-  final List<DailyBreakdown> trendData;
 
-  const EnergyBarChart({super.key, required this.trendData});
+  const EnergyBarChart({required this.trendData, super.key});
+  final List<DailyBreakdown> trendData;
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     if (trendData.isEmpty) return const SizedBox.shrink();
 
     return Container(
       height: 200.h,
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: colors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Energy Consumption',
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.bold,
+              color: colors.textPrimary,
+            ),
           ),
           SizedBox(height: 16.h),
           Expanded(
             child: BarChart(
               BarChartData(
-                gridData: FlGridData(show: false),
+                gridData: FlGridData(
+                  drawVerticalLine: false,
+                  getDrawingHorizontalLine: (value) {
+                    return FlLine(
+                      color: colors.outline,
+                      strokeWidth: 1,
+                      dashArray: const [5, 5],
+                    );
+                  },
+                ),
                 titlesData: FlTitlesData(
                   leftTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          '${value.toInt()}',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: colors.textTertiary,
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
+                  rightTitles: const AxisTitles(),
+                  topTitles: const AxisTitles(),
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
@@ -52,7 +74,10 @@ class EnergyBarChart extends StatelessWidget {
                           if (index % 5 == 0) {
                             return Text(
                               '${trendData[index].date.day}',
-                              style: TextStyle(fontSize: 10.sp),
+                              style: TextStyle(
+                                fontSize: 10.sp,
+                                color: colors.textSecondary,
+                              ),
                             );
                           }
                         }
@@ -71,7 +96,7 @@ class EnergyBarChart extends StatelessWidget {
                         barRods: [
                           BarChartRodData(
                             toY: e.value.energy,
-                            color: Colors.orange,
+                            color: colors.warning,
                             width: 8.w,
                             borderRadius: BorderRadius.circular(4.r),
                           ),

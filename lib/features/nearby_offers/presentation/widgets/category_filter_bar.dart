@@ -3,6 +3,7 @@
 /// Belongs To: nearby_offers feature
 library;
 
+import 'package:ev_charging_user_app/core/extensions/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -80,7 +81,7 @@ class CategoryFilterBar extends StatelessWidget {
       ),
       backgroundColor: isDark
           ? theme.colorScheme.surfaceContainerHighest
-          : Colors.white,
+          : context.appColors.surface,
       selectedColor: theme.colorScheme.primary,
       labelStyle: theme.textTheme.labelLarge?.copyWith(
         color: isSelected

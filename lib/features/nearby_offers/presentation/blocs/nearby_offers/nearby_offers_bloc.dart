@@ -160,7 +160,6 @@ class NearbyOffersBloc extends Bloc<NearbyOffersEvent, NearbyOffersState> {
       final params = OfferFilterParams(
         latitude: state.filterParams.latitude,
         longitude: state.filterParams.longitude,
-        radiusKm: 5.0, // Default
       );
 
       final offers = await _getNearbyOffers(params);

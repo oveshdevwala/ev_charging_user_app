@@ -4,7 +4,6 @@
 library;
 
 import 'package:ev_charging_user_app/features/nearby_offers/data/models/check_in_model.dart';
-import 'package:ev_charging_user_app/features/nearby_offers/data/models/redemption_model.dart';
 import 'package:ev_charging_user_app/features/nearby_offers/data/repositories/partner_repository.dart';
 
 class CheckInPartnerUseCase {

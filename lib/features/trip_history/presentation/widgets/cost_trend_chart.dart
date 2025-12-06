@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/extensions/context_ext.dart';
 import '../../domain/entities/monthly_analytics.dart';
 
 class CostTrendChart extends StatelessWidget {
@@ -9,33 +10,65 @@ class CostTrendChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     if (trendData.isEmpty) {
-      return const Center(child: Text('No trips this month'));
+      return Center(
+        child: Text(
+          'No trips this month',
+          style: TextStyle(color: colors.textSecondary),
+        ),
+      );
     }
 
     return Container(
       height: 200.h,
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: colors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Cost Trend',
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.bold,
+              color: colors.textPrimary,
+            ),
           ),
           SizedBox(height: 16.h),
           Expanded(
             child: LineChart(
               LineChartData(
-                gridData: const FlGridData(show: false),
+                gridData: FlGridData(
+                  drawVerticalLine: false,
+                  getDrawingHorizontalLine: (value) {
+                    return FlLine(
+                      color: colors.outline,
+                      strokeWidth: 1,
+                      dashArray: const [5, 5],
+                    );
+                  },
+                ),
                 titlesData: FlTitlesData(
-                  leftTitles: const AxisTitles(),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          '\$${value.toInt()}',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: colors.textTertiary,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                   rightTitles: const AxisTitles(),
                   topTitles: const AxisTitles(),
                   bottomTitles: AxisTitles(
@@ -48,7 +81,10 @@ class CostTrendChart extends StatelessWidget {
                             // Show every 5th day
                             return Text(
                               '${trendData[index].date.day}',
-                              style: TextStyle(fontSize: 10.sp),
+                              style: TextStyle(
+                                fontSize: 10.sp,
+                                color: colors.textSecondary,
+                              ),
                             );
                           }
                         }
@@ -66,12 +102,12 @@ class CostTrendChart extends StatelessWidget {
                         .map((e) => FlSpot(e.key.toDouble(), e.value.cost))
                         .toList(),
                     isCurved: true,
-                    color: Theme.of(context).primaryColor,
+                    color: colors.primary,
                     barWidth: 3,
                     dotData: const FlDotData(show: false),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                      color: colors.primary.withValues(alpha: 0.1),
                     ),
                   ),
                 ],

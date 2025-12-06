@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/core.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/transaction_model.dart';
 import '../../../repositories/activity_repository.dart';
@@ -21,21 +23,28 @@ class TransactionDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final transaction = DummyActivityRepository().getTransactionById(transactionId);
+    final colors = context.appColors;
+    final transaction = DummyActivityRepository().getTransactionById(
+      transactionId,
+    );
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
+      backgroundColor: colors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundLight,
+        backgroundColor: colors.background,
         surfaceTintColor: Colors.transparent,
         leading: IconButton(
           icon: Container(
             padding: EdgeInsets.all(8.r),
             decoration: BoxDecoration(
-              color: AppColors.surfaceLight,
+              color: colors.surface,
               borderRadius: BorderRadius.circular(12.r),
             ),
-            child: Icon(Iconsax.arrow_left, size: 20.r, color: AppColors.textPrimaryLight),
+            child: Icon(
+              Iconsax.arrow_left,
+              size: 20.r,
+              color: colors.textPrimary,
+            ),
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
@@ -44,30 +53,29 @@ class TransactionDetailPage extends StatelessWidget {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         centerTitle: false,
       ),
       body: transaction == null
-          ? _buildNotFound()
+          ? _buildNotFound(context)
           : _buildContent(context, transaction),
     );
   }
 
-  Widget _buildNotFound() {
+  Widget _buildNotFound(BuildContext context) {
+    final colors = context.appColors;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Iconsax.warning_2, size: 64.r, color: AppColors.textTertiaryLight),
+          Icon(Iconsax.warning_2, size: 64.r, color: colors.textTertiary),
           SizedBox(height: 16.h),
           Text(
             'Transaction not found',
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 16.sp, color: colors.textSecondary),
           ),
         ],
       ),
@@ -80,11 +88,11 @@ class TransactionDetailPage extends StatelessWidget {
       child: Column(
         children: [
           // Amount Card
-          _buildAmountCard(transaction),
+          _buildAmountCard(context, transaction),
           SizedBox(height: 20.h),
 
           // Transaction Info
-          _buildInfoCard(transaction),
+          _buildInfoCard(context, transaction),
           SizedBox(height: 20.h),
 
           // Reference Card
@@ -95,7 +103,8 @@ class TransactionDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAmountCard(TransactionModel transaction) {
+  Widget _buildAmountCard(BuildContext context, TransactionModel transaction) {
+    final colors = context.appColors;
     final isCredit = transaction.isCredit;
 
     return Container(
@@ -105,8 +114,8 @@ class TransactionDetailPage extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: isCredit
-              ? [AppColors.success, AppColors.successDark]
-              : [AppColors.primary, AppColors.primaryDark],
+              ? [colors.success, colors.successContainer]
+              : [colors.primary, colors.primaryContainer],
         ),
         borderRadius: BorderRadius.circular(20.r),
       ),
@@ -116,13 +125,13 @@ class TransactionDetailPage extends StatelessWidget {
             width: 60.r,
             height: 60.r,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: colors.surface.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: Icon(
               _getIcon(transaction.type),
               size: 30.r,
-              color: Colors.white,
+              color: colors.surface,
             ),
           ),
           SizedBox(height: 16.h),
@@ -131,162 +140,96 @@ class TransactionDetailPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 36.sp,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: colors.surface,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             transaction.typeDisplayName,
             style: TextStyle(
+              fontSize: 14.sp,
+              color: colors.surface.withValues(alpha: 0.8),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoCard(BuildContext context, TransactionModel transaction) {
+    final colors = context.appColors;
+
+    return Container(
+      padding: EdgeInsets.all(20.r),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: colors.outline),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Transaction Information',
+            style: TextStyle(
               fontSize: 16.sp,
-              color: Colors.white.withValues(alpha: 0.9),
+              fontWeight: FontWeight.w600,
+              color: colors.textPrimary,
             ),
           ),
           SizedBox(height: 16.h),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-            child: Text(
-              transaction.status == TransactionStatus.completed
-                  ? 'Completed'
-                  : transaction.status == TransactionStatus.pending
-                      ? 'Pending'
-                      : 'Failed',
-              style: TextStyle(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  IconData _getIcon(TransactionType type) {
-    switch (type) {
-      case TransactionType.charging:
-        return Iconsax.flash_1;
-      case TransactionType.subscription:
-        return Iconsax.calendar_tick;
-      case TransactionType.refund:
-        return Iconsax.money_recive;
-      case TransactionType.topUp:
-        return Iconsax.wallet_add;
-      case TransactionType.withdrawal:
-        return Iconsax.money_send;
-      case TransactionType.reward:
-        return Iconsax.gift;
-      case TransactionType.referral:
-        return Iconsax.people;
-    }
-  }
-
-  Widget _buildInfoCard(TransactionModel transaction) {
-    return Container(
-      padding: EdgeInsets.all(16.r),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.outlineLight),
-      ),
-      child: Column(
-        children: [
+          _buildInfoRow(context, 'Date', transaction.formattedDate),
+          SizedBox(height: 12.h),
+          _buildInfoRow(context, 'Time', transaction.formattedTime),
+          SizedBox(height: 12.h),
           _buildInfoRow(
-            icon: Iconsax.calendar,
-            label: 'Date',
-            value: transaction.formattedDate,
-          ),
-          Divider(height: 24.h, color: AppColors.outlineLight),
-          _buildInfoRow(
-            icon: Iconsax.clock,
-            label: 'Time',
-            value: transaction.formattedTime,
+            context,
+            'Status',
+            _getStatusDisplayName(transaction.status),
           ),
           if (transaction.stationName != null) ...[
-            Divider(height: 24.h, color: AppColors.outlineLight),
-            _buildInfoRow(
-              icon: Iconsax.gas_station,
-              label: 'Station',
-              value: transaction.stationName!,
-            ),
-          ],
-          if (transaction.energyKwh != null) ...[
-            Divider(height: 24.h, color: AppColors.outlineLight),
-            _buildInfoRow(
-              icon: Iconsax.flash_1,
-              label: 'Energy',
-              value: '${transaction.energyKwh!.toStringAsFixed(1)} kWh',
-            ),
-          ],
-          if (transaction.description != null) ...[
-            Divider(height: 24.h, color: AppColors.outlineLight),
-            _buildInfoRow(
-              icon: Iconsax.document_text,
-              label: 'Description',
-              value: transaction.description!,
-            ),
+            SizedBox(height: 12.h),
+            _buildInfoRow(context, 'Station', transaction.stationName!),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildInfoRow({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
+  Widget _buildInfoRow(BuildContext context, String label, String value) {
+    final colors = context.appColors;
+
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Container(
-          width: 40.r,
-          height: 40.r,
-          decoration: BoxDecoration(
-            color: AppColors.surfaceVariantLight,
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          child: Icon(icon, size: 20.r, color: AppColors.textSecondaryLight),
+        Text(
+          label,
+          style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
         ),
-        SizedBox(width: 14.w),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: AppColors.textTertiaryLight,
-                ),
-              ),
-              SizedBox(height: 2.h),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimaryLight,
-                ),
-              ),
-            ],
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+            color: colors.textPrimary,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildReferenceCard(BuildContext context, TransactionModel transaction) {
+  Widget _buildReferenceCard(
+    BuildContext context,
+    TransactionModel transaction,
+  ) {
+    final colors = context.appColors;
+
     return Container(
-      padding: EdgeInsets.all(16.r),
+      padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: colors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,74 +237,35 @@ class TransactionDetailPage extends StatelessWidget {
           Text(
             'Reference',
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
           SizedBox(height: 12.h),
           Row(
             children: [
               Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(12.r),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceVariantLight,
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: Text(
-                    transaction.id,
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      fontFamily: 'monospace',
-                      color: AppColors.textSecondaryLight,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(width: 10.w),
-              Material(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(10.r),
-                child: InkWell(
-                  onTap: () {
-                    Clipboard.setData(ClipboardData(text: transaction.id));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Transaction ID copied'),
-                        behavior: SnackBarBehavior.floating,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                      ),
-                    );
-                  },
-                  borderRadius: BorderRadius.circular(10.r),
-                  child: Container(
-                    padding: EdgeInsets.all(12.r),
-                    child: Icon(
-                      Iconsax.copy,
-                      size: 20.r,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16.h),
-          Row(
-            children: [
-              Icon(Iconsax.info_circle, size: 16.r, color: AppColors.textTertiaryLight),
-              SizedBox(width: 8.w),
-              Expanded(
                 child: Text(
-                  'Keep this reference for your records.',
+                  transaction.id,
                   style: TextStyle(
-                    fontSize: 12.sp,
-                    color: AppColors.textTertiaryLight,
+                    fontSize: 14.sp,
+                    color: colors.textSecondary,
+                    fontFamily: 'monospace',
                   ),
                 ),
+              ),
+              IconButton(
+                icon: Icon(Iconsax.copy, size: 20.r, color: colors.primary),
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: transaction.id));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Reference copied'),
+                      backgroundColor: colors.surfaceVariant,
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -369,5 +273,38 @@ class TransactionDetailPage extends StatelessWidget {
       ),
     );
   }
-}
 
+  String _getStatusDisplayName(TransactionStatus status) {
+    switch (status) {
+      case TransactionStatus.completed:
+        return 'Completed';
+      case TransactionStatus.pending:
+        return 'Pending';
+      case TransactionStatus.failed:
+        return 'Failed';
+      case TransactionStatus.cancelled:
+        return 'Cancelled';
+      case TransactionStatus.refunded:
+        return 'Refunded';
+    }
+  }
+
+  IconData _getIcon(TransactionType type) {
+    switch (type) {
+      case TransactionType.charging:
+        return Iconsax.flash_1;
+      case TransactionType.topUp:
+        return Iconsax.add_circle;
+      case TransactionType.refund:
+        return Iconsax.arrow_left;
+      case TransactionType.reward:
+        return Iconsax.gift;
+      case TransactionType.subscription:
+        return Iconsax.crown;
+      case TransactionType.withdrawal:
+        return Iconsax.money_send;
+      case TransactionType.referral:
+        return Iconsax.people;
+    }
+  }
+}

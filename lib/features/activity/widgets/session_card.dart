@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/charging_session_model.dart';
 
@@ -34,21 +35,23 @@ class SessionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(isCompact ? 12.r : 16.r),
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: AppColors.outlineLight),
+          border: Border.all(color: colors.outline),
         ),
         child: Row(
           children: [
             // Station image
             ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
-              child: _buildStationImage(),
+              child: _buildStationImage(context),
             ),
             SizedBox(width: 12.w),
 
@@ -65,13 +68,13 @@ class SessionCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: isCompact ? 13.sp : 14.sp,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimaryLight,
+                            color: colors.textPrimary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      _buildStatusBadge(),
+                      _buildStatusBadge(context),
                     ],
                   ),
                   SizedBox(height: 4.h),
@@ -79,22 +82,24 @@ class SessionCard extends StatelessWidget {
                     '${session.formattedDate} · ${session.formattedTime}',
                     style: TextStyle(
                       fontSize: 11.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: colors.textSecondary,
                     ),
                   ),
                   SizedBox(height: 8.h),
                   Row(
                     children: [
                       _buildMetric(
+                        context,
                         icon: Iconsax.flash_1,
                         value: '${session.energyKwh.toStringAsFixed(1)} kWh',
-                        color: AppColors.primary,
+                        color: colors.primary,
                       ),
                       SizedBox(width: 16.w),
                       _buildMetric(
+                        context,
                         icon: Iconsax.clock,
                         value: session.formattedDuration,
-                        color: AppColors.secondary,
+                        color: colors.secondary,
                       ),
                       const Spacer(),
                       Text(
@@ -102,7 +107,7 @@ class SessionCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 15.sp,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
+                          color: colors.primary,
                         ),
                       ),
                     ],
@@ -116,29 +121,28 @@ class SessionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPlaceholder() {
+  Widget _buildPlaceholder(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       width: isCompact ? 50.r : 60.r,
       height: isCompact ? 50.r : 60.r,
-      color: AppColors.surfaceVariantLight,
-      child: Icon(
-        Iconsax.flash_1,
-        size: 24.r,
-        color: AppColors.textTertiaryLight,
-      ),
+      color: colors.surfaceVariant,
+      child: Icon(Iconsax.flash_1, size: 24.r, color: colors.textTertiary),
     );
   }
 
-  Widget _buildStationImage() {
+  Widget _buildStationImage(BuildContext context) {
     final imageUrl = session.stationImageUrl;
-    
+
     // Check if URL is valid
-    final isValidUrl = imageUrl != null &&
+    final isValidUrl =
+        imageUrl != null &&
         imageUrl.isNotEmpty &&
         (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
 
     if (!isValidUrl) {
-      return _buildPlaceholder();
+      return _buildPlaceholder(context);
     }
 
     return CachedNetworkImage(
@@ -146,32 +150,33 @@ class SessionCard extends StatelessWidget {
       width: isCompact ? 50.r : 60.r,
       height: isCompact ? 50.r : 60.r,
       fit: BoxFit.cover,
-      placeholder: (_, __) => _buildPlaceholder(),
-      errorWidget: (_, __, ___) => _buildPlaceholder(),
+      placeholder: (_, __) => _buildPlaceholder(context),
+      errorWidget: (_, __, ___) => _buildPlaceholder(context),
     );
   }
 
-  Widget _buildStatusBadge() {
+  Widget _buildStatusBadge(BuildContext context) {
+    final colors = context.appColors;
     Color bgColor;
     Color textColor;
     String text;
 
     switch (session.status) {
       case SessionStatus.completed:
-        bgColor = AppColors.success.withValues(alpha: 0.12);
-        textColor = AppColors.successDark;
+        bgColor = colors.success.withValues(alpha: 0.12);
+        textColor = colors.success;
         text = 'Completed';
       case SessionStatus.inProgress:
-        bgColor = AppColors.primary.withValues(alpha: 0.12);
-        textColor = AppColors.primary;
+        bgColor = colors.primary.withValues(alpha: 0.12);
+        textColor = colors.primary;
         text = 'Charging';
       case SessionStatus.cancelled:
-        bgColor = AppColors.warning.withValues(alpha: 0.12);
-        textColor = AppColors.warningDark;
+        bgColor = colors.warning.withValues(alpha: 0.12);
+        textColor = colors.warning;
         text = 'Cancelled';
       case SessionStatus.failed:
-        bgColor = AppColors.error.withValues(alpha: 0.12);
-        textColor = AppColors.error;
+        bgColor = colors.danger.withValues(alpha: 0.12);
+        textColor = colors.danger;
         text = 'Failed';
     }
 
@@ -192,11 +197,14 @@ class SessionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildMetric({
+  Widget _buildMetric(
+    BuildContext context, {
     required IconData icon,
     required String value,
     required Color color,
   }) {
+    final colors = context.appColors;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -207,7 +215,7 @@ class SessionCard extends StatelessWidget {
           style: TextStyle(
             fontSize: 12.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textSecondaryLight,
+            color: colors.textSecondary,
           ),
         ),
       ],

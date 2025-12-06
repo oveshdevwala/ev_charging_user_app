@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/station_model.dart';
 import '../../../repositories/station_repository.dart';
@@ -48,12 +49,15 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(),
+            _buildHeader(context),
             Expanded(child: _buildContent()),
           ],
         ),
@@ -61,7 +65,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
+    final colors = context.appColors;
+
     return Padding(
       padding: EdgeInsets.all(20.r),
       child: Text(
@@ -69,7 +75,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         style: TextStyle(
           fontSize: 24.sp,
           fontWeight: FontWeight.w700,
-          color: AppColors.textPrimaryLight,
+          color: colors.textPrimary,
         ),
       ),
     );
@@ -97,7 +103,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     context.push(AppRoutes.stationDetails.id(station.id)),
                 onFavoriteTap: () async {
                   await _stationRepository.toggleFavorite(station.id);
-                await  _loadFavorites();
+                  await _loadFavorites();
                 },
               ),
             );

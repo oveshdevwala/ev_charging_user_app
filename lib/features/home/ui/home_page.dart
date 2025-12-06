@@ -13,7 +13,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../features/nearby_offers/data/models/partner_offer_model.dart';
 import '../../../models/bundle_model.dart';
 import '../../../models/charging_session_model.dart';
 import '../../../models/offer_model.dart';
@@ -23,7 +25,6 @@ import '../../../repositories/home_repository.dart';
 import '../../../repositories/station_repository.dart';
 import '../../../routes/app_routes.dart';
 import '../../../widgets/loading_wrapper.dart';
-import '../../../features/nearby_offers/data/models/partner_offer_model.dart';
 import '../bloc/home_cubit.dart';
 import '../bloc/home_state.dart';
 import '../widgets/home_header.dart';
@@ -52,8 +53,10 @@ class _HomePageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
+      backgroundColor: colors.background,
       body: SafeArea(
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
@@ -67,7 +70,7 @@ class _HomePageContent extends StatelessWidget {
 
             return RefreshIndicator(
               onRefresh: () => context.read<HomeCubit>().refreshHomeData(),
-              color: AppColors.primary,
+              color: colors.primary,
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics(),
@@ -212,41 +215,36 @@ class _HomePageContent extends StatelessWidget {
   }
 
   Widget _buildErrorState(BuildContext context, String error) {
+    final colors = context.appColors;
+
     return Center(
       child: Padding(
         padding: EdgeInsets.all(32.r),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.error_outline_rounded,
-              size: 64.r,
-              color: AppColors.error,
-            ),
+            Icon(Icons.error_outline_rounded, size: 64.r, color: colors.danger),
             SizedBox(height: 16.h),
             Text(
               'Something went wrong',
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
             ),
             SizedBox(height: 8.h),
             Text(
               error,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 24.h),
             ElevatedButton(
               onPressed: () => context.read<HomeCubit>().loadHomeData(),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                backgroundColor: colors.primary,
+                foregroundColor: colors.textPrimary,
                 padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.r),
@@ -301,11 +299,14 @@ class _HomePageContent extends StatelessWidget {
   }
 
   void _onBundleTap(BuildContext context, BundleModel bundle) {
-    _showSnackBar(context, 'Bundle: ${bundle.titleKey}');
+    // Navigate to value packs list screen
+    // TODO: Map bundle to value pack ID if needed
+    context.push(AppRoutes.valuePacksList.path);
   }
 
   void _onBundlesViewAll(BuildContext context) {
-    _showSnackBar(context, 'View all bundles');
+    // Navigate to value packs list screen
+    context.push(AppRoutes.valuePacksList.path);
   }
 
   void _onCategoryTap(BuildContext context, HomeCategory category) {

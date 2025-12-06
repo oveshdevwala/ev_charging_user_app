@@ -7,6 +7,7 @@
 ///    - Customize accepted answer display
 library;
 
+import 'package:ev_charging_user_app/core/extensions/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -113,7 +114,7 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
       decoration: BoxDecoration(
         color: Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: context.appColors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +124,7 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
             children: [
               CircleAvatar(
                 radius: 18.r,
-                backgroundColor: AppColors.outlineLight,
+                backgroundColor: context.appColors.outline,
                 backgroundImage: question.userAvatar != null
                     ? NetworkImage(question.userAvatar!)
                     : null,
@@ -147,7 +148,7 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
                       'Asked ${_formatTime(question.createdAt)}',
                       style: TextStyle(
                         fontSize: 11.sp,
-                        color: AppColors.textTertiaryLight,
+                        color: context.appColors.textTertiary,
                       ),
                     ),
                   ],
@@ -192,29 +193,29 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
                     : Iconsax.arrow_up_2,
                 size: 18.r,
                 color: question.isUpvotedByMe
-                    ? AppColors.primary
-                    : AppColors.textSecondaryLight,
+                    ? context.appColors.primary
+                    : context.appColors.textSecondary,
               ),
               SizedBox(width: 4.w),
               Text(
                 '${question.upvotesCount} upvotes',
                 style: TextStyle(
                   fontSize: 12.sp,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
               ),
               SizedBox(width: 16.w),
               Icon(
                 Iconsax.message,
                 size: 16.r,
-                color: AppColors.textSecondaryLight,
+                color: context.appColors.textSecondary,
               ),
               SizedBox(width: 4.w),
               Text(
                 '${question.answersCount} answers',
                 style: TextStyle(
                   fontSize: 12.sp,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
               ),
             ],
@@ -234,7 +235,7 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
               Icon(
                 Iconsax.message_text,
                 size: 48.r,
-                color: AppColors.outlineLight,
+                color: context.appColors.outline,
               ),
               SizedBox(height: 12.h),
               Text(
@@ -242,7 +243,7 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimaryLight,
+                  color: context.appColors.textPrimary,
                 ),
               ),
               SizedBox(height: 4.h),
@@ -250,7 +251,7 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
                 'Be the first to answer this question',
                 style: TextStyle(
                   fontSize: 13.sp,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
               ),
             ],
@@ -261,15 +262,15 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
 
     // Sort with accepted answer first
     final sortedAnswers = List<AnswerModel>.from(question.answers)
-    ..sort((a, b) {
-      if (a.isAccepted && !b.isAccepted) {
-        return -1;
-      }
-      if (!a.isAccepted && b.isAccepted) {
-        return 1;
-      }
-      return b.helpfulCount.compareTo(a.helpfulCount);
-    });
+      ..sort((a, b) {
+        if (a.isAccepted && !b.isAccepted) {
+          return -1;
+        }
+        if (!a.isAccepted && b.isAccepted) {
+          return 1;
+        }
+        return b.helpfulCount.compareTo(a.helpfulCount);
+      });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,7 +280,7 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimaryLight,
+            color: context.appColors.textPrimary,
           ),
         ),
         SizedBox(height: 12.h),
@@ -317,7 +318,7 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
         color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.appColors.shadow,
             blurRadius: 10,
             offset: const Offset(0, -4),
           ),
@@ -341,23 +342,23 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
                     hintText: 'Write your answer...',
                     hintStyle: TextStyle(
                       fontSize: 14.sp,
-                      color: AppColors.textTertiaryLight,
+                      color: context.appColors.textTertiary,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      borderSide: const BorderSide(
-                        color: AppColors.outlineLight,
+                      borderSide:  BorderSide(
+                        color: context.appColors.outline,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      borderSide: const BorderSide(
-                        color: AppColors.outlineLight,
+                      borderSide:  BorderSide(
+                        color: context.appColors.outline,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      borderSide: const BorderSide(color: AppColors.primary),
+                      borderSide: BorderSide(color: context.appColors.primary),
                     ),
                     contentPadding: EdgeInsets.all(12.r),
                   ),
@@ -382,15 +383,15 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
                   height: 48.r,
                   decoration: BoxDecoration(
                     color: state.answerText.trim().isNotEmpty
-                        ? AppColors.primary
-                        : AppColors.outlineLight,
+                        ? context.appColors.primary
+                        : context.appColors.outline,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: state.isSubmittingAnswer
                       ? Padding(
                           padding: EdgeInsets.all(14.r),
-                          child: const CircularProgressIndicator(
-                            color: Colors.white,
+                          child: CircularProgressIndicator(
+                            color: context.appColors.surface,
                             strokeWidth: 2,
                           ),
                         )
@@ -398,8 +399,8 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
                           Iconsax.send_1,
                           size: 22.r,
                           color: state.answerText.trim().isNotEmpty
-                              ? Colors.white
-                              : AppColors.textTertiaryLight,
+                              ? context.appColors.surface
+                              : context.appColors.textTertiary,
                         ),
                 ),
               ),
@@ -416,15 +417,15 @@ class _QuestionDetailContentState extends State<_QuestionDetailContent> {
                       _isAnonymous ? Iconsax.tick_square : Iconsax.square,
                       size: 18.r,
                       color: _isAnonymous
-                          ? AppColors.primary
-                          : AppColors.textSecondaryLight,
+                          ? context.appColors.primary
+                          : context.appColors.textSecondary,
                     ),
                     SizedBox(width: 6.w),
                     Text(
                       'Answer anonymously',
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: context.appColors.textSecondary,
                       ),
                     ),
                   ],

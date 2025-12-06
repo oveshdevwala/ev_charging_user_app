@@ -4,14 +4,13 @@
 /// Route: /paymentMethods
 library;
 
-import 'package:ev_charging_user_app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/di/injection.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../widgets/common_button.dart';
 import '../bloc/bloc.dart';
@@ -24,6 +23,8 @@ class PaymentMethodsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -33,6 +34,7 @@ class PaymentMethodsPage extends StatelessWidget {
         ),
       ],
       child: Scaffold(
+        backgroundColor: colors.background,
         appBar: AppBar(title: const Text('Payment Methods')),
         body: BlocBuilder<PaymentBloc, PaymentState>(
           builder: (context, state) {
@@ -71,23 +73,26 @@ class PaymentMethodsPage extends StatelessWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final colors = context.appColors;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Iconsax.card, size: 64.r, color: AppColors.textTertiaryLight),
+          Icon(Iconsax.card, size: 64.r, color: colors.textTertiary),
           SizedBox(height: 16.h),
           Text(
             'No payment methods',
-            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+              color: colors.textPrimary,
+            ),
           ),
           SizedBox(height: 8.h),
           Text(
             'Add a payment method to get started',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
           ),
         ],
       ),
@@ -98,20 +103,23 @@ class PaymentMethodsPage extends StatelessWidget {
     BuildContext context,
     PaymentMethodModel method,
   ) {
+    final colors = context.appColors;
+
     return Card(
       margin: EdgeInsets.only(bottom: 12.h),
       child: ListTile(
-        leading: Icon(Iconsax.card, size: 32.r, color: AppColors.primary),
+        leading: Icon(Iconsax.card, size: 32.r, color: colors.primary),
         title: Text(
           '${method.brand} •••• ${method.last4}',
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+            color: colors.textPrimary,
+          ),
         ),
         subtitle: Text(
           'Expires ${method.formattedExpiry}',
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: AppColors.textSecondaryLight,
-          ),
+          style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -120,12 +128,12 @@ class PaymentMethodsPage extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: colors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: Text(
                   'Default',
-                  style: TextStyle(fontSize: 12.sp, color: AppColors.primary),
+                  style: TextStyle(fontSize: 12.sp, color: colors.primary),
                 ),
               ),
             SizedBox(width: 8.w),
@@ -141,10 +149,7 @@ class PaymentMethodsPage extends StatelessWidget {
                     },
                   ),
                 PopupMenuItem(
-                  child: const Text(
-                    'Remove',
-                    style: TextStyle(color: AppColors.error),
-                  ),
+                  child: Text('Remove', style: TextStyle(color: colors.danger)),
                   onTap: () {
                     _showRemoveDialog(context, method);
                   },
@@ -158,36 +163,40 @@ class PaymentMethodsPage extends StatelessWidget {
   }
 
   void _showAddCardDialog(BuildContext context) {
-    context.push(AppRoutes.addCard.path);
+    // TODO: Implement add card dialog
   }
 
   void _showRemoveDialog(BuildContext context, PaymentMethodModel method) {
+    final colors = context.appColors;
+
     showDialog<void>(
       context: context,
-      builder: (dialogContext) => BlocProvider.value(
-        value: context.read<PaymentBloc>(),
-        child: AlertDialog(
-          title: const Text('Remove Payment Method'),
-          content: Text(
-            'Are you sure you want to remove ${method.brand} •••• ${method.last4}?',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<PaymentBloc>().add(RemovePaymentMethod(method.id));
-                Navigator.pop(dialogContext);
-              },
-              child: const Text(
-                'Remove',
-                style: TextStyle(color: AppColors.error),
-              ),
-            ),
-          ],
+      builder: (context) => AlertDialog(
+        backgroundColor: colors.surface,
+        title: Text(
+          'Remove Payment Method',
+          style: TextStyle(color: colors.textPrimary),
         ),
+        content: Text(
+          'Are you sure you want to remove ${method.brand} •••• ${method.last4}?',
+          style: TextStyle(color: colors.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: colors.textSecondary),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<PaymentBloc>().add(RemovePaymentMethod(method.id));
+              Navigator.pop(context);
+            },
+            child: Text('Remove', style: TextStyle(color: colors.danger)),
+          ),
+        ],
       ),
     );
   }

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../core/constants/app_strings.dart';
+import '../core/extensions/context_ext.dart';
 import '../core/theme/app_colors.dart';
 import 'common_button.dart';
 
@@ -84,6 +85,7 @@ class LoadingIndicator extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -104,7 +106,7 @@ class LoadingIndicator extends StatelessWidget {
               message!,
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
+                color: colors.textSecondary,
               ),
             ),
           ],
@@ -130,6 +132,7 @@ class ErrorStateWidget extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Center(
       child: Padding(
         padding: EdgeInsets.all(24.r),
@@ -139,7 +142,7 @@ class ErrorStateWidget extends StatelessWidget {
             Icon(
               icon ?? Icons.error_outline_rounded,
               size: 64.r,
-              color: AppColors.error,
+              color: colors.danger,
             ),
             SizedBox(height: 16.h),
             Text(
@@ -147,7 +150,7 @@ class ErrorStateWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -156,7 +159,7 @@ class ErrorStateWidget extends StatelessWidget {
               message,
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
+                color: colors.textSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -196,6 +199,7 @@ class EmptyStateWidget extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Center(
       child: Padding(
         padding: EdgeInsets.all(24.r),
@@ -208,7 +212,7 @@ class EmptyStateWidget extends StatelessWidget {
               Icon(
                 icon ?? Icons.inbox_outlined,
                 size: 80.r,
-                color: AppColors.textTertiaryLight,
+                color: colors.textTertiary,
               ),
             SizedBox(height: 24.h),
             Text(
@@ -216,7 +220,7 @@ class EmptyStateWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -226,7 +230,7 @@ class EmptyStateWidget extends StatelessWidget {
                 message!,
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: AppColors.textSecondaryLight,
+                  color: colors.textSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -259,11 +263,12 @@ class ShimmerLoading extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: AppColors.outlineLight,
+        color: colors.outline,
         borderRadius: BorderRadius.circular(borderRadius ?? 8.r),
       ),
     );

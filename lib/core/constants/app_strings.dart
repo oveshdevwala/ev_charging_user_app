@@ -49,6 +49,8 @@ abstract final class AppStrings {
   static const String loading = 'Loading...';
   static const String seeAll = 'See All';
   static const String viewDetails = 'View Details';
+  static const String buyNow = 'Buy Now';
+  static const String subscribe = 'Subscribe';
 
   // ============ Auth ============
   static const String login = 'Login';
@@ -102,6 +104,7 @@ abstract final class AppStrings {
   static const String pricePerKwh = 'Price per kWh';
   static const String operatingHours = 'Operating Hours';
   static const String getDirections = 'Get Directions';
+  static const String getLocation = 'Get Location';
   static const String bookNow = 'Book Now';
   static const String addToFavorites = 'Add to Favorites';
   static const String removeFromFavorites = 'Remove from Favorites';
@@ -218,6 +221,23 @@ abstract final class AppStrings {
   static const String bundleBusinessDesc = 'Fleet management solution';
   static const String bundleBadgeBestValue = 'Best Value';
   static const String bundleBadgePopular = 'Popular';
+
+  // ============ Value Packs ============
+  static const String valuePacks = 'Value Packs';
+  static const String valuePackDetails = 'Pack Details';
+  static const String valuePackFeatures = 'Features';
+  static const String valuePackReviews = 'Reviews';
+  static const String valuePackCompare = 'Compare Packs';
+  static const String valuePackPurchase = 'Purchase';
+  static const String valuePackSubscribe = 'Subscribe';
+  static const String valuePackBuyNow = 'Buy Now';
+  static const String valuePackSaved = 'Saved Packs';
+  static const String valuePackFAQ = 'FAQ';
+  static const String valuePackRelated = 'Related Packs';
+  static const String valuePackNotAvailable = 'Not Available';
+  static const String valuePackOneTime = 'One-time payment';
+  static const String valuePackMonthly = 'Per month';
+  static const String valuePackYearly = 'Per year';
 
   // ============ Offers ============
   static const String offerFlashSaleTitle = 'Flash Sale';

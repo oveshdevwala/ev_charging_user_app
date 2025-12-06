@@ -8,12 +8,16 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// Trip stat card widget for displaying single statistics.
 class TripStatCard extends StatelessWidget {
   const TripStatCard({
-    required this.icon, required this.label, required this.value, super.key,
+    required this.icon,
+    required this.label,
+    required this.value,
+    super.key,
     this.subtitle,
     this.iconColor,
     this.backgroundColor,
@@ -30,8 +34,9 @@ class TripStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final theme = Theme.of(context);
-    final effectiveIconColor = iconColor ?? AppColors.primary;
+    final effectiveIconColor = iconColor ?? colors.primary;
     final effectiveBgColor =
         backgroundColor ?? effectiveIconColor.withValues(alpha: 0.1);
 
@@ -42,9 +47,7 @@ class TripStatCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: theme.cardColor,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(
-            color: AppColors.outlineLight,
-          ),
+          border: Border.all(color: context.appColors.outline),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,11 +60,7 @@ class TripStatCard extends StatelessWidget {
                 color: effectiveBgColor,
                 borderRadius: BorderRadius.circular(10.r),
               ),
-              child: Icon(
-                icon,
-                size: 20.r,
-                color: effectiveIconColor,
-              ),
+              child: Icon(icon, size: 20.r, color: effectiveIconColor),
             ),
             SizedBox(height: 12.h),
             // Label
@@ -69,7 +68,7 @@ class TripStatCard extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: 12.sp,
-                color: AppColors.textSecondaryLight,
+                color: context.appColors.textSecondary,
               ),
             ),
             SizedBox(height: 4.h),
@@ -79,7 +78,7 @@ class TripStatCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w700,
-                color: AppColors.textPrimaryLight,
+                color: context.appColors.textPrimary,
               ),
             ),
             if (subtitle != null) ...[
@@ -88,7 +87,7 @@ class TripStatCard extends StatelessWidget {
                 subtitle!,
                 style: TextStyle(
                   fontSize: 11.sp,
-                  color: AppColors.textTertiaryLight,
+                  color: context.appColors.textTertiary,
                 ),
               ),
             ],
@@ -101,9 +100,7 @@ class TripStatCard extends StatelessWidget {
 
 /// Horizontal trip stat row for compact display.
 class TripStatRow extends StatelessWidget {
-  const TripStatRow({
-    required this.stats, super.key,
-  });
+  const TripStatRow({required this.stats, super.key});
 
   final List<TripStatData> stats;
 
@@ -120,11 +117,7 @@ class TripStatRow extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 12.h),
             decoration: BoxDecoration(
               border: !isLast
-                  ? const Border(
-                      right: BorderSide(
-                        color: AppColors.outlineLight,
-                      ),
-                    )
+                  ? Border(right: BorderSide(color: context.appColors.outline))
                   : null,
             ),
             child: Column(
@@ -132,7 +125,7 @@ class TripStatRow extends StatelessWidget {
                 Icon(
                   stat.icon,
                   size: 20.r,
-                  color: stat.color ?? AppColors.primary,
+                  color: stat.color ?? context.appColors.primary,
                 ),
                 SizedBox(height: 6.h),
                 Text(
@@ -140,7 +133,7 @@ class TripStatRow extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimaryLight,
+                    color: context.appColors.textPrimary,
                   ),
                 ),
                 SizedBox(height: 2.h),
@@ -148,7 +141,7 @@ class TripStatRow extends StatelessWidget {
                   stat.label,
                   style: TextStyle(
                     fontSize: 11.sp,
-                    color: AppColors.textSecondaryLight,
+                    color: context.appColors.textSecondary,
                   ),
                 ),
               ],
@@ -178,7 +171,8 @@ class TripStatData {
 /// Summary stats card with multiple stats in a row.
 class TripSummaryStatsCard extends StatelessWidget {
   const TripSummaryStatsCard({
-    required this.stats, super.key,
+    required this.stats,
+    super.key,
     this.backgroundColor,
   });
 
@@ -194,9 +188,7 @@ class TripSummaryStatsCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor ?? theme.cardColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(
-          color: AppColors.outlineLight,
-        ),
+        border: Border.all(color: context.appColors.outline),
       ),
       child: TripStatRow(stats: stats),
     );
@@ -206,7 +198,10 @@ class TripSummaryStatsCard extends StatelessWidget {
 /// Large featured stat widget.
 class FeaturedStatWidget extends StatelessWidget {
   const FeaturedStatWidget({
-    required this.icon, required this.label, required this.value, super.key,
+    required this.icon,
+    required this.label,
+    required this.value,
+    super.key,
     this.unit,
     this.color,
     this.gradient,
@@ -221,13 +216,14 @@ class FeaturedStatWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveGradient = gradient ??
+    final effectiveGradient =
+        gradient ??
         LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            color ?? AppColors.primary,
-            (color ?? AppColors.primary).withValues(alpha: 0.8),
+            color ?? context.appColors.primary,
+            (color ?? context.appColors.primary).withValues(alpha: 0.8),
           ],
         );
 
@@ -238,7 +234,7 @@ class FeaturedStatWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-            color: (color ?? AppColors.primary).withValues(alpha: 0.3),
+            color: (color ?? context.appColors.primary).withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -250,14 +246,10 @@ class FeaturedStatWidget extends StatelessWidget {
             width: 56.r,
             height: 56.r,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: context.appColors.surface.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(14.r),
             ),
-            child: Icon(
-              icon,
-              size: 28.r,
-              color: Colors.white,
-            ),
+            child: Icon(icon, size: 28.r, color: context.appColors.surface),
           ),
           SizedBox(width: 16.w),
           Expanded(
@@ -268,7 +260,7 @@ class FeaturedStatWidget extends StatelessWidget {
                   label,
                   style: TextStyle(
                     fontSize: 13.sp,
-                    color: Colors.white.withValues(alpha: 0.9),
+                    color: context.appColors.surface.withValues(alpha: 0.9),
                   ),
                 ),
                 SizedBox(height: 4.h),
@@ -280,7 +272,7 @@ class FeaturedStatWidget extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 28.sp,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: context.appColors.surface,
                       ),
                     ),
                     if (unit != null) ...[
@@ -292,7 +284,9 @@ class FeaturedStatWidget extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
-                            color: Colors.white.withValues(alpha: 0.8),
+                            color: context.appColors.surface.withValues(
+                              alpha: 0.8,
+                            ),
                           ),
                         ),
                       ),
@@ -307,4 +301,3 @@ class FeaturedStatWidget extends StatelessWidget {
     );
   }
 }
-

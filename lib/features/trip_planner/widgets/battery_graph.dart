@@ -10,6 +10,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../models/models.dart';
 
@@ -68,7 +69,7 @@ class BatteryGraph extends StatelessWidget {
             'No data available',
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
+              color: context.appColors.textSecondary,
             ),
           ),
         ),
@@ -79,9 +80,10 @@ class BatteryGraph extends StatelessWidget {
         .map((d) => d.distanceKm)
         .reduce((a, b) => a > b ? a : b);
 
-    final effectiveLineColor = lineColor ?? AppColors.primary;
-    final effectiveReserveColor = reserveLineColor ?? AppColors.warning;
-    final effectiveChargingColor = chargingColor ?? AppColors.secondary;
+    final colors = context.appColors;
+    final effectiveLineColor = lineColor ?? colors.primary;
+    final effectiveReserveColor = reserveLineColor ?? colors.warning;
+    final effectiveChargingColor = chargingColor ?? colors.secondary;
 
     // Create line chart spots
     final spots = <FlSpot>[];
@@ -104,15 +106,17 @@ class BatteryGraph extends StatelessWidget {
             verticalInterval: maxDistance / 5,
             getDrawingHorizontalLine: (value) {
               return FlLine(
-                color: (isDark ? AppColors.outlineDark : AppColors.outlineLight)
-                    .withValues(alpha: 0.5),
+                color:
+                    (isDark ? colors.outline : context.appColors.outline)
+                        .withValues(alpha: 0.5),
                 strokeWidth: 1,
               );
             },
             getDrawingVerticalLine: (value) {
               return FlLine(
-                color: (isDark ? AppColors.outlineDark : AppColors.outlineLight)
-                    .withValues(alpha: 0.5),
+                color:
+                    (isDark ? colors.outline : context.appColors.outline)
+                        .withValues(alpha: 0.5),
                 strokeWidth: 1,
               );
             },
@@ -123,7 +127,7 @@ class BatteryGraph extends StatelessWidget {
                 'SOC %',
                 style: TextStyle(
                   fontSize: 10.sp,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
               ),
               sideTitles: SideTitles(
@@ -135,7 +139,7 @@ class BatteryGraph extends StatelessWidget {
                     '${value.toInt()}%',
                     style: TextStyle(
                       fontSize: 10.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: context.appColors.textSecondary,
                     ),
                   );
                 },
@@ -146,7 +150,7 @@ class BatteryGraph extends StatelessWidget {
                 'Distance (km)',
                 style: TextStyle(
                   fontSize: 10.sp,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
               ),
               sideTitles: SideTitles(
@@ -158,7 +162,7 @@ class BatteryGraph extends StatelessWidget {
                     '${value.toInt()}',
                     style: TextStyle(
                       fontSize: 10.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: context.appColors.textSecondary,
                     ),
                   );
                 },
@@ -171,10 +175,14 @@ class BatteryGraph extends StatelessWidget {
             show: true,
             border: Border(
               left: BorderSide(
-                color: isDark ? AppColors.outlineDark : AppColors.outlineLight,
+                color: isDark
+                    ? colors.outline
+                    : context.appColors.outline,
               ),
               bottom: BorderSide(
-                color: isDark ? AppColors.outlineDark : AppColors.outlineLight,
+                color: isDark
+                    ? colors.outline
+                    : context.appColors.outline,
               ),
             ),
           ),
@@ -182,7 +190,7 @@ class BatteryGraph extends StatelessWidget {
             enabled: showTooltip,
             touchTooltipData: LineTouchTooltipData(
               getTooltipColor: (touchedSpot) =>
-                  isDark ? AppColors.surfaceDark : Colors.white,
+                  isDark ? colors.surface : context.appColors.surface,
               tooltipPadding: EdgeInsets.all(8.r),
               getTooltipItems: (touchedSpots) {
                 return touchedSpots.map((spot) {
@@ -203,7 +211,7 @@ class BatteryGraph extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 10.sp,
                                 fontWeight: FontWeight.normal,
-                                color: AppColors.textSecondaryLight,
+                                color: context.appColors.textSecondary,
                               ),
                             ),
                           ]
@@ -252,7 +260,7 @@ class BatteryGraph extends StatelessWidget {
                         ? effectiveChargingColor
                         : effectiveLineColor,
                     strokeWidth: isCharging ? 2 : 0,
-                    strokeColor: Colors.white,
+                    strokeColor: context.appColors.surface,
                   );
                 },
               ),
@@ -304,12 +312,13 @@ class BatteryProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final isLow = socPercent <= reserveSocPercent;
     final color = isLow
-        ? AppColors.error
+        ? colors.danger
         : socPercent <= 30
-        ? AppColors.warning
-        : AppColors.primary;
+        ? colors.warning
+        : colors.primary;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -319,7 +328,7 @@ class BatteryProgressIndicator extends StatelessWidget {
           height: height ?? 24.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4.r),
-            border: Border.all(color: AppColors.outlineLight, width: 2),
+            border: Border.all(color: context.appColors.outline, width: 2),
           ),
           child: Stack(
             children: [
@@ -341,7 +350,7 @@ class BatteryProgressIndicator extends StatelessWidget {
                 bottom: 0,
                 child: Container(
                   width: 2,
-                  color: AppColors.warning.withValues(alpha: 0.5),
+                  color: context.appColors.warning.withValues(alpha: 0.5),
                 ),
               ),
             ],

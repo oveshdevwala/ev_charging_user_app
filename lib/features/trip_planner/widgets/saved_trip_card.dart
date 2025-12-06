@@ -10,13 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../models/models.dart';
 
 /// Saved trip card widget.
 class SavedTripCard extends StatelessWidget {
   const SavedTripCard({
-    required this.trip, required this.onTap, super.key,
+    required this.trip,
+    required this.onTap,
+    super.key,
     this.onFavoriteTap,
     this.onDeleteTap,
     this.compact = false,
@@ -45,14 +48,12 @@ class SavedTripCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: theme.cardColor,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(
-            color: AppColors.outlineLight,
-          ),
-          boxShadow: const [
+          border: Border.all(color: context.appColors.outline),
+          boxShadow: [
             BoxShadow(
-              color: AppColors.shadowLight,
+              color: context.appColors.shadow,
               blurRadius: 8,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -63,7 +64,7 @@ class SavedTripCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.05),
+                color: context.appColors.primary.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
               ),
               child: Column(
@@ -77,7 +78,7 @@ class SavedTripCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimaryLight,
+                            color: context.appColors.textPrimary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -90,8 +91,8 @@ class SavedTripCard extends StatelessWidget {
                             trip.isFavorite ? Iconsax.heart5 : Iconsax.heart,
                             size: 22.r,
                             color: trip.isFavorite
-                                ? AppColors.error
-                                : AppColors.textSecondaryLight,
+                                ? context.appColors.danger
+                                : context.appColors.textSecondary,
                           ),
                         ),
                     ],
@@ -102,7 +103,7 @@ class SavedTripCard extends StatelessWidget {
                       Icon(
                         Iconsax.location,
                         size: 14.r,
-                        color: AppColors.primary,
+                        color: context.appColors.primary,
                       ),
                       SizedBox(width: 4.w),
                       Expanded(
@@ -110,7 +111,7 @@ class SavedTripCard extends StatelessWidget {
                           trip.origin.shortDisplay,
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: AppColors.textSecondaryLight,
+                            color: context.appColors.textSecondary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -123,7 +124,7 @@ class SavedTripCard extends StatelessWidget {
                     child: Icon(
                       Iconsax.arrow_down,
                       size: 12.r,
-                      color: AppColors.textTertiaryLight,
+                      color: context.appColors.textTertiary,
                     ),
                   ),
                   Row(
@@ -131,7 +132,7 @@ class SavedTripCard extends StatelessWidget {
                       Icon(
                         Iconsax.flag,
                         size: 14.r,
-                        color: AppColors.error,
+                        color: context.appColors.danger,
                       ),
                       SizedBox(width: 4.w),
                       Expanded(
@@ -139,7 +140,7 @@ class SavedTripCard extends StatelessWidget {
                           trip.destination.shortDisplay,
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: AppColors.textSecondaryLight,
+                            color: context.appColors.textSecondary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -161,19 +162,23 @@ class SavedTripCard extends StatelessWidget {
                       _buildStatItem(
                         Iconsax.routing_2,
                         '${trip.estimates?.totalDistanceKm.toStringAsFixed(0) ?? '0'} km',
+                        context: context,
                       ),
                       _buildStatItem(
                         Iconsax.clock,
                         trip.estimates?.formattedTotalTime ?? '--',
+                        context: context,
                       ),
                       _buildStatItem(
                         Iconsax.flash_1,
                         '${trip.chargingStops.length} stops',
+                        context: context,
                       ),
                       _buildStatItem(
                         Iconsax.dollar_circle,
                         '\$${trip.estimates?.estimatedCost.toStringAsFixed(2) ?? '0'}',
-                        valueColor: AppColors.primary,
+                        context: context,
+                        valueColor: context.appColors.primary,
                       ),
                     ],
                   ),
@@ -186,7 +191,7 @@ class SavedTripCard extends StatelessWidget {
                           _formatDate(trip.createdAt!),
                           style: TextStyle(
                             fontSize: 11.sp,
-                            color: AppColors.textTertiaryLight,
+                            color: context.appColors.textTertiary,
                           ),
                         ),
                         if (onDeleteTap != null)
@@ -197,14 +202,14 @@ class SavedTripCard extends StatelessWidget {
                                 Icon(
                                   Iconsax.trash,
                                   size: 14.r,
-                                  color: AppColors.error,
+                                  color: context.appColors.danger,
                                 ),
                                 SizedBox(width: 4.w),
                                 Text(
                                   'Delete',
                                   style: TextStyle(
                                     fontSize: 11.sp,
-                                    color: AppColors.error,
+                                    color: context.appColors.danger,
                                   ),
                                 ),
                               ],
@@ -230,9 +235,7 @@ class SavedTripCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: theme.cardColor,
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(
-            color: AppColors.outlineLight,
-          ),
+          border: Border.all(color: context.appColors.outline),
         ),
         child: Row(
           children: [
@@ -240,13 +243,13 @@ class SavedTripCard extends StatelessWidget {
               width: 44.r,
               height: 44.r,
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
+                color: context.appColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: Icon(
                 Iconsax.routing_2,
                 size: 22.r,
-                color: AppColors.primary,
+                color: context.appColors.primary,
               ),
             ),
             SizedBox(width: 12.w),
@@ -259,7 +262,7 @@ class SavedTripCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimaryLight,
+                      color: context.appColors.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -269,7 +272,7 @@ class SavedTripCard extends StatelessWidget {
                     '${trip.estimates?.totalDistanceKm.toStringAsFixed(0) ?? '0'} km • ${trip.estimates?.formattedTotalTime ?? '--'} • ${trip.chargingStops.length} stops',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: context.appColors.textSecondary,
                     ),
                   ),
                 ],
@@ -283,8 +286,8 @@ class SavedTripCard extends StatelessWidget {
                   trip.isFavorite ? Iconsax.heart5 : Iconsax.heart,
                   size: 20.r,
                   color: trip.isFavorite
-                      ? AppColors.error
-                      : AppColors.textSecondaryLight,
+                      ? context.appColors.danger
+                      : context.appColors.textSecondary,
                 ),
               ),
             ],
@@ -292,7 +295,7 @@ class SavedTripCard extends StatelessWidget {
             Icon(
               Iconsax.arrow_right_3,
               size: 16.r,
-              color: AppColors.textTertiaryLight,
+              color: context.appColors.textTertiary,
             ),
           ],
         ),
@@ -303,22 +306,19 @@ class SavedTripCard extends StatelessWidget {
   Widget _buildStatItem(
     IconData icon,
     String value, {
+    required BuildContext context,
     Color? valueColor,
   }) {
     return Column(
       children: [
-        Icon(
-          icon,
-          size: 16.r,
-          color: AppColors.textSecondaryLight,
-        ),
+        Icon(icon, size: 16.r, color: context.appColors.textSecondary),
         SizedBox(height: 4.h),
         Text(
           value,
           style: TextStyle(
             fontSize: 12.sp,
             fontWeight: FontWeight.w600,
-            color: valueColor ?? AppColors.textPrimaryLight,
+            color: valueColor ?? context.appColors.textPrimary,
           ),
         ),
       ],
@@ -340,4 +340,3 @@ class SavedTripCard extends StatelessWidget {
     }
   }
 }
-

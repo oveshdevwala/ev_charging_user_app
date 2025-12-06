@@ -48,6 +48,7 @@ class _BookingPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return BlocConsumer<BookingCubit, BookingState>(
       listenWhen: (prev, curr) =>
           prev.status != curr.status || prev.error != curr.error,
@@ -62,7 +63,7 @@ class _BookingPageContent extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.error!),
-              backgroundColor: AppColors.error,
+              backgroundColor: colors.danger,
               behavior: SnackBarBehavior.floating,
             ),
           );
@@ -96,6 +97,7 @@ class _BookingPageContent extends StatelessWidget {
   }
 
   void _showSuccessDialog(BuildContext context, String bookingId) {
+    final colors = context.appColors;
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -114,7 +116,7 @@ class _BookingPageContent extends StatelessWidget {
               ),
               child: Icon(
                 Iconsax.tick_circle5,
-                color: Colors.white,
+                color: context.appColors.surface,
                 size: 24.r,
               ),
             ),
@@ -133,14 +135,14 @@ class _BookingPageContent extends StatelessWidget {
               'Your charging session has been booked successfully!',
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
+                color: colors.textSecondary,
               ),
             ),
             SizedBox(height: 16.h),
             Container(
               padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
-                color: AppColors.surfaceVariantLight,
+                color: colors.surfaceVariant,
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Row(
@@ -155,7 +157,7 @@ class _BookingPageContent extends StatelessWidget {
                           'Booking ID',
                           style: TextStyle(
                             fontSize: 11.sp,
-                            color: AppColors.textTertiaryLight,
+                            color: colors.textTertiary,
                           ),
                         ),
                         Text(
@@ -163,7 +165,7 @@ class _BookingPageContent extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimaryLight,
+                            color: colors.textPrimary,
                           ),
                         ),
                       ],
@@ -184,7 +186,7 @@ class _BookingPageContent extends StatelessWidget {
               'View Bookings',
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
+                color: colors.textSecondary,
               ),
             ),
           ),
@@ -204,7 +206,7 @@ class _BookingPageContent extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: context.appColors.surface,
               ),
             ),
           ),
@@ -220,6 +222,7 @@ class _LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -230,7 +233,7 @@ class _LoadingView extends StatelessWidget {
             'Loading station...',
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
+              color: colors.textSecondary,
             ),
           ),
         ],
@@ -245,6 +248,7 @@ class _StationNotFoundView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Center(
       child: Padding(
         padding: EdgeInsets.all(32.r),
@@ -270,7 +274,7 @@ class _StationNotFoundView extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w700,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
             ),
             SizedBox(height: 12.h),
@@ -279,7 +283,7 @@ class _StationNotFoundView extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
+                color: colors.textSecondary,
               ),
             ),
             SizedBox(height: 32.h),
@@ -303,6 +307,7 @@ class _BookingFormView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     final cubit = context.read<BookingCubit>();
 
     return Stack(
@@ -365,7 +370,7 @@ class _BookingFormView extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(24.r),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: context.appColors.surface,
                   borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: Column(
@@ -378,7 +383,7 @@ class _BookingFormView extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight,
+                        color: colors.textPrimary,
                       ),
                     ),
                   ],
@@ -391,6 +396,7 @@ class _BookingFormView extends StatelessWidget {
   }
 
   Widget _buildEnhancedSummary(BuildContext context, BookingState state) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
@@ -413,36 +419,36 @@ class _BookingFormView extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
           SizedBox(height: 16.h),
-          _buildSummaryRow(
+          _buildSummaryRow(context,
             'Charger',
             state.selectedCharger?.name ?? '-',
             Iconsax.flash_1,
           ),
-          _buildSummaryRow(
+          _buildSummaryRow(context,
             'Power',
             '${state.selectedCharger?.power.toStringAsFixed(0) ?? '-'} kW',
             Iconsax.electricity,
           ),
-          _buildSummaryRow(
+          _buildSummaryRow(context,
             'Duration',
             '${state.duration} min',
             Iconsax.timer_1,
           ),
-          _buildSummaryRow(
+          _buildSummaryRow(context,
             'Date & Time',
             state.formattedBookingTime,
             Iconsax.calendar,
           ),
-          _buildSummaryRow(
+          _buildSummaryRow(context,
             'Est. Energy',
             '${state.estimatedEnergy.toStringAsFixed(1)} kWh',
             Iconsax.battery_charging,
           ),
-          Divider(color: AppColors.outlineLight, height: 24.h),
+          Divider(color: colors.outline, height: 24.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -451,7 +457,7 @@ class _BookingFormView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimaryLight,
+                  color: colors.textPrimary,
                 ),
               ),
               Text(
@@ -469,18 +475,19 @@ class _BookingFormView extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryRow(String label, String value, IconData icon) {
+  Widget _buildSummaryRow(BuildContext context, String label, String value, IconData icon) {
+    final colors = context.appColors;
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: Row(
         children: [
-          Icon(icon, size: 18.r, color: AppColors.textSecondaryLight),
+          Icon(icon, size: 18.r, color: colors.textSecondary),
           SizedBox(width: 10.w),
           Text(
             label,
             style: TextStyle(
               fontSize: 13.sp,
-              color: AppColors.textSecondaryLight,
+              color: colors.textSecondary,
             ),
           ),
           const Spacer(),
@@ -489,7 +496,7 @@ class _BookingFormView extends StatelessWidget {
             style: TextStyle(
               fontSize: 13.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
         ],

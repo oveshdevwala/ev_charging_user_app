@@ -1,14 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class TripRecord extends Equatable {
-  final String id;
-  final String stationName;
-  final DateTime startTime;
-  final DateTime endTime;
-  final double energyConsumedKWh;
-  final double cost;
-  final String vehicle;
-  final double efficiencyScore;
 
   const TripRecord({
     required this.id,
@@ -20,6 +12,14 @@ class TripRecord extends Equatable {
     required this.vehicle,
     required this.efficiencyScore,
   });
+  final String id;
+  final String stationName;
+  final DateTime startTime;
+  final DateTime endTime;
+  final double energyConsumedKWh;
+  final double cost;
+  final String vehicle;
+  final double efficiencyScore;
 
   @override
   List<Object?> get props => [

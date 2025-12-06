@@ -10,11 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../core/extensions/context_ext.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/credits_model.dart';
 
 /// Credits timeline for displaying credit history.
-/// 
+///
 /// Features:
 /// - Visual timeline with connectors
 /// - Source-based icons
@@ -22,7 +23,8 @@ import '../../data/models/credits_model.dart';
 /// - Used/available indicators
 class CreditsTimeline extends StatelessWidget {
   const CreditsTimeline({
-    required this.entries, super.key,
+    required this.entries,
+    super.key,
     this.showExpiring = true,
   });
 
@@ -53,7 +55,7 @@ class CreditsTimeline extends StatelessWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = context.appColors;
 
     return Container(
       padding: EdgeInsets.all(32.r),
@@ -62,7 +64,7 @@ class CreditsTimeline extends StatelessWidget {
           Icon(
             Iconsax.empty_wallet,
             size: 48.r,
-            color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
+            color: colors.textTertiary,
           ),
           SizedBox(height: 12.h),
           Text(
@@ -70,7 +72,7 @@ class CreditsTimeline extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+              color: colors.textSecondary,
             ),
           ),
           SizedBox(height: 4.h),
@@ -78,7 +80,7 @@ class CreditsTimeline extends StatelessWidget {
             'Start charging to earn credits',
             style: TextStyle(
               fontSize: 12.sp,
-              color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
+              color: colors.textTertiary,
             ),
           ),
         ],
@@ -100,7 +102,7 @@ class _CreditTimelineItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = context.appColors;
 
     return IntrinsicHeight(
       child: Row(
@@ -111,12 +113,12 @@ class _CreditTimelineItem extends StatelessWidget {
             width: 40.w,
             child: Column(
               children: [
-                _buildDot(),
+                _buildDot(context),
                 if (!isLast)
                   Expanded(
                     child: Container(
                       width: 2,
-                      color: isDark ? AppColors.outlineDark : AppColors.outlineLight,
+                      color: colors.outline,
                     ),
                   ),
               ],
@@ -128,10 +130,10 @@ class _CreditTimelineItem extends StatelessWidget {
               margin: EdgeInsets.only(bottom: 16.h),
               padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
-                color: isDark ? AppColors.surfaceVariantDark : AppColors.surfaceVariantLight,
+                color: colors.surfaceVariant,
                 borderRadius: BorderRadius.circular(12.r),
                 border: entry.isExpired
-                    ? Border.all(color: AppColors.error.withValues(alpha: 0.3))
+                    ? Border.all(color: colors.danger.withValues(alpha: 0.3))
                     : null,
               ),
               child: Column(
@@ -145,12 +147,12 @@ class _CreditTimelineItem extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(6.r),
                             decoration: BoxDecoration(
-                              color: _getSourceColor().withValues(alpha: 0.1),
+                              color: _getSourceColor(context).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8.r),
                             ),
                             child: Icon(
                               _getSourceIcon(),
-                              color: _getSourceColor(),
+                              color: _getSourceColor(context),
                               size: 14.r,
                             ),
                           ),
@@ -160,7 +162,7 @@ class _CreditTimelineItem extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w600,
-                              color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                              color: colors.textPrimary,
                             ),
                           ),
                         ],
@@ -170,7 +172,7 @@ class _CreditTimelineItem extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w700,
-                          color: entry.isExpired ? AppColors.textTertiaryLight : AppColors.success,
+                          color: entry.isExpired ? colors.textTertiary : colors.success,
                         ),
                       ),
                     ],
@@ -181,7 +183,7 @@ class _CreditTimelineItem extends StatelessWidget {
                       entry.stationName ?? entry.description ?? '',
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                       ),
                     ),
                   ],
@@ -193,17 +195,17 @@ class _CreditTimelineItem extends StatelessWidget {
                         entry.formattedEarnedDate,
                         style: TextStyle(
                           fontSize: 11.sp,
-                          color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
+                          color: colors.textTertiary,
                         ),
                       ),
                       if (showExpiring && !entry.isExpired && entry.daysUntilExpiry <= 30)
-                        _buildExpiryBadge(),
-                      if (entry.isExpired) _buildExpiredBadge(),
+                        _buildExpiryBadge(context),
+                      if (entry.isExpired) _buildExpiredBadge(context),
                     ],
                   ),
                   if (entry.usedCredits > 0) ...[
                     SizedBox(height: 8.h),
-                    _buildProgressBar(isDark),
+                    _buildProgressBar(context),
                   ],
                 ],
               ),
@@ -214,17 +216,19 @@ class _CreditTimelineItem extends StatelessWidget {
     );
   }
 
-  Widget _buildDot() {
+  Widget _buildDot(BuildContext context) {
+    final colors = context.appColors;
+    final color = entry.isExpired ? colors.danger : _getSourceColor(context);
+
     return Container(
       width: 12.r,
       height: 12.r,
       decoration: BoxDecoration(
-        color: entry.isExpired ? AppColors.error : _getSourceColor(),
+        color: color,
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: (entry.isExpired ? AppColors.error : _getSourceColor())
-                .withValues(alpha: 0.3),
+            color: color.withValues(alpha: 0.3),
             blurRadius: 4,
             spreadRadius: 1,
           ),
@@ -254,45 +258,49 @@ class _CreditTimelineItem extends StatelessWidget {
     }
   }
 
-  Color _getSourceColor() {
+  Color _getSourceColor(BuildContext context) {
+    final colors = context.appColors;
+
     switch (entry.source) {
       case CreditSource.charging:
-        return AppColors.primary;
+        return colors.primary;
       case CreditSource.referral:
-        return AppColors.secondary;
+        return colors.secondary;
       case CreditSource.promotion:
-        return AppColors.tertiary;
+        return colors.tertiary;
       case CreditSource.bonus:
-        return Colors.amber;
+        return colors.warning;
       case CreditSource.signup:
-        return AppColors.success;
+        return colors.success;
       case CreditSource.anniversary:
-        return Colors.pink;
+        return colors.danger;
       case CreditSource.loyalty:
-        return Colors.orange;
+        return colors.info;
       case CreditSource.feedback:
-        return AppColors.info;
+        return colors.info;
     }
   }
 
-  Widget _buildExpiryBadge() {
+  Widget _buildExpiryBadge(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
-        color: AppColors.warningContainer,
+        color: colors.warningContainer,
         borderRadius: BorderRadius.circular(4.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Iconsax.clock, size: 10.r, color: AppColors.warningDark),
+          Icon(Iconsax.clock, size: 10.r, color: colors.warning),
           SizedBox(width: 4.w),
           Text(
             'Expires in ${entry.daysUntilExpiry}d',
             style: TextStyle(
               fontSize: 9.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.warningDark,
+              color: colors.warning,
             ),
           ),
         ],
@@ -300,11 +308,13 @@ class _CreditTimelineItem extends StatelessWidget {
     );
   }
 
-  Widget _buildExpiredBadge() {
+  Widget _buildExpiredBadge(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
-        color: AppColors.errorContainer,
+        color: colors.dangerContainer,
         borderRadius: BorderRadius.circular(4.r),
       ),
       child: Text(
@@ -312,13 +322,14 @@ class _CreditTimelineItem extends StatelessWidget {
         style: TextStyle(
           fontSize: 9.sp,
           fontWeight: FontWeight.w600,
-          color: AppColors.error,
+          color: colors.danger,
         ),
       ),
     );
   }
 
-  Widget _buildProgressBar(bool isDark) {
+  Widget _buildProgressBar(BuildContext context) {
+    final colors = context.appColors;
     final progress = entry.usedCredits / entry.credits;
 
     return Column(
@@ -331,7 +342,7 @@ class _CreditTimelineItem extends StatelessWidget {
               'Used: ${entry.usedCredits} / ${entry.credits}',
               style: TextStyle(
                 fontSize: 10.sp,
-                color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
+                color: colors.textTertiary,
               ),
             ),
             Text(
@@ -339,7 +350,7 @@ class _CreditTimelineItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: 10.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.success,
+                color: colors.success,
               ),
             ),
           ],
@@ -349,9 +360,9 @@ class _CreditTimelineItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(2.r),
           child: LinearProgressIndicator(
             value: progress,
-            backgroundColor: isDark ? AppColors.outlineDark : AppColors.outlineLight,
+            backgroundColor: colors.outline,
             valueColor: AlwaysStoppedAnimation(
-              progress == 1 ? AppColors.textTertiaryLight : AppColors.primary,
+              progress == 1 ? colors.textTertiary : colors.primary,
             ),
             minHeight: 4.h,
           ),
@@ -360,4 +371,3 @@ class _CreditTimelineItem extends StatelessWidget {
     );
   }
 }
-

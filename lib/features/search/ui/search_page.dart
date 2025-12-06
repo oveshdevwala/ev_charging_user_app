@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/station_model.dart';
 import '../../../repositories/station_repository.dart';
@@ -77,10 +78,11 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.appColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            _buildSearchHeader(),
+            _buildSearchHeader(context),
             Expanded(child: _buildResults()),
           ],
         ),
@@ -88,7 +90,9 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildSearchHeader() {
+  Widget _buildSearchHeader(BuildContext context) {
+    final colors = context.appColors;
+
     return Padding(
       padding: EdgeInsets.all(20.r),
       child: Column(
@@ -99,7 +103,7 @@ class _SearchPageState extends State<SearchPage> {
             style: TextStyle(
               fontSize: 24.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
           SizedBox(height: 16.h),
@@ -114,7 +118,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               SizedBox(width: 12.w),
-              _buildFilterButton(),
+              _buildFilterButton(context),
             ],
           ),
         ],
@@ -122,15 +126,21 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildFilterButton() {
+  Widget _buildFilterButton(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       width: 52.r,
       height: 52.r,
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: colors.primary,
         borderRadius: BorderRadius.circular(12.r),
       ),
-      child: Icon(Iconsax.setting_4, size: 22.r, color: Colors.white),
+      child: Icon(
+        Iconsax.setting_4,
+        size: 22.r,
+        color: colors.textPrimary,
+      ),
     );
   }
 
@@ -150,7 +160,8 @@ class _SearchPageState extends State<SearchPage> {
             child: StationCard(
               station: station,
               compact: true,
-              onTap: () => context.push(AppRoutes.stationDetails.id(station.id)),
+              onTap: () =>
+                  context.push(AppRoutes.stationDetails.id(station.id)),
               onFavoriteTap: () async {
                 await _stationRepository.toggleFavorite(station.id);
                 await _searchStations(_searchQuery);
@@ -162,4 +173,3 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
-

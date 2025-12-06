@@ -31,9 +31,9 @@ class ActivityDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ActivityCubit(
-        activityRepository: DummyActivityRepository(),
-      )..loadActivityData(),
+      create: (context) =>
+          ActivityCubit(activityRepository: DummyActivityRepository())
+            ..loadActivityData(),
       child: const _ActivityDetailsContent(),
     );
   }
@@ -44,8 +44,10 @@ class _ActivityDetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
+      backgroundColor: colors.background,
       body: BlocBuilder<ActivityCubit, ActivityState>(
         builder: (context, state) {
           if (state.isLoading && !state.hasData) {
@@ -57,8 +59,9 @@ class _ActivityDetailsContent extends StatelessWidget {
               _buildAppBar(context, state),
             ],
             body: RefreshIndicator(
-              onRefresh: () => context.read<ActivityCubit>().refreshActivityData(),
-              color: AppColors.primary,
+              onRefresh: () =>
+                  context.read<ActivityCubit>().refreshActivityData(),
+              color: colors.primary,
               child: _buildContent(context, state),
             ),
           );
@@ -68,26 +71,27 @@ class _ActivityDetailsContent extends StatelessWidget {
   }
 
   Widget _buildAppBar(BuildContext context, ActivityState state) {
+    final colors = context.appColors;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? colors.textPrimary : Colors.white;
+
     return SliverAppBar(
       expandedHeight: 200.h,
       pinned: true,
-      backgroundColor: AppColors.primary,
+      backgroundColor: colors.primary,
       surfaceTintColor: Colors.transparent,
-      title: const Text(
+      title: Text(
         'Your Activity',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
       ),
       leading: IconButton(
         icon: Container(
           padding: EdgeInsets.all(8.r),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.2),
+            color: textColor.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12.r),
           ),
-          child: Icon(Iconsax.arrow_left, size: 20.r, color: Colors.white),
+          child: Icon(Iconsax.arrow_left, size: 20.r, color: textColor),
         ),
         onPressed: () => Navigator.of(context).pop(),
       ),
@@ -96,10 +100,10 @@ class _ActivityDetailsContent extends StatelessWidget {
           icon: Container(
             padding: EdgeInsets.all(8.r),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: textColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12.r),
             ),
-            child: Icon(Iconsax.export_3, size: 20.r, color: Colors.white),
+            child: Icon(Iconsax.export_3, size: 20.r, color: textColor),
           ),
           onPressed: () {
             // Export functionality
@@ -108,26 +112,26 @@ class _ActivityDetailsContent extends StatelessWidget {
         SizedBox(width: 8.w),
       ],
       flexibleSpace: FlexibleSpaceBar(
-        background: _buildHeaderStats(state),
+        background: _buildHeaderStats(state, context),
       ),
     );
   }
 
-  Widget _buildHeaderStats(ActivityState state) {
+  Widget _buildHeaderStats(ActivityState state, BuildContext context) {
+    final colors = context.appColors;
     final summary = state.summary;
     if (summary == null) {
       return const SizedBox.shrink();
     }
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? colors.textPrimary : Colors.white;
 
     return DecoratedBox(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary,
-            AppColors.primaryDark,
-          ],
+          colors: [AppColors.primary, AppColors.primaryDark],
         ),
       ),
       child: SafeArea(
@@ -141,7 +145,7 @@ class _ActivityDetailsContent extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.w800,
-                  color: Colors.white,
+                  color: textColor,
                 ),
               ),
               SizedBox(height: 4.h),
@@ -149,17 +153,29 @@ class _ActivityDetailsContent extends StatelessWidget {
                 'Level ${summary.level} · ${summary.xpPoints} XP',
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: Colors.white.withValues(alpha: 0.85),
+                  color: textColor.withValues(alpha: 0.9),
                 ),
               ),
               const Spacer(),
               Row(
                 children: [
-                  _buildHeaderStat('Sessions', '${summary.totalSessions}'),
+                  _buildHeaderStat(
+                    'Sessions',
+                    '${summary.totalSessions}',
+                    textColor,
+                  ),
                   SizedBox(width: 24.w),
-                  _buildHeaderStat('Energy', '${summary.totalEnergyKwh.toStringAsFixed(0)} kWh'),
+                  _buildHeaderStat(
+                    'Energy',
+                    '${summary.totalEnergyKwh.toStringAsFixed(0)} kWh',
+                    textColor,
+                  ),
                   SizedBox(width: 24.w),
-                  _buildHeaderStat('Saved', '\$${summary.totalSpent.toStringAsFixed(0)}'),
+                  _buildHeaderStat(
+                    'Saved',
+                    '\$${summary.totalSpent.toStringAsFixed(0)}',
+                    textColor,
+                  ),
                 ],
               ),
             ],
@@ -169,7 +185,7 @@ class _ActivityDetailsContent extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderStat(String label, String value) {
+  Widget _buildHeaderStat(String label, String value, Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -178,14 +194,14 @@ class _ActivityDetailsContent extends StatelessWidget {
           style: TextStyle(
             fontSize: 20.sp,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: textColor,
           ),
         ),
         Text(
           label,
           style: TextStyle(
             fontSize: 12.sp,
-            color: Colors.white.withValues(alpha: 0.7),
+            color: textColor.withValues(alpha: 0.9),
           ),
         ),
       ],
@@ -193,6 +209,8 @@ class _ActivityDetailsContent extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context, ActivityState state) {
+    final colors = context.appColors;
+
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       padding: EdgeInsets.all(20.r),
@@ -204,25 +222,27 @@ class _ActivityDetailsContent extends StatelessWidget {
           SizedBox(height: 24.h),
 
           // Energy chart section
-          _buildSectionHeader('Energy Usage', 'kWh consumed'),
+          _buildSectionHeader(context, 'Energy Usage', 'kWh consumed'),
           SizedBox(height: 16.h),
           _buildChartCard(
+            context,
             child: EnergyChart(
               data: state.currentGraphData,
-              barColor: AppColors.primary,
+              barColor: colors.primary,
             ),
           ),
           SizedBox(height: 8.h),
-          _buildChartSummary(state),
+          _buildChartSummary(context, state),
           SizedBox(height: 28.h),
 
           // Spending chart section
-          _buildSectionHeader('Spending Trend', 'Amount spent'),
+          _buildSectionHeader(context, 'Spending Trend', 'Amount spent'),
           SizedBox(height: 16.h),
           _buildChartCard(
+            context,
             child: SpendingChart(
               data: state.currentGraphData,
-              lineColor: AppColors.secondary,
+              lineColor: colors.secondary,
             ),
           ),
           SizedBox(height: 28.h),
@@ -243,33 +263,51 @@ class _ActivityDetailsContent extends StatelessWidget {
           ],
 
           // Recent sessions
-          _buildSectionHeader('Recent Sessions', '${state.sessions.length} sessions'),
+          _buildSectionHeader(
+            context,
+            'Recent Sessions',
+            '${state.sessions.length} sessions',
+          ),
           SizedBox(height: 16.h),
-          ...state.sessions.take(5).map((session) => Padding(
-                padding: EdgeInsets.only(bottom: 12.h),
-                child: SessionCard(
-                  session: session,
-                  onTap: () => context.push(AppRoutes.sessionDetail.id(session.id)),
+          ...state.sessions
+              .take(5)
+              .map(
+                (session) => Padding(
+                  padding: EdgeInsets.only(bottom: 12.h),
+                  child: SessionCard(
+                    session: session,
+                    onTap: () =>
+                        context.push(AppRoutes.sessionDetail.id(session.id)),
+                  ),
                 ),
-              )),
+              ),
           if (state.sessions.length > 5)
-            _buildViewAllButton('View All Sessions', () {
+            _buildViewAllButton(context, 'View All Sessions', () {
               context.push(AppRoutes.allSessions.path);
             }),
           SizedBox(height: 28.h),
 
           // Recent transactions
-          _buildSectionHeader('Recent Transactions', '${state.transactions.length} transactions'),
+          _buildSectionHeader(
+            context,
+            'Recent Transactions',
+            '${state.transactions.length} transactions',
+          ),
           SizedBox(height: 16.h),
-          ...state.transactions.take(5).map((tx) => Padding(
-                padding: EdgeInsets.only(bottom: 10.h),
-                child: TransactionCard(
-                  transaction: tx,
-                  onTap: () => context.push(AppRoutes.transactionDetail.id(tx.id)),
+          ...state.transactions
+              .take(5)
+              .map(
+                (tx) => Padding(
+                  padding: EdgeInsets.only(bottom: 10.h),
+                  child: TransactionCard(
+                    transaction: tx,
+                    onTap: () =>
+                        context.push(AppRoutes.transactionDetail.id(tx.id)),
+                  ),
                 ),
-              )),
+              ),
           if (state.transactions.length > 5)
-            _buildViewAllButton('View All Transactions', () {
+            _buildViewAllButton(context, 'View All Transactions', () {
               context.push(AppRoutes.allTransactions.path);
             }),
 
@@ -280,10 +318,12 @@ class _ActivityDetailsContent extends StatelessWidget {
   }
 
   Widget _buildTimeRangeSelector(BuildContext context, ActivityState state) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(4.r),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariantLight,
+        color: colors.surfaceVariant,
         borderRadius: BorderRadius.circular(14.r),
       ),
       child: Row(
@@ -296,14 +336,14 @@ class _ActivityDetailsContent extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 padding: EdgeInsets.symmetric(vertical: 12.h),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.surfaceLight : Colors.transparent,
+                  color: isSelected ? colors.surface : Colors.transparent,
                   borderRadius: BorderRadius.circular(10.r),
                   boxShadow: isSelected
                       ? [
-                          const BoxShadow(
-                            color: AppColors.shadowLight,
+                          BoxShadow(
+                            color: colors.shadow,
                             blurRadius: 4,
-                            offset: Offset(0, 2),
+                            offset: const Offset(0, 2),
                           ),
                         ]
                       : null,
@@ -315,8 +355,8 @@ class _ActivityDetailsContent extends StatelessWidget {
                     fontSize: 14.sp,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                     color: isSelected
-                        ? AppColors.textPrimaryLight
-                        : AppColors.textSecondaryLight,
+                        ? colors.textPrimary
+                        : colors.textSecondary,
                   ),
                 ),
               ),
@@ -327,7 +367,13 @@ class _ActivityDetailsContent extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title, String subtitle) {
+  Widget _buildSectionHeader(
+    BuildContext context,
+    String title,
+    String subtitle,
+  ) {
+    final colors = context.appColors;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -336,51 +382,55 @@ class _ActivityDetailsContent extends StatelessWidget {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         Text(
           subtitle,
-          style: TextStyle(
-            fontSize: 13.sp,
-            color: AppColors.textSecondaryLight,
-          ),
+          style: TextStyle(fontSize: 13.sp, color: colors.textSecondary),
         ),
       ],
     );
   }
 
-  Widget _buildChartCard({required Widget child}) {
+  Widget _buildChartCard(BuildContext context, {required Widget child}) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: colors.outline),
       ),
       child: child,
     );
   }
 
-  Widget _buildChartSummary(ActivityState state) {
+  Widget _buildChartSummary(BuildContext context, ActivityState state) {
+    final colors = context.appColors;
+
     return Row(
       children: [
         Expanded(
           child: _buildSummaryItem(
+            context,
             label: 'Total Energy',
             value: '${state.totalEnergy.toStringAsFixed(1)} kWh',
-            color: AppColors.primary,
+            color: colors.primary,
           ),
         ),
         Expanded(
           child: _buildSummaryItem(
+            context,
             label: 'Total Spent',
             value: '\$${state.totalSpending.toStringAsFixed(2)}',
-            color: AppColors.secondary,
+            color: colors.secondary,
           ),
         ),
         Expanded(
           child: _buildSummaryItem(
+            context,
             label: 'Sessions',
             value: '${state.totalSessions}',
             color: AppColors.tertiary,
@@ -390,11 +440,14 @@ class _ActivityDetailsContent extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryItem({
+  Widget _buildSummaryItem(
+    BuildContext context, {
     required String label,
     required String value,
     required Color color,
   }) {
+    final colors = context.appColors;
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 4.w),
       padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
@@ -415,24 +468,27 @@ class _ActivityDetailsContent extends StatelessWidget {
           SizedBox(height: 2.h),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 11.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 11.sp, color: colors.textSecondary),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildViewAllButton(String text, VoidCallback onTap) {
+  Widget _buildViewAllButton(
+    BuildContext context,
+    String text,
+    VoidCallback onTap,
+  ) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 14.h),
         decoration: BoxDecoration(
-          color: AppColors.surfaceVariantLight,
+          color: colors.surfaceVariant,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Row(
@@ -443,19 +499,14 @@ class _ActivityDetailsContent extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.primary,
+                color: colors.primary,
               ),
             ),
             SizedBox(width: 6.w),
-            Icon(
-              Iconsax.arrow_right_3,
-              size: 16.r,
-              color: AppColors.primary,
-            ),
+            Icon(Iconsax.arrow_right_3, size: 16.r, color: colors.primary),
           ],
         ),
       ),
     );
   }
 }
-

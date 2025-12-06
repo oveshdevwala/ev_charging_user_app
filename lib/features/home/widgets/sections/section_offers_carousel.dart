@@ -105,6 +105,7 @@ class _OfferListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -113,10 +114,10 @@ class _OfferListItem extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
-            color: AppColors.surfaceLight,
+            color: colors.surface,
             borderRadius: BorderRadius.circular(10.r),
             border: Border.all(
-              color: AppColors.outlineLight.withValues(alpha: 0.5),
+              color: colors.outline.withValues(alpha: 0.5),
             ),
           ),
           child: Row(
@@ -144,7 +145,7 @@ class _OfferListItem extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight,
+                        color: colors.textPrimary,
                       ),
                     ),
                     SizedBox(height: 2.h),
@@ -152,7 +153,7 @@ class _OfferListItem extends StatelessWidget {
                       _getOfferSubtitle(),
                       style: TextStyle(
                         fontSize: 11.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                       ),
                     ),
                   ],
@@ -161,7 +162,7 @@ class _OfferListItem extends StatelessWidget {
               Icon(
                 Iconsax.arrow_right_3,
                 size: 16.r,
-                color: AppColors.textTertiaryLight,
+                color: colors.textTertiary,
               ),
             ],
           ),

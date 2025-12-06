@@ -6,11 +6,11 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/di/injection.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../bloc/bloc.dart';
 import '../repositories/repositories.dart';
 
@@ -35,22 +35,24 @@ class PrivacyPolicyPage extends StatelessWidget {
             }
 
             if (state.privacyPolicy == null) {
+              final colors = context.appColors;
               return Center(
                 child: Text(
                   'Privacy policy not available',
-                  style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+                  style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
                 ),
               );
             }
 
+            final colors = context.appColors;
             return Markdown(
               data: state.privacyPolicy!,
               padding: EdgeInsets.all(20.r),
               styleSheet: MarkdownStyleSheet(
-                p: TextStyle(fontSize: 14.sp, color: AppColors.textPrimaryLight),
-                h1: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w700),
-                h2: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
-                h3: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+                p: TextStyle(fontSize: 14.sp, color: colors.textPrimary),
+                h1: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w700, color: colors.textPrimary),
+                h2: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600, color: colors.textPrimary),
+                h3: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600, color: colors.textPrimary),
               ),
             );
           },

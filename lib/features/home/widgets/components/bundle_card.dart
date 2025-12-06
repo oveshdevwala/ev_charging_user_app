@@ -48,25 +48,26 @@ class BundleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: width ?? 180.w,
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
             color: bundle.isPopular || bundle.isBestValue
                 ? _bundleColor.withValues(alpha: 0.5)
-                : AppColors.outlineLight,
+                : colors.outline,
             width: bundle.isPopular || bundle.isBestValue ? 2 : 1,
           ),
-          boxShadow: const [
+          boxShadow:  [
             BoxShadow(
-              color: AppColors.shadowLight,
+              color: colors.shadow,
               blurRadius: 8,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -106,7 +107,7 @@ class BundleCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 10.sp,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: context.appColors.surface,
                       ),
                     ),
                   ),
@@ -120,7 +121,7 @@ class BundleCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -132,7 +133,7 @@ class BundleCard extends StatelessWidget {
               _getLocalizedBenefit(),
               style: TextStyle(
                 fontSize: 12.sp,
-                color: AppColors.textSecondaryLight,
+                color: colors.textSecondary,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -158,7 +159,7 @@ class BundleCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.textTertiaryLight,
+                      color: colors.textTertiary,
                       decoration: TextDecoration.lineThrough,
                     ),
                   ),
@@ -169,7 +170,7 @@ class BundleCard extends StatelessWidget {
                       '/${bundle.durationText}',
                       style: TextStyle(
                         fontSize: 11.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                       ),
                     ),
                   ),
@@ -189,7 +190,7 @@ class BundleCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 10.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.successDark,
+                    color: colors.successContainer,
                   ),
                 ),
               ),

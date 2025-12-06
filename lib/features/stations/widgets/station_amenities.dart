@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/station_model.dart';
 
@@ -19,10 +20,19 @@ class StationAmenities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppStrings.amenities, style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+        Text(
+          AppStrings.amenities,
+          style: TextStyle(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
+            color: colors.textPrimary,
+          ),
+        ),
         SizedBox(height: 12.h),
         Wrap(
           spacing: 8.w,
@@ -31,15 +41,26 @@ class StationAmenities extends StatelessWidget {
             return Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: AppColors.surfaceVariantLight,
+                color: colors.surfaceVariant,
                 borderRadius: BorderRadius.circular(20.r),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(_getAmenityIcon(amenity), size: 16.r),
+                  Icon(
+                    _getAmenityIcon(amenity),
+                    size: 16.r,
+                    color: colors.textPrimary,
+                  ),
                   SizedBox(width: 6.w),
-                  Text(amenity.name.toUpperCase(), style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500)),
+                  Text(
+                    amenity.name.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w500,
+                      color: colors.textPrimary,
+                    ),
+                  ),
                 ],
               ),
             );
@@ -70,4 +91,3 @@ class StationAmenities extends StatelessWidget {
     }
   }
 }
-

@@ -28,13 +28,12 @@ class SupportBloc extends Bloc<SupportEvent, SupportState> {
     LoadFAQ event,
     Emitter<SupportState> emit,
   ) async {
-    emit(state.copyWith(isLoadingFAQ: true, error: null));
+    emit(state.copyWith(isLoadingFAQ: true));
     try {
       final faq = await _repository.getFAQ();
       emit(state.copyWith(
         isLoadingFAQ: false,
         faq: faq,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -48,7 +47,7 @@ class SupportBloc extends Bloc<SupportEvent, SupportState> {
     SubmitTicket event,
     Emitter<SupportState> emit,
   ) async {
-    emit(state.copyWith(isSubmitting: true, error: null));
+    emit(state.copyWith(isSubmitting: true));
     try {
       final ticket = await _repository.submitSupportTicket(
         subject: event.subject,
@@ -58,7 +57,6 @@ class SupportBloc extends Bloc<SupportEvent, SupportState> {
       emit(state.copyWith(
         isSubmitting: false,
         submittedTicket: ticket,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -72,13 +70,12 @@ class SupportBloc extends Bloc<SupportEvent, SupportState> {
     LoadTickets event,
     Emitter<SupportState> emit,
   ) async {
-    emit(state.copyWith(isLoadingTickets: true, error: null));
+    emit(state.copyWith(isLoadingTickets: true));
     try {
       final tickets = await _repository.getSupportTickets();
       emit(state.copyWith(
         isLoadingTickets: false,
         tickets: tickets,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -92,13 +89,12 @@ class SupportBloc extends Bloc<SupportEvent, SupportState> {
     LoadPrivacyPolicy event,
     Emitter<SupportState> emit,
   ) async {
-    emit(state.copyWith(isLoadingPolicy: true, error: null));
+    emit(state.copyWith(isLoadingPolicy: true));
     try {
       final policy = await _repository.getPrivacyPolicy();
       emit(state.copyWith(
         isLoadingPolicy: false,
         privacyPolicy: policy,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -112,13 +108,12 @@ class SupportBloc extends Bloc<SupportEvent, SupportState> {
     LoadTermsOfService event,
     Emitter<SupportState> emit,
   ) async {
-    emit(state.copyWith(isLoadingTerms: true, error: null));
+    emit(state.copyWith(isLoadingTerms: true));
     try {
       final terms = await _repository.getTermsOfService();
       emit(state.copyWith(
         isLoadingTerms: false,
         termsOfService: terms,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -132,7 +127,7 @@ class SupportBloc extends Bloc<SupportEvent, SupportState> {
     ClearSupportError event,
     Emitter<SupportState> emit,
   ) {
-    emit(state.copyWith(error: null));
+    emit(state.copyWith());
   }
 }
 

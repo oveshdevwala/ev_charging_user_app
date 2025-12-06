@@ -14,14 +14,15 @@ import '../../../../core/theme/app_colors.dart';
 import '../../data/models/cashback_model.dart';
 
 /// Cashback tag for displaying cashback percentage.
-/// 
+///
 /// Features:
 /// - Partner tier badges
 /// - Percentage display
 /// - Compact and expanded variants
 class CashbackTag extends StatelessWidget {
   const CashbackTag({
-    required this.percentage, super.key,
+    required this.percentage,
+    super.key,
     this.partnerBadge,
     this.isCompact = false,
     this.showIcon = true,
@@ -35,20 +36,18 @@ class CashbackTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isCompact) {
-      return _buildCompact();
+      return _buildCompact(context);
     }
-    return _buildExpanded();
+    return _buildExpanded(context);
   }
 
-  Widget _buildCompact() {
+  Widget _buildCompact(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            AppColors.success,
-            AppColors.successDark,
-          ],
+        gradient: LinearGradient(
+          colors: [AppColors.success, colors.successContainer],
         ),
         borderRadius: BorderRadius.circular(4.r),
       ),
@@ -58,7 +57,7 @@ class CashbackTag extends StatelessWidget {
           if (showIcon) ...[
             Icon(
               Iconsax.money_recive,
-              color: Colors.white,
+              color: colors.textPrimary,
               size: 10.r,
             ),
             SizedBox(width: 3.w),
@@ -68,7 +67,7 @@ class CashbackTag extends StatelessWidget {
             style: TextStyle(
               fontSize: 10.sp,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: colors.textPrimary,
             ),
           ),
         ],
@@ -76,17 +75,16 @@ class CashbackTag extends StatelessWidget {
     );
   }
 
-  Widget _buildExpanded() {
+  Widget _buildExpanded(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: _getGradientColors(),
-        ),
+        gradient: LinearGradient(colors: _getGradientColors(context)),
         borderRadius: BorderRadius.circular(8.r),
         boxShadow: [
           BoxShadow(
-            color: _getGradientColors().first.withValues(alpha: 0.3),
+            color: _getGradientColors(context).first.withValues(alpha: 0.3),
             blurRadius: 4.r,
             offset: Offset(0, 2.h),
           ),
@@ -95,11 +93,7 @@ class CashbackTag extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            _getBadgeIcon(),
-            color: Colors.white,
-            size: 14.r,
-          ),
+          Icon(_getBadgeIcon(), color: colors.textPrimary, size: 14.r),
           SizedBox(width: 6.w),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +104,7 @@ class CashbackTag extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: colors.textPrimary,
                 ),
               ),
               if (partnerBadge != null)
@@ -118,7 +112,7 @@ class CashbackTag extends StatelessWidget {
                   partnerBadge!,
                   style: TextStyle(
                     fontSize: 9.sp,
-                    color: Colors.white.withValues(alpha: 0.8),
+                    color: colors.textSecondary,
                   ),
                 ),
             ],
@@ -128,17 +122,18 @@ class CashbackTag extends StatelessWidget {
     );
   }
 
-  List<Color> _getGradientColors() {
+  List<Color> _getGradientColors(BuildContext context) {
+    final colors = context.appColors;
     if (partnerBadge?.toLowerCase().contains('platinum') ?? false) {
-      return [const Color(0xFF6B5B95), const Color(0xFF4A4063)];
+      return [colors.tertiary, colors.tertiaryContainer];
     }
     if (partnerBadge?.toLowerCase().contains('gold') ?? false) {
-      return [const Color(0xFFFFB400), const Color(0xFFCC9000)];
+      return [colors.secondary, colors.secondaryContainer];
     }
     if (partnerBadge?.toLowerCase().contains('silver') ?? false) {
-      return [const Color(0xFF9E9E9E), const Color(0xFF757575)];
+      return [colors.textTertiary, colors.textTertiary];
     }
-    return [AppColors.success, AppColors.successDark];
+    return [AppColors.success, colors.successContainer];
   }
 
   IconData _getBadgeIcon() {
@@ -157,28 +152,23 @@ class CashbackTag extends StatelessWidget {
 
 /// Cashback detail card for transaction details.
 class CashbackDetailCard extends StatelessWidget {
-  const CashbackDetailCard({
-    required this.cashback, super.key,
-    this.onTap,
-  });
+  const CashbackDetailCard({required this.cashback, super.key, this.onTap});
 
   final CashbackModel cashback;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = context.appColors;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(12.r),
         decoration: BoxDecoration(
-          color: isDark ? AppColors.surfaceVariantDark : AppColors.surfaceVariantLight,
+          color: colors.surfaceVariant,
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(
-            color: AppColors.success.withValues(alpha: 0.3),
-          ),
+          border: Border.all(color: colors.success.withValues(alpha: 0.3)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,12 +178,12 @@ class CashbackDetailCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(8.r),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withValues(alpha: 0.1),
+                    color: colors.success.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10.r),
                   ),
                   child: Icon(
                     Iconsax.money_recive,
-                    color: AppColors.success,
+                    color: colors.success,
                     size: 20.r,
                   ),
                 ),
@@ -207,7 +197,7 @@ class CashbackDetailCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
-                          color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                          color: colors.textPrimary,
                         ),
                       ),
                       SizedBox(height: 2.h),
@@ -215,7 +205,7 @@ class CashbackDetailCard extends StatelessWidget {
                         cashback.typeDisplayName,
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                          color: colors.textSecondary,
                         ),
                       ),
                     ],
@@ -229,10 +219,11 @@ class CashbackDetailCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.success,
+                        color: colors.success,
                       ),
                     ),
-                    if (cashback.isPartnerStation && cashback.partnerBadge != null)
+                    if (cashback.isPartnerStation &&
+                        cashback.partnerBadge != null)
                       CashbackTag(
                         percentage: cashback.cashbackPercentage,
                         isCompact: true,
@@ -246,27 +237,29 @@ class CashbackDetailCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(10.r),
               decoration: BoxDecoration(
-                color: (isDark ? AppColors.backgroundDark : AppColors.backgroundLight),
+                color: colors.background,
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildInfoItem(
+                    context: context,
                     label: 'Original Amount',
                     value: cashback.formattedOriginalAmount,
-                    isDark: isDark,
                   ),
                   _buildInfoItem(
+                    context: context,
                     label: 'Cashback',
                     value: cashback.formattedPercentage,
-                    isDark: isDark,
                   ),
                   _buildInfoItem(
+                    context: context,
                     label: 'Status',
                     value: cashback.statusDisplayName,
-                    isDark: isDark,
-                    valueColor: cashback.isCredited ? AppColors.success : AppColors.warning,
+                    valueColor: cashback.isCredited
+                        ? colors.success
+                        : colors.warning,
                   ),
                 ],
               ),
@@ -274,10 +267,7 @@ class CashbackDetailCard extends StatelessWidget {
             SizedBox(height: 8.h),
             Text(
               cashback.formattedEarnedDate,
-              style: TextStyle(
-                fontSize: 11.sp,
-                color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
-              ),
+              style: TextStyle(fontSize: 11.sp, color: colors.textTertiary),
             ),
           ],
         ),
@@ -286,20 +276,19 @@ class CashbackDetailCard extends StatelessWidget {
   }
 
   Widget _buildInfoItem({
+    required BuildContext context,
     required String label,
     required String value,
-    required bool isDark,
     Color? valueColor,
   }) {
+    final colors = context.appColors;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: 10.sp,
-            color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
-          ),
+          style: TextStyle(fontSize: 10.sp, color: colors.textTertiary),
         ),
         SizedBox(height: 2.h),
         Text(
@@ -307,11 +296,10 @@ class CashbackDetailCard extends StatelessWidget {
           style: TextStyle(
             fontSize: 12.sp,
             fontWeight: FontWeight.w600,
-            color: valueColor ?? (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
+            color: valueColor ?? colors.textPrimary,
           ),
         ),
       ],
     );
   }
 }
-

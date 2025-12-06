@@ -16,7 +16,9 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../routes/app_routes.dart';
 import '../../../widgets/app_app_bar.dart';
 import '../../../widgets/common_button.dart';
 import '../bloc/bloc.dart';
@@ -82,6 +84,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
   }
 
   Widget _buildContent(BuildContext context, TripPlannerState state) {
+    final colors = context.appColors;
     final trip = state.currentTrip!;
     final stops = trip.chargingStops;
     final estimates = trip.estimates;
@@ -102,17 +105,14 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimaryLight,
+                  color: colors.textPrimary,
                 ),
               ),
               const Spacer(),
               // Expand all hint
               Text(
                 'Tap card to expand',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: AppColors.textTertiaryLight,
-                ),
+                style: TextStyle(fontSize: 11.sp, color: colors.textTertiary),
               ),
             ],
           ),
@@ -222,7 +222,8 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
     required bool showBottomLine,
     String? subtitle,
   }) {
-    final color = isStart ? AppColors.primary : AppColors.error;
+    final colors = context.appColors;
+    final color = isStart ? colors.primary : colors.danger;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,7 +238,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                   width: 3,
                   height: 20.h,
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.3),
+                    color: colors.primary.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
@@ -259,7 +260,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                   child: Icon(
                     isStart ? Iconsax.location : Iconsax.flag,
                     size: 20.r,
-                    color: Colors.white,
+                    color: colors.surface,
                   ),
                 ),
               ),
@@ -268,7 +269,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                   width: 3,
                   height: 20.h,
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.3),
+                    color: colors.primary.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
@@ -305,7 +306,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                         style: TextStyle(
                           fontSize: 15.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimaryLight,
+                          color: context.appColors.textPrimary,
                         ),
                       ),
                       if (subtitle != null) ...[
@@ -314,7 +315,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                           subtitle,
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: AppColors.textSecondaryLight,
+                            color: context.appColors.textSecondary,
                           ),
                         ),
                       ],
@@ -336,7 +337,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                       style: TextStyle(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
-                        color: socPercent < 20 ? AppColors.warning : color,
+                        color: socPercent < 20 ? colors.warning : color,
                       ),
                     ),
                   ],
@@ -370,8 +371,8 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppColors.primary.withValues(alpha: 0.4),
-                    AppColors.primary.withValues(alpha: 0.2),
+                    context.appColors.primary.withValues(alpha: 0.4),
+                    context.appColors.primary.withValues(alpha: 0.2),
                   ],
                 ),
               ),
@@ -384,7 +385,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
             margin: EdgeInsets.symmetric(vertical: 4.h),
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
             decoration: BoxDecoration(
-              color: AppColors.surfaceVariantLight,
+              color: context.appColors.surfaceVariant,
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Row(
@@ -393,14 +394,14 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                 Icon(
                   Iconsax.routing_2,
                   size: 14.r,
-                  color: AppColors.textTertiaryLight,
+                  color: context.appColors.textTertiary,
                 ),
                 SizedBox(width: 6.w),
                 Text(
                   '${distanceKm.toStringAsFixed(0)} km drive',
                   style: TextStyle(
                     fontSize: 11.sp,
-                    color: AppColors.textSecondaryLight,
+                    color: context.appColors.textSecondary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -417,6 +418,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
     List<ChargingStopModel> stops,
     TripEstimates? estimates,
   ) {
+    final colors = context.appColors;
     final totalChargingTime = estimates?.totalChargingTimeMin ?? 0;
     final totalCost = estimates?.estimatedCost ?? 0.0;
     final totalEnergy = stops.fold<double>(
@@ -431,29 +433,32 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppColors.primary.withValues(alpha: 0.1),
-            AppColors.secondary.withValues(alpha: 0.05),
+            colors.primary.withValues(alpha: 0.1),
+            colors.secondary.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+        border: Border.all(color: colors.primary.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildSummaryItem(
+            context,
             Iconsax.timer_1,
             _formatDuration(totalChargingTime),
             'Charging',
           ),
-          Container(width: 1, height: 40.h, color: AppColors.outlineLight),
+          Container(width: 1, height: 40.h, color: colors.outline),
           _buildSummaryItem(
+            context,
             Iconsax.flash_1,
             '${totalEnergy.toStringAsFixed(0)} kWh',
             'Energy',
           ),
-          Container(width: 1, height: 40.h, color: AppColors.outlineLight),
+          Container(width: 1, height: 40.h, color: colors.outline),
           _buildSummaryItem(
+            context,
             Iconsax.dollar_circle,
             '\$${totalCost.toStringAsFixed(2)}',
             'Total Cost',
@@ -472,32 +477,36 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
     return mins > 0 ? '${hours}h ${mins}m' : '${hours}h';
   }
 
-  Widget _buildSummaryItem(IconData icon, String value, String label) {
+  Widget _buildSummaryItem(
+    BuildContext context,
+    IconData icon,
+    String value,
+    String label,
+  ) {
+    final colors = context.appColors;
     return Column(
       children: [
-        Icon(icon, size: 22.r, color: AppColors.primary),
+        Icon(icon, size: 22.r, color: colors.primary),
         SizedBox(height: 6.h),
         Text(
           value,
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         SizedBox(height: 2.h),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 11.sp,
-            color: AppColors.textSecondaryLight,
-          ),
+          style: TextStyle(fontSize: 11.sp, color: colors.textSecondary),
         ),
       ],
     );
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final colors = context.appColors;
     return Center(
       child: Padding(
         padding: EdgeInsets.all(32.r),
@@ -508,14 +517,10 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
               width: 80.r,
               height: 80.r,
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
+                color: colors.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Iconsax.flash_15,
-                size: 40.r,
-                color: AppColors.primary,
-              ),
+              child: Icon(Iconsax.flash_15, size: 40.r, color: colors.primary),
             ),
             SizedBox(height: 20.h),
             Text(
@@ -523,17 +528,14 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
             ),
             SizedBox(height: 8.h),
             Text(
               'Your vehicle has enough charge to complete this trip without stopping.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
             ),
           ],
         ),
@@ -542,42 +544,53 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
   }
 
   Widget _buildTipsCard(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: AppColors.info.withValues(alpha: 0.08),
+        color: colors.info.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: AppColors.info.withValues(alpha: 0.2)),
+        border: Border.all(color: colors.info.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Iconsax.lamp_charge, size: 20.r, color: AppColors.info),
+              Icon(Iconsax.lamp_charge, size: 20.r, color: colors.info),
               SizedBox(width: 8.w),
               Text(
                 'Pro Tips',
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.info,
+                  color: colors.info,
                 ),
               ),
             ],
           ),
           SizedBox(height: 12.h),
-          _buildTipItem('Reserve charging spots in advance for busy routes'),
+          _buildTipItem(
+            context,
+            'Reserve charging spots in advance for busy routes',
+          ),
           SizedBox(height: 8.h),
-          _buildTipItem('Arrive with 10-20% battery for fastest charging'),
+          _buildTipItem(
+            context,
+            'Arrive with 10-20% battery for fastest charging',
+          ),
           SizedBox(height: 8.h),
-          _buildTipItem('Charge to 80% for optimal speed and battery health'),
+          _buildTipItem(
+            context,
+            'Charge to 80% for optimal speed and battery health',
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildTipItem(String text) {
+  Widget _buildTipItem(BuildContext context, String text) {
+    final colors = context.appColors;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -585,18 +598,12 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
           width: 5.r,
           height: 5.r,
           margin: EdgeInsets.only(top: 6.h, right: 10.w),
-          decoration: const BoxDecoration(
-            color: AppColors.info,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: colors.info, shape: BoxShape.circle),
         ),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(
-              fontSize: 13.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 13.sp, color: colors.textSecondary),
           ),
         ),
       ],
@@ -604,6 +611,11 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
   }
 
   void _showStopDetails(BuildContext context, ChargingStopModel stop) {
+    context.push(AppRoutes.stationDetails.id(stop.stationId));
+  }
+
+  void _showStopDetailsBottomSheet(BuildContext context, ChargingStopModel stop) {
+    final colors = context.appColors;
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -614,7 +626,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
         maxChildSize: 0.9,
         builder: (_, controller) => Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
+            color: colors.surface,
             borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
           ),
           padding: EdgeInsets.all(20.r),
@@ -627,7 +639,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                   width: 40.w,
                   height: 4.h,
                   decoration: BoxDecoration(
-                    color: AppColors.outlineLight,
+                    color: colors.outline,
                     borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
@@ -642,7 +654,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                       style: TextStyle(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimaryLight,
+                        color: colors.textPrimary,
                       ),
                     ),
                   ),
@@ -658,7 +670,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                         vertical: 6.h,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.1),
+                        color: colors.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: Row(
@@ -667,7 +679,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                           Icon(
                             Iconsax.building,
                             size: 16.r,
-                            color: AppColors.primary,
+                            color: colors.primary,
                           ),
                           SizedBox(width: 4.w),
                           Text(
@@ -675,7 +687,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                             style: TextStyle(
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.primary,
+                              color: colors.primary,
                             ),
                           ),
                         ],
@@ -695,7 +707,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                       vertical: 4.h,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.secondary.withValues(alpha: 0.1),
+                      color: colors.secondary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(6.r),
                     ),
                     child: Text(
@@ -703,7 +715,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                       style: TextStyle(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.secondary,
+                        color: colors.secondary,
                       ),
                     ),
                   ),
@@ -716,7 +728,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                     Icon(
                       Iconsax.location,
                       size: 16.r,
-                      color: AppColors.textSecondaryLight,
+                      color: colors.textSecondary,
                     ),
                     SizedBox(width: 8.w),
                     Expanded(
@@ -724,7 +736,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                         stop.location.address!,
                         style: TextStyle(
                           fontSize: 14.sp,
-                          color: AppColors.textSecondaryLight,
+                          color: colors.textSecondary,
                         ),
                       ),
                     ),
@@ -735,7 +747,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
               Container(
                 padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceVariantLight,
+                  color: colors.surfaceVariant,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
@@ -744,12 +756,14 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                       children: [
                         Expanded(
                           child: _buildDetailInfoItem(
+                            context,
                             'Charger',
                             '${stop.chargerPowerKw.toStringAsFixed(0)} kW',
                           ),
                         ),
                         Expanded(
                           child: _buildDetailInfoItem(
+                            context,
                             'Type',
                             stop.chargerTypeDisplay,
                           ),
@@ -761,12 +775,14 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                       children: [
                         Expanded(
                           child: _buildDetailInfoItem(
+                            context,
                             'Price',
                             '\$${stop.pricePerKwh.toStringAsFixed(2)}/kWh',
                           ),
                         ),
                         Expanded(
                           child: _buildDetailInfoItem(
+                            context,
                             'Cost',
                             '\$${stop.estimatedCost.toStringAsFixed(2)}',
                           ),
@@ -784,7 +800,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimaryLight,
+                    color: colors.textPrimary,
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -799,14 +815,14 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
                             vertical: 6.h,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.surfaceVariantLight,
+                            color: colors.surfaceVariant,
                             borderRadius: BorderRadius.circular(6.r),
                           ),
                           child: Text(
                             amenity,
                             style: TextStyle(
                               fontSize: 12.sp,
-                              color: AppColors.textSecondaryLight,
+                              color: colors.textSecondary,
                             ),
                           ),
                         ),
@@ -849,13 +865,18 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
     );
   }
 
-  Widget _buildDetailInfoItem(String label, String value) {
+  Widget _buildDetailInfoItem(
+    BuildContext context,
+    String label,
+    String value,
+  ) {
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 11.sp, color: AppColors.textTertiaryLight),
+          style: TextStyle(fontSize: 11.sp, color: colors.textTertiary),
         ),
         SizedBox(height: 4.h),
         Text(
@@ -863,7 +884,7 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
       ],
@@ -925,14 +946,18 @@ class _ChargingStopsPageState extends State<ChargingStopsPage> {
               SnackBar(
                 content: Row(
                   children: [
-                    Icon(Iconsax.tick_circle, color: Colors.white, size: 20.r),
+                    Icon(
+                      Iconsax.tick_circle,
+                      color: context.appColors.surface,
+                      size: 20.r,
+                    ),
                     SizedBox(width: 8.w),
                     Expanded(
                       child: Text('Booking confirmed for ${stop.stationName}'),
                     ),
                   ],
                 ),
-                backgroundColor: AppColors.primary,
+                backgroundColor: context.appColors.primary,
                 behavior: SnackBarBehavior.floating,
               ),
             );
@@ -980,10 +1005,11 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: colors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
       ),
       child: Column(
@@ -995,7 +1021,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: AppColors.outlineLight,
+                color: colors.outline,
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
@@ -1016,7 +1042,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                   child: Icon(
                     Iconsax.arrow_left,
                     size: 24.r,
-                    color: AppColors.textPrimaryLight,
+                    color: colors.textPrimary,
                   ),
                 ),
                 SizedBox(width: 16.w),
@@ -1026,7 +1052,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                   ),
                 ),
@@ -1045,9 +1071,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                     height: 4.h,
                     margin: EdgeInsets.only(right: index < 2 ? 8.w : 0),
                     decoration: BoxDecoration(
-                      color: isActive
-                          ? AppColors.primary
-                          : AppColors.outlineLight,
+                      color: isActive ? colors.primary : colors.outline,
                       borderRadius: BorderRadius.circular(2.r),
                     ),
                   ),
@@ -1097,6 +1121,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
   }
 
   Widget _buildConfirmStep() {
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1104,7 +1129,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
         Container(
           padding: EdgeInsets.all(16.r),
           decoration: BoxDecoration(
-            color: AppColors.surfaceVariantLight,
+            color: colors.surfaceVariant,
             borderRadius: BorderRadius.circular(14.r),
           ),
           child: Row(
@@ -1113,12 +1138,12 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                 width: 56.r,
                 height: 56.r,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
+                  color: colors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Icon(
                   Iconsax.flash_15,
-                  color: AppColors.primary,
+                  color: colors.primary,
                   size: 28.r,
                 ),
               ),
@@ -1132,7 +1157,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight,
+                        color: colors.textPrimary,
                       ),
                     ),
                     SizedBox(height: 4.h),
@@ -1140,7 +1165,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                       '${widget.stop.chargerPowerKw.toStringAsFixed(0)} kW • ${widget.stop.network ?? "Charger"}',
                       style: TextStyle(
                         fontSize: 13.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                       ),
                     ),
                   ],
@@ -1156,11 +1181,12 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         SizedBox(height: 16.h),
         _buildDetailRow(
+          context,
           Iconsax.clock,
           'Arrival Time',
           widget.stop.arrivalTime != null
@@ -1169,18 +1195,21 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
         ),
         SizedBox(height: 12.h),
         _buildDetailRow(
+          context,
           Iconsax.timer_1,
           'Charging Duration',
           widget.stop.formattedChargeTime,
         ),
         SizedBox(height: 12.h),
         _buildDetailRow(
+          context,
           Iconsax.flash_1,
           'Energy to Add',
           '${widget.stop.energyToChargeKwh.toStringAsFixed(1)} kWh',
         ),
         SizedBox(height: 12.h),
         _buildDetailRow(
+          context,
           Iconsax.battery_charging,
           'Battery',
           '${widget.stop.arrivalSocPercent.toStringAsFixed(0)}% → ${widget.stop.departureSocPercent.toStringAsFixed(0)}%',
@@ -1190,9 +1219,9 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
         Container(
           padding: EdgeInsets.all(16.r),
           decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: 0.05),
+            color: colors.primary.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(14.r),
-            border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+            border: Border.all(color: colors.primary.withValues(alpha: 0.2)),
           ),
           child: Column(
             children: [
@@ -1203,14 +1232,14 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                     'Energy Cost',
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: colors.textSecondary,
                     ),
                   ),
                   Text(
                     '\$${widget.stop.estimatedCost.toStringAsFixed(2)}',
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                   ),
                 ],
@@ -1223,19 +1252,19 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                     'Reservation Fee',
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: colors.textSecondary,
                     ),
                   ),
                   Text(
                     r'$1.00',
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                   ),
                 ],
               ),
-              Divider(height: 24.h),
+              Divider(height: 24.h, color: colors.outline),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -1244,7 +1273,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                   ),
                   Text(
@@ -1252,7 +1281,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
+                      color: colors.primary,
                     ),
                   ),
                 ],
@@ -1265,6 +1294,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
   }
 
   Widget _buildPaymentStep() {
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1273,7 +1303,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         SizedBox(height: 16.h),
@@ -1295,13 +1325,11 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
               padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppColors.primary.withValues(alpha: 0.1)
-                    : AppColors.surfaceVariantLight,
+                    ? colors.primary.withValues(alpha: 0.1)
+                    : colors.surfaceVariant,
                 borderRadius: BorderRadius.circular(14.r),
                 border: Border.all(
-                  color: isSelected
-                      ? AppColors.primary
-                      : AppColors.outlineLight,
+                  color: isSelected ? colors.primary : colors.outline,
                   width: isSelected ? 2 : 1,
                 ),
               ),
@@ -1310,9 +1338,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                   Icon(
                     icon,
                     size: 24.r,
-                    color: isSelected
-                        ? AppColors.primary
-                        : AppColors.textSecondaryLight,
+                    color: isSelected ? colors.primary : colors.textSecondary,
                   ),
                   SizedBox(width: 14.w),
                   Expanded(
@@ -1321,7 +1347,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.textPrimaryLight,
+                        color: colors.textPrimary,
                       ),
                     ),
                   ),
@@ -1329,7 +1355,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
                     Icon(
                       Iconsax.tick_circle5,
                       size: 22.r,
-                      color: AppColors.primary,
+                      color: colors.primary,
                     ),
                 ],
               ),
@@ -1345,20 +1371,20 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
           child: Container(
             padding: EdgeInsets.all(16.r),
             decoration: BoxDecoration(
-              border: Border.all(color: AppColors.outlineLight),
+              border: Border.all(color: colors.outline),
               borderRadius: BorderRadius.circular(14.r),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Iconsax.add, size: 20.r, color: AppColors.primary),
+                Icon(Iconsax.add, size: 20.r, color: colors.primary),
                 SizedBox(width: 8.w),
                 Text(
                   'Add New Card',
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.primary,
+                    color: colors.primary,
                   ),
                 ),
               ],
@@ -1370,6 +1396,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
   }
 
   Widget _buildProcessingStep() {
+    final colors = context.appColors;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -1378,9 +1405,9 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
           SizedBox(
             width: 60.r,
             height: 60.r,
-            child: const CircularProgressIndicator(
+            child: CircularProgressIndicator(
               strokeWidth: 4,
-              valueColor: AlwaysStoppedAnimation(AppColors.primary),
+              valueColor: AlwaysStoppedAnimation(colors.primary),
             ),
           ),
           SizedBox(height: 24.h),
@@ -1389,26 +1416,23 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             'Please wait while we confirm your booking',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
           ),
         ] else ...[
           Container(
             width: 80.r,
             height: 80.r,
-            decoration: const BoxDecoration(
-              color: AppColors.primary,
+            decoration: BoxDecoration(
+              color: colors.primary,
               shape: BoxShape.circle,
             ),
-            child: Icon(Iconsax.tick_circle, size: 40.r, color: Colors.white),
+            child: Icon(Iconsax.tick_circle, size: 40.r, color: colors.surface),
           ),
           SizedBox(height: 24.h),
           Text(
@@ -1416,33 +1440,33 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             'Your charging spot is reserved',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
           ),
         ],
       ],
     );
   }
 
-  Widget _buildDetailRow(IconData icon, String label, String value) {
+  Widget _buildDetailRow(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
+    final colors = context.appColors;
     return Row(
       children: [
-        Icon(icon, size: 20.r, color: AppColors.textSecondaryLight),
+        Icon(icon, size: 20.r, color: colors.textSecondary),
         SizedBox(width: 12.w),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: AppColors.textSecondaryLight,
-          ),
+          style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
         ),
         const Spacer(),
         Text(
@@ -1450,7 +1474,7 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
       ],
@@ -1458,15 +1482,16 @@ class _BookingFlowSheetState extends State<_BookingFlowSheet> {
   }
 
   Widget _buildBottomButton() {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        boxShadow: const [
+        color: colors.surface,
+        boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: colors.shadow,
             blurRadius: 10,
-            offset: Offset(0, -2),
+            offset: const Offset(0, -2),
           ),
         ],
       ),

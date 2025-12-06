@@ -14,7 +14,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../routes/app_routes.dart';
 import '../../data/datasources/partner_remote_datasource.dart';
-import '../../data/models/partner_category.dart';
 import '../blocs/nearby_offers/nearby_offers.dart';
 import '../widgets/widgets.dart';
 
@@ -38,7 +37,7 @@ class _NearbyOffersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -78,7 +77,7 @@ class _NearbyOffersView extends StatelessWidget {
                             '${state.filterParams.radiusKm.toInt()} km',
                           ),
                           onPressed: () {
-                            showModalBottomSheet(
+                            showModalBottomSheet<void>(
                               context: context,
                               builder: (_) => RadiusFilterSheet(
                                 currentRadiusKm: state.filterParams.radiusKm,
@@ -123,10 +122,10 @@ class _NearbyOffersView extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.error_outline,
                           size: 48,
-                          color: Colors.red,
+                          color: Theme.of(context).colorScheme.error,
                         ),
                         SizedBox(height: 16.h),
                         Text(state.errorMessage ?? 'Something went wrong'),
@@ -203,7 +202,7 @@ class _NearbyOffersView extends StatelessWidget {
   }
 
   void _showSortSheet(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (_) => Container(
         padding: EdgeInsets.all(24.r),

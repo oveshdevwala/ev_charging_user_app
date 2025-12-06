@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../widgets/app_app_bar.dart';
 import '../../../widgets/common_button.dart';
@@ -28,16 +29,13 @@ class TripDetailPage extends StatelessWidget {
       builder: (context, state) {
         final trip = state.currentTrip;
         if (trip == null) {
-          return const Scaffold(
-            body: Center(child: Text('No trip data')),
-          );
+          return const Scaffold(body: Center(child: Text('No trip data')));
         }
 
         return Scaffold(
           appBar: AppAppBar(
             title: 'Trip Itinerary',
-            onBackPressed: () =>
-                context.read<TripPlannerCubit>().goToSummary(),
+            onBackPressed: () => context.read<TripPlannerCubit>().goToSummary(),
             actions: [
               IconButton(
                 icon: Icon(Iconsax.share, size: 22.r),
@@ -50,9 +48,7 @@ class TripDetailPage extends StatelessWidget {
               // Map placeholder
               _buildMapPlaceholder(context, state),
               // Itinerary
-              Expanded(
-                child: _buildItinerary(context, state),
-              ),
+              Expanded(child: _buildItinerary(context, state)),
             ],
           ),
           bottomNavigationBar: _buildBottomBar(context),
@@ -67,11 +63,9 @@ class TripDetailPage extends StatelessWidget {
     return Container(
       height: 200.h,
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: AppColors.surfaceVariantLight,
-        border: Border(
-          bottom: BorderSide(color: AppColors.outlineLight),
-        ),
+      decoration: BoxDecoration(
+        color: context.appColors.surfaceVariant,
+        border: Border(bottom: BorderSide(color: context.appColors.outline)),
       ),
       child: Stack(
         children: [
@@ -82,8 +76,8 @@ class TripDetailPage extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  AppColors.primary.withValues(alpha: 0.1),
-                  AppColors.secondary.withValues(alpha: 0.05),
+                  context.appColors.primary.withValues(alpha: 0.1),
+                  context.appColors.secondary.withValues(alpha: 0.05),
                 ],
               ),
             ),
@@ -94,21 +88,21 @@ class TripDetailPage extends StatelessWidget {
                   Icon(
                     Iconsax.map,
                     size: 48.r,
-                    color: AppColors.primary.withValues(alpha: 0.5),
+                    color: context.appColors.primary.withValues(alpha: 0.5),
                   ),
                   SizedBox(height: 8.h),
                   Text(
                     'Map View',
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: context.appColors.textSecondary,
                     ),
                   ),
                   Text(
                     'Integrate with Google Maps or flutter_map',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: AppColors.textTertiaryLight,
+                      color: context.appColors.textTertiary,
                     ),
                   ),
                 ],
@@ -123,13 +117,10 @@ class TripDetailPage extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.appColors.surface,
                 borderRadius: BorderRadius.circular(10.r),
-                boxShadow: const [
-                  BoxShadow(
-                    color: AppColors.shadowLight,
-                    blurRadius: 8,
-                  ),
+                boxShadow: [
+                  BoxShadow(color: context.appColors.shadow, blurRadius: 8),
                 ],
               ),
               child: Row(
@@ -137,7 +128,7 @@ class TripDetailPage extends StatelessWidget {
                   Icon(
                     Iconsax.routing_2,
                     size: 20.r,
-                    color: AppColors.primary,
+                    color: context.appColors.primary,
                   ),
                   SizedBox(width: 8.w),
                   Expanded(
@@ -146,6 +137,7 @@ class TripDetailPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w500,
+                        color: context.appColors.textPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -156,7 +148,7 @@ class TripDetailPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.primary,
+                      color: context.appColors.primary,
                     ),
                   ),
                 ],
@@ -194,7 +186,8 @@ class TripDetailPage extends StatelessWidget {
               TripStatData(
                 icon: Iconsax.battery_charging,
                 label: 'Arrive',
-                value: '${estimates?.arrivalSocPercent.toStringAsFixed(0) ?? '0'}%',
+                value:
+                    '${estimates?.arrivalSocPercent.toStringAsFixed(0) ?? '0'}%',
               ),
             ],
           ),
@@ -205,7 +198,7 @@ class TripDetailPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimaryLight,
+              color: context.appColors.textPrimary,
             ),
           ),
           SizedBox(height: 16.h),
@@ -219,7 +212,7 @@ class TripDetailPage extends StatelessWidget {
                 ? _formatTime(trip.departureTime!)
                 : 'Now',
             icon: Iconsax.location,
-            color: AppColors.primary,
+            color: context.appColors.primary,
           ),
           // Legs and stops
           for (var i = 0; i <= stops.length; i++) ...[
@@ -228,18 +221,18 @@ class TripDetailPage extends StatelessWidget {
               context,
               distance: i == 0
                   ? (stops.isNotEmpty
-                      ? stops[0].distanceFromPreviousKm
-                      : estimates?.totalDistanceKm ?? 0)
+                        ? stops[0].distanceFromPreviousKm
+                        : estimates?.totalDistanceKm ?? 0)
                   : (i < stops.length
-                      ? stops[i].distanceFromPreviousKm
-                      : (estimates?.totalDistanceKm ?? 0) -
-                          (stops.isNotEmpty
-                              ? stops.last.distanceFromStartKm
-                              : 0)),
+                        ? stops[i].distanceFromPreviousKm
+                        : (estimates?.totalDistanceKm ?? 0) -
+                              (stops.isNotEmpty
+                                  ? stops.last.distanceFromStartKm
+                                  : 0)),
               duration: i == 0
                   ? (stops.isNotEmpty
-                      ? (stops[0].distanceFromPreviousKm / 80 * 60).round()
-                      : estimates?.totalDriveTimeMin ?? 0)
+                        ? (stops[0].distanceFromPreviousKm / 80 * 60).round()
+                        : estimates?.totalDriveTimeMin ?? 0)
                   : 30, // Simplified
             ),
             // Charging stop
@@ -252,7 +245,7 @@ class TripDetailPage extends StatelessWidget {
                     '${stops[i].arrivalSocPercent.toStringAsFixed(0)}% → ${stops[i].departureSocPercent.toStringAsFixed(0)}%',
                 detail: stops[i].formattedChargeTime,
                 icon: Iconsax.flash_1,
-                color: AppColors.warning,
+                color: context.appColors.warning,
                 extraInfo:
                     '+${stops[i].energyToChargeKwh.toStringAsFixed(1)} kWh',
               ),
@@ -263,10 +256,13 @@ class TripDetailPage extends StatelessWidget {
             type: _ItineraryType.end,
             title: 'Arrive',
             subtitle: trip.destination.shortDisplay,
-            detail: estimates?.eta != null ? _formatTime(estimates!.eta!) : '--',
+            detail: estimates?.eta != null
+                ? _formatTime(estimates!.eta!)
+                : '--',
             icon: Iconsax.flag,
-            color: AppColors.error,
-            extraInfo: '${estimates?.arrivalSocPercent.toStringAsFixed(0) ?? '0'}% SOC',
+            color: context.appColors.danger,
+            extraInfo:
+                '${estimates?.arrivalSocPercent.toStringAsFixed(0) ?? '0'}% SOC',
           ),
           SizedBox(height: 80.h),
         ],
@@ -305,11 +301,7 @@ class TripDetailPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Icon(
-                  icon,
-                  size: 18.r,
-                  color: Colors.white,
-                ),
+                child: Icon(icon, size: 18.r, color: context.appColors.surface),
               ),
             ],
           ),
@@ -337,13 +329,15 @@ class TripDetailPage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimaryLight,
+                          color: context.appColors.textPrimary,
                         ),
                       ),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 8.w, vertical: 4.h),
+                        horizontal: 8.w,
+                        vertical: 4.h,
+                      ),
                       decoration: BoxDecoration(
                         color: color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(6.r),
@@ -364,7 +358,7 @@ class TripDetailPage extends StatelessWidget {
                   subtitle,
                   style: TextStyle(
                     fontSize: 13.sp,
-                    color: AppColors.textSecondaryLight,
+                    color: context.appColors.textSecondary,
                   ),
                 ),
                 if (extraInfo != null) ...[
@@ -410,8 +404,8 @@ class TripDetailPage extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppColors.primary.withValues(alpha: 0.5),
-                    AppColors.secondary.withValues(alpha: 0.5),
+                    context.appColors.primary.withValues(alpha: 0.5),
+                    context.appColors.secondary.withValues(alpha: 0.5),
                   ],
                 ),
               ),
@@ -425,7 +419,7 @@ class TripDetailPage extends StatelessWidget {
             margin: EdgeInsets.symmetric(vertical: 8.h),
             padding: EdgeInsets.all(10.r),
             decoration: BoxDecoration(
-              color: AppColors.surfaceVariantLight,
+              color: context.appColors.surfaceVariant,
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Row(
@@ -433,21 +427,21 @@ class TripDetailPage extends StatelessWidget {
                 Icon(
                   Iconsax.car,
                   size: 16.r,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
                 SizedBox(width: 8.w),
                 Text(
                   'Drive ${distance.toStringAsFixed(0)} km',
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: AppColors.textSecondaryLight,
+                    color: context.appColors.textSecondary,
                   ),
                 ),
                 Text(
                   ' • ~${duration}min',
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: AppColors.textTertiaryLight,
+                    color: context.appColors.textTertiary,
                   ),
                 ),
               ],
@@ -459,15 +453,16 @@ class TripDetailPage extends StatelessWidget {
   }
 
   Widget _buildBottomBar(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        boxShadow: const [
+        color: colors.surface,
+        boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: colors.shadow,
             blurRadius: 10,
-            offset: Offset(0, -2),
+            offset: const Offset(0, -2),
           ),
         ],
       ),
@@ -483,7 +478,9 @@ class TripDetailPage extends StatelessWidget {
   }
 
   String _formatTime(DateTime time) {
-    final hour = time.hour > 12 ? time.hour - 12 : (time.hour == 0 ? 12 : time.hour);
+    final hour = time.hour > 12
+        ? time.hour - 12
+        : (time.hour == 0 ? 12 : time.hour);
     final period = time.hour >= 12 ? 'PM' : 'AM';
     final minute = time.minute.toString().padLeft(2, '0');
     return '$hour:$minute $period';
@@ -491,4 +488,3 @@ class TripDetailPage extends StatelessWidget {
 }
 
 enum _ItineraryType { start, charge, end }
-

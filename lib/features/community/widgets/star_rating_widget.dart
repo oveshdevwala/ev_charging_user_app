@@ -10,12 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// Interactive star rating widget.
 class StarRatingWidget extends StatelessWidget {
   const StarRatingWidget({
-    required this.rating, super.key,
+    required this.rating,
+    super.key,
     this.onRatingChanged,
     this.starCount = 5,
     this.size = 32,
@@ -59,6 +61,7 @@ class StarRatingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -66,7 +69,9 @@ class StarRatingWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: List.generate(starCount, (index) {
             return Padding(
-              padding: EdgeInsets.only(right: index < starCount - 1 ? spacing.w : 0),
+              padding: EdgeInsets.only(
+                right: index < starCount - 1 ? spacing.w : 0,
+              ),
               child: _buildStar(context, index),
             );
           }),
@@ -78,7 +83,7 @@ class StarRatingWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: activeColor ?? AppColors.ratingActive,
+              color: activeColor ?? colors.warning,
             ),
           ),
         ],
@@ -119,28 +124,33 @@ class StarRatingWidget extends StatelessWidget {
                 onRatingChanged!(starValue.toDouble());
               }
             },
-      child: SizedBox(
-        width: size.r,
-        height: size.r,
-        child: Stack(
-          children: [
-            // Background star (inactive)
-            Icon(
-              Iconsax.star1,
-              size: size.r,
-              color: inactiveColor ?? AppColors.ratingInactive,
+      child: Builder(
+        builder: (context) {
+          final colors = context.appColors;
+          return SizedBox(
+            width: size.r,
+            height: size.r,
+            child: Stack(
+              children: [
+                // Background star (inactive)
+                Icon(
+                  Iconsax.star1,
+                  size: size.r,
+                  color: inactiveColor ?? colors.textTertiary,
+                ),
+                // Filled star with clip
+                ClipRect(
+                  clipper: _StarClipper(fillAmount),
+                  child: Icon(
+                    Iconsax.star1,
+                    size: size.r,
+                    color: activeColor ?? colors.warning,
+                  ),
+                ),
+              ],
             ),
-            // Filled star with clip
-            ClipRect(
-              clipper: _StarClipper(fillAmount),
-              child: Icon(
-                Iconsax.star1,
-                size: size.r,
-                color: activeColor ?? AppColors.ratingActive,
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -174,13 +184,15 @@ class _StarClipper extends CustomClipper<Rect> {
   }
 
   @override
-  bool shouldReclip(_StarClipper oldClipper) => fillAmount != oldClipper.fillAmount;
+  bool shouldReclip(_StarClipper oldClipper) =>
+      fillAmount != oldClipper.fillAmount;
 }
 
 /// Compact star rating display (read-only).
 class StarRatingCompact extends StatelessWidget {
   const StarRatingCompact({
-    required this.rating, super.key,
+    required this.rating,
+    super.key,
     this.reviewCount,
     this.size = 14,
     this.showCount = true,
@@ -195,21 +207,18 @@ class StarRatingCompact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          Iconsax.star1,
-          size: size.r,
-          color: color ?? AppColors.ratingActive,
-        ),
+        Icon(Iconsax.star1, size: size.r, color: color ?? colors.warning),
         SizedBox(width: 4.w),
         Text(
           rating.toStringAsFixed(1),
           style: TextStyle(
             fontSize: size.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryLight,
+            color: context.appColors.textPrimary,
           ),
         ),
         if (showCount && reviewCount != null) ...[
@@ -217,7 +226,7 @@ class StarRatingCompact extends StatelessWidget {
             ' (${_formatCount(reviewCount!)})',
             style: TextStyle(
               fontSize: (size - 2).sp,
-              color: AppColors.textSecondaryLight,
+              color: context.appColors.textSecondary,
             ),
           ),
         ],
@@ -236,7 +245,9 @@ class StarRatingCompact extends StatelessWidget {
 /// Rating selector with microcopy feedback.
 class RatingSelector extends StatelessWidget {
   const RatingSelector({
-    required this.rating, required this.onRatingChanged, super.key,
+    required this.rating,
+    required this.onRatingChanged,
+    super.key,
     this.size = 40,
   });
 
@@ -261,7 +272,7 @@ class RatingSelector extends StatelessWidget {
             'Tap to rate',
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
+              color: context.appColors.textSecondary,
             ),
           ),
         ],
@@ -269,4 +280,3 @@ class RatingSelector extends StatelessWidget {
     );
   }
 }
-

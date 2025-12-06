@@ -6,7 +6,6 @@
 ///    - Add caching logic in the real implementation
 library;
 
-import 'dart:math';
 
 import '../datasources/datasources.dart';
 import '../models/models.dart';
@@ -170,7 +169,7 @@ class DummyPartnerRepository implements PartnerRepository {
         description: 'Exclusive offer for EV drivers.',
         offerType: PartnerOfferType.discount,
         partnerCategory: PartnerCategory.food,
-        discountPercent: 15.0,
+        discountPercent: 15,
         validUntil: DateTime.now().add(const Duration(days: 7)),
       );
     });

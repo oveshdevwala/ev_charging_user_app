@@ -9,7 +9,9 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/theme/app_colors.dart';
 import '../bloc/bloc.dart';
 import '../repositories/trip_planner_repository.dart';
 import 'charging_stops_page.dart';
@@ -26,9 +28,9 @@ class TripPlannerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TripPlannerCubit(
-        repository: DummyTripPlannerRepository(),
-      )..initialize(),
+      create: (context) =>
+          TripPlannerCubit(repository: DummyTripPlannerRepository())
+            ..initialize(),
       child: BlocBuilder<TripPlannerCubit, TripPlannerState>(
         buildWhen: (prev, curr) => prev.step != curr.step,
         builder: (context, state) {
@@ -52,7 +54,7 @@ class TripPlannerPage extends StatelessWidget {
 
   void _handleBackNavigation(BuildContext context, TripPlanningStep step) {
     final cubit = context.read<TripPlannerCubit>();
-    
+
     switch (step) {
       case TripPlanningStep.home:
         // Already at home, system will handle pop
@@ -96,23 +98,27 @@ class _CalculatingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircularProgressIndicator(),
-            const SizedBox(height: 24),
+            CircularProgressIndicator(color: colors.primary),
+            SizedBox(height: 24.h),
             Text(
               'Calculating your trip...',
-              style: Theme.of(context).textTheme.titleMedium,
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+                color: colors.textPrimary,
+              ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Text(
               'Finding the best charging stops',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey,
-                  ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
             ),
           ],
         ),

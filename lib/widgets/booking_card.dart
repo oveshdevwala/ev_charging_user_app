@@ -31,6 +31,7 @@ class BookingCard extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -38,7 +39,7 @@ class BookingCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: AppColors.outlineLight),
+          border: Border.all(color: colors.outline),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +69,7 @@ class BookingCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimaryLight,
+                          color: colors.textPrimary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -78,7 +79,7 @@ class BookingCard extends StatelessWidget {
                         booking.chargerName ?? 'Charger',
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: AppColors.textSecondaryLight,
+                          color: colors.textSecondary,
                         ),
                       ),
                     ],
@@ -94,7 +95,7 @@ class BookingCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
-                color: AppColors.surfaceVariantLight,
+                color: colors.surfaceVariant,
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Row(
@@ -104,30 +105,33 @@ class BookingCard extends StatelessWidget {
                       icon: Iconsax.calendar_1,
                       label: 'Date',
                       value: booking.startTime.formatted,
+                      context: context,
                     ),
                   ),
                   Container(
                     width: 1,
                     height: 40.h,
-                    color: AppColors.outlineLight,
+                    color: colors.outline,
                   ),
                   Expanded(
                     child: _buildDetailItem(
                       icon: Iconsax.clock,
                       label: 'Time',
                       value: booking.startTime.formattedTime,
+                      context: context,
                     ),
                   ),
                   Container(
                     width: 1,
                     height: 40.h,
-                    color: AppColors.outlineLight,
+                    color: colors.outline,
                   ),
                   Expanded(
                     child: _buildDetailItem(
                       icon: Iconsax.timer_1,
                       label: 'Duration',
                       value: booking.durationDisplay,
+                      context: context,
                     ),
                   ),
                 ],
@@ -146,7 +150,7 @@ class BookingCard extends StatelessWidget {
                       'Total Cost',
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                       ),
                     ),
                     Text(
@@ -168,7 +172,7 @@ class BookingCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.error,
+                        color: colors.danger,
                       ),
                     ),
                   ),
@@ -184,7 +188,7 @@ class BookingCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: context.appColors.surface,
                     ),
                   ),
                 ),
@@ -199,21 +203,23 @@ class BookingCard extends StatelessWidget {
   Widget _buildDetailItem({
     required IconData icon,
     required String label,
-    required String value,
+    required String value, 
+    required BuildContext context,
   }) {
+    final colors = context.appColors;
     return Column(
       children: [
         Icon(
           icon,
           size: 18.r,
-          color: AppColors.textSecondaryLight,
+          color: colors.textSecondary,
         ),
         SizedBox(height: 4.h),
         Text(
           label,
           style: TextStyle(
             fontSize: 10.sp,
-            color: AppColors.textSecondaryLight,
+            color: colors.textSecondary,
           ),
         ),
         SizedBox(height: 2.h),
@@ -222,7 +228,7 @@ class BookingCard extends StatelessWidget {
           style: TextStyle(
             fontSize: 12.sp,
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
           textAlign: TextAlign.center,
         ),
@@ -255,11 +261,11 @@ class BookingCard extends StatelessWidget {
       case BookingStatus.confirmed:
         return AppColors.info;
       case BookingStatus.inProgress:
-        return AppColors.charging;
+        return AppColors.info;
       case BookingStatus.completed:
         return AppColors.success;
       case BookingStatus.cancelled:
-        return AppColors.error;
+        return AppColors.warning;
       case BookingStatus.failed:
         return AppColors.error;
     }

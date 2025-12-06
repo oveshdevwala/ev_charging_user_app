@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/booking_model.dart';
 import '../../../repositories/booking_repository.dart';
@@ -60,13 +61,16 @@ class _BookingsPageState extends State<BookingsPage>
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(),
-            _buildTabBar(),
+            _buildHeader(context),
+            _buildTabBar(context),
             SizedBox(height: 16.h),
             Expanded(child: _buildTabContent()),
           ],
@@ -75,7 +79,9 @@ class _BookingsPageState extends State<BookingsPage>
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
+    final colors = context.appColors;
+
     return Padding(
       padding: EdgeInsets.all(20.r),
       child: Row(
@@ -86,44 +92,44 @@ class _BookingsPageState extends State<BookingsPage>
             style: TextStyle(
               fontSize: 24.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimaryLight,
+              color: colors.textPrimary,
             ),
           ),
           TextButton.icon(
             onPressed: () => context.push(AppRoutes.tripHistory.path),
             icon: Icon(Iconsax.chart_1, size: 18.r),
-            label: Text(
-              'Trip History',
-              style: TextStyle(fontSize: 14.sp),
-            ),
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.primary,
-            ),
+            label: Text('Trip History', style: TextStyle(fontSize: 14.sp)),
+            style: TextButton.styleFrom(foregroundColor: colors.primary),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildTabBar() {
+  Widget _buildTabBar(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.w),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariantLight,
+        color: colors.surfaceVariant,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: TabBar(
         controller: _tabController,
         indicator: BoxDecoration(
-          color: AppColors.primary,
+          color: colors.primary,
           borderRadius: BorderRadius.circular(10.r),
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
-        labelColor: Colors.white,
-        unselectedLabelColor: AppColors.textSecondaryLight,
+        labelColor: colors.textPrimary,
+        unselectedLabelColor: colors.textSecondary,
         labelStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
-        tabs: const [Tab(text: 'Upcoming'), Tab(text: 'Past')],
+        tabs: const [
+          Tab(text: 'Upcoming'),
+          Tab(text: 'Past'),
+        ],
       ),
     );
   }
@@ -141,7 +147,10 @@ class _BookingsPageState extends State<BookingsPage>
     );
   }
 
-  Widget _buildBookingList(List<BookingModel> bookings, {required bool isUpcoming}) {
+  Widget _buildBookingList(
+    List<BookingModel> bookings, {
+    required bool isUpcoming,
+  }) {
     if (bookings.isEmpty) {
       return EmptyStateWidget(
         title: AppStrings.noBookingsFound,
@@ -167,11 +176,12 @@ class _BookingsPageState extends State<BookingsPage>
             padding: EdgeInsets.only(bottom: 16.h),
             child: BookingCard(
               booking: booking,
-              onTap: () => context.push(AppRoutes.bookingDetails.id(booking.id)),
+              onTap: () =>
+                  context.push(AppRoutes.bookingDetails.id(booking.id)),
               onCancelTap: isUpcoming
                   ? () async {
                       await _bookingRepository.cancelBooking(booking.id);
-                     await _loadBookings();
+                      await _loadBookings();
                     }
                   : null,
             ),
@@ -181,4 +191,3 @@ class _BookingsPageState extends State<BookingsPage>
     );
   }
 }
-

@@ -10,12 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../core/extensions/context_ext.dart';
 import '../../../../core/theme/app_colors.dart';
 
 /// Category button widget for quick actions grid.
 class CategoryButton extends StatelessWidget {
   const CategoryButton({
-    required this.icon, required this.label, required this.onTap, super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    super.key,
     this.iconColor,
     this.backgroundColor,
     this.labelStyle,
@@ -49,6 +53,8 @@ class CategoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -57,11 +63,9 @@ class CategoryButton extends StatelessWidget {
           vertical: isCompact ? 12.h : 16.h,
         ),
         decoration: BoxDecoration(
-          color: backgroundColor ?? AppColors.surfaceVariantLight,
+          color: backgroundColor ?? colors.surface,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(
-            color: AppColors.outlineLight.withValues(alpha: 0.5),
-          ),
+          border: Border.all(color: colors.outline),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -71,23 +75,24 @@ class CategoryButton extends StatelessWidget {
               width: isCompact ? 44.r : 52.r,
               height: isCompact ? 44.r : 52.r,
               decoration: BoxDecoration(
-                color: (iconColor ?? AppColors.primary).withValues(alpha: 0.12),
+                color: (iconColor ?? colors.primary).withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 icon,
                 size: iconSize ?? (isCompact ? 22.r : 26.r),
-                color: iconColor ?? AppColors.primary,
+                color: iconColor ?? colors.primary,
               ),
             ),
             SizedBox(height: isCompact ? 8.h : 12.h),
             Text(
               label,
-              style: labelStyle ??
+              style:
+                  labelStyle ??
                   TextStyle(
                     fontSize: isCompact ? 11.sp : 12.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimaryLight,
+                    color: colors.textPrimary,
                   ),
               textAlign: TextAlign.center,
               maxLines: 2,
@@ -103,7 +108,10 @@ class CategoryButton extends StatelessWidget {
 /// Horizontal category button with icon and label in a row.
 class CategoryButtonHorizontal extends StatelessWidget {
   const CategoryButtonHorizontal({
-    required this.icon, required this.label, required this.onTap, super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    super.key,
     this.iconColor,
     this.backgroundColor,
     this.trailing,
@@ -118,14 +126,16 @@ class CategoryButtonHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: backgroundColor ?? AppColors.surfaceLight,
+          color: backgroundColor ?? colors.surface,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: AppColors.outlineLight),
+          border: Border.all(color: colors.outline),
         ),
         child: Row(
           children: [
@@ -133,14 +143,10 @@ class CategoryButtonHorizontal extends StatelessWidget {
               width: 44.r,
               height: 44.r,
               decoration: BoxDecoration(
-                color: (iconColor ?? AppColors.primary).withValues(alpha: 0.12),
+                color: (iconColor ?? colors.primary).withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12.r),
               ),
-              child: Icon(
-                icon,
-                size: 22.r,
-                color: iconColor ?? AppColors.primary,
-              ),
+              child: Icon(icon, size: 22.r, color: iconColor ?? colors.primary),
             ),
             SizedBox(width: 12.w),
             Expanded(
@@ -149,7 +155,7 @@ class CategoryButtonHorizontal extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimaryLight,
+                  color: colors.textPrimary,
                 ),
               ),
             ),
@@ -157,7 +163,7 @@ class CategoryButtonHorizontal extends StatelessWidget {
                 Icon(
                   Iconsax.arrow_right_3,
                   size: 20.r,
-                  color: AppColors.textTertiaryLight,
+                  color: colors.textTertiary,
                 ),
           ],
         ),
@@ -165,4 +171,3 @@ class CategoryButtonHorizontal extends StatelessWidget {
     );
   }
 }
-

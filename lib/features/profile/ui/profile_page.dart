@@ -12,6 +12,7 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
 import '../../../core/di/injection.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 import '../bloc/bloc.dart';
@@ -29,12 +30,13 @@ class ProfilePage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ProfileBloc(
-            repository: sl<ProfileRepository>(),
-          )..add(const LoadProfile()),
+          create: (context) =>
+              ProfileBloc(repository: sl<ProfileRepository>())
+                ..add(const LoadProfile()),
         ),
       ],
       child: Scaffold(
+        backgroundColor: context.appColors.background,
         body: SafeArea(
           child: BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
@@ -48,7 +50,7 @@ class ProfilePage extends StatelessWidget {
               final avatarUrl = profile?.avatarUrl;
 
               return SingleChildScrollView(
-                padding: EdgeInsets.all(20.r),
+                padding: EdgeInsets.all(8.r),
                 child: Column(
                   children: [
                     ProfileHeader(
@@ -67,7 +69,10 @@ class ProfilePage extends StatelessWidget {
                     SizedBox(height: 16.h),
                     Text(
                       'Version 1.0.0',
-                      style: TextStyle(fontSize: 12.sp, color: AppColors.textTertiaryLight),
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: context.appColors.textTertiary,
+                      ),
                     ),
                   ],
                 ),
@@ -172,22 +177,28 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildLogoutButton(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: () => _showLogoutDialog(context),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         decoration: BoxDecoration(
-          color: AppColors.errorContainer,
+          color: colors.dangerContainer,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Iconsax.logout, size: 20.r, color: AppColors.error),
+            Icon(Iconsax.logout, size: 20.r, color: colors.danger),
             SizedBox(width: 8.w),
             Text(
               AppStrings.logout,
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600, color: AppColors.error),
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+                color: colors.danger,
+              ),
             ),
           ],
         ),
@@ -196,23 +207,34 @@ class ProfilePage extends StatelessWidget {
   }
 
   void _showLogoutDialog(BuildContext context) {
+    final colors = context.appColors;
+
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
+        backgroundColor: colors.surface,
+        title: Text('Logout', style: TextStyle(color: colors.textPrimary)),
+        content: Text(
+          'Are you sure you want to logout?',
+          style: TextStyle(color: colors.textSecondary),
+        ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: colors.textSecondary),
+            ),
+          ),
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
               context.go(AppRoutes.login.path);
             },
-            child: const Text('Logout', style: TextStyle(color: AppColors.error)),
+            child: Text('Logout', style: TextStyle(color: colors.danger)),
           ),
         ],
       ),
     );
   }
 }
-

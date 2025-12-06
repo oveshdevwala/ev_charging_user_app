@@ -1,5 +1,5 @@
 /// File: lib/core/theme/dark_theme.dart
-/// Purpose: Dark theme configuration for the app
+/// Purpose: Dark theme configuration for the app (WCAG AA compliant)
 /// Belongs To: shared
 /// Customization Guide:
 ///    - Modify colors in AppColors
@@ -12,8 +12,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app_colors.dart';
+import 'color_schemes.dart';
 
 /// Dark theme configuration for the EV Charging app.
+/// Uses balanced dark tones (not pure black) for comfortable viewing.
+/// All colors follow WCAG AA contrast guidelines for accessibility.
 class DarkTheme {
   DarkTheme._();
 
@@ -21,31 +24,35 @@ class DarkTheme {
   static ThemeData get theme => ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
+    extensions: const [
+      darkColorScheme,
+    ],
 
     // ============ Color Scheme ============
     colorScheme: const ColorScheme.dark(
       primary: AppColors.primaryLight,
       onPrimary: AppColors.textPrimaryLight,
-      primaryContainer: AppColors.primaryDark,
+      primaryContainer: AppColors.primaryContainerDark,
       onPrimaryContainer: AppColors.primaryContainer,
       secondary: AppColors.secondaryLight,
       onSecondary: AppColors.textPrimaryLight,
-      secondaryContainer: AppColors.secondaryDark,
+      secondaryContainer: AppColors.secondaryContainerDark,
       onSecondaryContainer: AppColors.secondaryContainer,
       tertiary: AppColors.tertiaryLight,
       onTertiary: AppColors.textPrimaryLight,
-      tertiaryContainer: AppColors.tertiaryDark,
+      tertiaryContainer: AppColors.tertiaryContainerDark,
       onTertiaryContainer: AppColors.tertiaryContainer,
       error: AppColors.errorLight,
       onError: AppColors.textPrimaryLight,
-      errorContainer: AppColors.errorDark,
+      errorContainer: AppColors.errorContainerDark,
       onErrorContainer: AppColors.errorContainer,
       surface: AppColors.surfaceDark,
-      onSurface: AppColors.textPrimaryDark,
       surfaceContainerHighest: AppColors.surfaceVariantDark,
       onSurfaceVariant: AppColors.textSecondaryDark,
       outline: AppColors.outlineDark,
       outlineVariant: AppColors.outlineVariantDark,
+      shadow: AppColors.shadowDarkMode,
+      scrim: AppColors.scrim,
     ),
 
     // ============ Scaffold ============
@@ -59,7 +66,11 @@ class DarkTheme {
       backgroundColor: AppColors.surfaceDark,
       foregroundColor: AppColors.textPrimaryDark,
       surfaceTintColor: Colors.transparent,
-      systemOverlayStyle: SystemUiOverlayStyle.light,
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
       titleTextStyle: TextStyle(
         fontSize: 18.sp,
         fontWeight: FontWeight.w600,
@@ -145,15 +156,15 @@ class DarkTheme {
     // ============ Input Decoration Theme ============
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.surfaceVariantDark,
+      fillColor: AppColors.surfaceDark,
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
-        borderSide: BorderSide.none,
+        borderSide: const BorderSide(color: AppColors.outlineDark),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
-        borderSide: BorderSide.none,
+        borderSide: const BorderSide(color: AppColors.outlineDark),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.r),
@@ -206,7 +217,7 @@ class DarkTheme {
     // ============ Navigation Bar Theme (Material 3) ============
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: AppColors.surfaceDark,
-      indicatorColor: AppColors.primaryDark,
+      indicatorColor: AppColors.primaryContainerDark,
       elevation: 0,
       height: 65.h,
       labelTextStyle: WidgetStateProperty.resolveWith((states) {
@@ -250,7 +261,7 @@ class DarkTheme {
     // ============ Chip Theme ============
     chipTheme: ChipThemeData(
       backgroundColor: AppColors.surfaceVariantDark,
-      selectedColor: AppColors.primaryDark,
+      selectedColor: AppColors.primaryContainerDark,
       disabledColor: AppColors.outlineDark,
       labelStyle: TextStyle(
         fontSize: 12.sp,
@@ -334,7 +345,7 @@ class DarkTheme {
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return AppColors.primaryDark;
+          return AppColors.primaryContainerDark;
         }
         return AppColors.surfaceVariantDark;
       }),
@@ -366,14 +377,14 @@ class DarkTheme {
     // ============ Progress Indicator Theme ============
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.primaryLight,
-      linearTrackColor: AppColors.primaryDark,
-      circularTrackColor: AppColors.primaryDark,
+      linearTrackColor: AppColors.primaryContainerDark,
+      circularTrackColor: AppColors.primaryContainerDark,
     ),
 
     // ============ Slider Theme ============
     sliderTheme: SliderThemeData(
       activeTrackColor: AppColors.primaryLight,
-      inactiveTrackColor: AppColors.primaryDark,
+      inactiveTrackColor: AppColors.primaryContainerDark,
       thumbColor: AppColors.primaryLight,
       overlayColor: AppColors.primaryLight.withValues(alpha: 0.12),
       trackHeight: 4.h,

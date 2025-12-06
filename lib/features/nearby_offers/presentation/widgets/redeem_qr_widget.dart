@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../../../core/extensions/context_ext.dart';
 import '../../data/models/redemption_model.dart';
 
 class RedeemQrWidget extends StatelessWidget {
@@ -24,11 +25,11 @@ class RedeemQrWidget extends StatelessWidget {
         Container(
           padding: EdgeInsets.all(16.r),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: context.appColors.surface,
             borderRadius: BorderRadius.circular(24.r),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: context.appColors.textPrimary.withOpacity(0.1),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),
@@ -36,9 +37,8 @@ class RedeemQrWidget extends StatelessWidget {
           ),
           child: QrImageView(
             data: redemption.qrCode ?? 'INVALID',
-            version: QrVersions.auto,
             size: 200.w,
-            backgroundColor: Colors.white,
+            backgroundColor: context.appColors.surface,
           ),
         ),
         SizedBox(height: 24.h),

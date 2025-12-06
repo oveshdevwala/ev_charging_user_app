@@ -42,30 +42,35 @@ class TransactionCard extends StatelessWidget {
     }
   }
 
-  Color get _iconColor {
+  Color _iconColor(BuildContext context) {
+    final colors = context.appColors;
+
     if (transaction.isCredit) {
-      return AppColors.success;
+      return colors.success;
     }
     switch (transaction.type) {
       case TransactionType.charging:
-        return AppColors.primary;
+        return colors.primary;
       case TransactionType.subscription:
         return AppColors.tertiary;
       default:
-        return AppColors.secondary;
+        return colors.secondary;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+    final iconColor = _iconColor(context);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(14.r),
-          border: Border.all(color: AppColors.outlineLight),
+          border: Border.all(color: colors.outline),
         ),
         child: Row(
           children: [
@@ -74,10 +79,10 @@ class TransactionCard extends StatelessWidget {
               width: 48.r,
               height: 48.r,
               decoration: BoxDecoration(
-                color: _iconColor.withValues(alpha: 0.12),
+                color: iconColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12.r),
               ),
-              child: Icon(_icon, size: 22.r, color: _iconColor),
+              child: Icon(_icon, size: 22.r, color: iconColor),
             ),
             SizedBox(width: 14.w),
 
@@ -91,7 +96,7 @@ class TransactionCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                   ),
                   SizedBox(height: 2.h),
@@ -99,7 +104,7 @@ class TransactionCard extends StatelessWidget {
                     transaction.description ?? transaction.stationName ?? '',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: colors.textSecondary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -109,7 +114,7 @@ class TransactionCard extends StatelessWidget {
                     '${transaction.formattedDate} · ${transaction.formattedTime}',
                     style: TextStyle(
                       fontSize: 11.sp,
-                      color: AppColors.textTertiaryLight,
+                      color: colors.textTertiary,
                     ),
                   ),
                 ],
@@ -126,8 +131,8 @@ class TransactionCard extends StatelessWidget {
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
                     color: transaction.isCredit
-                        ? AppColors.success
-                        : AppColors.textPrimaryLight,
+                        ? colors.success
+                        : colors.textPrimary,
                   ),
                 ),
                 if (transaction.energyKwh != null) ...[
@@ -136,7 +141,7 @@ class TransactionCard extends StatelessWidget {
                     '${transaction.energyKwh!.toStringAsFixed(1)} kWh',
                     style: TextStyle(
                       fontSize: 11.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: colors.textSecondary,
                     ),
                   ),
                 ],
@@ -169,6 +174,8 @@ class TransactionGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -179,7 +186,7 @@ class TransactionGroup extends StatelessWidget {
             style: TextStyle(
               fontSize: 13.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.textSecondaryLight,
+              color: colors.textSecondary,
             ),
           ),
         ),

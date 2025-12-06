@@ -6,6 +6,7 @@
 ///    - Uses fl_chart for rendering
 library;
 
+import 'package:ev_charging_user_app/core/extensions/context_ext.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,16 +59,15 @@ class EnergyChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     if (data.isEmpty) {
       return SizedBox(
         height: height ?? 200.h,
         child: Center(
           child: Text(
             'No data available',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
           ),
         ),
       );
@@ -87,8 +87,7 @@ class EnergyChart extends StatelessWidget {
           barTouchData: BarTouchData(
             enabled: true,
             touchTooltipData: BarTouchTooltipData(
-              getTooltipColor: (_) =>
-                  AppColors.textPrimaryLight.withValues(alpha: 0.9),
+              getTooltipColor: (_) => colors.textPrimary.withValues(alpha: 0.9),
               tooltipPadding: EdgeInsets.all(8.r),
               tooltipMargin: 8.h,
               getTooltipItem: (group, groupIndex, rod, rodIndex) {
@@ -96,7 +95,7 @@ class EnergyChart extends StatelessWidget {
                 return BarTooltipItem(
                   '${day.energyKwh.toStringAsFixed(1)} kWh\n${day.sessions} sessions',
                   TextStyle(
-                    color: Colors.white,
+                    color: colors.surface,
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
                   ),
@@ -125,7 +124,7 @@ class EnergyChart extends StatelessWidget {
                     child: Text(
                       day.dayAbbrev,
                       style: TextStyle(
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                         fontSize: 10.sp,
                         fontWeight: FontWeight.w500,
                       ),
@@ -148,7 +147,7 @@ class EnergyChart extends StatelessWidget {
                     child: Text(
                       '${value.toInt()}',
                       style: TextStyle(
-                        color: AppColors.textTertiaryLight,
+                        color: colors.textTertiary,
                         fontSize: 10.sp,
                       ),
                     ),
@@ -165,10 +164,10 @@ class EnergyChart extends StatelessWidget {
             drawVerticalLine: false,
             horizontalInterval: maxY / 4,
             getDrawingHorizontalLine: (value) {
-              return const FlLine(
-                color: AppColors.outlineLight,
+              return FlLine(
+                color: colors.outline,
                 strokeWidth: 1,
-                dashArray: [5, 5],
+                dashArray: const [5, 5],
               );
             },
           ),
@@ -176,15 +175,14 @@ class EnergyChart extends StatelessWidget {
             final index = entry.key;
             final day = entry.value;
             final isToday = index == data.length - 1;
+            final color = barColor ?? colors.primary;
 
             return BarChartGroupData(
               x: index,
               barRods: [
                 BarChartRodData(
                   toY: day.energyKwh,
-                  color: isToday
-                      ? (barColor ?? AppColors.primary)
-                      : (barColor ?? AppColors.primary).withValues(alpha: 0.5),
+                  color: isToday ? color : color.withValues(alpha: 0.5),
                   width: data.length > 14 ? 8.w : 24.w,
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(4.r),
@@ -192,7 +190,7 @@ class EnergyChart extends StatelessWidget {
                   backDrawRodData: BackgroundBarChartRodData(
                     show: true,
                     toY: maxY,
-                    color: AppColors.surfaceVariantLight,
+                    color: colors.surfaceVariant,
                   ),
                 ),
               ],
@@ -229,16 +227,15 @@ class SpendingChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     if (data.isEmpty) {
       return SizedBox(
         height: height ?? 180.h,
         child: Center(
           child: Text(
             'No data available',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
           ),
         ),
       );
@@ -246,7 +243,7 @@ class SpendingChart extends StatelessWidget {
 
     final maxCost = data.map((d) => d.cost).reduce((a, b) => a > b ? a : b);
     final maxY = ((maxCost / 10).ceil() * 10).toDouble();
-    final color = lineColor ?? AppColors.secondary;
+    final color = lineColor ?? colors.secondary;
 
     return SizedBox(
       height: height ?? 180.h,
@@ -254,8 +251,7 @@ class SpendingChart extends StatelessWidget {
         LineChartData(
           lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
-              getTooltipColor: (_) =>
-                  AppColors.textPrimaryLight.withValues(alpha: 0.9),
+              getTooltipColor: (_) => colors.textPrimary.withValues(alpha: 0.9),
               tooltipPadding: EdgeInsets.all(8.r),
               getTooltipItems: (spots) {
                 return spots.map((spot) {
@@ -263,7 +259,7 @@ class SpendingChart extends StatelessWidget {
                   return LineTooltipItem(
                     '\$${day.cost.toStringAsFixed(2)}',
                     TextStyle(
-                      color: Colors.white,
+                      color: colors.surface,
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
                     ),
@@ -276,10 +272,10 @@ class SpendingChart extends StatelessWidget {
             drawVerticalLine: false,
             horizontalInterval: maxY / 4,
             getDrawingHorizontalLine: (value) {
-              return const FlLine(
-                color: AppColors.outlineLight,
+              return FlLine(
+                color: colors.outline,
                 strokeWidth: 1,
-                dashArray: [5, 5],
+                dashArray: const [5, 5],
               );
             },
           ),
@@ -299,7 +295,7 @@ class SpendingChart extends StatelessWidget {
                     child: Text(
                       day.shortDate,
                       style: TextStyle(
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                         fontSize: 10.sp,
                       ),
                     ),
@@ -319,7 +315,7 @@ class SpendingChart extends StatelessWidget {
                   return Text(
                     '\$${value.toInt()}',
                     style: TextStyle(
-                      color: AppColors.textTertiaryLight,
+                      color: colors.textTertiary,
                       fontSize: 10.sp,
                     ),
                   );
@@ -351,7 +347,7 @@ class SpendingChart extends StatelessWidget {
                     radius: index == data.length - 1 ? 5 : 3,
                     color: color,
                     strokeWidth: 2,
-                    strokeColor: Colors.white,
+                    strokeColor: colors.surface,
                   );
                 },
               ),

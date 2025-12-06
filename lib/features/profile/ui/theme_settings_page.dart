@@ -11,7 +11,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/di/injection.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../bloc/bloc.dart';
 import '../models/models.dart';
 import '../repositories/repositories.dart';
@@ -80,22 +80,23 @@ class ThemeSettingsPage extends StatelessWidget {
     IconData icon,
     bool isSelected,
   ) {
+    final colors = context.appColors;
     return Card(
       child: ListTile(
-        leading: Icon(icon, size: 24.r, color: AppColors.primary),
+        leading: Icon(icon, size: 24.r, color: colors.primary),
         title: Text(
           title,
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600, color: colors.textPrimary),
         ),
         subtitle: Text(
           subtitle,
           style: TextStyle(
             fontSize: 14.sp,
-            color: AppColors.textSecondaryLight,
+            color: colors.textSecondary,
           ),
         ),
         trailing: isSelected
-            ? Icon(Iconsax.tick_circle, size: 24.r, color: AppColors.primary)
+            ? Icon(Iconsax.tick_circle, size: 24.r, color: colors.primary)
             : const SizedBox.shrink(),
         onTap: () {
           context.read<ThemeBloc>().add(SetThemeMode(mode));

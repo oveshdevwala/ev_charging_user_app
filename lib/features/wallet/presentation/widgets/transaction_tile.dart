@@ -10,11 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../core/extensions/context_ext.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/wallet_transaction_model.dart';
 
 /// Transaction tile for displaying individual transactions.
-/// 
+///
 /// Features:
 /// - Icon based on transaction type
 /// - Credit/debit color coding
@@ -22,7 +23,8 @@ import '../../data/models/wallet_transaction_model.dart';
 /// - Formatted date and time
 class TransactionTile extends StatelessWidget {
   const TransactionTile({
-    required this.transaction, super.key,
+    required this.transaction,
+    super.key,
     this.onTap,
     this.showDivider = true,
   });
@@ -33,7 +35,7 @@ class TransactionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = context.appColors;
 
     return Column(
       children: [
@@ -44,10 +46,10 @@ class TransactionTile extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 4.w),
             child: Row(
               children: [
-                _buildIcon(isDark),
+                _buildIcon(context),
                 SizedBox(width: 12.w),
-                Expanded(child: _buildDetails(isDark)),
-                _buildAmount(isDark),
+                Expanded(child: _buildDetails(context)),
+                _buildAmount(context),
               ],
             ),
           ),
@@ -55,22 +57,22 @@ class TransactionTile extends StatelessWidget {
         if (showDivider)
           Divider(
             height: 1,
-            color: isDark ? AppColors.dividerDark : AppColors.dividerLight,
+            color: colors.outline,
           ),
       ],
     );
   }
 
-  Widget _buildIcon(bool isDark) {
+  Widget _buildIcon(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10.r),
       decoration: BoxDecoration(
-        color: _getIconBackgroundColor(isDark),
+        color: _getIconBackgroundColor(context),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Icon(
         _getIcon(),
-        color: _getIconColor(),
+        color: _getIconColor(context),
         size: 20.r,
       ),
     );
@@ -101,26 +103,29 @@ class TransactionTile extends StatelessWidget {
     }
   }
 
-  Color _getIconColor() {
+  Color _getIconColor(BuildContext context) {
+    final colors = context.appColors;
+
     if (transaction.isCredit) {
-      return AppColors.success;
+      return colors.success;
     }
     switch (transaction.type) {
       case WalletTransactionType.charging:
-        return AppColors.primary;
+        return colors.primary;
       case WalletTransactionType.subscription:
-        return AppColors.tertiary;
+        return colors.tertiary;
       default:
-        return AppColors.error;
+        return colors.danger;
     }
   }
 
-  Color _getIconBackgroundColor(bool isDark) {
-    final baseColor = _getIconColor();
-    return baseColor.withValues(alpha: isDark ? 0.2 : 0.1);
+  Color _getIconBackgroundColor(BuildContext context) {
+    final baseColor = _getIconColor(context);
+    return baseColor.withValues(alpha: 0.1);
   }
 
-  Widget _buildDetails(bool isDark) {
+  Widget _buildDetails(BuildContext context) {
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -129,7 +134,7 @@ class TransactionTile extends StatelessWidget {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
-            color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         SizedBox(height: 2.h),
@@ -137,7 +142,7 @@ class TransactionTile extends StatelessWidget {
           _getSubtitle(),
           style: TextStyle(
             fontSize: 12.sp,
-            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+            color: colors.textSecondary,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -149,12 +154,12 @@ class TransactionTile extends StatelessWidget {
               '${transaction.formattedDate} • ${transaction.formattedTime}',
               style: TextStyle(
                 fontSize: 11.sp,
-                color: isDark ? AppColors.textTertiaryDark : AppColors.textTertiaryLight,
+                color: colors.textTertiary,
               ),
             ),
             if (transaction.status != WalletTransactionStatus.completed) ...[
               SizedBox(width: 8.w),
-              _buildStatusBadge(),
+              _buildStatusBadge(context),
             ],
           ],
         ),
@@ -172,30 +177,31 @@ class TransactionTile extends StatelessWidget {
     return transaction.description ?? '';
   }
 
-  Widget _buildStatusBadge() {
+  Widget _buildStatusBadge(BuildContext context) {
+    final colors = context.appColors;
     Color bgColor;
     Color textColor;
 
     switch (transaction.status) {
       case WalletTransactionStatus.pending:
-        bgColor = AppColors.warningContainer;
-        textColor = AppColors.warningDark;
+        bgColor = colors.warningContainer;
+        textColor = colors.warning;
         break;
       case WalletTransactionStatus.processing:
-        bgColor = AppColors.infoContainer;
-        textColor = AppColors.infoDark;
+        bgColor = colors.infoContainer;
+        textColor = colors.info;
         break;
       case WalletTransactionStatus.failed:
-        bgColor = AppColors.errorContainer;
-        textColor = AppColors.error;
+        bgColor = colors.dangerContainer;
+        textColor = colors.danger;
         break;
       case WalletTransactionStatus.cancelled:
-        bgColor = AppColors.outlineLight;
-        textColor = AppColors.textSecondaryLight;
+        bgColor = colors.surfaceVariant;
+        textColor = colors.textSecondary;
         break;
       case WalletTransactionStatus.completed:
-        bgColor = AppColors.successContainer;
-        textColor = AppColors.successDark;
+        bgColor = colors.successContainer;
+        textColor = colors.success;
         break;
     }
 
@@ -216,7 +222,9 @@ class TransactionTile extends StatelessWidget {
     );
   }
 
-  Widget _buildAmount(bool isDark) {
+  Widget _buildAmount(BuildContext context) {
+    final colors = context.appColors;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -225,7 +233,7 @@ class TransactionTile extends StatelessWidget {
           style: TextStyle(
             fontSize: 15.sp,
             fontWeight: FontWeight.w700,
-            color: transaction.isCredit ? AppColors.success : (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
+            color: transaction.isCredit ? colors.success : colors.textPrimary,
           ),
         ),
         if (transaction.cashbackPercentage != null)
@@ -233,7 +241,7 @@ class TransactionTile extends StatelessWidget {
             margin: EdgeInsets.only(top: 4.h),
             padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
             decoration: BoxDecoration(
-              color: AppColors.success.withValues(alpha: 0.1),
+              color: colors.success.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(4.r),
             ),
             child: Text(
@@ -241,7 +249,7 @@ class TransactionTile extends StatelessWidget {
               style: TextStyle(
                 fontSize: 9.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.success,
+                color: colors.success,
               ),
             ),
           ),
@@ -249,4 +257,3 @@ class TransactionTile extends StatelessWidget {
     );
   }
 }
-

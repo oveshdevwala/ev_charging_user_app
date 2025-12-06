@@ -133,7 +133,7 @@ class HomeCubit extends Cubit<HomeState> {
       final params = OfferFilterParams(
         latitude: latitude,
         longitude: longitude,
-        radiusKm: 10.0, // 10km radius for home page
+        radiusKm: 10, // 10km radius for home page
         limit: 10, // Limit to 10 offers for home page
       );
       return await getNearbyOffers(params);

@@ -33,34 +33,59 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   Future<void> _onLoadTheme(LoadTheme event, Emitter<ThemeState> emit) async {
     emit(state.copyWith(isLoading: true));
     try {
-      // Load from local storage first
-      final savedTheme = _prefs.getString(_themeKey);
+      // Load from local storage first - handle both int and String (migration)
       var themeMode = ThemeModeOption.system;
-      if (savedTheme != null) {
-        themeMode = ThemeModeOption.values.firstWhere(
-          (e) => e.name == savedTheme,
-          orElse: () => ThemeModeOption.system,
-        );
+      if (_prefs.containsKey(_themeKey)) {
+        final value = _prefs.get(_themeKey);
+        if (value is String) {
+          // New format: stored as string
+          themeMode = ThemeModeOption.values.firstWhere(
+            (e) => e.name == value,
+            orElse: () => ThemeModeOption.system,
+          );
+        } else if (value is int) {
+          // Old format: stored as int (from ThemeManager)
+          // Map ThemeMode enum to ThemeModeOption
+          if (value >= 0 && value < 3) {
+            switch (value) {
+              case 0: // ThemeMode.system
+                themeMode = ThemeModeOption.system;
+                break;
+              case 1: // ThemeMode.light
+                themeMode = ThemeModeOption.light;
+                break;
+              case 2: // ThemeMode.dark
+                themeMode = ThemeModeOption.dark;
+                break;
+            }
+            // Migrate to string format
+            await _prefs.setString(_themeKey, themeMode.name);
+          }
+        }
       }
 
       // Load from server preferences if available
-      final profile = await _repository.getProfile();
-      final serverTheme = profile.preferences?.themeMode ?? themeMode;
-
-      await _prefs.setString(_themeKey, serverTheme.name);
-
-      emit(state.copyWith(isLoading: false, themeMode: serverTheme));
-    } catch (e) {
-      // Fallback to local storage
-      final savedTheme = _prefs.getString(_themeKey);
-      var themeMode = ThemeModeOption.system;
-      if (savedTheme != null) {
-        themeMode = ThemeModeOption.values.firstWhere(
-          (e) => e.name == savedTheme,
-          orElse: () => ThemeModeOption.system,
-        );
+      try {
+        final profile = await _repository.getProfile();
+        final serverTheme = profile.preferences?.themeMode;
+        if (serverTheme != null) {
+          themeMode = serverTheme;
+          await _prefs.setString(_themeKey, serverTheme.name);
+        }
+      } catch (_) {
+        // Server fetch failed, use local value
       }
+
       emit(state.copyWith(isLoading: false, themeMode: themeMode));
+    } catch (e) {
+      // Fallback to system mode
+      emit(
+        state.copyWith(
+          isLoading: false,
+          themeMode: ThemeModeOption.system,
+          error: e.toString(),
+        ),
+      );
     }
   }
 

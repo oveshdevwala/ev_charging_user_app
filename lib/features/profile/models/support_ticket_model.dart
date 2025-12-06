@@ -26,9 +26,8 @@ class SupportTicketModel extends Equatable {
     required this.id,
     required this.subject,
     required this.message,
-    this.attachments = const [],
+    required this.createdAt, this.attachments = const [],
     this.status = TicketStatus.open,
-    required this.createdAt,
     this.updatedAt,
     this.ticketNumber,
   });
@@ -86,7 +85,7 @@ class SupportTicketModel extends Equatable {
 
   static String _statusToJson(TicketStatus status) => status.name;
 
-  static DateTime _dateTimeFromJson(dynamic value) {
+  static DateTime _dateTimeFromJson(value) {
     if (value is String) {
       return DateTime.parse(value);
     }
@@ -95,7 +94,7 @@ class SupportTicketModel extends Equatable {
 
   static String _dateTimeToJson(DateTime date) => date.toIso8601String();
 
-  static DateTime? _dateTimeFromJsonNullable(dynamic value) {
+  static DateTime? _dateTimeFromJsonNullable(value) {
     if (value == null) return null;
     if (value is String) {
       return DateTime.tryParse(value);

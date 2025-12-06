@@ -7,6 +7,7 @@
 library;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ev_charging_user_app/core/extensions/context_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
@@ -17,7 +18,8 @@ import '../models/models.dart';
 /// Photo grid widget for displaying community photos.
 class PhotoGrid extends StatelessWidget {
   const PhotoGrid({
-    required this.photos, super.key,
+    required this.photos,
+    super.key,
     this.crossAxisCount = 3,
     this.spacing = 8,
     this.onPhotoTap,
@@ -51,7 +53,7 @@ class PhotoGrid extends StatelessWidget {
       itemCount: photos.length + (hasMore ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == photos.length && hasMore) {
-          return _buildLoadMore();
+          return _buildLoadMore(context);
         }
         return _PhotoTile(
           photo: photos[index],
@@ -61,12 +63,14 @@ class PhotoGrid extends StatelessWidget {
     );
   }
 
-  Widget _buildLoadMore() {
+  Widget _buildLoadMore(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: isLoading ? null : onLoadMore,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: AppColors.surfaceVariantLight,
+          color: colors.surfaceVariant,
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Center(
@@ -74,7 +78,10 @@ class PhotoGrid extends StatelessWidget {
               ? SizedBox(
                   width: 24.r,
                   height: 24.r,
-                  child: const CircularProgressIndicator(strokeWidth: 2),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: colors.primary,
+                  ),
                 )
               : Column(
                   mainAxisSize: MainAxisSize.min,
@@ -82,14 +89,14 @@ class PhotoGrid extends StatelessWidget {
                     Icon(
                       Iconsax.arrow_down,
                       size: 24.r,
-                      color: AppColors.textSecondaryLight,
+                      color: colors.textSecondary,
                     ),
                     SizedBox(height: 4.h),
                     Text(
                       'Load more',
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                       ),
                     ),
                   ],
@@ -102,16 +109,15 @@ class PhotoGrid extends StatelessWidget {
 
 /// Single photo tile in grid.
 class _PhotoTile extends StatelessWidget {
-  const _PhotoTile({
-    required this.photo,
-    required this.onTap,
-  });
+  const _PhotoTile({required this.photo, required this.onTap});
 
   final CommunityPhotoModel photo;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: ClipRRect(
@@ -120,22 +126,21 @@ class _PhotoTile extends StatelessWidget {
           imageUrl: photo.thumbnailUrl ?? photo.url,
           fit: BoxFit.cover,
           placeholder: (context, url) => ColoredBox(
-            color: AppColors.outlineLight,
+            color: colors.outline,
             child: Center(
               child: SizedBox(
                 width: 20.r,
                 height: 20.r,
-                child: const CircularProgressIndicator(strokeWidth: 2),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: colors.primary,
+                ),
               ),
             ),
           ),
           errorWidget: (context, url, error) => ColoredBox(
-            color: AppColors.outlineLight,
-            child: Icon(
-              Iconsax.image,
-              size: 24.r,
-              color: AppColors.textTertiaryLight,
-            ),
+            color: colors.outline,
+            child: Icon(Iconsax.image, size: 24.r, color: colors.textTertiary),
           ),
         ),
       ),
@@ -146,7 +151,9 @@ class _PhotoTile extends StatelessWidget {
 /// Full-screen photo viewer.
 class PhotoViewer extends StatefulWidget {
   const PhotoViewer({
-    required this.photos, required this.initialIndex, super.key,
+    required this.photos,
+    required this.initialIndex,
+    super.key,
     this.onReport,
     this.onDownload,
   });
@@ -179,8 +186,10 @@ class _PhotoViewerState extends State<PhotoViewer> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: colors.background,
       body: Stack(
         children: [
           // Photo viewer
@@ -198,13 +207,15 @@ class _PhotoViewerState extends State<PhotoViewer> {
                   child: CachedNetworkImage(
                     imageUrl: widget.photos[index].url,
                     fit: BoxFit.contain,
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(color: Colors.white),
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(
+                        color: context.appColors.textPrimary,
+                      ),
                     ),
                     errorWidget: (context, url, error) => Icon(
                       Iconsax.image,
                       size: 64.r,
-                      color: Colors.white54,
+                      color: context.appColors.textSecondary,
                     ),
                   ),
                 ),
@@ -227,7 +238,7 @@ class _PhotoViewerState extends State<PhotoViewer> {
                       icon: Icon(
                         Iconsax.close_circle,
                         size: 28.r,
-                        color: Colors.white,
+                        color: context.appColors.textPrimary,
                       ),
                     ),
                     const Spacer(),
@@ -235,7 +246,7 @@ class _PhotoViewerState extends State<PhotoViewer> {
                       '${_currentIndex + 1} / ${widget.photos.length}',
                       style: TextStyle(
                         fontSize: 14.sp,
-                        color: Colors.white,
+                        color: context.appColors.textPrimary,
                       ),
                     ),
                     const Spacer(),
@@ -244,7 +255,7 @@ class _PhotoViewerState extends State<PhotoViewer> {
                       icon: Icon(
                         Iconsax.more,
                         size: 24.r,
-                        color: Colors.white,
+                        color: context.appColors.textPrimary,
                       ),
                     ),
                   ],
@@ -262,18 +273,18 @@ class _PhotoViewerState extends State<PhotoViewer> {
               child: SafeArea(
                 child: Container(
                   padding: EdgeInsets.all(16.r),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, Colors.black87],
+                      colors: [Colors.transparent, context.appColors.scrim],
                     ),
                   ),
                   child: Text(
                     widget.photos[_currentIndex].caption!,
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: Colors.white,
+                      color: context.appColors.textPrimary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -286,13 +297,15 @@ class _PhotoViewerState extends State<PhotoViewer> {
   }
 
   void _showOptions(BuildContext context) {
+    final colors = context.appColors;
+
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         margin: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(16.r),
         ),
         child: Column(
@@ -309,11 +322,8 @@ class _PhotoViewerState extends State<PhotoViewer> {
               ),
             if (widget.onReport != null)
               ListTile(
-                leading: Icon(Iconsax.flag, size: 24.r, color: AppColors.error),
-                title: const Text(
-                  'Report',
-                  style: TextStyle(color: AppColors.error),
-                ),
+                leading: Icon(Iconsax.flag, size: 24.r, color: colors.danger),
+                title: Text('Report', style: TextStyle(color: colors.danger)),
                 onTap: () {
                   Navigator.pop(context);
                   widget.onReport?.call(widget.photos[_currentIndex]);
@@ -329,42 +339,34 @@ class _PhotoViewerState extends State<PhotoViewer> {
 
 /// Empty photos placeholder.
 class EmptyPhotosWidget extends StatelessWidget {
-  const EmptyPhotosWidget({
-    super.key,
-    this.onUpload,
-  });
+  const EmptyPhotosWidget({super.key, this.onUpload});
 
   final VoidCallback? onUpload;
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Center(
       child: Padding(
         padding: EdgeInsets.all(32.r),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Iconsax.gallery,
-              size: 64.r,
-              color: AppColors.outlineLight,
-            ),
+            Icon(Iconsax.gallery, size: 64.r, color: colors.outline),
             SizedBox(height: 16.h),
             Text(
               'No photos yet',
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
             ),
             SizedBox(height: 8.h),
             Text(
               'Be the first to share a photo of this station',
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
               textAlign: TextAlign.center,
             ),
             if (onUpload != null) ...[
@@ -373,14 +375,6 @@ class EmptyPhotosWidget extends StatelessWidget {
                 onPressed: onUpload,
                 icon: Icon(Iconsax.camera, size: 18.r),
                 label: const Text('Upload Photo'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                ),
               ),
             ],
           ],
@@ -389,4 +383,3 @@ class EmptyPhotosWidget extends StatelessWidget {
     );
   }
 }
-

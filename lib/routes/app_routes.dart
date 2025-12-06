@@ -14,7 +14,9 @@ import '../features/auth/auth.dart';
 import '../features/bookings/bookings.dart';
 import '../features/community/community.dart';
 import '../features/main_shell/main_shell.dart';
+import '../features/nearby_offers/presentation/screens/screens.dart';
 import '../features/notifications/notifications.dart';
+import '../features/value_packs/presentation/screens/screens.dart';
 import '../features/onboarding/onboarding.dart';
 import '../features/profile/profile.dart';
 import '../features/splash/splash.dart';
@@ -22,7 +24,6 @@ import '../features/stations/stations.dart';
 import '../features/trip_history/trip_history.dart';
 import '../features/trip_planner/trip_planner.dart';
 import '../features/wallet/wallet.dart';
-import '../features/nearby_offers/presentation/screens/screens.dart';
 
 // ============================================================
 // APP ROUTES ENUM
@@ -50,10 +51,12 @@ enum AppRoutes {
   userNotifications,
   userSettings,
   editProfile,
-  activityDetails,
-  tripPlanner,
-  tripSummary,
-  wallet,
+      activityDetails,
+      tripPlanner,
+      tripSummary,
+      chargingStops,
+      tripInsights,
+      wallet,
   walletRecharge,
   stationCommunity,
   leaveReview,
@@ -82,6 +85,13 @@ enum AppRoutes {
   partnerDetail,
   offerRedeem,
   checkInSuccess,
+
+  // -------- Value Packs Routes --------
+  valuePacksList,
+  valuePackDetail,
+  comparePacks,
+  purchasePack,
+  packReviews,
 }
 
 // ============================================================
@@ -134,6 +144,10 @@ extension AppRoutePath on AppRoutes {
         return '/tripPlanner';
       case AppRoutes.tripSummary:
         return '/tripSummary';
+      case AppRoutes.chargingStops:
+        return '/chargingStops';
+      case AppRoutes.tripInsights:
+        return '/tripInsights';
       case AppRoutes.wallet:
         return '/wallet';
       case AppRoutes.walletRecharge:
@@ -188,6 +202,18 @@ extension AppRoutePath on AppRoutes {
         return '/offerRedeem';
       case AppRoutes.checkInSuccess:
         return '/checkInSuccess';
+
+      // Value Packs
+      case AppRoutes.valuePacksList:
+        return '/valuePacks';
+      case AppRoutes.valuePackDetail:
+        return '/valuePackDetail';
+      case AppRoutes.comparePacks:
+        return '/comparePacks';
+      case AppRoutes.purchasePack:
+        return '/purchasePack';
+      case AppRoutes.packReviews:
+        return '/packReviews';
     }
   }
 
@@ -398,6 +424,26 @@ class AppRouter {
         },
       ),
 
+      // -------- Charging Stops (Standalone) --------
+      GoRoute(
+        path: '${AppRoutes.chargingStops.path}/:tripId',
+        name: AppRoutes.chargingStops.name,
+        builder: (context, state) {
+          final tripId = state.pathParameters['tripId'] ?? '';
+          return StandaloneChargingStopsPage(tripId: tripId);
+        },
+      ),
+
+      // -------- Trip Insights (Standalone) --------
+      GoRoute(
+        path: '${AppRoutes.tripInsights.path}/:tripId',
+        name: AppRoutes.tripInsights.name,
+        builder: (context, state) {
+          final tripId = state.pathParameters['tripId'] ?? '';
+          return StandaloneInsightsPage(tripId: tripId);
+        },
+      ),
+
       // -------- Wallet --------
       GoRoute(
         path: AppRoutes.wallet.path,
@@ -503,13 +549,56 @@ class AppRouter {
           return OfferRedeemScreen(offerId: offerId);
         },
       ),
+
+      // -------- Value Packs --------
+      GoRoute(
+        path: AppRoutes.valuePacksList.path,
+        name: AppRoutes.valuePacksList.name,
+        builder: (context, state) => const ValuePacksListScreen(),
+      ),
+      GoRoute(
+        path: '${AppRoutes.valuePackDetail.path}/:id',
+        name: AppRoutes.valuePackDetail.name,
+        builder: (context, state) {
+          final packId = state.pathParameters['id'] ?? '';
+          return ValuePackDetailScreen(packId: packId);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.comparePacks.path,
+        name: AppRoutes.comparePacks.name,
+        builder: (context, state) {
+          final packIds = state.uri.queryParameters['ids']?.split(',') ?? [];
+          return ComparePacksScreen(packIds: packIds);
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.purchasePack.path}/:id',
+        name: AppRoutes.purchasePack.name,
+        builder: (context, state) {
+          final packId = state.pathParameters['id'] ?? '';
+          return PurchaseScreen(packId: packId);
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.packReviews.path}/:id',
+        name: AppRoutes.packReviews.name,
+        builder: (context, state) {
+          final packId = state.pathParameters['id'] ?? '';
+          return ReviewsScreen(packId: packId);
+        },
+      ),
     ],
     errorBuilder: (context, state) => Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            Icon(
+              Icons.error_outline,
+              size: 64,
+              color: Theme.of(context).colorScheme.error,
+            ),
             const SizedBox(height: 16),
             Text(
               'Page not found',

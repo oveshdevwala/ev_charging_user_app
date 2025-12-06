@@ -6,7 +6,6 @@ library;
 import 'package:equatable/equatable.dart';
 
 import '../../../data/datasources/partner_remote_datasource.dart';
-import '../../../data/models/partner_category.dart';
 import '../../../data/models/partner_offer_model.dart';
 
 enum NearbyOffersStatus { initial, loading, loaded, error }

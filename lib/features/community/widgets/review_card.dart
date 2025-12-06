@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../models/models.dart';
 import 'star_rating_widget.dart';
@@ -19,7 +20,8 @@ import 'star_rating_widget.dart';
 /// Review card widget.
 class ReviewCard extends StatelessWidget {
   const ReviewCard({
-    required this.review, super.key,
+    required this.review,
+    super.key,
     this.onHelpfulTap,
     this.onFlagTap,
     this.onPhotoTap,
@@ -38,12 +40,14 @@ class ReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: colors.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +63,7 @@ class ReviewCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
             ),
             SizedBox(height: 8.h),
@@ -71,7 +75,7 @@ class ReviewCard extends StatelessWidget {
               review.body!,
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
+                color: colors.textSecondary,
                 height: 1.5,
               ),
               maxLines: isExpanded ? null : maxLines,
@@ -94,21 +98,19 @@ class ReviewCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final colors = context.appColors;
+
     return Row(
       children: [
         // Avatar
         CircleAvatar(
           radius: 20.r,
-          backgroundColor: AppColors.outlineLight,
+          backgroundColor: colors.outline,
           backgroundImage: review.userAvatar != null
               ? CachedNetworkImageProvider(review.userAvatar!)
               : null,
           child: review.userAvatar == null
-              ? Icon(
-                  Iconsax.user,
-                  size: 20.r,
-                  color: AppColors.textSecondaryLight,
-                )
+              ? Icon(Iconsax.user, size: 20.r, color: colors.textSecondary)
               : null,
         ),
         SizedBox(width: 12.w),
@@ -125,12 +127,12 @@ class ReviewCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimaryLight,
+                      color: colors.textPrimary,
                     ),
                   ),
                   if (review.isVerifiedSession) ...[
                     SizedBox(width: 6.w),
-                    _buildVerifiedBadge(),
+                    _buildVerifiedBadge(context),
                   ],
                 ],
               ),
@@ -139,47 +141,38 @@ class ReviewCard extends StatelessWidget {
                 review.createdAt != null
                     ? timeago.format(review.createdAt!)
                     : 'Recently',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: AppColors.textTertiaryLight,
-                ),
+                style: TextStyle(fontSize: 12.sp, color: colors.textTertiary),
               ),
             ],
           ),
         ),
 
         // Rating
-        StarRatingCompact(
-          rating: review.rating,
-          size: 12,
-          showCount: false,
-        ),
+        StarRatingCompact(rating: review.rating, size: 12, showCount: false),
       ],
     );
   }
 
-  Widget _buildVerifiedBadge() {
+  Widget _buildVerifiedBadge(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.1),
+        color: colors.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(4.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Iconsax.verify5,
-            size: 12.r,
-            color: AppColors.primary,
-          ),
+          Icon(Iconsax.verify5, size: 12.r, color: colors.primary),
           SizedBox(width: 4.w),
           Text(
             'Verified',
             style: TextStyle(
               fontSize: 10.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.primary,
+              color: colors.primary,
             ),
           ),
         ],
@@ -188,6 +181,7 @@ class ReviewCard extends StatelessWidget {
   }
 
   Widget _buildPhotoGrid(BuildContext context) {
+    final colors = context.appColors;
     final photos = review.photos;
     final displayCount = photos.length > 4 ? 4 : photos.length;
     final hasMore = photos.length > 4;
@@ -204,7 +198,9 @@ class ReviewCard extends StatelessWidget {
             child: GestureDetector(
               onTap: () => onPhotoTap?.call(index),
               child: Container(
-                margin: EdgeInsets.only(right: index < displayCount - 1 ? 8.w : 0),
+                margin: EdgeInsets.only(
+                  right: index < displayCount - 1 ? 8.w : 0,
+                ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.r),
                   child: Stack(
@@ -213,28 +209,27 @@ class ReviewCard extends StatelessWidget {
                       CachedNetworkImage(
                         imageUrl: photos[index].effectiveUrl,
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: AppColors.outlineLight,
-                        ),
+                        placeholder: (context, url) =>
+                            Container(color: colors.outline),
                         errorWidget: (context, url, error) => ColoredBox(
-                          color: AppColors.outlineLight,
+                          color: colors.outline,
                           child: Icon(
                             Iconsax.image,
                             size: 24.r,
-                            color: AppColors.textTertiaryLight,
+                            color: colors.textTertiary,
                           ),
                         ),
                       ),
                       if (showOverlay)
                         ColoredBox(
-                          color: Colors.black54,
+                          color: colors.textPrimary.withValues(alpha: 0.54),
                           child: Center(
                             child: Text(
                               '+$remainingCount',
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                                color: colors.surface,
                               ),
                             ),
                           ),
@@ -251,6 +246,8 @@ class ReviewCard extends StatelessWidget {
   }
 
   Widget _buildActions(BuildContext context) {
+    final colors = context.appColors;
+
     return Row(
       children: [
         // Helpful button
@@ -276,11 +273,7 @@ class ReviewCard extends StatelessWidget {
         if (onShareTap != null)
           IconButton(
             onPressed: onShareTap,
-            icon: Icon(
-              Iconsax.share,
-              size: 20.r,
-              color: AppColors.textSecondaryLight,
-            ),
+            icon: Icon(Iconsax.share, size: 20.r, color: colors.textSecondary),
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(minWidth: 32.r, minHeight: 32.r),
           ),
@@ -305,7 +298,8 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isActive ? AppColors.primary : AppColors.textSecondaryLight;
+    final colors = context.appColors;
+    final color = isActive ? colors.primary : colors.textSecondary;
 
     return GestureDetector(
       onTap: onTap,
@@ -331,42 +325,34 @@ class _ActionButton extends StatelessWidget {
 
 /// Empty reviews placeholder.
 class EmptyReviewsWidget extends StatelessWidget {
-  const EmptyReviewsWidget({
-    super.key,
-    this.onWriteReview,
-  });
+  const EmptyReviewsWidget({super.key, this.onWriteReview});
 
   final VoidCallback? onWriteReview;
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Center(
       child: Padding(
         padding: EdgeInsets.all(32.r),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Iconsax.message_text,
-              size: 64.r,
-              color: AppColors.outlineLight,
-            ),
+            Icon(Iconsax.message_text, size: 64.r, color: colors.textTertiary),
             SizedBox(height: 16.h),
             Text(
               'No reviews yet',
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
+                color: colors.textPrimary,
               ),
             ),
             SizedBox(height: 8.h),
             Text(
               'Be the first to share your experience',
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.textSecondaryLight,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
               textAlign: TextAlign.center,
             ),
             if (onWriteReview != null) ...[
@@ -376,9 +362,12 @@ class EmptyReviewsWidget extends StatelessWidget {
                 icon: Icon(Iconsax.edit, size: 18.r),
                 label: const Text('Write a Review'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                  backgroundColor: colors.primary,
+                  foregroundColor: colors.onPrimaryContainer,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24.w,
+                    vertical: 12.h,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.r),
                   ),
@@ -391,4 +380,3 @@ class EmptyReviewsWidget extends StatelessWidget {
     );
   }
 }
-

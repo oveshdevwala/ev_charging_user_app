@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 import '../../../widgets/app_app_bar.dart';
@@ -23,10 +24,7 @@ import '../widgets/widgets.dart';
 
 /// Standalone trip summary page that can be accessed directly with a tripId.
 class StandaloneTripSummaryPage extends StatefulWidget {
-  const StandaloneTripSummaryPage({
-    required this.tripId,
-    super.key,
-  });
+  const StandaloneTripSummaryPage({required this.tripId, super.key});
 
   final String tripId;
 
@@ -99,14 +97,14 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
               Icon(
                 Iconsax.warning_2,
                 size: 64.r,
-                color: AppColors.textTertiaryLight,
+                color: context.appColors.textTertiary,
               ),
               SizedBox(height: 16.h),
               Text(
                 _error ?? 'Trip not found',
                 style: TextStyle(
                   fontSize: 16.sp,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
               ),
               SizedBox(height: 24.h),
@@ -132,7 +130,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
             icon: Icon(
               trip.isFavorite ? Iconsax.heart5 : Iconsax.heart,
               size: 22.r,
-              color: trip.isFavorite ? AppColors.error : null,
+              color: trip.isFavorite ? context.appColors.danger : null,
             ),
             onPressed: () {
               // Toggle favorite locally
@@ -163,14 +161,14 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
             SizedBox(height: 24.h),
             // Battery preview
             if (trip.batteryGraphData.isNotEmpty) ...[
-              _buildSectionHeader('Battery Level Along Route'),
+              _buildSectionHeader(context, 'Battery Level Along Route'),
               SizedBox(height: 12.h),
               Container(
                 padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(16.r),
-                  border: Border.all(color: AppColors.outlineLight),
+                  border: Border.all(color: context.appColors.outline),
                 ),
                 child: BatteryGraph(
                   dataPoints: trip.batteryGraphData,
@@ -183,17 +181,23 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
             // Charging stops preview
             if (trip.chargingStops.isNotEmpty) ...[
               _buildSectionHeader(
+                context,
                 '${trip.chargingStops.length} Charging Stops',
                 action: 'View All',
                 onAction: () => _showAllStops(context, trip),
               ),
               SizedBox(height: 12.h),
-              ...trip.chargingStops.take(2).map(
+              ...trip.chargingStops
+                  .take(2)
+                  .map(
                     (stop) => ChargingStopCard(
                       stop: stop,
                       showTimeline: false,
                       onNavigateTap: () => _openDirections(context, stop),
                       onReserveTap: () => _openBooking(context, stop),
+                      onDetailsTap: () => context.push(
+                        AppRoutes.stationDetails.id(stop.stationId),
+                      ),
                     ),
                   ),
               if (trip.chargingStops.length > 2) ...[
@@ -204,7 +208,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
                       '+${trip.chargingStops.length - 2} more stops',
                       style: TextStyle(
                         fontSize: 13.sp,
-                        color: AppColors.primary,
+                        color: context.appColors.primary,
                       ),
                     ),
                   ),
@@ -214,14 +218,14 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
             ],
             // Cost breakdown
             if (trip.costBreakdown.isNotEmpty) ...[
-              _buildSectionHeader('Cost Breakdown'),
+              _buildSectionHeader(context, 'Cost Breakdown'),
               SizedBox(height: 12.h),
               Container(
                 padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(16.r),
-                  border: Border.all(color: AppColors.outlineLight),
+                  border: Border.all(color: context.appColors.outline),
                 ),
                 child: CostBarBreakdown(
                   costBreakdown: trip.costBreakdown,
@@ -235,7 +239,9 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
               label: 'Edit Trip',
               onPressed: () {
                 // Navigate to trip planner to edit
-                context.push('${AppRoutes.tripPlanner.path}?tripId=${widget.tripId}');
+                context.push(
+                  '${AppRoutes.tripPlanner.path}?tripId=${widget.tripId}',
+                );
               },
               variant: ButtonVariant.outlined,
               icon: Iconsax.edit_2,
@@ -249,6 +255,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
   }
 
   Widget _buildRouteHeader(BuildContext context, TripModel trip) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
@@ -256,12 +263,12 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppColors.primary.withValues(alpha: 0.1),
-            AppColors.secondary.withValues(alpha: 0.05),
+            colors.primary.withValues(alpha: 0.1),
+            colors.secondary.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+        border: Border.all(color: colors.primary.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -271,10 +278,14 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
                 width: 40.r,
                 height: 40.r,
                 decoration: BoxDecoration(
-                  color: AppColors.primary,
+                  color: colors.primary,
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Icon(Iconsax.location, size: 20.r, color: Colors.white),
+                child: Icon(
+                  Iconsax.location,
+                  size: 20.r,
+                  color: colors.surface,
+                ),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -285,7 +296,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
                       'From',
                       style: TextStyle(
                         fontSize: 11.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: colors.textSecondary,
                       ),
                     ),
                     Text(
@@ -293,7 +304,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
                       style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight,
+                        color: colors.textPrimary,
                       ),
                     ),
                   ],
@@ -308,11 +319,11 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
                 Container(
                   width: 2,
                   height: 24.h,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [AppColors.primary, AppColors.error],
+                      colors: [colors.primary, colors.danger],
                     ),
                   ),
                 ),
@@ -325,10 +336,10 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
                 width: 40.r,
                 height: 40.r,
                 decoration: BoxDecoration(
-                  color: AppColors.error,
+                  color: colors.danger,
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Icon(Iconsax.flag, size: 20.r, color: Colors.white),
+                child: Icon(Iconsax.flag, size: 20.r, color: colors.surface),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -339,7 +350,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
                       'To',
                       style: TextStyle(
                         fontSize: 11.sp,
-                        color: AppColors.textSecondaryLight,
+                        color: context.appColors.textSecondary,
                       ),
                     ),
                     Text(
@@ -347,7 +358,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
                       style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight,
+                        color: context.appColors.textPrimary,
                       ),
                     ),
                   ],
@@ -361,6 +372,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
   }
 
   Widget _buildMainStats(BuildContext context, TripModel trip) {
+    final colors = context.appColors;
     final estimates = trip.estimates;
     if (estimates == null) {
       return const SizedBox.shrink();
@@ -372,31 +384,32 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
           icon: Iconsax.routing_2,
           label: 'Distance',
           value: '${estimates.totalDistanceKm.toStringAsFixed(0)} km',
-          color: AppColors.primary,
+          color: colors.primary,
         ),
         TripStatData(
           icon: Iconsax.clock,
           label: 'Total Time',
           value: estimates.formattedTotalTime,
-          color: AppColors.secondary,
+          color: colors.secondary,
         ),
         TripStatData(
           icon: Iconsax.flash_1,
           label: 'Stops',
           value: '${estimates.requiredStops}',
-          color: AppColors.warning,
+          color: colors.warning,
         ),
         TripStatData(
           icon: Iconsax.dollar_circle,
           label: 'Est. Cost',
           value: '\$${estimates.estimatedCost.toStringAsFixed(0)}',
-          color: AppColors.primary,
+          color: colors.primary,
         ),
       ],
     );
   }
 
   Widget _buildQuickActions(BuildContext context, TripModel trip) {
+    final colors = context.appColors;
     return Row(
       children: [
         Expanded(
@@ -405,29 +418,29 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
             icon: Iconsax.flash_1,
             label: 'Charging Stops',
             value: '${trip.chargingStops.length}',
-            color: AppColors.warning,
+            color: colors.warning,
             onTap: () => _showAllStops(context, trip),
           ),
         ),
-        SizedBox(width: 12.w),
+        SizedBox(width: 8.w),
         Expanded(
           child: _buildActionCard(
             context,
             icon: Iconsax.chart_2,
             label: 'Trip Insights',
             value: 'View',
-            color: AppColors.tertiary,
+            color: colors.tertiary,
             onTap: () => _showInsights(context, trip),
           ),
         ),
-        SizedBox(width: 12.w),
+        SizedBox(width: 8.w),
         Expanded(
           child: _buildActionCard(
             context,
             icon: Iconsax.map,
             label: 'Full Route',
             value: 'View',
-            color: AppColors.secondary,
+            color: colors.secondary,
             onTap: () => _showFullRoute(context, trip),
           ),
         ),
@@ -469,7 +482,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
               label,
               style: TextStyle(
                 fontSize: 11.sp,
-                color: AppColors.textSecondaryLight,
+                color: context.appColors.textSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -480,10 +493,12 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
   }
 
   Widget _buildSectionHeader(
+    BuildContext context,
     String title, {
     String? action,
     VoidCallback? onAction,
   }) {
+    final colors = context.appColors;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -492,7 +507,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimaryLight,
+            color: colors.textPrimary,
           ),
         ),
         if (action != null && onAction != null)
@@ -503,7 +518,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
               style: TextStyle(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
-                color: AppColors.primary,
+                color: colors.primary,
               ),
             ),
           ),
@@ -512,17 +527,18 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
   }
 
   Widget _buildBottomBar(BuildContext context, TripModel trip) {
+    final colors = context.appColors;
     final estimates = trip.estimates;
 
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        boxShadow: const [
+        color: colors.surface,
+        boxShadow: [
           BoxShadow(
-            color: AppColors.shadowLight,
+            color: colors.shadow,
             blurRadius: 10,
-            offset: Offset(0, -2),
+            offset: const Offset(0, -2),
           ),
         ],
       ),
@@ -538,7 +554,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
                     'Arrival',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: AppColors.textSecondaryLight,
+                      color: context.appColors.textSecondary,
                     ),
                   ),
                   Text(
@@ -546,7 +562,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryLight,
+                      color: context.appColors.textPrimary,
                     ),
                   ),
                 ],
@@ -568,8 +584,9 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
   }
 
   String _formatEta(DateTime eta) {
-    final hour =
-        eta.hour > 12 ? eta.hour - 12 : (eta.hour == 0 ? 12 : eta.hour);
+    final hour = eta.hour > 12
+        ? eta.hour - 12
+        : (eta.hour == 0 ? 12 : eta.hour);
     final period = eta.hour >= 12 ? 'PM' : 'AM';
     final minute = eta.minute.toString().padLeft(2, '0');
     return '$hour:$minute $period';
@@ -603,8 +620,9 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Could not open maps: $e')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not open maps: $e')));
       }
     }
   }
@@ -614,185 +632,11 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
   }
 
   void _showAllStops(BuildContext context, TripModel trip) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        maxChildSize: 0.9,
-        minChildSize: 0.5,
-        builder: (_, scrollController) => DecoratedBox(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-          ),
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 12.h),
-                width: 40.w,
-                height: 4.h,
-                decoration: BoxDecoration(
-                  color: AppColors.outlineLight,
-                  borderRadius: BorderRadius.circular(2.r),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${trip.chargingStops.length} Charging Stops',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(Iconsax.close_circle, size: 24.r),
-                      onPressed: () => Navigator.pop(ctx),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  controller: scrollController,
-                  padding: EdgeInsets.all(16.r),
-                  itemCount: trip.chargingStops.length,
-                  itemBuilder: (_, index) {
-                    final stop = trip.chargingStops[index];
-                    return ChargingStopCard(
-                      stop: stop,
-                      isFirst: index == 0,
-                      isLast: index == trip.chargingStops.length - 1,
-                      onNavigateTap: () {
-                        Navigator.pop(ctx);
-                        _openDirections(context, stop);
-                      },
-                      onReserveTap: () {
-                        Navigator.pop(ctx);
-                        _openBooking(context, stop);
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    context.push(AppRoutes.chargingStops.id(widget.tripId));
   }
 
   void _showInsights(BuildContext context, TripModel trip) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => DraggableScrollableSheet(
-        initialChildSize: 0.8,
-        maxChildSize: 0.95,
-        minChildSize: 0.5,
-        builder: (_, scrollController) => DecoratedBox(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-          ),
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 12.h),
-                width: 40.w,
-                height: 4.h,
-                decoration: BoxDecoration(
-                  color: AppColors.outlineLight,
-                  borderRadius: BorderRadius.circular(2.r),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Trip Insights',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(Iconsax.close_circle, size: 24.r),
-                      onPressed: () => Navigator.pop(ctx),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  padding: EdgeInsets.all(16.r),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Battery Graph
-                      Text(
-                        'Battery Level',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(height: 12.h),
-                      Container(
-                        padding: EdgeInsets.all(16.r),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(color: AppColors.outlineLight),
-                        ),
-                        child: BatteryGraph(
-                          dataPoints: trip.batteryGraphData,
-                          reserveSocPercent: trip.vehicle.reserveSocPercent,
-                          height: 200.h,
-                        ),
-                      ),
-                      SizedBox(height: 24.h),
-                      // Cost Breakdown
-                      if (trip.costBreakdown.isNotEmpty) ...[
-                        Text(
-                          'Cost Breakdown',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 12.h),
-                        Container(
-                          padding: EdgeInsets.all(16.r),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(12.r),
-                            border: Border.all(color: AppColors.outlineLight),
-                          ),
-                          child: CostPieChart(
-                            costBreakdown: trip.costBreakdown,
-                            totalCost: trip.estimates?.estimatedCost ?? 0,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    context.push(AppRoutes.tripInsights.id(widget.tripId));
   }
 
   void _showFullRoute(BuildContext context, TripModel trip) {
@@ -800,14 +644,14 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
       SnackBar(
         content: Row(
           children: [
-            Icon(Iconsax.map, color: Colors.white, size: 20.r),
+            Icon(Iconsax.map, color: context.appColors.surface, size: 20.r),
             SizedBox(width: 8.w),
             Text(
               'Route: ${trip.origin.shortDisplay} → ${trip.destination.shortDisplay}',
             ),
           ],
         ),
-        backgroundColor: AppColors.primary,
+        backgroundColor: context.appColors.primary,
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -831,17 +675,17 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
         await launchUrl(appleMapsUrl, mode: LaunchMode.externalApplication);
       } else {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Could not open maps')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Could not open maps')));
         }
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: $e')));
       }
     }
   }
 }
-

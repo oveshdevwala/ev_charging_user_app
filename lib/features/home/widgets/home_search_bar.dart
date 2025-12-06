@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/extensions/context_ext.dart';
 
 /// Search bar widget that navigates to search page.
 class HomeSearchBar extends StatelessWidget {
@@ -18,12 +18,14 @@ class HomeSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         decoration: BoxDecoration(
-          color: AppColors.surfaceVariantLight,
+          color: colors.surfaceVariant,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Row(
@@ -31,26 +33,18 @@ class HomeSearchBar extends StatelessWidget {
             Icon(
               Iconsax.search_normal,
               size: 20.r,
-              color: AppColors.textSecondaryLight,
+              color: colors.textSecondary,
             ),
             SizedBox(width: 12.w),
             Text(
               AppStrings.searchForStations,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: AppColors.textTertiaryLight,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textTertiary),
             ),
             const Spacer(),
-            Icon(
-              Iconsax.setting_4,
-              size: 20.r,
-              color: AppColors.textSecondaryLight,
-            ),
+            Icon(Iconsax.setting_4, size: 20.r, color: colors.textSecondary),
           ],
         ),
       ),
     );
   }
 }
-

@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/constants/app_strings.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/extensions/context_ext.dart';
 
 /// Booking date and time selection widget.
 class BookingDateTimeSelection extends StatelessWidget {
@@ -23,10 +23,11 @@ class BookingDateTimeSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppStrings.selectTimeSlot, style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600)),
+        Text(AppStrings.selectTimeSlot, style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600, color: colors.textPrimary)),
         SizedBox(height: 12.h),
         Row(
           children: [
@@ -80,17 +81,18 @@ class _SelectionBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.outlineLight),
+        border: Border.all(color: colors.outline),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Row(
         children: [
-          Icon(icon, size: 20.r, color: AppColors.primary),
+          Icon(icon, size: 20.r, color: colors.primary),
           SizedBox(width: 12.w),
-          Text(label, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500)),
+          Text(label, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: colors.textPrimary)),
         ],
       ),
     );

@@ -8,6 +8,7 @@ library;
 
 import 'dart:async';
 
+import 'package:ev_charging_user_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -31,7 +32,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
+      systemNavigationBarColor: AppColors.surfaceDark,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../widgets/common_button.dart';
 import '../models/models.dart';
@@ -18,7 +19,8 @@ import 'battery_graph.dart';
 /// Expandable charging stop card widget.
 class ChargingStopCard extends StatefulWidget {
   const ChargingStopCard({
-    required this.stop, super.key,
+    required this.stop,
+    super.key,
     this.onNavigateTap,
     this.onReserveTap,
     this.onDetailsTap,
@@ -127,15 +129,15 @@ class _ChargingStopCardState extends State<ChargingStopCard>
               borderRadius: BorderRadius.circular(16.r),
               border: Border.all(
                 color: _isExpanded
-                    ? AppColors.primary.withValues(alpha: 0.3)
-                    : AppColors.outlineLight,
+                    ? context.appColors.primary.withValues(alpha: 0.3)
+                    : context.appColors.outline,
                 width: _isExpanded ? 1.5 : 1,
               ),
               boxShadow: [
                 BoxShadow(
                   color: _isExpanded
-                      ? AppColors.primary.withValues(alpha: 0.1)
-                      : AppColors.shadowLight,
+                      ? context.appColors.primary.withValues(alpha: 0.1)
+                      : context.appColors.shadow,
                   blurRadius: _isExpanded ? 12 : 8,
                   offset: const Offset(0, 2),
                 ),
@@ -151,7 +153,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
                 ),
                 // Content
                 Padding(
-                  padding: EdgeInsets.all(16.r),
+                  padding: EdgeInsets.all(8.r),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -200,8 +202,8 @@ class _ChargingStopCardState extends State<ChargingStopCard>
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppColors.primary.withValues(alpha: 0.2),
-                    AppColors.primary.withValues(alpha: 0.5),
+                    context.appColors.primary.withValues(alpha: 0.2),
+                    context.appColors.primary.withValues(alpha: 0.5),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(2.r),
@@ -212,15 +214,18 @@ class _ChargingStopCardState extends State<ChargingStopCard>
             width: 40.r,
             height: 40.r,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [AppColors.primary, AppColors.primaryDark],
+                colors: [
+                  context.appColors.primary,
+                  context.appColors.primaryContainer,
+                ],
               ),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.4),
+                  color: context.appColors.primary.withValues(alpha: 0.4),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -230,7 +235,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
               child: Icon(
                 Iconsax.flash_15,
                 size: 20.r,
-                color: Colors.white,
+                color: context.appColors.surface,
               ),
             ),
           ),
@@ -244,8 +249,8 @@ class _ChargingStopCardState extends State<ChargingStopCard>
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppColors.primary.withValues(alpha: 0.5),
-                    AppColors.primary.withValues(alpha: 0.2),
+                    context.appColors.primary.withValues(alpha: 0.5),
+                    context.appColors.primary.withValues(alpha: 0.2),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(2.r),
@@ -257,12 +262,13 @@ class _ChargingStopCardState extends State<ChargingStopCard>
   }
 
   Widget _buildHeader(BuildContext context) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
         color: _isExpanded
-            ? AppColors.primary.withValues(alpha: 0.15)
-            : AppColors.primary.withValues(alpha: 0.08),
+            ? colors.primary.withValues(alpha: 0.15)
+            : colors.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
       child: Row(
@@ -271,7 +277,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             decoration: BoxDecoration(
-              color: AppColors.primary,
+              color: colors.primary,
               borderRadius: BorderRadius.circular(6.r),
             ),
             child: Text(
@@ -279,7 +285,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
               style: TextStyle(
                 fontSize: 10.sp,
                 fontWeight: FontWeight.w700,
-                color: Colors.white,
+                color: context.appColors.surface,
               ),
             ),
           ),
@@ -291,7 +297,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
+                color: context.appColors.textPrimary,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -304,10 +310,10 @@ class _ChargingStopCardState extends State<ChargingStopCard>
               constraints: BoxConstraints(maxWidth: 90.w),
               padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
               decoration: BoxDecoration(
-                color: AppColors.secondary.withValues(alpha: 0.15),
+                color: context.appColors.secondary.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(4.r),
                 border: Border.all(
-                  color: AppColors.secondary.withValues(alpha: 0.3),
+                  color: context.appColors.secondary.withValues(alpha: 0.3),
                 ),
               ),
               child: Text(
@@ -315,7 +321,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
                 style: TextStyle(
                   fontSize: 9.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.secondary,
+                  color: context.appColors.secondary,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -329,7 +335,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
             child: Icon(
               Iconsax.arrow_down_1,
               size: 18.r,
-              color: AppColors.primary,
+              color: context.appColors.primary,
             ),
           ),
         ],
@@ -343,7 +349,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
         Icon(
           Iconsax.location,
           size: 14.r,
-          color: AppColors.textSecondaryLight,
+          color: context.appColors.textSecondary,
         ),
         SizedBox(width: 4.w),
         Expanded(
@@ -351,7 +357,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
             widget.stop.location.address ?? widget.stop.location.displayName,
             style: TextStyle(
               fontSize: 12.sp,
-              color: AppColors.textSecondaryLight,
+              color: context.appColors.textSecondary,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -372,8 +378,8 @@ class _ChargingStopCardState extends State<ChargingStopCard>
             label: 'Arrive',
             value: '${widget.stop.arrivalSocPercent.toStringAsFixed(0)}%',
             valueColor: widget.stop.arrivalSocPercent < 20
-                ? AppColors.warning
-                : AppColors.textPrimaryLight,
+                ? context.appColors.warning
+                : context.appColors.textPrimary,
           ),
         ),
         // Departure SOC
@@ -383,7 +389,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
             icon: Iconsax.battery_full,
             label: 'Depart',
             value: '${widget.stop.departureSocPercent.toStringAsFixed(0)}%',
-            valueColor: AppColors.primary,
+            valueColor: context.appColors.primary,
           ),
         ),
         // Charge time
@@ -402,7 +408,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
             icon: Iconsax.dollar_circle,
             label: 'Cost',
             value: '\$${widget.stop.estimatedCost.toStringAsFixed(2)}',
-            valueColor: AppColors.secondary,
+            valueColor: context.appColors.secondary,
           ),
         ),
       ],
@@ -418,17 +424,13 @@ class _ChargingStopCardState extends State<ChargingStopCard>
   }) {
     return Column(
       children: [
-        Icon(
-          icon,
-          size: 18.r,
-          color: AppColors.textSecondaryLight,
-        ),
+        Icon(icon, size: 18.r, color: context.appColors.textSecondary),
         SizedBox(height: 4.h),
         Text(
           label,
           style: TextStyle(
             fontSize: 10.sp,
-            color: AppColors.textTertiaryLight,
+            color: context.appColors.textTertiary,
           ),
         ),
         SizedBox(height: 2.h),
@@ -437,7 +439,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
           style: TextStyle(
             fontSize: 13.sp,
             fontWeight: FontWeight.w600,
-            color: valueColor ?? AppColors.textPrimaryLight,
+            color: valueColor ?? context.appColors.textPrimary,
           ),
         ),
       ],
@@ -448,7 +450,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Divider(color: AppColors.outlineLight, height: 1),
+        Divider(color: context.appColors.outline, height: 1),
         SizedBox(height: 16.h),
         // Charger info chips
         Wrap(
@@ -456,14 +458,17 @@ class _ChargingStopCardState extends State<ChargingStopCard>
           runSpacing: 8.h,
           children: [
             _buildInfoChip(
+              context,
               Iconsax.flash_1,
               '${widget.stop.chargerPowerKw.toStringAsFixed(0)} kW',
             ),
             _buildInfoChip(
+              context,
               Iconsax.cpu_charge,
               widget.stop.chargerTypeDisplay,
             ),
             _buildInfoChip(
+              context,
               Iconsax.money,
               '\$${widget.stop.pricePerKwh.toStringAsFixed(2)}/kWh',
             ),
@@ -478,14 +483,14 @@ class _ChargingStopCardState extends State<ChargingStopCard>
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceVariantLight,
+                  color: context.appColors.surfaceVariant,
                   borderRadius: BorderRadius.circular(6.r),
                 ),
                 child: Text(
                   amenity,
                   style: TextStyle(
                     fontSize: 11.sp,
-                    color: AppColors.textSecondaryLight,
+                    color: context.appColors.textSecondary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -498,7 +503,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
           Container(
             padding: EdgeInsets.all(12.r),
             decoration: BoxDecoration(
-              color: AppColors.surfaceVariantLight,
+              color: context.appColors.surfaceVariant,
               borderRadius: BorderRadius.circular(10.r),
             ),
             child: Row(
@@ -506,7 +511,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
                 Icon(
                   Iconsax.clock,
                   size: 16.r,
-                  color: AppColors.textSecondaryLight,
+                  color: context.appColors.textSecondary,
                 ),
                 SizedBox(width: 8.w),
                 Text(
@@ -514,7 +519,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
                   style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.textPrimaryLight,
+                    color: context.appColors.textPrimary,
                   ),
                 ),
                 if (widget.stop.departureTime != null) ...[
@@ -522,7 +527,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
                     '  •  ',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: AppColors.textTertiaryLight,
+                      color: context.appColors.textTertiary,
                     ),
                   ),
                   Text(
@@ -530,7 +535,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.textPrimaryLight,
+                      color: context.appColors.textPrimary,
                     ),
                   ),
                 ],
@@ -543,10 +548,10 @@ class _ChargingStopCardState extends State<ChargingStopCard>
         Container(
           padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: 0.05),
+            color: context.appColors.primary.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(10.r),
             border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.2),
+              color: context.appColors.primary.withValues(alpha: 0.2),
             ),
           ),
           child: Row(
@@ -562,7 +567,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
                 child: Icon(
                   Iconsax.arrow_right_3,
                   size: 16.r,
-                  color: AppColors.primary,
+                  color: context.appColors.primary,
                 ),
               ),
               BatteryProgressIndicator(
@@ -575,7 +580,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: AppColors.primary,
+                  color: context.appColors.primary,
                   borderRadius: BorderRadius.circular(6.r),
                 ),
                 child: Text(
@@ -583,7 +588,7 @@ class _ChargingStopCardState extends State<ChargingStopCard>
                   style: TextStyle(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: context.appColors.surface,
                   ),
                 ),
               ),
@@ -594,31 +599,26 @@ class _ChargingStopCardState extends State<ChargingStopCard>
     );
   }
 
-  Widget _buildInfoChip(IconData icon, String text) {
+  Widget _buildInfoChip(BuildContext context, IconData icon, String text) {
+    final colors = context.appColors;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.1),
+        color: colors.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: colors.primary.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 14.r,
-            color: AppColors.primary,
-          ),
+          Icon(icon, size: 14.r, color: colors.primary),
           SizedBox(width: 5.w),
           Text(
             text,
             style: TextStyle(
               fontSize: 11.sp,
               fontWeight: FontWeight.w600,
-              color: AppColors.primary,
+              color: colors.primary,
             ),
           ),
         ],
@@ -627,25 +627,45 @@ class _ChargingStopCardState extends State<ChargingStopCard>
   }
 
   Widget _buildActionButtons(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: CommonButton(
-            label: 'Navigate',
-            onPressed: widget.onNavigateTap,
-            size: ButtonSize.small,
-            icon: Iconsax.direct_right,
-          ),
+        CommonButton(
+          label: 'Navigate',
+        
+          onPressed: widget.onNavigateTap,
+          size: ButtonSize.small,
+          icon: Iconsax.direct_right,
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
         ),
-        SizedBox(width: 10.w),
-        Expanded(
-          child: CommonButton(
-            label: 'Reserve',
-            onPressed: widget.onReserveTap,
-            variant: ButtonVariant.outlined,
-            size: ButtonSize.small,
-            icon: Iconsax.calendar,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: CommonButton(
+                label: 'Reserve',
+                onPressed: widget.onReserveTap,
+                variant: ButtonVariant.outlined,
+                size: ButtonSize.small,
+                icon: Iconsax.calendar,
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+              ),
+            ),
+            if (widget.onDetailsTap != null) ...[
+              SizedBox(width: 6.w),
+              Expanded(
+                child: CommonButton(
+                  label: 'Details',
+                  onPressed: widget.onDetailsTap,
+                  variant: ButtonVariant.tonal,
+                  size: ButtonSize.small,
+                  icon: Iconsax.info_circle,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8.w,
+                    vertical: 8.h,
+                  ),
+                ),
+              ),
+            ],
+          ],
         ),
       ],
     );

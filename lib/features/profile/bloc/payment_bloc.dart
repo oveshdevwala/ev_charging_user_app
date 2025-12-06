@@ -30,13 +30,12 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     LoadPaymentMethods event,
     Emitter<PaymentState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
     try {
       final methods = await _repository.getPaymentMethods();
       emit(state.copyWith(
         isLoading: false,
         paymentMethods: methods,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -50,7 +49,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     AddPaymentMethod event,
     Emitter<PaymentState> emit,
   ) async {
-    emit(state.copyWith(isAdding: true, error: null));
+    emit(state.copyWith(isAdding: true));
     try {
       final method = await _repository.addPaymentMethod(
         gatewayToken: event.gatewayToken,
@@ -63,7 +62,6 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       emit(state.copyWith(
         isAdding: false,
         paymentMethods: updatedMethods,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -77,7 +75,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     SetDefaultPaymentMethod event,
     Emitter<PaymentState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
     try {
       await _repository.setDefaultPaymentMethod(event.id);
       final updatedMethods = state.paymentMethods.map((method) {
@@ -86,7 +84,6 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       emit(state.copyWith(
         isLoading: false,
         paymentMethods: updatedMethods,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -100,7 +97,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     RemovePaymentMethod event,
     Emitter<PaymentState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
     try {
       await _repository.removePaymentMethod(event.id);
       final updatedMethods = state.paymentMethods
@@ -109,7 +106,6 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       emit(state.copyWith(
         isLoading: false,
         paymentMethods: updatedMethods,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -123,13 +119,12 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     LoadWallet event,
     Emitter<PaymentState> emit,
   ) async {
-    emit(state.copyWith(isLoadingWallet: true, error: null));
+    emit(state.copyWith(isLoadingWallet: true));
     try {
       final wallet = await _repository.getWallet();
       emit(state.copyWith(
         isLoadingWallet: false,
         wallet: wallet,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -143,7 +138,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     TopUpWallet event,
     Emitter<PaymentState> emit,
   ) async {
-    emit(state.copyWith(isToppingUp: true, error: null));
+    emit(state.copyWith(isToppingUp: true));
     try {
       final transaction = await _repository.topUpWallet(
         amount: event.amount,
@@ -159,7 +154,6 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       emit(state.copyWith(
         isToppingUp: false,
         wallet: updatedWallet,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -173,13 +167,12 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     LoadBillingHistory event,
     Emitter<PaymentState> emit,
   ) async {
-    emit(state.copyWith(isLoadingBilling: true, error: null));
+    emit(state.copyWith(isLoadingBilling: true));
     try {
       final history = await _repository.getBillingHistory();
       emit(state.copyWith(
         isLoadingBilling: false,
         billingHistory: history,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -193,7 +186,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     ClearPaymentError event,
     Emitter<PaymentState> emit,
   ) {
-    emit(state.copyWith(error: null));
+    emit(state.copyWith());
   }
 }
 

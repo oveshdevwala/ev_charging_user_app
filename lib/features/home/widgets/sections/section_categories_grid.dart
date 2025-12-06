@@ -84,22 +84,22 @@ class SectionCategoriesGrid extends StatelessWidget {
           // Row 1: 3 items
           Row(
             children: [
-              _buildItem(_categories[0]),
+              _buildItem(context, _categories[0]),
               SizedBox(width: 8.w),
-              _buildItem(_categories[1]),
+              _buildItem(context, _categories[1]),
               SizedBox(width: 8.w),
-              _buildItem(_categories[2]),
+              _buildItem(context, _categories[2]),
             ],
           ),
           SizedBox(height: 8.h),
           // Row 2: 3 items
           Row(
             children: [
-              _buildItem(_categories[3]),
+              _buildItem(context, _categories[3]),
               SizedBox(width: 8.w),
-              _buildItem(_categories[4]),
+              _buildItem(context, _categories[4]),
               SizedBox(width: 8.w),
-              _buildItem(_categories[5]),
+              _buildItem(context, _categories[5]),
             ],
           ),
         ],
@@ -107,7 +107,7 @@ class SectionCategoriesGrid extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(_CategoryItem item) {
+  Widget _buildItem(BuildContext context, _CategoryItem item) {
     return Expanded(
       child: _CompactGridButton(
         icon: item.icon,
@@ -135,6 +135,8 @@ class _CompactGridButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -143,10 +145,10 @@ class _CompactGridButton extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 12.h),
           decoration: BoxDecoration(
-            color: AppColors.surfaceLight,
+            color: colors.surface,
             borderRadius: BorderRadius.circular(12.r),
             border: Border.all(
-              color: AppColors.outlineLight.withValues(alpha: 0.4),
+              color: colors.outline,
             ),
           ),
           child: Column(
@@ -156,13 +158,13 @@ class _CompactGridButton extends StatelessWidget {
                 width: 36.r,
                 height: 36.r,
                 decoration: BoxDecoration(
-                  color: (iconColor ?? AppColors.primary).withValues(alpha: 0.1),
+                  color: (iconColor ?? colors.primary).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: Icon(
                   icon,
                   size: 18.r,
-                  color: iconColor ?? AppColors.primary,
+                  color: iconColor ?? colors.primary,
                 ),
               ),
               SizedBox(height: 6.h),
@@ -171,7 +173,7 @@ class _CompactGridButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimaryLight,
+                  color: colors.textPrimary,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

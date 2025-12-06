@@ -6,7 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/theme/app_colors.dart';
+import '../../../core/extensions/context_ext.dart';
 
 /// Profile header showing user avatar and info.
 class ProfileHeader extends StatelessWidget {
@@ -27,32 +27,44 @@ class ProfileHeader extends StatelessWidget {
     
     return Column(
       children: [
-        avatarUrl != null && avatarUrl!.isNotEmpty
-            ? CircleAvatar(
+        if (avatarUrl != null && avatarUrl!.isNotEmpty) CircleAvatar(
                 radius: 50.r,
                 backgroundImage: NetworkImage(avatarUrl!),
                 onBackgroundImageError: (_, __) {},
-              )
-            : Container(
+              ) else Container(
                 width: 100.r,
                 height: 100.r,
-                decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                  color: context.appColors.primary,
+                  shape: BoxShape.circle,
+                ),
                 child: Center(
                   child: Text(
                     initials,
-                    style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.w700, color: Colors.white),
+                    style: TextStyle(
+                      fontSize: 32.sp,
+                      fontWeight: FontWeight.w700,
+                      color: context.appColors.surface,
+                    ),
                   ),
                 ),
               ),
         SizedBox(height: 16.h),
         Text(
           name,
-          style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w700, color: AppColors.textPrimaryLight),
+          style: TextStyle(
+            fontSize: 22.sp,
+            fontWeight: FontWeight.w700,
+            color: context.appColors.textPrimary,
+          ),
         ),
         SizedBox(height: 4.h),
         Text(
           email,
-          style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondaryLight),
+          style: TextStyle(
+            fontSize: 14.sp,
+            color: context.appColors.textSecondary,
+          ),
         ),
       ],
     );

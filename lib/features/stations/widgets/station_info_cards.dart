@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/station_model.dart';
 
@@ -20,7 +21,13 @@ class StationInfoCards extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: _InfoCard(icon: Iconsax.clock, title: 'Hours', value: station.operatingHours)),
+        Expanded(
+          child: _InfoCard(
+            icon: Iconsax.clock,
+            title: 'Hours',
+            value: station.operatingHours,
+          ),
+        ),
         SizedBox(width: 12.w),
         Expanded(
           child: _InfoCard(
@@ -55,22 +62,34 @@ class _InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Container(
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariantLight,
+        color: colors.surfaceVariant,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
         children: [
-          Icon(icon, size: 24.r, color: AppColors.primary),
+          Icon(icon, size: 24.r, color: colors.primary),
           SizedBox(height: 8.h),
-          Text(title, style: TextStyle(fontSize: 11.sp, color: AppColors.textSecondaryLight)),
+          Text(
+            title,
+            style: TextStyle(fontSize: 11.sp, color: colors.textSecondary),
+          ),
           SizedBox(height: 2.h),
-          Text(value, style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600), textAlign: TextAlign.center),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 13.sp,
+              fontWeight: FontWeight.w600,
+              color: colors.textPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
   }
 }
-

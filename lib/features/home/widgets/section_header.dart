@@ -10,12 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 
 /// Section header widget with title and optional view all action.
 class SectionHeader extends StatelessWidget {
   const SectionHeader({
-    required this.title, super.key,
+    required this.title,
+    super.key,
     this.onViewAll,
     this.actionText,
     this.showAction = true,
@@ -47,6 +49,8 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
+
     return Padding(
       padding: padding ?? EdgeInsets.symmetric(horizontal: 20.w),
       child: Row(
@@ -55,11 +59,12 @@ class SectionHeader extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: titleStyle ??
+              style:
+                  titleStyle ??
                   TextStyle(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimaryLight,
+                    color: colors.textPrimary,
                     letterSpacing: -0.3,
                   ),
               maxLines: 1,
@@ -74,11 +79,12 @@ class SectionHeader extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
                 child: Text(
                   actionText ?? AppStrings.seeAll,
-                  style: actionStyle ??
+                  style:
+                      actionStyle ??
                       TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.primary,
+                        color: colors.primary,
                       ),
                 ),
               ),
@@ -88,4 +94,3 @@ class SectionHeader extends StatelessWidget {
     );
   }
 }
-
