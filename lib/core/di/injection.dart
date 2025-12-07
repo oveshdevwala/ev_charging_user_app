@@ -19,6 +19,7 @@ import '../../features/trip_history/data/datasources/trip_remote_datasource.dart
 import '../../features/trip_history/data/repositories/trip_repository_impl.dart';
 import '../../features/trip_history/domain/repositories/trip_repository.dart';
 import '../../features/trip_history/domain/usecases/export_trip_report.dart';
+import '../../features/trip_history/domain/usecases/get_completed_trips.dart';
 import '../../features/trip_history/domain/usecases/get_monthly_analytics.dart';
 import '../../features/trip_history/domain/usecases/get_trip_history.dart';
 import '../../features/trip_history/presentation/bloc/trip_history_bloc.dart';
@@ -28,8 +29,12 @@ import '../../features/value_packs/data/repositories/value_packs_repository_impl
 import '../../features/value_packs/domain/repositories/value_packs_repository.dart';
 import '../../features/value_packs/domain/usecases/usecases.dart';
 import '../../features/value_packs/presentation/cubits/cubits.dart';
+import '../../features/settings/data/repositories/repositories.dart';
 import '../../repositories/repositories.dart';
+import '../repositories/pexels_repository.dart';
 import '../services/analytics_service.dart';
+import '../services/pexels_api_service.dart';
+import '../services/station_image_service.dart';
 import '../theme/theme_manager.dart';
 
 /// Global service locator instance.
@@ -54,8 +59,21 @@ Future<void> initializeDependencies() async {
     ..registerLazySingleton<PartnerRepository>(DummyPartnerRepository.new)
     // ============ Profile Repository ============
     ..registerLazySingleton<ProfileRepository>(DummyProfileRepository.new)
+    // ============ Settings Repository ============
+    ..registerLazySingleton<SettingsRepository>(
+      () => SettingsRepositoryImpl(prefs: sl<SharedPreferences>()),
+    )
     // ============ Services ============
     ..registerLazySingleton<AnalyticsService>(DummyAnalyticsService.new)
+    // ============ Pexels Service & Repository ============
+    ..registerLazySingleton<PexelsApiService>(PexelsApiService.new)
+    ..registerLazySingleton<PexelsRepository>(
+      () => PexelsRepositoryImpl(apiService: sl<PexelsApiService>()),
+    )
+    // ============ Station Image Service ============
+    ..registerLazySingleton<StationImageService>(
+      () => StationImageService(pexelsRepository: sl<PexelsRepository>()),
+    )
     // ============ Nearby Offers Usecases ============
     ..registerLazySingleton(() => GetNearbyOffersUseCase(sl()))
     ..registerLazySingleton(() => GetPartnersUseCase(sl()))
@@ -81,12 +99,14 @@ Future<void> initializeDependencies() async {
     ..registerLazySingleton(() => GetTripHistory(sl()))
     ..registerLazySingleton(() => GetMonthlyAnalytics(sl()))
     ..registerLazySingleton(() => ExportTripReport(sl()))
+    ..registerLazySingleton(() => GetCompletedTrips(sl()))
     // BLoC
     ..registerFactory(
       () => TripHistoryBloc(
         getTripHistory: sl(),
         getMonthlyAnalytics: sl(),
         exportTripReport: sl(),
+        getCompletedTrips: sl(),
       ),
     );
 

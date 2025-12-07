@@ -10,7 +10,7 @@
 # ===============================
 
 # Build a clean, production-ready Flutter User App with:
-# - Flutter (Clean Architecture, MVVM + BLoC Single-State pattern)
+# - Flutter ( MVVM(model view viewmodel) + BLoC Single-State pattern)
 # - go_router (typed routing with AppRoutes enum)
 # - flutter_screenutil (responsive UI)
 # - sqflite (optional local cache)

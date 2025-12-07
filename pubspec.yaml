@@ -37,6 +37,8 @@ dependencies:
   logger: ^2.4.0
   timeago: ^3.7.0
   uuid: ^4.5.1
+  dio: ^5.4.0
+  flutter_dotenv: ^5.1.0
 
   # Image Processing
   image_picker: ^1.1.2
@@ -57,6 +59,7 @@ dependencies:
   json_annotation: ^4.9.0
   qr_flutter: ^4.1.0
   flutter_markdown: ^0.6.18
+  crypto: ^3.0.5
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +77,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/lottie/
+    - .env
 
 
 flutter_intl:

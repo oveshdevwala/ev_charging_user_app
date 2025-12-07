@@ -13,11 +13,14 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 import '../../../widgets/app_app_bar.dart';
 import '../../../widgets/common_button.dart';
+import '../../trip_history/domain/repositories/trip_repository.dart';
+import '../../trip_history/utils/completed_trip_converter.dart';
 import '../models/models.dart';
 import '../repositories/repositories.dart';
 import '../widgets/widgets.dart';
@@ -34,7 +37,7 @@ class StandaloneTripSummaryPage extends StatefulWidget {
 }
 
 class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
-  final _repository = DummyTripPlannerRepository();
+  final _tripPlannerRepo = DummyTripPlannerRepository();
   TripModel? _trip;
   bool _isLoading = true;
   String? _error;
@@ -52,7 +55,22 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
     });
 
     try {
-      final trip = await _repository.fetchTripById(widget.tripId);
+      // First try trip planner repository
+      var trip = await _tripPlannerRepo.fetchTripById(widget.tripId);
+      
+      // If not found, try trip history repository
+      if (trip == null) {
+        try {
+          final tripHistoryRepo = sl<TripRepository>();
+          final completedTrip = await tripHistoryRepo.getTripById(widget.tripId);
+          if (completedTrip != null) {
+            trip = CompletedTripConverter.toTripModel(completedTrip);
+          }
+        } catch (e) {
+          // Ignore trip history errors, will show "Trip not found" below
+        }
+      }
+
       if (mounted) {
         setState(() {
           _trip = trip;

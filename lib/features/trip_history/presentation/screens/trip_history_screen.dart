@@ -1,140 +1,133 @@
+/// File: lib/features/trip_history/presentation/screens/trip_history_screen.dart
+/// Purpose: Trip history screen displaying completed trips
+/// Belongs To: trip_history feature
+/// Route: AppRoutes.tripHistory
+/// Customization Guide:
+///    - Adjust list item spacing and padding
+///    - Customize empty state message
+library;
+
+import 'package:ev_charging_user_app/core/di/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/di/injection.dart';
+import '../../../../core/constants/app_strings.dart';
+import '../../../../core/extensions/context_ext.dart';
+import '../../../../routes/app_routes.dart';
+import '../../../../widgets/app_app_bar.dart';
 import '../bloc/trip_history_bloc.dart';
 import '../bloc/trip_history_event.dart';
 import '../bloc/trip_history_state.dart';
-import '../widgets/cost_trend_chart.dart';
-import '../widgets/energy_bar_chart.dart';
-import '../widgets/monthly_summary_card.dart';
-import '../widgets/trip_list_item.dart';
+import '../widgets/trip_tile.dart';
 
+/// Trip history screen showing all completed trips.
 class TripHistoryScreen extends StatelessWidget {
   const TripHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<TripHistoryBloc>()..add(FetchTripHistory()),
+      create: (context) => sl<TripHistoryBloc>()..add(FetchCompletedTrips()),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Trip History & Analytics'),
-          actions: [
-            BlocConsumer<TripHistoryBloc, TripHistoryState>(
-              listener: (context, state) {
-                if (state is TripHistoryExported) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Report exported to ${state.file.path}'),
-                      action: SnackBarAction(
-                        label: 'Open',
-                        onPressed: () {
-                          // Open file logic
-                        },
-                      ),
-                    ),
-                  );
-                } else if (state is TripHistoryError) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(state.message)));
-                }
-              },
-              builder: (context, state) {
-                if (state is TripHistoryExporting) {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 16),
-                      child: SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    ),
-                  );
-                }
-                return IconButton(
-                  icon: const Icon(Icons.download),
-                  onPressed: () {
-                    final currentMonth = DateTime.now()
-                        .toIso8601String()
-                        .substring(0, 7);
-                    context.read<TripHistoryBloc>().add(
-                      ExportReportPDF(currentMonth),
-                    );
-                  },
-                );
-              },
-            ),
-          ],
+        appBar: AppAppBar(
+          title: AppStrings.tripPlannerRecentTrips,
         ),
         body: BlocBuilder<TripHistoryBloc, TripHistoryState>(
           builder: (context, state) {
             if (state is TripHistoryLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is TripHistoryLoaded) {
+              final trips = state.completedTrips;
+              
+              if (trips.isEmpty) {
+                return _buildEmptyState(context);
+              }
+
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<TripHistoryBloc>().add(FetchTripHistory());
+                  context.read<TripHistoryBloc>().add(FetchCompletedTrips());
                 },
-                child: CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.all(16.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (state.analytics != null) ...[
-                              MonthlySummaryCard(analytics: state.analytics!),
-                              SizedBox(height: 24.h),
-                              CostTrendChart(
-                                trendData: state.analytics!.trendData,
-                              ),
-                              SizedBox(height: 24.h),
-                              EnergyBarChart(
-                                trendData: state.analytics!.trendData,
-                              ),
-                              SizedBox(height: 24.h),
-                            ],
-                            Text(
-                              'Recent Trips',
-                              style: Theme.of(context).textTheme.titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 12.h),
-                          ],
-                        ),
-                      ),
-                    ),
-                    if (state.trips.isEmpty)
-                      SliverToBoxAdapter(
-                        child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(32.w),
-                            child: const Text('No trips found'),
-                          ),
-                        ),
-                      )
-                    else
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.w),
-                            child: TripListItem(trip: state.trips[index]),
-                          );
-                        }, childCount: state.trips.length),
-                      ),
-                    SliverPadding(padding: EdgeInsets.only(bottom: 24.h)),
-                  ],
+                child: ListView.builder(
+                  padding: EdgeInsets.all(16.r),
+                  itemCount: trips.length,
+                  itemBuilder: (context, index) {
+                    final trip = trips[index];
+                    return TripTile(
+                      trip: trip,
+                      onTap: () {
+                        context.pushToWithId(AppRoutes.tripSummary, trip.id);
+                      },
+                      onFavoriteTap: () {
+                        context.read<TripHistoryBloc>().add(
+                              ToggleTripFavorite(trip.id),
+                            );
+                      },
+                    );
+                  },
                 ),
               );
             } else if (state is TripHistoryError) {
-              return Center(child: Text(state.message));
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      state.message,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: context.appColors.textSecondary,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<TripHistoryBloc>().add(FetchCompletedTrips());
+                      },
+                      child: const Text(AppStrings.retry),
+                    ),
+                  ],
+                ),
+              );
             }
             return const SizedBox.shrink();
           },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    final colors = context.appColors;
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(32.r),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.route_outlined,
+              size: 64.r,
+              color: colors.textSecondary,
+            ),
+            SizedBox(height: 16.h),
+            Text(
+              'No trips yet',
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+                color: colors.textPrimary,
+              ),
+            ),
+            SizedBox(height: 8.h),
+            Text(
+              'Your completed trips will appear here',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: colors.textSecondary,
+              ),
+            ),
+          ],
         ),
       ),
     );

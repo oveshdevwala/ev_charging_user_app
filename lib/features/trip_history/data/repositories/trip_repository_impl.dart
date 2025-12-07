@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import '../../domain/entities/completed_trip.dart';
 import '../../domain/entities/monthly_analytics.dart';
 import '../../domain/entities/trip_record.dart';
 import '../../domain/repositories/trip_repository.dart';
@@ -55,5 +56,31 @@ class TripRepositoryImpl implements TripRepository {
     final file = File('${dir.path}/trip_report_$month.pdf');
     await file.writeAsBytes(bytes);
     return file;
+  }
+
+  @override
+  Future<List<CompletedTrip>> getAllTrips() async {
+    try {
+      final remoteTrips = await remoteDataSource.getAllTrips();
+      // Sort by most recent first
+      remoteTrips.sort((a, b) {
+        final aDate = a.createdAt ?? DateTime(0);
+        final bDate = b.createdAt ?? DateTime(0);
+        return bDate.compareTo(aDate);
+      });
+      return remoteTrips.map((e) => e.toEntity()).toList();
+    } catch (e) {
+      throw Exception('Failed to fetch trips: $e');
+    }
+  }
+
+  @override
+  Future<CompletedTrip?> getTripById(String tripId) async {
+    try {
+      final tripModel = await remoteDataSource.getTripById(tripId);
+      return tripModel?.toEntity();
+    } catch (e) {
+      throw Exception('Failed to fetch trip: $e');
+    }
   }
 }

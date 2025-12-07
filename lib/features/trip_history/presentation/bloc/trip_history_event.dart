@@ -24,3 +24,13 @@ class ExportReportPDF extends TripHistoryEvent {
   @override
   List<Object> get props => [month];
 }
+
+class FetchCompletedTrips extends TripHistoryEvent {}
+
+class ToggleTripFavorite extends TripHistoryEvent {
+  const ToggleTripFavorite(this.tripId);
+  final String tripId;
+
+  @override
+  List<Object> get props => [tripId];
+}

@@ -19,6 +19,7 @@ import '../features/notifications/notifications.dart';
 import '../features/value_packs/presentation/screens/screens.dart';
 import '../features/onboarding/onboarding.dart';
 import '../features/profile/profile.dart';
+import '../features/settings/presentation/ui/screens/screens.dart';
 import '../features/splash/splash.dart';
 import '../features/stations/stations.dart';
 import '../features/trip_history/trip_history.dart';
@@ -50,13 +51,17 @@ enum AppRoutes {
   bookingDetails,
   userNotifications,
   userSettings,
+  settingsAppearance,
+  settingsNotifications,
+  settingsPrivacy,
+  settingsDataBackup,
   editProfile,
-      activityDetails,
-      tripPlanner,
-      tripSummary,
-      chargingStops,
-      tripInsights,
-      wallet,
+  activityDetails,
+  tripPlanner,
+  tripSummary,
+  chargingStops,
+  tripInsights,
+  wallet,
   walletRecharge,
   stationCommunity,
   leaveReview,
@@ -136,6 +141,14 @@ extension AppRoutePath on AppRoutes {
         return '/userNotifications';
       case AppRoutes.userSettings:
         return '/userSettings';
+      case AppRoutes.settingsAppearance:
+        return '/settings/appearance';
+      case AppRoutes.settingsNotifications:
+        return '/settings/notifications';
+      case AppRoutes.settingsPrivacy:
+        return '/settings/privacy';
+      case AppRoutes.settingsDataBackup:
+        return '/settings/dataBackup';
       case AppRoutes.editProfile:
         return '/editProfile';
       case AppRoutes.activityDetails:
@@ -338,7 +351,27 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.userSettings.path,
         name: AppRoutes.userSettings.name,
-        builder: (context, state) => const SettingsPage(),
+        builder: (context, state) => const SettingsHomeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsAppearance.path,
+        name: AppRoutes.settingsAppearance.name,
+        builder: (context, state) => const AppearanceScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsNotifications.path,
+        name: AppRoutes.settingsNotifications.name,
+        builder: (context, state) => const NotificationsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsPrivacy.path,
+        name: AppRoutes.settingsPrivacy.name,
+        builder: (context, state) => const PrivacyScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsDataBackup.path,
+        name: AppRoutes.settingsDataBackup.name,
+        builder: (context, state) => const DataBackupScreen(),
       ),
 
       // -------- Edit Profile --------

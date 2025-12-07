@@ -526,4 +526,43 @@ abstract final class AppStrings {
   static const String showToPartner = 'Show this QR code to the cashier';
   static const String expiresIn = 'Expires in';
   static const String validUntil = 'Valid until';
+
+  // ============ Settings ============
+  static const String settingsTitle = 'Settings';
+  static const String settingsAccount = 'Account & Profile';
+  static const String settingsAppearance = 'Appearance';
+  static const String settingsNotifications = 'Notifications';
+  static const String settingsPrivacy = 'Privacy & Security';
+  static const String settingsDataBackup = 'Data & Backup';
+  static const String settingsLanguage = 'Language & Locale';
+  static const String settingsAccessibility = 'Accessibility';
+  static const String settingsAbout = 'About & Legal';
+  static const String settingsSignOut = 'Sign Out';
+  static const String settingsDeleteAccount = 'Delete Account';
+  static const String settingsExport = 'Export Settings';
+  static const String settingsImport = 'Import Settings';
+  static const String settingsReset = 'Reset to Defaults';
+  static const String settingsClearCache = 'Clear Cache';
+  static const String settingsThemeMode = 'Theme Mode';
+  static const String settingsAccentColor = 'Accent Color';
+  static const String settingsFontSize = 'Font Size';
+  static const String settingsEnableNotifications = 'Enable Notifications';
+  static const String settingsChargingAlerts = 'Charging Alerts';
+  static const String settingsTripReminders = 'Trip Reminders';
+  static const String settingsPromotions = 'Promotions';
+  static const String settingsQuietHours = 'Quiet Hours';
+  static const String settingsSound = 'Sound';
+  static const String settingsAnalytics = 'Analytics';
+  static const String settingsLocationServices = 'Location Services';
+  static const String settingsBiometricLock = 'Biometric Lock';
+  static const String settingsPinLock = 'PIN Lock';
+  static const String settingsSessionTimeout = 'Session Timeout';
+  static const String settingsLastExported = 'Last exported';
+  static const String settingsNever = 'Never';
+  static const String settingsSystem = 'System';
+  static const String settingsLight = 'Light';
+  static const String settingsDark = 'Dark';
+  static const String settingsSmall = 'Small';
+  static const String settingsMedium = 'Medium';
+  static const String settingsLarge = 'Large';
 }

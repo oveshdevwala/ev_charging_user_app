@@ -6,6 +6,8 @@
 ///    - Replace DummyStationRepository with real implementation
 library;
 
+import '../core/di/injection.dart';
+import '../core/services/station_image_service.dart';
 import '../models/models.dart';
 
 /// Station repository interface.
@@ -49,8 +51,11 @@ abstract class StationRepository {
 
 /// Dummy station repository for development/testing.
 class DummyStationRepository implements StationRepository {
+  DummyStationRepository() : _imageService = sl<StationImageService>();
+
   final List<StationModel> _stations = _generateDummyStations();
   final Set<String> _favorites = {};
+  final StationImageService _imageService;
 
   static List<StationModel> _generateDummyStations() {
     return [
@@ -495,9 +500,26 @@ class DummyStationRepository implements StationRepository {
     final end = (start + limit) > _stations.length
         ? _stations.length
         : start + limit;
-    return _stations
-        .sublist(start, end)
-        .map((s) => s.copyWith(isFavorite: _favorites.contains(s.id)))
+    final stations = _stations.sublist(start, end);
+    
+    // Fetch Pexels images for stations
+    final stationIds = stations.map((s) => s.id).toList();
+    final stationNames = {for (final s in stations) s.id: s.name};
+    final stationDescriptions = {
+      for (final s in stations) s.id: s.description ?? '',
+    };
+    
+    final imageUrls = await _imageService.getStationImageUrls(
+      stationIds,
+      stationNames: stationNames,
+      stationDescriptions: stationDescriptions,
+    );
+    
+    return stations
+        .map((s) => s.copyWith(
+              isFavorite: _favorites.contains(s.id),
+              imageUrl: imageUrls[s.id] ?? s.imageUrl,
+            ))
         .toList();
   }
 
@@ -506,7 +528,18 @@ class DummyStationRepository implements StationRepository {
     await Future.delayed(const Duration(milliseconds: 500));
     try {
       final station = _stations.firstWhere((s) => s.id == id);
-      return station.copyWith(isFavorite: _favorites.contains(id));
+      
+      // Fetch Pexels image for this station
+      final imageUrl = await _imageService.getStationImageUrl(
+        id,
+        stationName: station.name,
+        stationDescription: station.description,
+      );
+      
+      return station.copyWith(
+        isFavorite: _favorites.contains(id),
+        imageUrl: imageUrl ?? station.imageUrl,
+      );
     } catch (e) {
       return null;
     }
@@ -522,8 +555,25 @@ class DummyStationRepository implements StationRepository {
     // In dummy, return all stations sorted by distance
     final stations = List<StationModel>.from(_stations)
       ..sort((a, b) => (a.distance ?? 0).compareTo(b.distance ?? 0));
+    
+    // Fetch Pexels images for nearby stations
+    final stationIds = stations.map((s) => s.id).toList();
+    final stationNames = {for (final s in stations) s.id: s.name};
+    final stationDescriptions = {
+      for (final s in stations) s.id: s.description ?? '',
+    };
+    
+    final imageUrls = await _imageService.getStationImageUrls(
+      stationIds,
+      stationNames: stationNames,
+      stationDescriptions: stationDescriptions,
+    );
+    
     return stations
-        .map((s) => s.copyWith(isFavorite: _favorites.contains(s.id)))
+        .map((s) => s.copyWith(
+              isFavorite: _favorites.contains(s.id),
+              imageUrl: imageUrls[s.id] ?? s.imageUrl,
+            ))
         .toList();
   }
 
@@ -534,13 +584,32 @@ class DummyStationRepository implements StationRepository {
       return [];
     }
     final lowerQuery = query.toLowerCase();
-    return _stations
+    final stations = _stations
         .where(
           (s) =>
               s.name.toLowerCase().contains(lowerQuery) ||
               s.address.toLowerCase().contains(lowerQuery),
         )
-        .map((s) => s.copyWith(isFavorite: _favorites.contains(s.id)))
+        .toList();
+    
+    // Fetch Pexels images for search results
+    final stationIds = stations.map((s) => s.id).toList();
+    final stationNames = {for (final s in stations) s.id: s.name};
+    final stationDescriptions = {
+      for (final s in stations) s.id: s.description ?? '',
+    };
+    
+    final imageUrls = await _imageService.getStationImageUrls(
+      stationIds,
+      stationNames: stationNames,
+      stationDescriptions: stationDescriptions,
+    );
+    
+    return stations
+        .map((s) => s.copyWith(
+              isFavorite: _favorites.contains(s.id),
+              imageUrl: imageUrls[s.id] ?? s.imageUrl,
+            ))
         .toList();
   }
 

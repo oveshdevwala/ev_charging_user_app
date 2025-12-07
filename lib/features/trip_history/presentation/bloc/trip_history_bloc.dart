@@ -1,24 +1,28 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/export_trip_report.dart';
+import '../../domain/usecases/get_completed_trips.dart';
 import '../../domain/usecases/get_monthly_analytics.dart';
 import '../../domain/usecases/get_trip_history.dart';
 import 'trip_history_event.dart';
 import 'trip_history_state.dart';
 
 class TripHistoryBloc extends Bloc<TripHistoryEvent, TripHistoryState> {
-
   TripHistoryBloc({
     required this.getTripHistory,
     required this.getMonthlyAnalytics,
     required this.exportTripReport,
+    required this.getCompletedTrips,
   }) : super(TripHistoryInitial()) {
     on<FetchTripHistory>(_onFetchTripHistory);
     on<FetchMonthlyAnalytics>(_onFetchMonthlyAnalytics);
     on<ExportReportPDF>(_onExportReportPDF);
+    on<FetchCompletedTrips>(_onFetchCompletedTrips);
+    on<ToggleTripFavorite>(_onToggleTripFavorite);
   }
   final GetTripHistory getTripHistory;
   final GetMonthlyAnalytics getMonthlyAnalytics;
   final ExportTripReport exportTripReport;
+  final GetCompletedTrips getCompletedTrips;
 
   Future<void> _onFetchTripHistory(
     FetchTripHistory event,
@@ -81,6 +85,42 @@ class TripHistoryBloc extends Bloc<TripHistoryEvent, TripHistoryState> {
       // But for now, I'll follow the prompt's state list.
     } catch (e) {
       emit(TripHistoryError(e.toString()));
+    }
+  }
+
+  Future<void> _onFetchCompletedTrips(
+    FetchCompletedTrips event,
+    Emitter<TripHistoryState> emit,
+  ) async {
+    emit(TripHistoryLoading());
+    try {
+      final completedTrips = await getCompletedTrips();
+      final currentState = state;
+      if (currentState is TripHistoryLoaded) {
+        emit(currentState.copyWith(completedTrips: completedTrips));
+      } else {
+        emit(
+          TripHistoryLoaded(trips: const [], completedTrips: completedTrips),
+        );
+      }
+    } catch (e) {
+      emit(TripHistoryError(e.toString()));
+    }
+  }
+
+  Future<void> _onToggleTripFavorite(
+    ToggleTripFavorite event,
+    Emitter<TripHistoryState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is TripHistoryLoaded) {
+      final updatedTrips = currentState.completedTrips.map((trip) {
+        if (trip.id == event.tripId) {
+          return trip.copyWith(isFavorite: !trip.isFavorite);
+        }
+        return trip;
+      }).toList();
+      emit(currentState.copyWith(completedTrips: updatedTrips));
     }
   }
 }

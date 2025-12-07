@@ -10,5 +10,6 @@ export 'booking_card.dart';
 export 'common_button.dart';
 export 'common_text_field.dart';
 export 'loading_wrapper.dart';
+export 'pexels_image_widget.dart';
 export 'station_card.dart';
 

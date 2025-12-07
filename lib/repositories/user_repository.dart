@@ -140,7 +140,7 @@ class DummyUserRepository implements UserRepository {
   Future<String?> uploadAvatar(String filePath) async {
     await Future.delayed(const Duration(seconds: 2));
     // Return a dummy URL
-    return 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e';
+    return 'https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop';
   }
 
   @override

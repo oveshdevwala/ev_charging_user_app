@@ -1,12 +1,11 @@
 /// File: lib/core/constants/constants.dart
-/// Purpose: Barrel file for all constant exports
+/// Purpose: Barrel export for all constants
 /// Belongs To: shared
-/// Customization Guide:
-///    - Add new constant file exports here
 library;
 
 export 'api_paths.dart';
 export 'app_assets.dart';
 export 'app_constants.dart';
 export 'app_strings.dart';
+export 'env.dart';
 export 'home_images.dart';
