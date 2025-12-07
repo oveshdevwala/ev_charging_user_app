@@ -13,21 +13,21 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 import '../../../widgets/app_app_bar.dart';
 import '../../../widgets/common_button.dart';
+import '../../trip_history/domain/repositories/trip_repository.dart';
+import '../../trip_history/utils/completed_trip_converter.dart';
 import '../models/models.dart';
 import '../repositories/repositories.dart';
 import '../widgets/widgets.dart';
 
 /// Standalone charging stops page that can be accessed directly with a tripId.
 class StandaloneChargingStopsPage extends StatefulWidget {
-  const StandaloneChargingStopsPage({
-    required this.tripId,
-    super.key,
-  });
+  const StandaloneChargingStopsPage({required this.tripId, super.key});
 
   final String tripId;
 
@@ -38,7 +38,7 @@ class StandaloneChargingStopsPage extends StatefulWidget {
 
 class _StandaloneChargingStopsPageState
     extends State<StandaloneChargingStopsPage> {
-  final _repository = DummyTripPlannerRepository();
+  final _tripPlannerRepo = DummyTripPlannerRepository();
   TripModel? _trip;
   bool _isLoading = true;
   String? _error;
@@ -57,7 +57,24 @@ class _StandaloneChargingStopsPageState
     });
 
     try {
-      final trip = await _repository.fetchTripById(widget.tripId);
+      // First try trip planner repository
+      var trip = await _tripPlannerRepo.fetchTripById(widget.tripId);
+
+      // If not found, try trip history repository
+      if (trip == null) {
+        try {
+          final tripHistoryRepo = sl<TripRepository>();
+          final completedTrip = await tripHistoryRepo.getTripById(
+            widget.tripId,
+          );
+          if (completedTrip != null) {
+            trip = CompletedTripConverter.toTripModel(completedTrip);
+          }
+        } catch (e) {
+          // Ignore trip history errors, will show "Trip not found" below
+        }
+      }
+
       if (mounted) {
         setState(() {
           _trip = trip;
@@ -146,9 +163,7 @@ class _StandaloneChargingStopsPageState
                 if (_expandedStops.length == stops.length) {
                   _expandedStops.clear();
                 } else {
-                  _expandedStops.addAll(
-                    List.generate(stops.length, (i) => i),
-                  );
+                  _expandedStops.addAll(List.generate(stops.length, (i) => i));
                 }
               });
             },
@@ -257,11 +272,7 @@ class _StandaloneChargingStopsPageState
             ),
           ),
           if (estimates != null) ...[
-            Container(
-              width: 1,
-              height: 40.h,
-              color: colors.outline,
-            ),
+            Container(width: 1, height: 40.h, color: colors.outline),
             SizedBox(width: 16.w),
             Expanded(
               child: Column(
@@ -286,11 +297,7 @@ class _StandaloneChargingStopsPageState
                 ],
               ),
             ),
-            Container(
-              width: 1,
-              height: 40.h,
-              color: colors.outline,
-            ),
+            Container(width: 1, height: 40.h, color: colors.outline),
             SizedBox(width: 16.w),
             Expanded(
               child: Column(
@@ -374,7 +381,8 @@ class _StandaloneChargingStopsPageState
               else
                 _buildDrivingSegment(
                   context,
-                  distanceKm: (estimates?.totalDistanceKm ?? 0) -
+                  distanceKm:
+                      (estimates?.totalDistanceKm ?? 0) -
                       stop.distanceFromStartKm,
                   fromLabel: stop.stationName,
                   toLabel: trip.destination.shortDisplay,
@@ -472,9 +480,7 @@ class _StandaloneChargingStopsPageState
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(
-                color: color.withValues(alpha: 0.2),
-              ),
+              border: Border.all(color: color.withValues(alpha: 0.2)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -545,19 +551,12 @@ class _StandaloneChargingStopsPageState
         ),
         child: Row(
           children: [
-            Icon(
-              Iconsax.routing_2,
-              size: 16.r,
-              color: colors.textSecondary,
-            ),
+            Icon(Iconsax.routing_2, size: 16.r, color: colors.textSecondary),
             SizedBox(width: 8.w),
             Expanded(
               child: Text(
                 '${distanceKm.toStringAsFixed(0)} km drive',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: colors.textSecondary,
-                ),
+                style: TextStyle(fontSize: 12.sp, color: colors.textSecondary),
               ),
             ),
           ],
@@ -574,20 +573,14 @@ class _StandaloneChargingStopsPageState
       decoration: BoxDecoration(
         color: colors.warning.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: colors.warning.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: colors.warning.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                Iconsax.lamp_charge,
-                size: 20.r,
-                color: colors.warning,
-              ),
+              Icon(Iconsax.lamp_charge, size: 20.r, color: colors.warning),
               SizedBox(width: 8.w),
               Text(
                 'Tips',
@@ -624,11 +617,7 @@ class _StandaloneChargingStopsPageState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Iconsax.flash_1,
-              size: 64.r,
-              color: colors.textTertiary,
-            ),
+            Icon(Iconsax.flash_1, size: 64.r, color: colors.textTertiary),
             SizedBox(height: 16.h),
             Text(
               'No Charging Stops Needed',
@@ -642,10 +631,7 @@ class _StandaloneChargingStopsPageState
             Text(
               'Your vehicle has enough charge to complete this trip without stopping.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: colors.textSecondary,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
             ),
           ],
         ),
@@ -690,9 +676,9 @@ class _StandaloneChargingStopsPageState
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not open maps: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not open maps: $e')));
       }
     }
   }
@@ -705,4 +691,3 @@ class _StandaloneChargingStopsPageState
     context.push(AppRoutes.stationDetails.id(stop.stationId));
   }
 }
-

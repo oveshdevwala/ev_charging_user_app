@@ -57,12 +57,14 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
     try {
       // First try trip planner repository
       var trip = await _tripPlannerRepo.fetchTripById(widget.tripId);
-      
+
       // If not found, try trip history repository
       if (trip == null) {
         try {
           final tripHistoryRepo = sl<TripRepository>();
-          final completedTrip = await tripHistoryRepo.getTripById(widget.tripId);
+          final completedTrip = await tripHistoryRepo.getTripById(
+            widget.tripId,
+          );
           if (completedTrip != null) {
             trip = CompletedTripConverter.toTripModel(completedTrip);
           }
@@ -434,7 +436,7 @@ class _StandaloneTripSummaryPageState extends State<StandaloneTripSummaryPage> {
           child: _buildActionCard(
             context,
             icon: Iconsax.flash_1,
-            label: 'Charging Stops',
+            label: 'Stops',
             value: '${trip.chargingStops.length}',
             color: colors.warning,
             onTap: () => _showAllStops(context, trip),
