@@ -49,7 +49,6 @@ class VehicleLocalDataSource {
         batteryCapacityKWh: 8.8,
         vehicleType: 'PHEV',
         licensePlate: 'MH14XY4321',
-        isDefault: false,
         imageUrl: '',
         createdAt: DateTime.parse('2024-06-02T11:00:00Z'),
         updatedAt: DateTime.parse('2024-06-02T11:00:00Z'),
@@ -64,7 +63,6 @@ class VehicleLocalDataSource {
         batteryCapacityKWh: 77.4,
         vehicleType: 'BEV',
         licensePlate: 'MH12GH6789',
-        isDefault: false,
         imageUrl: '',
         createdAt: DateTime.parse('2024-07-10T09:30:00Z'),
         updatedAt: DateTime.parse('2024-07-10T09:30:00Z'),
@@ -79,7 +77,6 @@ class VehicleLocalDataSource {
         batteryCapacityKWh: 1.3,
         vehicleType: 'HEV',
         licensePlate: 'MH12TR5555',
-        isDefault: false,
         imageUrl: '',
         createdAt: DateTime.parse('2024-08-20T12:15:00Z'),
         updatedAt: DateTime.parse('2024-08-20T12:15:00Z'),
@@ -114,7 +111,7 @@ class VehicleLocalDataSource {
     }
 
     try {
-      final List<dynamic> jsonList = jsonDecode(cached) as List<dynamic>;
+      final jsonList = jsonDecode(cached) as List<dynamic>;
       final vehicles = jsonList
           .map((json) => VehicleModel.fromJson(json as Map<String, dynamic>))
           .where((v) => v.userId == userId)

@@ -42,7 +42,6 @@ class AdminCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
         border: Border.all(
           color: borderColor ?? colors.outline,
-          width: 1,
         ),
         boxShadow: elevation != null && elevation! > 0
             ? [
@@ -113,7 +112,6 @@ class AdminCardWithHeader extends StatelessWidget {
               border: Border(
                 bottom: BorderSide(
                   color: colors.divider,
-                  width: 1,
                 ),
               ),
             ),
@@ -198,7 +196,6 @@ class _AdminClickableCardState extends State<AdminClickableCard> {
           borderRadius: BorderRadius.circular(widget.borderRadius ?? 12.r),
           border: Border.all(
             color: _isHovered ? colors.primary.withValues(alpha: 0.3) : colors.outline,
-            width: 1,
           ),
         ),
         child: Material(

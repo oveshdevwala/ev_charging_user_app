@@ -8,7 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../extensions/admin_context_ext.dart';
-import '../theme/admin_colors.dart';
 
 /// Admin metric card widget.
 class AdminMetricCard extends StatelessWidget {
@@ -53,6 +52,7 @@ class AdminMetricCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // Header row with icon
             Row(
@@ -72,43 +72,48 @@ class AdminMetricCard extends StatelessWidget {
                     ),
                   ),
                 if (change != null)
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                    decoration: BoxDecoration(
-                      color: (isPositiveChange ?? true)
-                          ? colors.successContainer
-                          : colors.errorContainer,
-                      borderRadius: BorderRadius.circular(6.r),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          (isPositiveChange ?? true)
-                              ? Iconsax.arrow_up_3
-                              : Iconsax.arrow_down,
-                          size: 12.r,
-                          color: (isPositiveChange ?? true)
-                              ? colors.success
-                              : colors.error,
-                        ),
-                        SizedBox(width: 2.w),
-                        Text(
-                          change!,
-                          style: TextStyle(
-                            fontSize: 11.sp,
-                            fontWeight: FontWeight.w600,
+                  Flexible(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      decoration: BoxDecoration(
+                        color: (isPositiveChange ?? true)
+                            ? colors.successContainer
+                            : colors.errorContainer,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            (isPositiveChange ?? true)
+                                ? Iconsax.arrow_up_3
+                                : Iconsax.arrow_down,
+                            size: 12.r,
                             color: (isPositiveChange ?? true)
                                 ? colors.success
                                 : colors.error,
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 2.w),
+                          Flexible(
+                            child: Text(
+                              change!,
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                fontWeight: FontWeight.w600,
+                                color: (isPositiveChange ?? true)
+                                    ? colors.success
+                                    : colors.error,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
               ],
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 12.h),
 
             // Title
             Text(
@@ -118,6 +123,8 @@ class AdminMetricCard extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 color: colors.textSecondary,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
             SizedBox(height: 4.h),
 
@@ -125,22 +132,26 @@ class AdminMetricCard extends StatelessWidget {
             Text(
               value,
               style: TextStyle(
-                fontSize: 28.sp,
+                fontSize: 24.sp,
                 fontWeight: FontWeight.w700,
                 color: colors.textPrimary,
                 height: 1.2,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
 
             // Subtitle/change label
             if (subtitle != null || changeLabel != null) ...[
-              SizedBox(height: 8.h),
+              SizedBox(height: 4.h),
               Text(
                 subtitle ?? changeLabel ?? '',
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: 11.sp,
                   color: colors.textTertiary,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ],

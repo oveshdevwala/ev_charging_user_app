@@ -5,11 +5,10 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/core.dart';
-import '../../../routes/admin_routes.dart';
+import '../../stations/view/station_edit_page.dart';
 
 /// Dashboard quick actions.
 class DashboardQuickActions extends StatelessWidget {
@@ -17,8 +16,6 @@ class DashboardQuickActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.adminColors;
-
     return AdminCardWithHeader(
       title: AdminStrings.dashboardQuickActions,
       contentPadding: EdgeInsets.all(12.r),
@@ -27,7 +24,11 @@ class DashboardQuickActions extends StatelessWidget {
           _QuickActionButton(
             icon: Iconsax.add_circle,
             label: 'Add New Station',
-            onTap: () => context.push(AdminRoutes.stationCreate.path),
+            onTap: () => context.showAdminModal(
+              title: AdminStrings.stationsAddTitle,
+              maxWidth: 1000,
+              child: const StationEditPage(),
+            ),
           ),
           SizedBox(height: 8.h),
           _QuickActionButton(

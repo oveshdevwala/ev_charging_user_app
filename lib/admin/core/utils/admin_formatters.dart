@@ -10,7 +10,7 @@ abstract final class AdminFormatters {
   // ============ Currency ============
   
   /// Format as currency (USD).
-  static String currency(num value, {String symbol = '\$', int decimals = 2}) {
+  static String currency(num value, {String symbol = r'$', int decimals = 2}) {
     return '$symbol${value.toStringAsFixed(decimals)}';
   }
 
@@ -93,7 +93,7 @@ abstract final class AdminFormatters {
 
   /// Format date and time as "Jan 15, 2024 at 3:30 PM".
   static String dateTime(DateTime date) {
-    return DateFormat('MMM d, yyyy \'at\' h:mm a').format(date);
+    return DateFormat("MMM d, yyyy 'at' h:mm a").format(date);
   }
 
   /// Format as relative time (2 hours ago).

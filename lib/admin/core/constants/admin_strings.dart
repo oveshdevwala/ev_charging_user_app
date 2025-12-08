@@ -96,7 +96,7 @@ abstract final class AdminStrings {
   static const String dashboardWelcome = 'Welcome back, Admin!';
   static const String dashboardTotalStations = 'Total Stations';
   static const String dashboardActiveUsers = 'Active Users';
-  static const String dashboardTodaySessions = 'Today\'s Sessions';
+  static const String dashboardTodaySessions = "Today's Sessions";
   static const String dashboardRevenue = 'Revenue';
   static const String dashboardRecentActivity = 'Recent Activity';
   static const String dashboardQuickActions = 'Quick Actions';

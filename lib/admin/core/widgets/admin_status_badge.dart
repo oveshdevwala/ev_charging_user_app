@@ -136,12 +136,15 @@ class AdminStatusBadge extends StatelessWidget {
             Icon(icon, size: iconSize, color: foregroundColor ?? fgColor),
             SizedBox(width: 4.w),
           ],
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.w600,
-              color: foregroundColor ?? fgColor,
+          Flexible(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.w600,
+                color: foregroundColor ?? fgColor,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

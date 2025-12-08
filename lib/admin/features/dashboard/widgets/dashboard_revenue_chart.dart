@@ -3,9 +3,9 @@
 /// Belongs To: admin/features/dashboard/widgets
 library;
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 import '../../../core/core.dart';
 
@@ -31,7 +31,6 @@ class DashboardRevenueChart extends StatelessWidget {
         child: LineChart(
           LineChartData(
             gridData: FlGridData(
-              show: true,
               drawVerticalLine: false,
               horizontalInterval: 1000,
               getDrawingHorizontalLine: (value) => FlLine(
@@ -69,8 +68,8 @@ class DashboardRevenueChart extends StatelessWidget {
                   },
                 ),
               ),
-              rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              rightTitles: const AxisTitles(),
+              topTitles: const AxisTitles(),
             ),
             borderData: FlBorderData(show: false),
             lineBarsData: [
@@ -88,7 +87,7 @@ class DashboardRevenueChart extends StatelessWidget {
                 color: colors.primary,
                 barWidth: 3,
                 isStrokeCapRound: true,
-                dotData: FlDotData(show: false),
+                dotData: const FlDotData(show: false),
                 belowBarData: BarAreaData(
                   show: true,
                   color: colors.primary.withValues(alpha: 0.1),

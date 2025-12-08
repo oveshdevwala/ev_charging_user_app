@@ -32,7 +32,7 @@ class DashboardMetrics extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           mainAxisSpacing: 16.h,
           crossAxisSpacing: 16.w,
-          childAspectRatio: constraints.maxWidth / crossAxisCount / 160,
+          childAspectRatio: constraints.maxWidth / crossAxisCount / 180,
           children: [
             AdminMetricCard(
               title: AdminStrings.dashboardTotalStations,
@@ -66,7 +66,7 @@ class DashboardMetrics extends StatelessWidget {
             ),
             AdminMetricCard(
               title: AdminStrings.dashboardRevenue,
-              value: '\$5,680',
+              value: r'$5,680',
               icon: Iconsax.dollar_circle,
               iconColor: colors.success,
               iconBackgroundColor: colors.successContainer,

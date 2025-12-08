@@ -39,7 +39,7 @@ class TripCalculator {
     if (efficiencyScores.isEmpty) {
       return 0;
     }
-    final sum = efficiencyScores.fold(0.0, (sum, score) => sum + score);
+    final sum = efficiencyScores.fold<double>(0, (sum, score) => sum + score);
     return sum / efficiencyScores.length;
   }
 }

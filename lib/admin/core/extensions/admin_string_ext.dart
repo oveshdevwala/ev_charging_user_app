@@ -29,9 +29,9 @@ extension AdminStringExt on String {
   String get snakeCase {
     if (isEmpty) return this;
     return replaceAllMapped(
-      RegExp(r'[A-Z]'),
+      RegExp('[A-Z]'),
       (match) => '_${match.group(0)!.toLowerCase()}',
-    ).replaceAll(RegExp(r'^_'), '').replaceAll(RegExp(r'[\s-]+'), '_').toLowerCase();
+    ).replaceAll(RegExp('^_'), '').replaceAll(RegExp(r'[\s-]+'), '_').toLowerCase();
   }
 
   /// Convert to kebab-case.
@@ -102,7 +102,7 @@ extension AdminStringExt on String {
   }
 
   /// Format as currency.
-  String asCurrency({String symbol = '\$', int decimals = 2}) {
+  String asCurrency({String symbol = r'$', int decimals = 2}) {
     final number = toDoubleOrNull;
     if (number == null) return this;
     return '$symbol${number.toStringAsFixed(decimals)}';

@@ -40,7 +40,7 @@ class DashboardRecentActivity extends StatelessWidget {
             icon: Iconsax.card,
             iconColor: colors.success,
             title: 'Payment received',
-            subtitle: '\$28.50 from Alex Thompson',
+            subtitle: r'$28.50 from Alex Thompson',
             time: '15 min ago',
           ),
           Divider(height: 1, color: colors.divider),

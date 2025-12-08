@@ -10,8 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../theme/admin_theme_extensions.dart';
 import '../../routes/admin_routes.dart';
+import '../theme/admin_theme_extensions.dart';
+import '../widgets/admin_modal_sheet.dart';
 
 // ============================================================
 // Theme & Color Extensions
@@ -220,6 +221,39 @@ extension AdminContextBreakpointExt on BuildContext {
       return tablet;
     }
     return mobile;
+  }
+}
+
+// ============================================================
+// Modal Sheet Extensions
+// ============================================================
+
+/// Extension for showing admin modal sheets.
+extension AdminContextModalExt on BuildContext {
+  /// Show an adaptive admin modal sheet (full-screen on mobile, centered on desktop).
+  Future<T?> showAdminModal<T>({
+    required Widget child,
+    String? title,
+    bool showCloseButton = true,
+    double? width,
+    double? height,
+    double maxWidth = 800,
+    double maxHeight = 900,
+    bool isDismissible = true,
+    bool enableDrag = true,
+  }) {
+    return AdminModalSheet.show<T>(
+      context: this,
+      child: child,
+      title: title,
+      showCloseButton: showCloseButton,
+      width: width,
+      height: height,
+      maxWidth: maxWidth,
+      maxHeight: maxHeight,
+      isDismissible: isDismissible,
+      enableDrag: enableDrag,
+    );
   }
 }
 

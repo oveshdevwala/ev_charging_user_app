@@ -9,8 +9,8 @@ library;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'admin_light_theme.dart';
 import 'admin_dark_theme.dart';
+import 'admin_light_theme.dart';
 
 /// Admin theme wrapper providing easy access to light/dark themes.
 abstract final class AdminTheme {

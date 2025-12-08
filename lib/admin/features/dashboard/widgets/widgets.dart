@@ -4,8 +4,8 @@
 library;
 
 export 'dashboard_metrics.dart';
+export 'dashboard_quick_actions.dart';
+export 'dashboard_recent_activity.dart';
 export 'dashboard_revenue_chart.dart';
 export 'dashboard_sessions_chart.dart';
-export 'dashboard_recent_activity.dart';
-export 'dashboard_quick_actions.dart';
 

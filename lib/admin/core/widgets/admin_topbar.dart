@@ -12,16 +12,10 @@ import 'package:iconsax/iconsax.dart';
 
 import '../config/admin_config.dart';
 import '../extensions/admin_context_ext.dart';
-import '../theme/admin_theme.dart';
 
 /// Admin topbar widget.
 class AdminTopbar extends StatelessWidget {
-  const AdminTopbar({
-    super.key,
-    this.title,
-    this.onMenuPressed,
-    this.actions,
-  });
+  const AdminTopbar({super.key, this.title, this.onMenuPressed, this.actions});
 
   final String? title;
   final VoidCallback? onMenuPressed;
@@ -36,23 +30,14 @@ class AdminTopbar extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
         color: colors.surface,
-        border: Border(
-          bottom: BorderSide(
-            color: colors.divider,
-            width: 1,
-          ),
-        ),
+        border: Border(bottom: BorderSide(color: colors.divider)),
       ),
       child: Row(
         children: [
           // Menu toggle button
           IconButton(
             onPressed: onMenuPressed,
-            icon: Icon(
-              Iconsax.menu_1,
-              size: 20.r,
-              color: colors.textSecondary,
-            ),
+            icon: Icon(Iconsax.menu_1, size: 20.r, color: colors.textSecondary),
           ),
 
           // Title
@@ -71,10 +56,7 @@ class AdminTopbar extends StatelessWidget {
           const Spacer(),
 
           // Custom actions
-          if (actions != null) ...[
-            ...actions!,
-            SizedBox(width: 8.w),
-          ],
+          if (actions != null) ...[...actions!, SizedBox(width: 8.w)],
 
           // Search button
           _TopbarIconButton(
@@ -109,8 +91,8 @@ class _TopbarIconButton extends StatelessWidget {
   const _TopbarIconButton({
     required this.icon,
     required this.onPressed,
-    this.tooltip,
     this.badge,
+    this.tooltip,
   });
 
   final IconData icon;
@@ -128,11 +110,7 @@ class _TopbarIconButton extends StatelessWidget {
         children: [
           IconButton(
             onPressed: onPressed,
-            icon: Icon(
-              icon,
-              size: 20.r,
-              color: colors.textSecondary,
-            ),
+            icon: Icon(icon, size: 20.r, color: colors.textSecondary),
             style: IconButton.styleFrom(
               backgroundColor: colors.surfaceVariant.withValues(alpha: 0.5),
               shape: RoundedRectangleBorder(
@@ -150,10 +128,7 @@ class _TopbarIconButton extends StatelessWidget {
                   color: colors.error,
                   shape: BoxShape.circle,
                 ),
-                constraints: BoxConstraints(
-                  minWidth: 16.r,
-                  minHeight: 16.r,
-                ),
+                constraints: BoxConstraints(minWidth: 16.r, minHeight: 16.r),
                 child: Text(
                   badge! > 99 ? '99+' : '$badge',
                   style: TextStyle(
@@ -207,9 +182,7 @@ class _NotificationButton extends StatelessWidget {
 
     return PopupMenuButton<String>(
       offset: Offset(0, 50.h),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.r),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       child: Stack(
         children: [
           Container(
@@ -306,11 +279,7 @@ class _NotificationButton extends StatelessWidget {
                 color: colors.primaryContainer,
                 borderRadius: BorderRadius.circular(8.r),
               ),
-              child: Icon(
-                n.$3,
-                size: 16.r,
-                color: colors.primary,
-              ),
+              child: Icon(n.$3, size: 16.r, color: colors.primary),
             ),
             SizedBox(width: 12.w),
             Expanded(
@@ -349,9 +318,7 @@ class _ProfileDropdown extends StatelessWidget {
 
     return PopupMenuButton<String>(
       offset: Offset(0, 50.h),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.r),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       child: Row(
         children: [
           CircleAvatar(
@@ -381,10 +348,7 @@ class _ProfileDropdown extends StatelessWidget {
               ),
               Text(
                 'Super Admin',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: colors.textTertiary,
-                ),
+                style: TextStyle(fontSize: 11.sp, color: colors.textTertiary),
               ),
             ],
           ),
@@ -402,7 +366,7 @@ class _ProfileDropdown extends StatelessWidget {
             children: [
               Icon(Iconsax.user, size: 18.r, color: colors.textSecondary),
               SizedBox(width: 12.w),
-              Text('My Profile'),
+              const Text('My Profile'),
             ],
           ),
         ),
@@ -411,7 +375,7 @@ class _ProfileDropdown extends StatelessWidget {
             children: [
               Icon(Iconsax.setting_2, size: 18.r, color: colors.textSecondary),
               SizedBox(width: 12.w),
-              Text('Settings'),
+              const Text('Settings'),
             ],
           ),
         ),
@@ -429,4 +393,3 @@ class _ProfileDropdown extends StatelessWidget {
     );
   }
 }
-

@@ -31,7 +31,6 @@ class AdminAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.adminColors;
     final effectiveBorderRadius = borderRadius ?? size / 2;
 
     if (imageUrl != null && imageUrl!.isNotEmpty) {
@@ -160,7 +159,7 @@ class AdminAvatarGroup extends StatelessWidget {
           for (var i = 0; i < visibleCount; i++)
             Positioned(
               left: i * (effectiveSize - overlapAmount),
-              child: Container(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(

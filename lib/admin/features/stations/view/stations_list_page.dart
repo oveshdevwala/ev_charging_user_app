@@ -6,16 +6,13 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/core.dart';
 import '../../../models/admin_station_model.dart';
-import '../../../routes/admin_routes.dart';
-import '../bloc/stations_bloc.dart';
-import '../bloc/stations_event.dart';
-import '../bloc/stations_state.dart';
 import '../stations.dart';
+import 'station_detail_page.dart';
+import 'station_edit_page.dart';
 
 /// Stations list page.
 class StationsListPage extends StatelessWidget {
@@ -35,14 +32,10 @@ class _StationsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.adminColors;
-
-    return AdminShell(
-      currentRoute: AdminRoutes.stations.path,
-      title: AdminStrings.navStations,
-      child: BlocBuilder<StationsBloc, StationsState>(
+    return BlocBuilder<StationsBloc, StationsState>(
         builder: (context, state) {
           return AdminPageContent(
+            scrollable: false,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -64,8 +57,11 @@ class _StationsListView extends StatelessWidget {
                     AdminButton(
                       label: AdminStrings.actionCreate,
                       icon: Iconsax.add,
-                      onPressed: () =>
-                          context.push(AdminRoutes.stationCreate.path),
+                      onPressed: () => context.showAdminModal(
+                        title: AdminStrings.stationsAddTitle,
+                        maxWidth: 1000,
+                        child: const StationEditPage(),
+                      ),
                     ),
                   ],
                 ),
@@ -81,7 +77,7 @@ class _StationsListView extends StatelessWidget {
                 _StationsFilters(state: state),
                 SizedBox(height: 16.h),
 
-                // Table
+                // Table with constrained height
                 Expanded(
                   child: AdminCard(
                     padding: EdgeInsets.zero,
@@ -108,8 +104,7 @@ class _StationsListView extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
+      );
   }
 }
 
@@ -171,8 +166,6 @@ class _StationsFilters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.adminColors;
-
     return Row(
       children: [
         // Search
@@ -238,7 +231,11 @@ class _StationsTable extends StatelessWidget {
         title: AdminStrings.stationsEmptyState,
         message: 'No stations match your search criteria.',
         actionLabel: 'Add Station',
-        onAction: () => context.push(AdminRoutes.stationCreate.path),
+        onAction: () => context.showAdminModal(
+          title: AdminStrings.stationsAddTitle,
+          maxWidth: 1000,
+          child: const StationEditPage(),
+        ),
       );
     }
 
@@ -355,33 +352,43 @@ class _StationsTable extends StatelessWidget {
         AdminDataColumn(
           id: 'actions',
           label: '',
-          width: 100.w,
+          width: 120.w,
           alignment: Alignment.centerRight,
           cellBuilder: (station) => Row(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AdminIconButton(
                 icon: Iconsax.eye,
                 size: 32,
                 tooltip: 'View',
-                onPressed: () =>
-                    context.push(AdminRoutes.stationDetail.id(station.id)),
+                onPressed: () => context.showAdminModal(
+                  title: AdminStrings.stationsDetailTitle,
+                  maxWidth: 1200,
+                  child: StationDetailPage(stationId: station.id),
+                ),
               ),
               SizedBox(width: 4.w),
               AdminIconButton(
                 icon: Iconsax.edit_2,
                 size: 32,
                 tooltip: 'Edit',
-                onPressed: () =>
-                    context.push(AdminRoutes.stationEdit.id(station.id)),
+                onPressed: () => context.showAdminModal(
+                  title: AdminStrings.stationsEditTitle,
+                  maxWidth: 1000,
+                  child: StationEditPage(stationId: station.id),
+                ),
               ),
             ],
           ),
         ),
       ],
       items: state.paginatedStations,
-      onRowTap: (station) =>
-          context.push(AdminRoutes.stationDetail.id(station.id)),
+      onRowTap: (station) => context.showAdminModal(
+        title: AdminStrings.stationsDetailTitle,
+        maxWidth: 1200,
+        child: StationDetailPage(stationId: station.id),
+      ),
       isLoading: state.isLoading,
     );
   }

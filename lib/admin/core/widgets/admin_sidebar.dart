@@ -11,11 +11,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../routes/admin_routes.dart';
 import '../config/admin_config.dart';
 import '../constants/admin_strings.dart';
 import '../extensions/admin_context_ext.dart';
 import '../theme/admin_colors.dart';
-import '../../routes/admin_routes.dart';
 
 /// Sidebar navigation item data.
 class SidebarItemData {
@@ -52,11 +52,15 @@ class AdminSidebar extends StatefulWidget {
     super.key,
     this.isCollapsed = false,
     this.onItemSelected,
+    this.onViewChanged,
+    this.currentViewIndex,
   });
 
   final String currentRoute;
   final bool isCollapsed;
   final VoidCallback? onItemSelected;
+  final void Function(int index)? onViewChanged;
+  final int? currentViewIndex;
 
   @override
   State<AdminSidebar> createState() => _AdminSidebarState();
@@ -64,6 +68,25 @@ class AdminSidebar extends StatefulWidget {
 
 class _AdminSidebarState extends State<AdminSidebar> {
   final Set<String> _expandedItems = {};
+
+  /// Map routes to view indices for tab switching.
+  static const Map<AdminRoutes, int> _routeToIndex = {
+    AdminRoutes.dashboard: 0,
+    AdminRoutes.stations: 1,
+    AdminRoutes.managers: 2,
+    AdminRoutes.users: 3,
+    AdminRoutes.sessions: 4,
+    AdminRoutes.payments: 5,
+    AdminRoutes.wallets: 6,
+    AdminRoutes.offers: 7,
+    AdminRoutes.partners: 8,
+    AdminRoutes.reviews: 9,
+    AdminRoutes.reports: 10,
+    AdminRoutes.content: 11,
+    AdminRoutes.media: 12,
+    AdminRoutes.logs: 13,
+    AdminRoutes.settings: 14,
+  };
 
   /// Sidebar sections with items.
   static const List<SidebarSectionData> _sections = [
@@ -183,7 +206,6 @@ class _AdminSidebarState extends State<AdminSidebar> {
         border: Border(
           right: BorderSide(
             color: colors.divider,
-            width: 1,
           ),
         ),
       ),
@@ -228,7 +250,6 @@ class _AdminSidebarState extends State<AdminSidebar> {
         border: Border(
           bottom: BorderSide(
             color: colors.divider,
-            width: 1,
           ),
         ),
       ),
@@ -293,7 +314,7 @@ class _AdminSidebarState extends State<AdminSidebar> {
                 fontSize: 10.sp,
                 fontWeight: FontWeight.w600,
                 color: colors.textTertiary,
-                letterSpacing: 1.0,
+                letterSpacing: 1,
               ),
             ),
           ),
@@ -304,7 +325,11 @@ class _AdminSidebarState extends State<AdminSidebar> {
 
   Widget _buildItem(BuildContext context, SidebarItemData item) {
     final colors = context.adminColors;
-    final isSelected = widget.currentRoute.startsWith(item.route.path);
+    // Use index-based selection if available, otherwise fallback to route matching
+    final itemIndex = _routeToIndex[item.route];
+    final isSelected = widget.currentViewIndex != null && itemIndex != null
+        ? widget.currentViewIndex == itemIndex
+        : widget.currentRoute.startsWith(item.route.path);
     final hasChildren = item.children != null && item.children!.isNotEmpty;
     final isExpanded = _expandedItems.contains(item.title);
 
@@ -323,7 +348,15 @@ class _AdminSidebarState extends State<AdminSidebar> {
                   }
                 });
               } else {
-                context.go(item.route.path);
+                // Update view index and URL for proper web navigation
+                final index = _routeToIndex[item.route];
+                if (index != null && widget.onViewChanged != null) {
+                  // This will update IndexedStack and URL via AdminMainPage
+                  widget.onViewChanged!(index);
+                } else {
+                  // Fallback to navigation for routes not in main tabs
+                  context.go(item.route.path);
+                }
                 widget.onItemSelected?.call();
               }
             },
@@ -406,7 +439,6 @@ class _AdminSidebarState extends State<AdminSidebar> {
         border: Border(
           top: BorderSide(
             color: colors.divider,
-            width: 1,
           ),
         ),
       ),

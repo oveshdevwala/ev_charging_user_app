@@ -5,7 +5,6 @@ library;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../models/admin_station_model.dart';
 import '../repository/stations_repository.dart';
 import 'stations_event.dart';
 import 'stations_state.dart';
@@ -33,7 +32,7 @@ class StationsBloc extends Bloc<StationsEvent, StationsState> {
     StationsLoadRequested event,
     Emitter<StationsState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
 
     try {
       final stations = await _repository.getStations(
@@ -85,7 +84,7 @@ class StationsBloc extends Bloc<StationsEvent, StationsState> {
     StationsSortChanged event,
     Emitter<StationsState> emit,
   ) async {
-    final newAscending = state.sortBy == event.sortBy ? !state.sortAscending : true;
+    final newAscending = !(state.sortBy == event.sortBy) || !state.sortAscending;
     emit(state.copyWith(
       sortBy: event.sortBy,
       sortAscending: newAscending,
@@ -128,7 +127,7 @@ class StationsBloc extends Bloc<StationsEvent, StationsState> {
     StationDetailLoadRequested event,
     Emitter<StationsState> emit,
   ) async {
-    emit(state.copyWith(isLoadingDetail: true, selectedStation: null));
+    emit(state.copyWith(isLoadingDetail: true));
 
     try {
       final station = await _repository.getStationById(event.stationId);

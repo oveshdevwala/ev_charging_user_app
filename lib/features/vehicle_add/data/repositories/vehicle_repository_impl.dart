@@ -53,7 +53,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
           // Fallback to local on network error
           result = await _localDataSource.addVehicle(model);
           return Either.left(
-            NetworkFailure(message: 'Network error: ${e.toString()}'),
+            NetworkFailure(message: 'Network error: $e'),
           );
         }
       }
@@ -63,7 +63,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
       return Either.left(e);
     } catch (e) {
       return Either.left(
-        UnknownFailure(message: 'Failed to add vehicle: ${e.toString()}'),
+        UnknownFailure(message: 'Failed to add vehicle: $e'),
       );
     }
   }
@@ -84,7 +84,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
           models = await _localDataSource.getVehicles(userId);
           if (models.isEmpty) {
             return Either.left(
-              NetworkFailure(message: 'Network error: ${e.toString()}'),
+              NetworkFailure(message: 'Network error: $e'),
             );
           }
         }
@@ -93,7 +93,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
       return Either.right(models.map((m) => m.toEntity()).toList());
     } catch (e) {
       return Either.left(
-        UnknownFailure(message: 'Failed to get vehicles: ${e.toString()}'),
+        UnknownFailure(message: 'Failed to get vehicles: $e'),
       );
     }
   }
@@ -113,7 +113,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
       }
 
       if (model == null) {
-        return Either.left(
+        return const Either.left(
           UnknownFailure(message: 'Vehicle not found'),
         );
       }
@@ -121,7 +121,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
       return Either.right(model.toEntity());
     } catch (e) {
       return Either.left(
-        UnknownFailure(message: 'Failed to get vehicle: ${e.toString()}'),
+        UnknownFailure(message: 'Failed to get vehicle: $e'),
       );
     }
   }
@@ -133,7 +133,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
     try {
       final existing = await _localDataSource.getVehicle(params.vehicleId);
       if (existing == null) {
-        return Either.left(
+        return const Either.left(
           UnknownFailure(message: 'Vehicle not found'),
         );
       }
@@ -162,7 +162,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
         } catch (e) {
           result = await _localDataSource.updateVehicle(updated);
           return Either.left(
-            NetworkFailure(message: 'Network error: ${e.toString()}'),
+            NetworkFailure(message: 'Network error: $e'),
           );
         }
       }
@@ -170,7 +170,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
       return Either.right(result.toEntity());
     } catch (e) {
       return Either.left(
-        UnknownFailure(message: 'Failed to update vehicle: ${e.toString()}'),
+        UnknownFailure(message: 'Failed to update vehicle: $e'),
       );
     }
   }
@@ -187,15 +187,15 @@ class VehicleRepositoryImpl implements VehicleRepository {
         } catch (e) {
           await _localDataSource.deleteVehicle(vehicleId);
           return Either.left(
-            NetworkFailure(message: 'Network error: ${e.toString()}'),
+            NetworkFailure(message: 'Network error: $e'),
           );
         }
       }
 
-      return Either.right(null);
+      return const Either.right(null);
     } catch (e) {
       return Either.left(
-        UnknownFailure(message: 'Failed to delete vehicle: ${e.toString()}'),
+        UnknownFailure(message: 'Failed to delete vehicle: $e'),
       );
     }
   }
@@ -226,7 +226,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
         } catch (e) {
           result = await _localDataSource.setDefaultVehicle(userId, vehicleId);
           return Either.left(
-            NetworkFailure(message: 'Network error: ${e.toString()}'),
+            NetworkFailure(message: 'Network error: $e'),
           );
         }
       }
@@ -235,7 +235,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
     } catch (e) {
       return Either.left(
         UnknownFailure(
-          message: 'Failed to set default vehicle: ${e.toString()}',
+          message: 'Failed to set default vehicle: $e',
         ),
       );
     }

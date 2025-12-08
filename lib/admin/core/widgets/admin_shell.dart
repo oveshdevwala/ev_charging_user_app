@@ -24,6 +24,8 @@ class AdminShell extends StatefulWidget {
     this.title,
     this.actions,
     this.floatingActionButton,
+    this.onViewChanged,
+    this.currentViewIndex,
   });
 
   final Widget child;
@@ -31,6 +33,8 @@ class AdminShell extends StatefulWidget {
   final String? title;
   final List<Widget>? actions;
   final Widget? floatingActionButton;
+  final void Function(int index)? onViewChanged;
+  final int? currentViewIndex;
 
   @override
   State<AdminShell> createState() => _AdminShellState();
@@ -70,8 +74,9 @@ class _AdminShellState extends State<AdminShell> {
               width: AdminConfig.sidebarWidth,
               child: AdminSidebar(
                 currentRoute: widget.currentRoute,
-                isCollapsed: false,
                 onItemSelected: () => Navigator.of(context).pop(),
+                onViewChanged: widget.onViewChanged,
+                currentViewIndex: widget.currentViewIndex,
               ),
             )
           : null,
@@ -87,6 +92,8 @@ class _AdminShellState extends State<AdminShell> {
               child: AdminSidebar(
                 currentRoute: widget.currentRoute,
                 isCollapsed: _isSidebarCollapsed,
+                onViewChanged: widget.onViewChanged,
+                currentViewIndex: widget.currentViewIndex,
               ),
             ),
 
@@ -103,7 +110,7 @@ class _AdminShellState extends State<AdminShell> {
 
                 // Page content
                 Expanded(
-                  child: Container(
+                  child: ColoredBox(
                     color: colors.background,
                     child: widget.child,
                   ),
@@ -215,7 +222,6 @@ class AdminPageHeader extends StatelessWidget {
 
         // Title and actions row
         Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               child: Column(

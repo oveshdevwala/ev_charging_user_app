@@ -123,7 +123,7 @@ class AdminDataTable<T> extends StatelessWidget {
       );
     }
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.surface,
         borderRadius: BorderRadius.circular(12.r),
@@ -147,7 +147,7 @@ class AdminDataTable<T> extends StatelessWidget {
                         value: selectedItems?.length == items.length && items.isNotEmpty,
                         tristate: true,
                         onChanged: (value) {
-                          if (value == true) {
+                          if (value ?? false) {
                             onSelectionChanged?.call(items.toSet());
                           } else {
                             onSelectionChanged?.call({});
@@ -206,19 +206,23 @@ class AdminDataTable<T> extends StatelessWidget {
     Widget cell = Padding(
       padding: EdgeInsets.symmetric(horizontal: AdminConfig.tableCellPadding.w),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: column.alignment == Alignment.centerRight
             ? MainAxisAlignment.end
             : column.alignment == Alignment.center
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.start,
         children: [
-          Text(
-            column.label.toUpperCase(),
-            style: TextStyle(
-              fontSize: 11.sp,
-              fontWeight: FontWeight.w600,
-              color: isSorted ? colors.primary : colors.textSecondary,
-              letterSpacing: 0.5,
+          Flexible(
+            child: Text(
+              column.label.toUpperCase(),
+              style: TextStyle(
+                fontSize: 11.sp,
+                fontWeight: FontWeight.w600,
+                color: isSorted ? colors.primary : colors.textSecondary,
+                letterSpacing: 0.5,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           if (column.sortable) ...[
@@ -238,7 +242,7 @@ class AdminDataTable<T> extends StatelessWidget {
     if (column.sortable && onSort != null) {
       cell = InkWell(
         onTap: () {
-          final newAscending = isSorted ? !isAscending : true;
+          final newAscending = !isSorted || !isAscending;
           onSort!(column.id, newAscending);
         },
         child: cell,
@@ -300,7 +304,6 @@ class _DataRowState<T> extends State<_DataRow<T>> {
                 : Border(
                     bottom: BorderSide(
                       color: colors.tableBorder,
-                      width: 1,
                     ),
                   ),
           ),
@@ -319,7 +322,7 @@ class _DataRowState<T> extends State<_DataRow<T>> {
                 ),
               
               // Data cells
-              ...widget.columns.map((column) => _buildDataCell(column)),
+              ...widget.columns.map(_buildDataCell),
             ],
           ),
         ),
@@ -328,7 +331,7 @@ class _DataRowState<T> extends State<_DataRow<T>> {
   }
 
   Widget _buildDataCell(AdminDataColumn<T> column) {
-    Widget cell = Padding(
+    final Widget cell = Padding(
       padding: EdgeInsets.symmetric(horizontal: AdminConfig.tableCellPadding.w),
       child: Align(
         alignment: column.alignment,

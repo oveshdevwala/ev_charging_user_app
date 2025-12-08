@@ -16,42 +16,42 @@ abstract final class AdminConfig {
   static const int maxPageSize = 100;
 
   // ============ Table ============
-  static const double tableRowHeight = 52.0;
-  static const double tableHeaderHeight = 48.0;
-  static const double tableCellPadding = 16.0;
+  static const double tableRowHeight = 52;
+  static const double tableHeaderHeight = 48;
+  static const double tableCellPadding = 16;
 
   // ============ Sidebar ============
-  static const double sidebarWidth = 280.0;
-  static const double sidebarCollapsedWidth = 72.0;
-  static const double sidebarBreakpoint = 1024.0;
+  static const double sidebarWidth = 280;
+  static const double sidebarCollapsedWidth = 72;
+  static const double sidebarBreakpoint = 1024;
 
   // ============ Topbar ============
-  static const double topbarHeight = 64.0;
+  static const double topbarHeight = 64;
 
   // ============ Cards ============
-  static const double cardBorderRadius = 12.0;
-  static const double cardPadding = 20.0;
+  static const double cardBorderRadius = 12;
+  static const double cardPadding = 20;
 
   // ============ Buttons ============
-  static const double buttonHeight = 44.0;
-  static const double buttonBorderRadius = 8.0;
-  static const double iconButtonSize = 40.0;
+  static const double buttonHeight = 44;
+  static const double buttonBorderRadius = 8;
+  static const double iconButtonSize = 40;
 
   // ============ Inputs ============
-  static const double inputHeight = 44.0;
-  static const double inputBorderRadius = 8.0;
+  static const double inputHeight = 44;
+  static const double inputBorderRadius = 8;
 
   // ============ Spacing ============
-  static const double spacingXs = 4.0;
-  static const double spacingSm = 8.0;
-  static const double spacingMd = 16.0;
-  static const double spacingLg = 24.0;
-  static const double spacingXl = 32.0;
-  static const double spacingXxl = 48.0;
+  static const double spacingXs = 4;
+  static const double spacingSm = 8;
+  static const double spacingMd = 16;
+  static const double spacingLg = 24;
+  static const double spacingXl = 32;
+  static const double spacingXxl = 48;
 
   // ============ Content ============
-  static const double contentMaxWidth = 1400.0;
-  static const double contentPadding = 24.0;
+  static const double contentMaxWidth = 1400;
+  static const double contentPadding = 24;
 
   // ============ Animation ============
   static const Duration animationFast = Duration(milliseconds: 150);

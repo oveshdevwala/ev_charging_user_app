@@ -14,10 +14,8 @@ import '../../../../../core/extensions/context_ext.dart';
 /// Vehicle image picker widget.
 class VehicleImagePicker extends StatelessWidget {
   const VehicleImagePicker({
-    this.imageFile,
+    required this.onImagePicked, required this.onImageRemoved, this.imageFile,
     this.imageUrl,
-    required this.onImagePicked,
-    required this.onImageRemoved,
     super.key,
   });
 
@@ -43,7 +41,7 @@ class VehicleImagePicker extends StatelessWidget {
           children: [
             ListTile(
               leading: Icon(Icons.camera_alt, size: 24.r),
-              title: Text('Take Photo'),
+              title: const Text('Take Photo'),
               onTap: () {
                 Navigator.pop(context);
                 _pickImage(context, ImageSource.camera);
@@ -51,7 +49,7 @@ class VehicleImagePicker extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.photo_library, size: 24.r),
-              title: Text('Choose from Gallery'),
+              title: const Text('Choose from Gallery'),
               onTap: () {
                 Navigator.pop(context);
                 _pickImage(context, ImageSource.gallery);
@@ -86,7 +84,6 @@ class VehicleImagePicker extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
             color: context.appColors.outline,
-            width: 1,
           ),
         ),
         child: hasImage

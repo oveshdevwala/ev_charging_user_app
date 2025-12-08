@@ -11,10 +11,10 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../core/core.dart';
 import '../../../models/admin_station_model.dart';
-import '../../../routes/admin_routes.dart';
 import '../bloc/stations_bloc.dart';
 import '../bloc/stations_event.dart';
 import '../bloc/stations_state.dart';
+import 'station_edit_page.dart';
 
 /// Station detail page.
 class StationDetailPage extends StatelessWidget {
@@ -41,105 +41,105 @@ class _StationDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.adminColors;
 
-    return AdminShell(
-      currentRoute: AdminRoutes.stations.path,
-      title: AdminStrings.stationsDetailTitle,
-      child: BlocBuilder<StationsBloc, StationsState>(
-        builder: (context, state) {
-          if (state.isLoadingDetail) {
-            return const AdminLoadingPage(
-              message: 'Loading station details...',
-            );
-          }
+    return BlocBuilder<StationsBloc, StationsState>(
+      builder: (context, state) {
+        if (state.isLoadingDetail) {
+          return const AdminLoadingPage(message: 'Loading station details...');
+        }
 
-          final station = state.selectedStation;
-          if (station == null) {
-            return AdminEmptyState(
-              icon: Iconsax.gas_station,
-              title: 'Station not found',
-              message: 'The station you are looking for does not exist.',
-              actionLabel: 'Go back',
-              onAction: () => context.pop(),
-            );
-          }
-
-          return AdminPageContent(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header with breadcrumbs
-                AdminPageHeader(
-                  title: station.name,
-                  subtitle: station.address,
-                  breadcrumbs: [AdminStrings.navStations, station.name],
-                  actions: [
-                    AdminButton(
-                      label: AdminStrings.actionEdit,
-                      variant: AdminButtonVariant.outlined,
-                      icon: Iconsax.edit_2,
-                      onPressed: () =>
-                          context.push(AdminRoutes.stationEdit.id(station.id)),
-                    ),
-                    AdminButton(
-                      label: AdminStrings.actionDelete,
-                      variant: AdminButtonVariant.outlined,
-                      icon: Iconsax.trash,
-                      backgroundColor: colors.error,
-                      foregroundColor: colors.error,
-                      onPressed: () async {
-                        final confirm = await showAdminDeleteDialog(
-                          context,
-                          itemName: 'station',
-                        );
-                        if ((confirm ?? false) && context.mounted) {
-                          context.read<StationsBloc>().add(
-                            StationDeleteRequested(station.id),
-                          );
-                          context.pop();
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(height: 24.h),
-
-                // Content
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Main info
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        children: [
-                          _StationOverviewCard(station: station),
-                          SizedBox(height: 16.h),
-                          _StationChargersCard(station: station),
-                          SizedBox(height: 16.h),
-                          _StationAmenitiesCard(station: station),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 24.w),
-                    // Side info
-                    Expanded(
-                      child: Column(
-                        children: [
-                          _StationStatsCard(station: station),
-                          SizedBox(height: 16.h),
-                          _StationManagerCard(station: station),
-                          SizedBox(height: 16.h),
-                          _StationContactCard(station: station),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+        final station = state.selectedStation;
+        if (station == null) {
+          return AdminEmptyState(
+            icon: Iconsax.gas_station,
+            title: 'Station not found',
+            message: 'The station you are looking for does not exist.',
+            actionLabel: 'Go back',
+            onAction: () => context.pop(),
           );
-        },
-      ),
+        }
+
+        return AdminPageContent(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with breadcrumbs
+              AdminPageHeader(
+                title: station.name,
+                subtitle: station.address,
+                breadcrumbs: [AdminStrings.navStations, station.name],
+                actions: [
+                  AdminButton(
+                    label: AdminStrings.actionEdit,
+                    variant: AdminButtonVariant.outlined,
+                    icon: Iconsax.edit_2,
+                    onPressed: () {
+                      context.pop(); // Close detail modal first
+                      context.showAdminModal(
+                        title: AdminStrings.stationsEditTitle,
+                        maxWidth: 1000,
+                        child: StationEditPage(stationId: station.id),
+                      );
+                    },
+                  ),
+                  AdminButton(
+                    label: AdminStrings.actionDelete,
+                    variant: AdminButtonVariant.outlined,
+                    icon: Iconsax.trash,
+                    backgroundColor: colors.error,
+                    foregroundColor: colors.error,
+                    onPressed: () async {
+                      final confirm = await showAdminDeleteDialog(
+                        context,
+                        itemName: 'station',
+                      );
+                      if ((confirm ?? false) && context.mounted) {
+                        context.read<StationsBloc>().add(
+                          StationDeleteRequested(station.id),
+                        );
+                        context.pop();
+                      }
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 24.h),
+
+              // Content
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Main info
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        _StationOverviewCard(station: station),
+                        SizedBox(height: 16.h),
+                        _StationChargersCard(station: station),
+                        SizedBox(height: 16.h),
+                        _StationAmenitiesCard(station: station),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 24.w),
+                  // Side info
+                  Expanded(
+                    child: Column(
+                      children: [
+                        _StationStatsCard(station: station),
+                        SizedBox(height: 16.h),
+                        _StationManagerCard(station: station),
+                        SizedBox(height: 16.h),
+                        _StationContactCard(station: station),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -319,8 +319,6 @@ class _StationAmenitiesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.adminColors;
-
     return AdminCardWithHeader(
       title: AdminStrings.stationsAmenities,
       child: Wrap(

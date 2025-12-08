@@ -3,9 +3,9 @@
 /// Belongs To: admin/features/dashboard/widgets
 library;
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 import '../../../core/core.dart';
 
@@ -19,7 +19,7 @@ class DashboardSessionsChart extends StatelessWidget {
 
     return AdminCardWithHeader(
       title: 'Sessions by Station',
-      subtitle: 'Today\'s distribution',
+      subtitle: "Today's distribution",
       child: SizedBox(
         height: 200.h,
         child: Row(

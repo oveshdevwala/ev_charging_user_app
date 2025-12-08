@@ -62,7 +62,7 @@ abstract final class AdminHelpers {
 
   /// Throttle function calls.
   static Function throttle(Function function, Duration delay) {
-    bool isThrottled = false;
+    var isThrottled = false;
     return () {
       if (!isThrottled) {
         function();
@@ -164,7 +164,7 @@ abstract final class AdminHelpers {
   /// Sort list by multiple criteria.
   static List<T> sortByMultiple<T>(
     List<T> list,
-    List<Comparable Function(T)> selectors,
+    List<Comparable<dynamic> Function(T)> selectors,
   ) {
     final result = List<T>.from(list);
     result.sort((a, b) {

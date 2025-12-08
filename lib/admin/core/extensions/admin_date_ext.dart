@@ -26,7 +26,7 @@ extension AdminDateExt on DateTime {
   String get format24Time => DateFormat('HH:mm').format(this);
 
   /// Format as "Jan 15, 2024 at 3:30 PM".
-  String get formatDateTime => DateFormat('MMM d, yyyy \'at\' h:mm a').format(this);
+  String get formatDateTime => DateFormat("MMM d, yyyy 'at' h:mm a").format(this);
 
   /// Format as "Jan 15, 3:30 PM".
   String get formatShortDateTime => DateFormat('MMM d, h:mm a').format(this);
@@ -129,7 +129,7 @@ extension AdminDateExt on DateTime {
   }
 
   /// Start of the month.
-  DateTime get startOfMonth => DateTime(year, month, 1);
+  DateTime get startOfMonth => DateTime(year, month);
 
   /// End of the month.
   DateTime get endOfMonth => DateTime(year, month + 1, 0, 23, 59, 59, 999);

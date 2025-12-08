@@ -34,17 +34,6 @@ class AdminButton extends StatelessWidget {
     this.foregroundColor,
   });
 
-  final String label;
-  final VoidCallback? onPressed;
-  final AdminButtonVariant variant;
-  final AdminButtonSize size;
-  final IconData? icon;
-  final IconPosition iconPosition;
-  final bool isLoading;
-  final bool isFullWidth;
-  final Color? backgroundColor;
-  final Color? foregroundColor;
-
   /// Primary action button.
   factory AdminButton.primary({
     required String label,
@@ -96,6 +85,17 @@ class AdminButton extends StatelessWidget {
       isLoading: isLoading,
     );
   }
+
+  final String label;
+  final VoidCallback? onPressed;
+  final AdminButtonVariant variant;
+  final AdminButtonSize size;
+  final IconData? icon;
+  final IconPosition iconPosition;
+  final bool isLoading;
+  final bool isFullWidth;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -299,7 +299,7 @@ class AdminIconButton extends StatelessWidget {
 
     if (tooltip != null) {
       button = Tooltip(
-        message: tooltip!,
+        message: tooltip,
         child: button,
       );
     }

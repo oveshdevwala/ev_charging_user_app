@@ -255,7 +255,7 @@ class _VehicleAddScreenState extends State<VehicleAddScreen> {
                     child: CommonTextField(
                       controller: _batteryController,
                       hint: 'e.g., 75.0',
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       onChanged: (value) {
                         final capacity = double.tryParse(value);
                         if (capacity != null) {
@@ -272,7 +272,7 @@ class _VehicleAddScreenState extends State<VehicleAddScreen> {
                   VehicleFormField(
                     label: 'Vehicle Type *',
                     child: DropdownButtonFormField<VehicleType>(
-                      value: state.form.vehicleType,
+                      initialValue: state.form.vehicleType,
                       decoration: InputDecoration(
                         hintText: 'Select type',
                         filled: true,
@@ -320,7 +320,7 @@ class _VehicleAddScreenState extends State<VehicleAddScreen> {
 
                   // Set as Default
                   SwitchListTile(
-                    title: Text('Set as Default Vehicle'),
+                    title: const Text('Set as Default Vehicle'),
                     value: state.form.isDefault,
                     onChanged: (value) {
                       context.read<VehicleAddBloc>().add(

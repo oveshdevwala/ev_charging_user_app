@@ -9,8 +9,8 @@ library;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/dashboard/view/dashboard_page.dart';
-import '../features/stations/view/stations_list_page.dart';
+import '../core/widgets/no_transition_page.dart';
+import '../features/admin_main/view/admin_main_page.dart';
 import '../features/stations/view/station_detail_page.dart';
 import '../features/stations/view/station_edit_page.dart';
 
@@ -22,68 +22,68 @@ import '../features/stations/view/station_edit_page.dart';
 enum AdminRoutes {
   // -------- Main Routes --------
   dashboard,
-  
+
   // -------- Stations --------
   stations,
   stationDetail,
   stationCreate,
   stationEdit,
-  
+
   // -------- Managers --------
   managers,
   managerDetail,
   managerCreate,
   managerEdit,
-  
+
   // -------- Users --------
   users,
   userDetail,
-  
+
   // -------- Sessions --------
   sessions,
   sessionDetail,
-  
+
   // -------- Payments --------
   payments,
   paymentDetail,
-  
+
   // -------- Wallets --------
   wallets,
   walletDetail,
-  
+
   // -------- Offers --------
   offers,
   offerDetail,
   offerCreate,
   offerEdit,
-  
+
   // -------- Partners --------
   partners,
   partnerDetail,
   partnerCreate,
   partnerEdit,
-  
+
   // -------- Reviews --------
   reviews,
   reviewDetail,
-  
+
   // -------- Reports --------
   reports,
   reportsRevenue,
   reportsUsage,
-  
+
   // -------- Content --------
   content,
   contentPages,
   contentFaq,
   contentBanners,
-  
+
   // -------- Media --------
   media,
-  
+
   // -------- Logs --------
   logs,
-  
+
   // -------- Settings --------
   settings,
   settingsGeneral,
@@ -91,7 +91,7 @@ enum AdminRoutes {
   settingsNotification,
   settingsSecurity,
   settingsRoles,
-  
+
   // -------- Auth --------
   login,
   forgotPassword,
@@ -108,8 +108,8 @@ extension AdminRoutePath on AdminRoutes {
     switch (this) {
       // Main
       case AdminRoutes.dashboard:
-        return '/admin';
-      
+        return '/admin/dashboard';
+
       // Stations
       case AdminRoutes.stations:
         return '/admin/stations';
@@ -119,7 +119,7 @@ extension AdminRoutePath on AdminRoutes {
         return '/admin/stations/create';
       case AdminRoutes.stationEdit:
         return '/admin/stations/edit';
-      
+
       // Managers
       case AdminRoutes.managers:
         return '/admin/managers';
@@ -129,31 +129,31 @@ extension AdminRoutePath on AdminRoutes {
         return '/admin/managers/create';
       case AdminRoutes.managerEdit:
         return '/admin/managers/edit';
-      
+
       // Users
       case AdminRoutes.users:
         return '/admin/users';
       case AdminRoutes.userDetail:
         return '/admin/users/detail';
-      
+
       // Sessions
       case AdminRoutes.sessions:
         return '/admin/sessions';
       case AdminRoutes.sessionDetail:
         return '/admin/sessions/detail';
-      
+
       // Payments
       case AdminRoutes.payments:
         return '/admin/payments';
       case AdminRoutes.paymentDetail:
         return '/admin/payments/detail';
-      
+
       // Wallets
       case AdminRoutes.wallets:
         return '/admin/wallets';
       case AdminRoutes.walletDetail:
         return '/admin/wallets/detail';
-      
+
       // Offers
       case AdminRoutes.offers:
         return '/admin/offers';
@@ -163,7 +163,7 @@ extension AdminRoutePath on AdminRoutes {
         return '/admin/offers/create';
       case AdminRoutes.offerEdit:
         return '/admin/offers/edit';
-      
+
       // Partners
       case AdminRoutes.partners:
         return '/admin/partners';
@@ -173,13 +173,13 @@ extension AdminRoutePath on AdminRoutes {
         return '/admin/partners/create';
       case AdminRoutes.partnerEdit:
         return '/admin/partners/edit';
-      
+
       // Reviews
       case AdminRoutes.reviews:
         return '/admin/reviews';
       case AdminRoutes.reviewDetail:
         return '/admin/reviews/detail';
-      
+
       // Reports
       case AdminRoutes.reports:
         return '/admin/reports';
@@ -187,7 +187,7 @@ extension AdminRoutePath on AdminRoutes {
         return '/admin/reports/revenue';
       case AdminRoutes.reportsUsage:
         return '/admin/reports/usage';
-      
+
       // Content
       case AdminRoutes.content:
         return '/admin/content';
@@ -197,15 +197,15 @@ extension AdminRoutePath on AdminRoutes {
         return '/admin/content/faq';
       case AdminRoutes.contentBanners:
         return '/admin/content/banners';
-      
+
       // Media
       case AdminRoutes.media:
         return '/admin/media';
-      
+
       // Logs
       case AdminRoutes.logs:
         return '/admin/logs';
-      
+
       // Settings
       case AdminRoutes.settings:
         return '/admin/settings';
@@ -219,7 +219,7 @@ extension AdminRoutePath on AdminRoutes {
         return '/admin/settings/security';
       case AdminRoutes.settingsRoles:
         return '/admin/settings/roles';
-      
+
       // Auth
       case AdminRoutes.login:
         return '/admin/login';
@@ -241,22 +241,10 @@ class AdminRouter {
   AdminRouter._();
 
   static final GoRouter router = GoRouter(
-    initialLocation: AdminRoutes.dashboard.path,
+    initialLocation: '/admin/dashboard',
     debugLogDiagnostics: true,
     routes: [
-      // -------- Dashboard --------
-      GoRoute(
-        path: AdminRoutes.dashboard.path,
-        name: AdminRoutes.dashboard.name,
-        builder: (context, state) => const DashboardPage(),
-      ),
-
-      // -------- Stations --------
-      GoRoute(
-        path: AdminRoutes.stations.path,
-        name: AdminRoutes.stations.name,
-        builder: (context, state) => const StationsListPage(),
-      ),
+      // -------- Stations Detail/Edit (shown as separate pages) --------
       GoRoute(
         path: '${AdminRoutes.stationDetail.path}/:id',
         name: AdminRoutes.stationDetail.name,
@@ -279,72 +267,133 @@ class AdminRouter {
         },
       ),
 
-      // -------- Placeholder routes for other features --------
-      // These will be implemented step by step
+      // -------- Main Admin Shell Route (handles all main tabs) --------
+      // Single persistent route - tab switching handled internally via IndexedStack
+      // Uses NoTransitionPage to prevent screen transitions and keep widget instance
+      GoRoute(
+        path: AdminRoutes.dashboard.path,
+        name: AdminRoutes.dashboard.name,
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.dashboard),
+        ),
+      ),
+      GoRoute(
+        path: AdminRoutes.stations.path,
+        name: AdminRoutes.stations.name,
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.stations),
+        ),
+      ),
       GoRoute(
         path: AdminRoutes.managers.path,
         name: AdminRoutes.managers.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Managers'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.managers),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.users.path,
         name: AdminRoutes.users.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Users'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.users),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.sessions.path,
         name: AdminRoutes.sessions.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Sessions'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.sessions),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.payments.path,
         name: AdminRoutes.payments.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Payments'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.payments),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.wallets.path,
         name: AdminRoutes.wallets.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Wallets'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.wallets),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.offers.path,
         name: AdminRoutes.offers.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Offers'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.offers),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.partners.path,
         name: AdminRoutes.partners.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Partners'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.partners),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.reviews.path,
         name: AdminRoutes.reviews.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Reviews'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.reviews),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.reports.path,
         name: AdminRoutes.reports.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Reports'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.reports),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.content.path,
         name: AdminRoutes.content.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Content'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.content),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.media.path,
         name: AdminRoutes.media.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Media'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.media),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.logs.path,
         name: AdminRoutes.logs.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Logs'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.logs),
+        ),
       ),
       GoRoute(
         path: AdminRoutes.settings.path,
         name: AdminRoutes.settings.name,
-        builder: (context, state) => _PlaceholderPage(title: 'Settings'),
+        pageBuilder: (context, state) => const AdminNoTransitionPage(
+          key: ValueKey('admin-main'),
+          child: AdminMainPage(initialRoute: AdminRoutes.settings),
+        ),
+      ),
+      // Redirect root /admin to dashboard
+      GoRoute(
+        path: '/admin',
+        redirect: (context, state) => AdminRoutes.dashboard.path,
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
@@ -375,39 +424,3 @@ class AdminRouter {
     ),
   );
 }
-
-/// Placeholder page for features not yet implemented.
-class _PlaceholderPage extends StatelessWidget {
-  const _PlaceholderPage({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.construction,
-              size: 64,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'This feature will be implemented in the next phase',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-

@@ -64,7 +64,7 @@ class AdminLoadingOverlay extends StatelessWidget {
         child,
         if (isLoading)
           Positioned.fill(
-            child: Container(
+            child: ColoredBox(
               color: colors.surface.withValues(alpha: 0.7),
               child: Center(
                 child: Column(
@@ -204,16 +204,16 @@ class _SkeletonItem extends StatelessWidget {
       ),
       child: Row(
         children: [
-          AdminShimmer(width: 48, height: 48, borderRadius: 8),
+          const AdminShimmer(width: 48, height: 48, borderRadius: 8),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                AdminShimmer(width: 120, height: 14),
+                const AdminShimmer(width: 120, height: 14),
                 SizedBox(height: 8.h),
-                AdminShimmer(width: 80, height: 10),
+                const AdminShimmer(width: 80, height: 10),
               ],
             ),
           ),

@@ -174,7 +174,7 @@ class AdminModal extends StatelessWidget {
       child: Material(
         color: colors.surface,
         elevation: 8,
-        child: Container(
+        child: SizedBox(
           width: width ?? 400.w,
           height: double.infinity,
           child: Column(
@@ -259,7 +259,6 @@ class AdminModal extends StatelessWidget {
       barrierDismissible: true,
       barrierLabel: 'Dismiss',
       barrierColor: Colors.black54,
-      transitionDuration: const Duration(milliseconds: 200),
       pageBuilder: (context, animation, secondaryAnimation) {
         return AdminModal(
           title: title,

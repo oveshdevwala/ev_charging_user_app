@@ -11,7 +11,6 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../core/core.dart';
 import '../../../models/admin_station_model.dart';
-import '../../../routes/admin_routes.dart';
 import '../bloc/stations_bloc.dart';
 import '../bloc/stations_event.dart';
 import '../bloc/stations_state.dart';
@@ -133,14 +132,7 @@ class _StationEditViewState extends State<_StationEditView> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.adminColors;
-
-    return AdminShell(
-      currentRoute: AdminRoutes.stations.path,
-      title: isEditing
-          ? AdminStrings.stationsEditTitle
-          : AdminStrings.stationsAddTitle,
-      child: BlocConsumer<StationsBloc, StationsState>(
+    return BlocConsumer<StationsBloc, StationsState>(
         listener: (context, state) {
           if (state.selectedStation != null && isEditing) {
             _populateForm(state.selectedStation!);
@@ -236,8 +228,7 @@ class _StationEditViewState extends State<_StationEditView> {
             ),
           );
         },
-      ),
-    );
+      );
   }
 }
 

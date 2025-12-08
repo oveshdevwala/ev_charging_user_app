@@ -33,7 +33,7 @@ class VehicleValidator {
   /// Validate nickname.
   static FieldValidation validateNickName(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return const FieldValidation(isValid: true); // Optional field
+      return const FieldValidation(); // Optional field
     }
 
     if (value.length > maxNickNameLength) {
@@ -43,7 +43,7 @@ class VehicleValidator {
       );
     }
 
-    return const FieldValidation(isValid: true);
+    return const FieldValidation();
   }
 
   /// Validate make.
@@ -55,7 +55,7 @@ class VehicleValidator {
       );
     }
 
-    return const FieldValidation(isValid: true);
+    return const FieldValidation();
   }
 
   /// Validate model.
@@ -67,7 +67,7 @@ class VehicleValidator {
       );
     }
 
-    return const FieldValidation(isValid: true);
+    return const FieldValidation();
   }
 
   /// Validate year.
@@ -86,7 +86,7 @@ class VehicleValidator {
       );
     }
 
-    return const FieldValidation(isValid: true);
+    return const FieldValidation();
   }
 
   /// Validate battery capacity.
@@ -112,13 +112,13 @@ class VehicleValidator {
       );
     }
 
-    return const FieldValidation(isValid: true);
+    return const FieldValidation();
   }
 
   /// Validate license plate.
   static FieldValidation validateLicensePlate(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return const FieldValidation(isValid: true); // Optional field
+      return const FieldValidation(); // Optional field
     }
 
     final trimmed = value.trim().toUpperCase();
@@ -139,13 +139,13 @@ class VehicleValidator {
       );
     }
 
-    return const FieldValidation(isValid: true);
+    return const FieldValidation();
   }
 
   /// Validate image file size (max 10MB).
   static FieldValidation validateImageSize(int? fileSizeBytes) {
     if (fileSizeBytes == null) {
-      return const FieldValidation(isValid: true); // Optional
+      return const FieldValidation(); // Optional
     }
 
     const maxSizeBytes = 10 * 1024 * 1024; // 10MB
@@ -156,13 +156,13 @@ class VehicleValidator {
       );
     }
 
-    return const FieldValidation(isValid: true);
+    return const FieldValidation();
   }
 
   /// Validate image file type.
   static FieldValidation validateImageType(String? filePath) {
     if (filePath == null || filePath.isEmpty) {
-      return const FieldValidation(isValid: true); // Optional
+      return const FieldValidation(); // Optional
     }
 
     final extension = filePath.toLowerCase().split('.').last;
@@ -176,7 +176,7 @@ class VehicleValidator {
       );
     }
 
-    return const FieldValidation(isValid: true);
+    return const FieldValidation();
   }
 
   /// Validate all fields and return error map.

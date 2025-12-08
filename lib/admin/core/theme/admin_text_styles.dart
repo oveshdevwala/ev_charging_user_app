@@ -206,7 +206,7 @@ abstract final class AdminTextStyles {
   static TextStyle sidebarGroup({Color? color}) => TextStyle(
     fontSize: 11.sp,
     fontWeight: FontWeight.w600,
-    letterSpacing: 1.0,
+    letterSpacing: 1,
     height: 1.45,
     color: color ?? AdminColors.textTertiaryLight,
   );

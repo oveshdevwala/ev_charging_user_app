@@ -1,56 +1,90 @@
 # ===============================
-# EV CHARGING USER APP .cursorrules
+# EV CHARGING ADMIN PANEL .cursorrules
 # ===============================
 
-# Project: EV Charging Flutter User App Template
-# Description: Flutter user app template using MVVM + BLoC + go_router + ScreenUtil + sqflite + Localization.
+# Project: EV Charging Flutter Admin Panel
+# Description: Flutter admin web panel using MVVM + BLoC + go_router + ScreenUtil + Material 3
+# Platform: Web-first (Desktop → Tablet → Mobile responsive)
 
 # ===============================
 # ARCHITECTURE GOALS
 # ===============================
 
-# Build a clean, production-ready Flutter User App with:
-# - Flutter ( MVVM(model view viewmodel) + BLoC Single-State pattern)
-# - go_router (typed routing with AppRoutes enum)
+# Build a clean, production-ready Flutter Admin Panel with:
+# - Flutter (MVVM + BLoC Single-State pattern)
+# - go_router (typed routing with AdminRoutes enum)
 # - flutter_screenutil (responsive UI)
-# - sqflite (optional local cache)
-# - intl + ARB (localization)
+# - Material 3 design system
 # - Barrel file exports everywhere
 # - App-wide constants — NO hard-coded strings/paths
-# - Reusable widgets, utils, wrappers
+# - Reusable admin widgets, utils, wrappers
+# - Sidebar + Topbar shell layout (NO separate screen navigation for tabs)
 
 # ===============================
-# PROJECT STRUCTURE
+# ADMIN PROJECT STRUCTURE
 # ===============================
 
 # Always follow this structure:
 # 
 # lib/
-#   core/
-#     constants/        # strings, assets, api paths
-#     theme/            # theme + manager (separate light/dark files)
-#     extensions/       # context, string, date, num extensions
-#     utils/            # helpers, validators
-#     local_db/         # sqflite helper
-#     di/               # dependency injection (GetIt)
-#   models/             # data models with copyWith + Equatable
-#   repositories/       # repository interfaces + dummy implementations
-#   routes/             # go_router setup with AppRoutes enum
-#   widgets/            # reusable components
-#   features/
-#     user_app/
-#       ui/
-#         pages/        # all screens
-#       bloc/           # bloc/cubit classes
-#       viewmodels/     # view models if needed
-#   l10n/               # ARB files
-#   bootstrap.dart      # initialization
-#   main.dart           # entry point
+#   admin/
+#     app_admin.dart          # Admin entry point
+#     admin.dart              # Barrel exports
+#     core/
+#       constants/            # AdminStrings, AdminAssets, AdminApiPaths
+#       theme/                # AdminTheme (light/dark), AdminColors, AdminTextStyles
+#       extensions/           # Admin context extensions (adminColors, goToAdmin, etc.)
+#       utils/                # AdminValidators, AdminFormatters, AdminHelpers
+#       config/               # AdminConfig, AdminResponsive
+#       widgets/              # Reusable admin components
+#     models/                 # Admin models with json_serializable
+#     repositories/           # Repository implementations (dummy data)
+#     services/               # CSV export, analytics, etc.
+#     blocs/                  # BLoC barrel exports
+#     viewmodels/             # ViewModel barrel exports
+#     routes/                 # AdminRoutes enum + AdminRouter
+#     features/
+#       dashboard/
+#         bloc/               # DashboardBloc, events, state
+#         view/                # DashboardPage
+#         widgets/             # Dashboard widgets
+#       stations/
+#         bloc/                # StationsBloc, events, state
+#         repository/          # StationsRepository
+#         view/                # List, Detail, Edit pages
+#       [other features]/      # Same structure
 #
 # Generate barrel files for every folder.
 
 # ===============================
-# BLoC RULES
+# ADMIN NAVIGATION RULES (CRITICAL)
+# ===============================
+
+# IMPORTANT: Admin panel uses TAB-BASED navigation within AdminShell:
+# - Sidebar tabs should NOT navigate to separate screens
+# - Use IndexedStack or similar to switch views within AdminShell
+# - Only detail/edit pages navigate (via modals or right-side panels)
+# - Main tabs (Dashboard, Stations, Users, etc.) stay within shell
+# - Sub-screens show as modals/sheets/panels, NOT full-screen navigation
+
+# Navigation pattern:
+# - Main tabs: Change view index in AdminShell (no navigation)
+# - Detail views: Show in modal/panel/drawer from right side
+# - Edit/Create: Show in modal/panel/drawer from right side
+# - Only use go_router for deep links or external navigation
+
+# Example:
+# AdminShell(
+#   currentViewIndex: _selectedIndex,  // Changed by sidebar
+#   onViewChanged: (index) => setState(() => _selectedIndex = index),
+#   child: IndexedStack(
+#     index: _selectedIndex,
+#     children: [DashboardPage(), StationsPage(), UsersPage(), ...],
+#   ),
+# )
+
+# ===============================
+# BLoC RULES (Same as User App)
 # ===============================
 
 # Single-state classes ONLY:
@@ -80,37 +114,29 @@
 # }
 
 # ===============================
-# ROUTING RULES
+# ADMIN ROUTING RULES
 # ===============================
 
-# All routes defined via enum → typed path extension:
+# Admin routes defined via enum → typed path extension:
 # 
-# enum AppRoutes { splash, login, userHome, stationDetails, ... }
+# enum AdminRoutes { dashboard, stations, managers, users, ... }
 # 
-# extension AppRoutePath on AppRoutes {
-#   String get path => '/$name';
+# extension AdminRoutePath on AdminRoutes {
+#   String get path => '/admin/$name';
 #   String id(String value) => '$path/$value';
 # }
 #
-# Usage:
-# context.go(AppRoutes.userHome.path);
-# context.push(AppRoutes.stationDetails.id(station.id));
+# Usage for deep links:
+# context.goToAdmin(AdminRoutes.stations.path);
+# context.pushToAdminWithId(AdminRoutes.stationDetail, stationId);
 #
 # NEVER type route strings manually.
-# ALWAYS navigate using AppRoutes enum extension.
+# ALWAYS navigate using AdminRoutes enum extension.
+
+# NOTE: Main tab switching should NOT use routes - use state management instead.
 
 # ===============================
-# LOCALIZATION RULES
-# ===============================
-
-# Add ANY user-visible string to:
-# - /core/constants/app_strings.dart
-# - /l10n/*.arb
-#
-# NEVER write any literal text into UI widgets.
-
-# ===============================
-# UI/UX RULES
+# ADMIN UI/UX RULES
 # ===============================
 
 # Use ScreenUtil sizing ONLY:
@@ -119,44 +145,55 @@
 # - Height: height: 50.h
 # - Radius/Padding: 16.r
 #
-# Icons not too small (min 20.r)
-# No text smaller than 12.sp
-# Buttons must follow tap target ≥ 48.h
-# Clean modern UI using reusable widgets only
+# Icons not too small (min 18.r for admin)
+# No text smaller than 11.sp
+# Buttons must follow tap target ≥ 44.h
+# Clean modern admin UI using reusable widgets only
 # No padding/margin hardcoded → make them params
+# Responsive: Desktop-first, adapt to tablet/mobile
+
+# Admin-specific UI patterns:
+# - Data tables with sorting, filtering, pagination
+# - Modal sheets for detail/edit views (slide from right)
+# - Filter panels (collapsible)
+# - Metric cards for dashboard
+# - Status badges/chips
+# - Search bars with filters
+# - Breadcrumb navigation
 
 # ===============================
-# THEME ARCHITECTURE
+# ADMIN THEME ARCHITECTURE
 # ===============================
 
-# Inside lib/core/theme/ use separate files:
-# - app_theme.dart      → wraps light/dark
-# - light_theme.dart    → ThemeData.light()
-# - dark_theme.dart     → ThemeData.dark()
-# - theme_manager.dart  → handles switching + persistence
-# - app_colors.dart     → color palette
-# - app_text_styles.dart → typography system
+# Inside lib/admin/core/theme/ use separate files:
+# - admin_theme.dart          → wraps light/dark
+# - admin_light_theme.dart    → ThemeData.light()
+# - admin_dark_theme.dart     → ThemeData.dark()
+# - admin_theme.dart          → AdminThemeService (switching + persistence)
+# - admin_colors.dart         → color palette (same as user app)
+# - admin_text_styles.dart    → typography system
 #
 # Never put ThemeData inside a single big file.
 # Use ScreenUtil for text sizing inside text styles.
 # All theme values configurable via constants (no hard-coded hex in widgets).
 
 # ===============================
-# CONTEXT EXTENSIONS
+# ADMIN CONTEXT EXTENSIONS
 # ===============================
 
-# Use context extensions instead of direct calls:
+# Use admin context extensions instead of direct calls:
 #
 # Theme:
+# - context.adminColors → AdminAppColors extension
 # - context.theme → Theme.of(context)
 # - context.colors → theme.colorScheme
 # - context.text → theme.textTheme
 # - context.isDark → brightness check
 #
-# Navigation:
-# - context.goTo(AppRoutes.xxx)
-# - context.pushTo(AppRoutes.xxx)
-# - context.pushToWithId(AppRoutes.xxx, id)
+# Navigation (for deep links only):
+# - context.goToAdmin(AdminRoutes.xxx)
+# - context.pushToAdmin(AdminRoutes.xxx)
+# - context.pushToAdminWithId(AdminRoutes.xxx, id)
 #
 # Sizing:
 # - context.w(8) → 8.w
@@ -165,38 +202,46 @@
 # - context.r(12) → 12.r
 
 # ===============================
-# REPOSITORY RULES
+# ADMIN REPOSITORY RULES
 # ===============================
 
-# Create interface first, then dummy implementation:
-# - Dummy implementation returns dummy model lists
+# Create repository with dummy implementation:
+# - Read from assets/dummy_data/admin/*.json
+# - Support pagination, filtering, sorting, searching
+# - Simulate CRUD (mutable in-memory list)
+# - Expose async APIs
 # - Later backend can replace easily (Envato requirement)
-# - Repos must NOT contain Flutter imports (pure Dart)
+# - Repos can contain Flutter imports (rootBundle for JSON)
 
 # ===============================
-# REUSABLE WIDGET RULES
+# ADMIN REUSABLE WIDGET RULES
 # ===============================
 
-# All screens must use reusable components:
-# - CommonButton (filled, outlined, text, tonal)
-# - AppAppBar
-# - CommonTextField
-# - LoadingWrapper
-# - EmptyStateWidget
-# - StationCard
-# - BookingCard
+# All admin screens must use reusable components:
+# - AdminShell (sidebar + topbar container)
+# - AdminButton (filled, outlined, text, tonal)
+# - AdminCard / AdminCardWithHeader
+# - AdminDataTable (sorting, filters, pagination)
+# - AdminTextField / AdminDropdownField / AdminSearchField
+# - AdminMetricCard
+# - AdminStatusBadge
+# - AdminEmptyState
+# - AdminLoading / AdminShimmer
+# - AdminDialog / AdminModal
+# - AdminFilterPanel
+# - AdminBreadcrumb
 #
 # Each customizable via params.
 
 # ===============================
-# DOCUMENTATION REQUIREMENTS
+# ADMIN DOCUMENTATION REQUIREMENTS
 # ===============================
 
 # Every file must contain:
-# /// File: path/to/file.dart
+# /// File: lib/admin/path/to/file.dart
 # /// Purpose: ...
-# /// Belongs To: user_app / shared
-# /// Route: ... (if applicable)
+# /// Belongs To: admin/[feature]
+# /// Route: AdminRoutes.xxx (if applicable)
 # /// Customization Guide:
 # ///    - How to change X
 # ///    - How to change Y
@@ -204,21 +249,52 @@
 # Add inline comments for non-obvious logic.
 
 # ===============================
-# SQFLITE RULES
+# ADMIN RESPONSIVE RULES
 # ===============================
 
-# Use sqflite only through /core/local_db/sqflite_helper.dart
-# Caching flow:
-# 1. Fetch from local if exists
-# 2. Otherwise fetch from dummy repository
-# 3. Cache result
+# Breakpoints:
+# - Mobile: < 768px
+# - Tablet: 768px - 1024px
+# - Desktop: ≥ 1024px
+# - Large Desktop: ≥ 1440px
+
+# Responsive patterns:
+# - Sidebar: Collapsed on mobile/tablet, full on desktop
+# - Data tables: Scrollable on mobile, full table on desktop
+# - Modals: Full-screen on mobile, side panel on desktop
+# - Grids: 1 column mobile, 2 tablet, 3-4 desktop
+
+# Use AdminResponsiveBuilder or adminResponsiveValue() helper.
+
+# ===============================
+# ADMIN DATA DISPLAY RULES
+# ===============================
+
+# Tables:
+# - Use AdminDataTable for all list views
+# - Include sorting, filtering, pagination
+# - Show loading states
+# - Show empty states
+# - Support row selection (bulk actions)
+
+# Forms:
+# - Use AdminTextField, AdminDropdownField, etc.
+# - Validate with AdminValidators
+# - Show errors inline
+# - Use AdminButton for actions
+
+# Modals/Sheets:
+# - Detail views: Show in right-side modal/panel
+# - Edit/Create: Show in right-side modal/panel
+# - Full-screen on mobile, side panel on desktop
+# - Use AdminModal.show() helper
 
 # ===============================
 # CURSOR RULES - AUTOMATED CHECKS
 # ===============================
 
-# enforce-project-structure:
-#   Ensure correct folder modules.
+# enforce-admin-structure:
+#   Ensure correct admin folder modules under lib/admin/
 
 # require-copywith:
 #   Every State class must include copyWith and Equatable.
@@ -230,10 +306,11 @@
 
 # no-hardcoded-strings:
 #   Block writing string literals longer than 3 words in UI code.
-#   Use AppStrings or localization.
+#   Use AdminStrings constants.
 
-# enforce-routing:
-#   Every new screen must have AppRoutes enum entry.
+# enforce-admin-routing:
+#   Every new admin screen must have AdminRoutes enum entry.
+#   But main tabs should use IndexedStack, not routes.
 
 # enforce-barrel-exports:
 #   Every folder must have a barrel export file.
@@ -243,61 +320,110 @@
 #   Pattern: (padding|margin|height|width|fontSize):\s*\d+
 #   Use .h/.w/.sp/.r instead.
 
+# enforce-admin-shell:
+#   All admin pages must be wrapped in AdminShell.
+#   Main tabs should NOT navigate - use IndexedStack.
+
 # ===============================
-# WHEN CREATING NEW SCREEN/FEATURE
+# WHEN CREATING NEW ADMIN FEATURE
 # ===============================
 
 # Cursor must automatically:
-# 1. Create UI page in features/user_app/ui/pages/
-# 2. Create Bloc (state/event) if needed
-# 3. Add Repository methods (dummy)
-# 4. Add Routes (enum + GoRoute)
-# 5. Update barrel file exports
-# 6. Add Localization strings
-# 7. Add file-level documentation
-# 8. Follow all architecture rules
+# 1. Create feature folder: lib/admin/features/[feature_name]/
+# 2. Create BLoC (state/event) if needed
+# 3. Create Repository (dummy JSON data)
+# 4. Create View pages (List, Detail, Edit)
+# 5. Add AdminRoutes enum entry (for deep links)
+# 6. Add sidebar item in AdminShell (use IndexedStack, NOT navigation)
+# 7. Update barrel file exports
+# 8. Add AdminStrings constants
+# 9. Add file-level documentation
+# 10. Follow all architecture rules
 
 # ===============================
-# WHEN MODIFYING EXISTING FEATURE
+# WHEN MODIFYING EXISTING ADMIN FEATURE
 # ===============================
 
 # Cursor must:
 # - Only modify specific requested logic
 # - Preserve architecture rules
-# - Never remove routing / localization
+# - Never remove routing / constants
 # - Never use hard-coded strings
 # - Maintain documentation
+# - Keep AdminShell structure intact
 
 # ===============================
-# NEVER DO
+# ADMIN NEVER DO
 # ===============================
 
-# - Never hardcode text in UI
-# - Never use magic numbers
+# - Never hardcode text in UI (use AdminStrings)
+# - Never use magic numbers (use AdminConfig constants)
 # - Never create widget without params
 # - Never skip documentation
 # - Never break MVVM/BLoC separation
 # - Never use setState for business logic
-# - Never use Theme.of(context) directly (use extensions)
-# - Never use MediaQuery.of(context) directly (use extensions)
+# - Never use Theme.of(context) directly (use context.adminColors)
+# - Never use MediaQuery.of(context) directly (use context extensions)
 # - Never type raw route strings
+# - Never navigate to separate screens for main sidebar tabs (use IndexedStack)
+# - Never create full-screen navigation for tab switching
+# - Never use go_router for main tab switching (use state management)
 
 # ===============================
-# ALWAYS DO
+# ADMIN ALWAYS DO
 # ===============================
 
-# - Use AppRoutes.pageName for navigation
+# - Use AdminRoutes.pageName for deep links only
+# - Use IndexedStack for main tab switching within AdminShell
+# - Use context.adminColors for theme access
 # - Use context extensions for theme/navigation/sizing
 # - Use ScreenUtil (.sp, .h, .w, .r) for all sizing
-# - Use AppStrings for all text
-# - Use AppColors for all colors
+# - Use AdminStrings for all text
+# - Use AdminColors for all colors
 # - Create reusable widgets with parameters
 # - Add barrel file exports
 # - Document all files and methods
 # - Use Equatable + copyWith for states
 # - Keep UI code clean (no business logic)
+# - Show detail/edit views in modals/panels, not full screens
+# - Keep AdminShell structure with sidebar + topbar
+# - Use responsive breakpoints for mobile/tablet/desktop
 
 # ===============================
-# END OF RULES
+# ADMIN SHELL NAVIGATION PATTERN
 # ===============================
 
+# Main Admin Shell Structure:
+# 
+# AdminShell(
+#   currentViewIndex: _currentIndex,  // Managed by state
+#   onViewChanged: (index) => setState(() => _currentIndex = index),
+#   child: IndexedStack(
+#     index: _currentIndex,
+#     children: [
+#       DashboardPage(),
+#       StationsPage(),
+#       ManagersPage(),
+#       UsersPage(),
+#       // ... other main tabs
+#     ],
+#   ),
+# )
+#
+# Sidebar items call onViewChanged(index) instead of context.go()
+# Detail/Edit views show in AdminModal or right-side panel
+# Only use go_router for deep links or external navigation
+
+# ===============================
+# END OF ADMIN RULES
+# ===============================
+
+# ===============================
+# USER APP RULES (COMMENTED - NOT APPLICABLE TO ADMIN)
+# ===============================
+
+# # The following rules are for the User App, not Admin Panel:
+# # - sqflite local caching (admin uses in-memory + JSON)
+# # - User app specific features (bookings, favorites, etc.)
+# # - User app navigation patterns (bottom tabs, etc.)
+# # - User app specific widgets (StationCard, BookingCard, etc.)
