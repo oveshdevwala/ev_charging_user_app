@@ -18,7 +18,7 @@ class PurchaseValuePack {
     required String paymentToken,
     String? coupon,
   }) async {
-    return await _repository.purchaseValuePack(
+    return _repository.purchaseValuePack(
       packId: packId,
       paymentToken: paymentToken,
       coupon: coupon,

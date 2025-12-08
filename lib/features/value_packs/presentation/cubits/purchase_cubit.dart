@@ -20,7 +20,7 @@ class PurchaseCubit extends Cubit<PurchaseState> {
     required String paymentMethodId,
     String? coupon,
   }) async {
-    emit(PurchaseState(status: PurchaseStatus.processing));
+    emit(const PurchaseState(status: PurchaseStatus.processing));
 
     try {
       // TODO: Get payment token from payment adapter

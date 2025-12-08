@@ -33,7 +33,11 @@ abstract class AnalyticsService {
   Future<void> logMarketplaceOpened({required String source});
 
   /// Log generic event.
-  Future<void> logEvent(String name, {Map<String, dynamic>? parameters});
+  Future<void> logEvent(
+    String name,
+    Map<String, String> map, {
+    Map<String, dynamic>? parameters,
+  });
 }
 
 /// Dummy analytics implementation.
@@ -71,7 +75,11 @@ class DummyAnalyticsService implements AnalyticsService {
   }
 
   @override
-  Future<void> logEvent(String name, {Map<String, dynamic>? parameters}) async {
+  Future<void> logEvent(
+    String name,
+    Map<String, String> map, {
+    Map<String, dynamic>? parameters,
+  }) async {
     // print('Analytics: Event $name - $parameters');
   }
 }

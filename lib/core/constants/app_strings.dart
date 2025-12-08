@@ -49,6 +49,8 @@ abstract final class AppStrings {
   static const String loading = 'Loading...';
   static const String seeAll = 'See All';
   static const String viewDetails = 'View Details';
+  static const String apply = 'Apply';
+  static const String clearAll = 'Clear All';
   static const String buyNow = 'Buy Now';
   static const String subscribe = 'Subscribe';
 
@@ -103,7 +105,7 @@ abstract final class AppStrings {
   static const String chargerTypes = 'Charger Types';
   static const String pricePerKwh = 'Price per kWh';
   static const String operatingHours = 'Operating Hours';
-  static const String getDirections = 'Get Directions';
+  static const String tripPlannerNavigategetDirections = 'Get Directions';
   static const String getLocation = 'Get Location';
   static const String bookNow = 'Book Now';
   static const String addToFavorites = 'Add to Favorites';
@@ -565,4 +567,46 @@ abstract final class AppStrings {
   static const String settingsSmall = 'Small';
   static const String settingsMedium = 'Medium';
   static const String settingsLarge = 'Large';
+
+  // ============ Vehicles ============
+  static const String vehicleAdd = 'Add Vehicle';
+  static const String vehicleEdit = 'Edit Vehicle';
+  static const String vehicleList = 'My Vehicles';
+  static const String vehicleAddSuccess = 'Vehicle added successfully';
+  static const String vehicleUpdateSuccess = 'Vehicle updated successfully';
+  static const String vehicleDeleteSuccess = 'Vehicle deleted successfully';
+  static const String vehicleSetDefaultSuccess =
+      'Default vehicle set successfully';
+  static const String vehicleAddError = 'Failed to add vehicle';
+  static const String vehicleUpdateError = 'Failed to update vehicle';
+  static const String vehicleDeleteError = 'Failed to delete vehicle';
+  static const String vehicleLoadError = 'Failed to load vehicles';
+  static const String vehicleNickname = 'Nickname';
+  static const String vehicleMake = 'Make';
+  static const String vehicleModel = 'Model';
+  static const String vehicleYear = 'Year';
+  static const String vehicleBatteryCapacity = 'Battery Capacity (kWh)';
+  static const String vehicleType = 'Vehicle Type';
+  static const String vehicleLicensePlate = 'License Plate';
+  static const String vehicleSetDefault = 'Set as Default';
+  static const String vehicleDefault = 'Default';
+  static const String vehicleNoVehicles = 'No vehicles yet';
+  static const String vehicleAddFirst = 'Add your first vehicle to get started';
+  static const String vehicleDeleteConfirm = 'Delete Vehicle?';
+  static const String vehicleDeleteMessage =
+      'Are you sure you want to delete this vehicle? This action cannot be undone.';
+
+  // ============ Validation ============
+  static const String validationRequired = 'validation.required';
+  static const String validationInvalidYear = 'validation.invalidYear';
+  static const String validationInvalidBattery =
+      'validation.batteryCapacityInvalid';
+  static const String validationInvalidLicense =
+      'validation.invalidLicensePlate';
+  static const String validationNickNameTooLong = 'validation.nickNameTooLong';
+  static const String validationBatteryCapacityTooLarge =
+      'validation.batteryCapacityTooLarge';
+  static const String validationImageTooLarge = 'validation.imageTooLarge';
+  static const String validationInvalidImageType =
+      'validation.invalidImageType';
 }

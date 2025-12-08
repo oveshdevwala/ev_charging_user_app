@@ -21,7 +21,7 @@ class GetValuePacks {
     int page = 1,
     int limit = 20,
   }) async {
-    return await _repository.getValuePacks(
+    return _repository.getValuePacks(
       filter: filter,
       sort: sort,
       page: page,

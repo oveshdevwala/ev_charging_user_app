@@ -22,8 +22,8 @@ class ReviewsCubit extends Cubit<ReviewsState> {
   /// Load reviews.
   Future<void> loadReviews(String packId, {int page = 1}) async {
     try {
-      final reviews = await _getReviews(packId, page: page, limit: 20);
-      emit(state.copyWith(reviews: reviews, error: null));
+      final reviews = await _getReviews(packId, page: page);
+      emit(state.copyWith(reviews: reviews));
     } catch (e) {
       emit(state.copyWith(error: e.toString()));
     }
@@ -37,7 +37,7 @@ class ReviewsCubit extends Cubit<ReviewsState> {
     required String message,
     List<String>? images,
   }) async {
-    emit(state.copyWith(submitting: true, error: null));
+    emit(state.copyWith(submitting: true));
 
     try {
       final review = await _submitReview(
@@ -52,7 +52,6 @@ class ReviewsCubit extends Cubit<ReviewsState> {
         reviews: [review, ...state.reviews],
         submitting: false,
         submitted: true,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(

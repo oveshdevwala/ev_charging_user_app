@@ -13,6 +13,6 @@ class GetCompletedTrips {
   final TripRepository repository;
 
   Future<List<CompletedTrip>> call() async {
-    return await repository.getAllTrips();
+    return repository.getAllTrips();
   }
 }

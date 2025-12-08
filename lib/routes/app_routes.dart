@@ -6,9 +6,13 @@
 ///    - Configure route parameters and transitions
 library;
 
+import 'package:ev_charging_user_app/features/vehicle_add/presentation/bloc/vehicle_add_bloc.dart';
+import 'package:ev_charging_user_app/features/vehicle_add/presentation/bloc/vehicle_add_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/core.dart';
 import '../features/activity/activity.dart';
 import '../features/auth/auth.dart';
 import '../features/bookings/bookings.dart';
@@ -16,14 +20,16 @@ import '../features/community/community.dart';
 import '../features/main_shell/main_shell.dart';
 import '../features/nearby_offers/presentation/screens/screens.dart';
 import '../features/notifications/notifications.dart';
-import '../features/value_packs/presentation/screens/screens.dart';
 import '../features/onboarding/onboarding.dart';
 import '../features/profile/profile.dart';
+import '../features/search/presentation/pages/stations_list_page.dart';
 import '../features/settings/presentation/ui/screens/screens.dart';
 import '../features/splash/splash.dart';
 import '../features/stations/stations.dart';
 import '../features/trip_history/trip_history.dart';
 import '../features/trip_planner/trip_planner.dart';
+import '../features/value_packs/presentation/screens/screens.dart';
+import '../features/vehicle_add/presentation/view/view.dart';
 import '../features/wallet/wallet.dart';
 
 // ============================================================
@@ -47,6 +53,7 @@ enum AppRoutes {
   userBookings,
   userProfile,
   stationDetails,
+  stationsList,
   booking,
   bookingDetails,
   userNotifications,
@@ -97,6 +104,11 @@ enum AppRoutes {
   comparePacks,
   purchasePack,
   packReviews,
+
+  // -------- Vehicle Routes --------
+  vehicleList,
+  addVehicle,
+  editVehicle,
 }
 
 // ============================================================
@@ -133,6 +145,8 @@ extension AppRoutePath on AppRoutes {
         return '/userProfile';
       case AppRoutes.stationDetails:
         return '/stationDetails';
+      case AppRoutes.stationsList:
+        return '/stationsList';
       case AppRoutes.booking:
         return '/booking';
       case AppRoutes.bookingDetails:
@@ -227,6 +241,14 @@ extension AppRoutePath on AppRoutes {
         return '/purchasePack';
       case AppRoutes.packReviews:
         return '/packReviews';
+
+      // Vehicle
+      case AppRoutes.vehicleList:
+        return '/vehicles';
+      case AppRoutes.addVehicle:
+        return '/vehicles/add';
+      case AppRoutes.editVehicle:
+        return '/vehicles/edit';
     }
   }
 
@@ -317,6 +339,17 @@ class AppRouter {
         builder: (context, state) {
           final stationId = state.pathParameters['id'] ?? '';
           return StationDetailsPage(stationId: stationId);
+        },
+      ),
+
+      // -------- Stations List (View All) --------
+      GoRoute(
+        path: AppRoutes.stationsList.path,
+        name: AppRoutes.stationsList.name,
+        builder: (context, state) {
+          final listType =
+              state.extra as StationsListType? ?? StationsListType.nearby;
+          return StationsListPage(listType: listType);
         },
       ),
 
@@ -553,6 +586,46 @@ class AppRouter {
         path: AppRoutes.tripHistory.path,
         name: AppRoutes.tripHistory.name,
         builder: (context, state) => const TripHistoryScreen(),
+      ),
+
+      // -------- Vehicles --------
+      GoRoute(
+        path: AppRoutes.vehicleList.path,
+        name: AppRoutes.vehicleList.name,
+        builder: (context, state) {
+          final userId = state.extra as String? ?? 'user_abc';
+          return BlocProvider(
+            create: (context) =>
+                sl<VehicleAddBloc>()..add(VehicleListLoadRequested(userId)),
+            child: VehicleListScreen(userId: userId),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.addVehicle.path,
+        name: AppRoutes.addVehicle.name,
+        builder: (context, state) {
+          final userId = state.extra as String? ?? 'user_abc';
+          return BlocProvider(
+            create: (context) =>
+                sl<VehicleAddBloc>()..add(VehicleAddInitialized(userId)),
+            child: VehicleAddScreen(userId: userId),
+          );
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.editVehicle.path}/:id',
+        name: AppRoutes.editVehicle.name,
+        builder: (context, state) {
+          final vehicleId = state.pathParameters['id'] ?? '';
+          final userId = state.extra as String? ?? 'user_abc';
+          return BlocProvider(
+            create: (context) =>
+                sl<VehicleAddBloc>()
+                  ..add(VehicleAddInitialized(userId, vehicleId: vehicleId)),
+            child: VehicleAddScreen(userId: userId, vehicleId: vehicleId),
+          );
+        },
       ),
 
       // -------- Nearby Offers --------

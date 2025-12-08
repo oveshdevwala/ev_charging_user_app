@@ -13,7 +13,6 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../core/di/injection.dart';
-import '../../../core/extensions/context_ext.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../widgets/app_app_bar.dart';
 import '../../../widgets/common_button.dart';

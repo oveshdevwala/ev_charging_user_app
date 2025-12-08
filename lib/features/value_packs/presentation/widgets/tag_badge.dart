@@ -32,7 +32,6 @@ class TagBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(6.r),
         border: Border.all(
           color: badgeColor.withOpacity(0.3),
-          width: 1,
         ),
       ),
       child: Text(

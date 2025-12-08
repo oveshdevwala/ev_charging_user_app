@@ -6,7 +6,6 @@
 ///    - Tappable to view full activity details
 library;
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
@@ -336,51 +335,51 @@ class SectionActivityEnhanced extends StatelessWidget {
     );
   }
 
-  Widget _buildMiniChart() {
-    if (weeklyData.isEmpty) {
-      return SizedBox(height: 50.h);
-    }
+  // Widget _buildMiniChart() {
+  //   if (weeklyData.isEmpty) {
+  //     return SizedBox(height: 50.h);
+  //   }
 
-    final maxEnergy = weeklyData
-        .map((d) => d.energyKwh)
-        .reduce((a, b) => a > b ? a : b);
-    final maxY = maxEnergy > 0 ? maxEnergy * 1.2 : 50.0;
+  //   final maxEnergy = weeklyData
+  //       .map((d) => d.energyKwh)
+  //       .reduce((a, b) => a > b ? a : b);
+  //   final maxY = maxEnergy > 0 ? maxEnergy * 1.2 : 50.0;
 
-    return SizedBox(
-      height: 50.h,
-      child: BarChart(
-        BarChartData(
-          alignment: BarChartAlignment.spaceAround,
-          maxY: maxY,
-          minY: 0,
-          barTouchData: const BarTouchData(enabled: false),
-          titlesData: const FlTitlesData(show: false),
-          borderData: FlBorderData(show: false),
-          gridData: const FlGridData(show: false),
-          barGroups: weeklyData.asMap().entries.map((entry) {
-            final index = entry.key;
-            final day = entry.value;
-            final isToday = index == weeklyData.length - 1;
+  //   return SizedBox(
+  //     height: 50.h,
+  //     child: BarChart(
+  //       BarChartData(
+  //         alignment: BarChartAlignment.spaceAround,
+  //         maxY: maxY,
+  //         minY: 0,
+  //         barTouchData: const BarTouchData(enabled: false),
+  //         titlesData: const FlTitlesData(show: false),
+  //         borderData: FlBorderData(show: false),
+  //         gridData: const FlGridData(show: false),
+  //         barGroups: weeklyData.asMap().entries.map((entry) {
+  //           final index = entry.key;
+  //           final day = entry.value;
+  //           final isToday = index == weeklyData.length - 1;
 
-            return BarChartGroupData(
-              x: index,
-              barRods: [
-                BarChartRodData(
-                  toY: day.energyKwh > 0 ? day.energyKwh : 2,
-                  color: isToday
-                      ? AppColors.primaryLight
-                      : AppColors.primary.withValues(alpha: 0.4),
-                  width: 20.w,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(4.r),
-                  ),
-                ),
-              ],
-            );
-          }).toList(),
-        ),
-        duration: Duration.zero,
-      ),
-    );
-  }
+  //           return BarChartGroupData(
+  //             x: index,
+  //             barRods: [
+  //               BarChartRodData(
+  //                 toY: day.energyKwh > 0 ? day.energyKwh : 2,
+  //                 color: isToday
+  //                     ? AppColors.primaryLight
+  //                     : AppColors.primary.withValues(alpha: 0.4),
+  //                 width: 20.w,
+  //                 borderRadius: BorderRadius.vertical(
+  //                   top: Radius.circular(4.r),
+  //                 ),
+  //               ),
+  //             ],
+  //           );
+  //         }).toList(),
+  //       ),
+  //       duration: Duration.zero,
+  //     ),
+  //   );
+  // }
 }

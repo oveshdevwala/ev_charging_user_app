@@ -61,6 +61,13 @@ dependencies:
   flutter_markdown: ^0.6.18
   crypto: ^3.0.5
 
+  # Map & Location
+  flutter_map: ^7.0.2
+  flutter_map_marker_cluster: ^1.1.0
+  latlong2: ^0.9.1
+  geolocator: ^13.0.1
+  permission_handler: ^11.3.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

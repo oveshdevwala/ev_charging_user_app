@@ -73,7 +73,7 @@ class ValuePack extends Equatable {
   /// Calculate discount percentage.
   double get discountPercent {
     if (!hasDiscount) {
-      return 0.0;
+      return 0;
     }
     return ((oldPrice! - price) / oldPrice!) * 100;
   }

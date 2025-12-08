@@ -16,7 +16,6 @@ import '../../routes/app_routes.dart';
 import '../value_packs/domain/usecases/usecases.dart';
 import '../value_packs/presentation/cubits/cubits.dart';
 import '../value_packs/presentation/screens/screens.dart';
-import '../value_packs/presentation/widgets/widgets.dart';
 
 /// Debug preview screen for value packs.
 class ValuePacksPreviewScreen extends StatelessWidget {
@@ -61,7 +60,7 @@ class ValuePacksPreviewScreen extends StatelessWidget {
             title: 'Purchase Screen',
             child: SizedBox(
               height: 600.h,
-              child: PurchaseScreen(packId: 'pack_001'),
+              child: const PurchaseScreen(packId: 'pack_001'),
             ),
           ),
           SizedBox(height: 24.h),
@@ -69,7 +68,7 @@ class ValuePacksPreviewScreen extends StatelessWidget {
             title: 'Reviews Screen',
             child: SizedBox(
               height: 600.h,
-              child: ReviewsScreen(packId: 'pack_001'),
+              child: const ReviewsScreen(packId: 'pack_001'),
             ),
           ),
           SizedBox(height: 24.h),
@@ -77,7 +76,7 @@ class ValuePacksPreviewScreen extends StatelessWidget {
             title: 'Compare Packs',
             child: SizedBox(
               height: 400.h,
-              child: ComparePacksScreen(packIds: ['pack_001', 'pack_002']),
+              child: const ComparePacksScreen(packIds: ['pack_001', 'pack_002']),
             ),
           ),
           SizedBox(height: 24.h),
@@ -115,7 +114,7 @@ class _PreviewSection extends StatelessWidget {
           ),
         ),
         SizedBox(height: 12.h),
-        Container(
+        DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(color: colors.outline),
             borderRadius: BorderRadius.circular(8.r),

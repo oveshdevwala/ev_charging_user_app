@@ -17,14 +17,16 @@ import '../models/station_model.dart';
 /// Station card widget for displaying charging station info.
 class StationCard extends StatelessWidget {
   const StationCard({
-    required this.station, required this.onTap, super.key,
+    required this.station,
+    required this.onTap,
+    super.key,
     this.onFavoriteTap,
     this.compact = false,
     this.showDistance = true,
     this.showRating = true,
     this.showAvailability = true,
   });
-  
+
   final StationModel station;
   final VoidCallback onTap;
   final VoidCallback? onFavoriteTap;
@@ -32,7 +34,7 @@ class StationCard extends StatelessWidget {
   final bool showDistance;
   final bool showRating;
   final bool showAvailability;
-  
+
   @override
   Widget build(BuildContext context) {
     if (compact) {
@@ -40,7 +42,7 @@ class StationCard extends StatelessWidget {
     }
     return _buildFullCard(context);
   }
-  
+
   Widget _buildFullCard(BuildContext context) {
     final colors = context.appColors;
     return GestureDetector(
@@ -58,7 +60,9 @@ class StationCard extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16.r),
+                  ),
                   child: _buildStationImage(
                     station.imageUrl,
                     context: context,
@@ -81,7 +85,9 @@ class StationCard extends StatelessWidget {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: context.appColors.textPrimary.withOpacity(0.1),
+                              color: context.appColors.textPrimary.withOpacity(
+                                0.1,
+                              ),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -103,7 +109,10 @@ class StationCard extends StatelessWidget {
                     bottom: 8.h,
                     left: 8.w,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 4.h,
+                      ),
                       decoration: BoxDecoration(
                         color: context.appColors.textPrimary.withOpacity(0.7),
                         borderRadius: BorderRadius.circular(8.r),
@@ -174,11 +183,7 @@ class StationCard extends StatelessWidget {
                     children: [
                       // Rating
                       if (showRating) ...[
-                        Icon(
-                          Iconsax.star1,
-                          size: 14.r,
-                          color: colors.warning,
-                        ),
+                        Icon(Iconsax.star1, size: 14.r, color: colors.warning),
                         SizedBox(width: 4.w),
                         Text(
                           station.rating.toStringAsFixed(1),
@@ -203,8 +208,8 @@ class StationCard extends StatelessWidget {
                           width: 8.r,
                           height: 8.r,
                           decoration: BoxDecoration(
-                            color: station.hasAvailableChargers 
-                                ? colors.success 
+                            color: station.hasAvailableChargers
+                                ? colors.success
                                 : colors.warning,
                             shape: BoxShape.circle,
                           ),
@@ -215,8 +220,8 @@ class StationCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w500,
-                            color: station.hasAvailableChargers 
-                                ? colors.success 
+                            color: station.hasAvailableChargers
+                                ? colors.success
                                 : colors.textSecondary,
                           ),
                         ),
@@ -241,13 +246,13 @@ class StationCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildCompactCard(BuildContext context) {
     final colors = context.appColors;
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(12.r),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         decoration: BoxDecoration(
           color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(12.r),
@@ -261,9 +266,9 @@ class StationCard extends StatelessWidget {
               child: _buildStationImage(
                 station.imageUrl,
                 context: context,
-                width: 72.w,
-                height: 72.h,
-                iconSize: 24.r,
+                width: 60.w,
+                height: 60.h,
+                iconSize: 20.r,
               ),
             ),
             SizedBox(width: 12.w),
@@ -271,6 +276,7 @@ class StationCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     station.name,
@@ -286,42 +292,38 @@ class StationCard extends StatelessWidget {
                   Text(
                     station.address,
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize: 11.sp,
                       color: colors.textSecondary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 6.h),
                   Row(
                     children: [
                       if (showRating) ...[
-                        Icon(
-                          Iconsax.star1,
-                          size: 12.r,
-                          color: colors.warning,
-                        ),
+                        Icon(Iconsax.star1, size: 11.r, color: colors.warning),
                         SizedBox(width: 2.w),
                         Text(
                           station.rating.toStringAsFixed(1),
                           style: TextStyle(
-                            fontSize: 11.sp,
+                            fontSize: 10.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(width: 8.w),
+                        SizedBox(width: 6.w),
                       ],
                       if (showDistance && station.distance != null) ...[
                         Icon(
                           Iconsax.location,
-                          size: 12.r,
+                          size: 11.r,
                           color: colors.textSecondary,
                         ),
                         SizedBox(width: 2.w),
                         Text(
                           '${station.distance!.toStringAsFixed(1)} km',
                           style: TextStyle(
-                            fontSize: 11.sp,
+                            fontSize: 10.sp,
                             color: colors.textSecondary,
                           ),
                         ),
@@ -331,6 +333,7 @@ class StationCard extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(width: 8.w),
             // Favorite and Price
             Column(
               mainAxisSize: MainAxisSize.min,
@@ -341,25 +344,24 @@ class StationCard extends StatelessWidget {
                     onTap: onFavoriteTap,
                     child: Icon(
                       station.isFavorite ? Iconsax.heart5 : Iconsax.heart,
-                      size: 20.r,
-                      color: station.isFavorite ? colors.danger : colors.textSecondary,
+                      size: 18.r,
+                      color: station.isFavorite
+                          ? colors.danger
+                          : colors.textSecondary,
                     ),
                   ),
-                if (onFavoriteTap != null) SizedBox(height: 8.h),
+                if (onFavoriteTap != null) SizedBox(height: 6.h),
                 Text(
                   '\$${station.pricePerKwh.toStringAsFixed(2)}',
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w700,
                     color: AppColors.primary,
                   ),
                 ),
                 Text(
                   '/kWh',
-                  style: TextStyle(
-                    fontSize: 10.sp,
-                    color: colors.textSecondary,
-                  ),
+                  style: TextStyle(fontSize: 9.sp, color: colors.textSecondary),
                 ),
               ],
             ),
@@ -379,8 +381,9 @@ class StationCard extends StatelessWidget {
   }) {
     final colors = context.appColors;
     // Check if URL is valid (not null, not empty, starts with http)
-    final isValidUrl = imageUrl != null && 
-        imageUrl.isNotEmpty && 
+    final isValidUrl =
+        imageUrl != null &&
+        imageUrl.isNotEmpty &&
         (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
 
     if (!isValidUrl) {
@@ -434,4 +437,3 @@ class StationCard extends StatelessWidget {
     );
   }
 }
-

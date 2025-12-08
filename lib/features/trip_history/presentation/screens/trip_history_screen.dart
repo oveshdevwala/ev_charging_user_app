@@ -29,7 +29,7 @@ class TripHistoryScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => sl<TripHistoryBloc>()..add(FetchCompletedTrips()),
       child: Scaffold(
-        appBar: AppAppBar(
+        appBar: const AppAppBar(
           title: AppStrings.tripPlannerRecentTrips,
         ),
         body: BlocBuilder<TripHistoryBloc, TripHistoryState>(

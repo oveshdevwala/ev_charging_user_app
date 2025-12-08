@@ -51,7 +51,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       create: (context) => sl<PurchaseCubit>()..reset(),
       child: Scaffold(
         backgroundColor: colors.background,
-        appBar: AppAppBar(
+        appBar: const AppAppBar(
           title: AppStrings.valuePackPurchase,
         ),
         body: BlocConsumer<PurchaseCubit, PurchaseState>(

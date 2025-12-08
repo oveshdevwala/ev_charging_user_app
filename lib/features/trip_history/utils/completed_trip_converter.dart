@@ -57,12 +57,11 @@ class CompletedTripConverter {
     final vehicle = VehicleProfileModel(
       id: 'default',
       name: completedTrip.vehicleName ?? 'Default Vehicle',
-      batteryCapacityKwh: 75.0, // Default value
-      consumptionWhPerKm: 180.0, // Default value
+      batteryCapacityKwh: 75, // Default value
+      consumptionWhPerKm: 180, // Default value
       currentSocPercent: batteryGraphData.isNotEmpty
           ? batteryGraphData.first.socPercent
           : 80.0,
-      reserveSocPercent: 10.0,
     );
 
     return TripModel(
@@ -76,8 +75,6 @@ class CompletedTripConverter {
       isFavorite: completedTrip.isFavorite,
       createdAt: completedTrip.createdAt,
       batteryGraphData: batteryGraphData,
-      // Add cost breakdown if needed
-      costBreakdown: <CostBreakdownItem>[],
     );
   }
 }

@@ -17,18 +17,6 @@ class PexelsPhoto {
     required this.src,
   });
 
-  /// Photo ID
-  final int id;
-
-  /// Photographer name (for attribution)
-  final String photographer;
-
-  /// Photo page URL on Pexels
-  final String url;
-
-  /// Image source URLs for different sizes
-  final PexelsSrc src;
-
   /// Create from JSON
   factory PexelsPhoto.fromJson(Map<String, dynamic> json) {
     return PexelsPhoto(
@@ -40,6 +28,18 @@ class PexelsPhoto {
       ),
     );
   }
+
+  /// Photo ID
+  final int id;
+
+  /// Photographer name (for attribution)
+  final String photographer;
+
+  /// Photo page URL on Pexels
+  final String url;
+
+  /// Image source URLs for different sizes
+  final PexelsSrc src;
 
   /// Convert to JSON
   Map<String, dynamic> toJson() {

@@ -40,7 +40,6 @@ class TripTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
             color: colors.outline.withValues(alpha: 0.2),
-            width: 1,
           ),
         ),
         child: Row(
@@ -79,7 +78,7 @@ class TripTile extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '${trip.formattedDistance}',
+                        trip.formattedDistance,
                         style: TextStyle(
                           fontSize: 12.sp,
                           color: colors.textSecondary,
