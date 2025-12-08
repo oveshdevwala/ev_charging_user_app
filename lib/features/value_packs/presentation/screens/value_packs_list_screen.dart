@@ -121,7 +121,7 @@ class _ValuePacksListScreenState extends State<_ValuePacksListScreenView> {
                   SizedBox(height: 24.h),
                   ElevatedButton(
                     onPressed: () => context.read<ValuePacksListCubit>().load(),
-                    child: Text(AppStrings.retry),
+                    child: const Text(AppStrings.retry),
                   ),
                 ],
               ),
@@ -220,12 +220,12 @@ class _ValuePacksListScreenState extends State<_ValuePacksListScreenView> {
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppStrings.filter),
+        title: const Text(AppStrings.filter),
         content: const Text('Filter options coming soon'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(AppStrings.ok),
+            child: const Text(AppStrings.ok),
           ),
         ],
       ),
@@ -236,7 +236,7 @@ class _ValuePacksListScreenState extends State<_ValuePacksListScreenView> {
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppStrings.sort),
+        title: const Text(AppStrings.sort),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -85,7 +85,7 @@ class PexelsApiService {
       );
 
       if (response.statusCode == 200) {
-        final data = response.data as Map<String, dynamic>;
+        final data = response.data!;
         final pexelsResponse = PexelsResponse.fromJson(data);
         return pexelsResponse.photos;
       } else {
@@ -135,7 +135,7 @@ class PexelsApiService {
       );
 
       if (response.statusCode == 200) {
-        final data = response.data as Map<String, dynamic>;
+        final data = response.data!;
         final pexelsResponse = PexelsResponse.fromJson(data);
         return pexelsResponse.photos;
       } else {

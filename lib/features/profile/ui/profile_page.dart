@@ -105,6 +105,14 @@ class ProfilePage extends StatelessWidget {
           onTap: () => context.push(AppRoutes.paymentMethods.path),
         ),
         ProfileMenuItem(
+          icon: Iconsax.car,
+          title: AppStrings.vehicleList,
+          onTap: () => context.push(
+            AppRoutes.vehicleList.path,
+            extra: 'user_abc', // TODO: Get actual userId from profile
+          ),
+        ),
+        ProfileMenuItem(
           icon: Iconsax.shield_tick,
           title: 'Security',
           onTap: () => context.push(AppRoutes.changePassword.path),

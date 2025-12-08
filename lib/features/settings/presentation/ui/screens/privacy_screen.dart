@@ -15,10 +15,6 @@ import '../../../../../widgets/widgets.dart';
 import '../../../data/repositories/repositories.dart';
 import '../../blocs/blocs.dart';
 import '../../viewmodels/viewmodels.dart';
-import '../../widgets/safe_scroll_area.dart';
-import '../../widgets/settings_section_card.dart';
-import '../../widgets/settings_select_tile.dart';
-import '../../widgets/settings_toggle_tile.dart';
 
 /// Privacy & Security settings screen.
 class PrivacyScreen extends StatelessWidget {

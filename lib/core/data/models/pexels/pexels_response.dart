@@ -15,6 +15,20 @@ class PexelsResponse {
     this.nextPage,
   });
 
+  /// Create from JSON
+  factory PexelsResponse.fromJson(Map<String, dynamic> json) {
+    final photosList = json['photos'] as List<dynamic>? ?? [];
+    return PexelsResponse(
+      photos: photosList
+          .map((photo) => PexelsPhoto.fromJson(photo as Map<String, dynamic>))
+          .toList(),
+      page: json['page'] as int? ?? 1,
+      perPage: json['per_page'] as int? ?? 15,
+      totalResults: json['total_results'] as int? ?? 0,
+      nextPage: json['next_page'] as String?,
+    );
+  }
+
   /// List of photos
   final List<PexelsPhoto> photos;
 
@@ -29,20 +43,6 @@ class PexelsResponse {
 
   /// Next page URL (if available)
   final String? nextPage;
-
-  /// Create from JSON
-  factory PexelsResponse.fromJson(Map<String, dynamic> json) {
-    final photosList = json['photos'] as List<dynamic>? ?? [];
-    return PexelsResponse(
-      photos: photosList
-          .map((photo) => PexelsPhoto.fromJson(photo as Map<String, dynamic>))
-          .toList(),
-      page: json['page'] as int? ?? 1,
-      perPage: json['per_page'] as int? ?? 15,
-      totalResults: json['total_results'] as int? ?? 0,
-      nextPage: json['next_page'] as String?,
-    );
-  }
 
   /// Convert to JSON
   Map<String, dynamic> toJson() {

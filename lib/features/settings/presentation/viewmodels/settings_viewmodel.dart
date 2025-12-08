@@ -48,7 +48,7 @@ class SettingsViewModel {
       case FontSizeOption.small:
         return 0.9;
       case FontSizeOption.medium:
-        return 1.0;
+        return 1;
       case FontSizeOption.large:
         return 1.1;
     }

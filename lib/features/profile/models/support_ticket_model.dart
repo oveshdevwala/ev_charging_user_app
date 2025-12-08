@@ -12,12 +12,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'support_ticket_model.g.dart';
 
 /// Support ticket status.
-enum TicketStatus {
-  open,
-  inProgress,
-  resolved,
-  closed,
-}
+enum TicketStatus { open, inProgress, resolved, closed }
 
 /// Support ticket model.
 @JsonSerializable()
@@ -26,7 +21,8 @@ class SupportTicketModel extends Equatable {
     required this.id,
     required this.subject,
     required this.message,
-    required this.createdAt, this.attachments = const [],
+    required this.createdAt,
+    this.attachments = const [],
     this.status = TicketStatus.open,
     this.updatedAt,
     this.ticketNumber,
@@ -95,7 +91,9 @@ class SupportTicketModel extends Equatable {
   static String _dateTimeToJson(DateTime date) => date.toIso8601String();
 
   static DateTime? _dateTimeFromJsonNullable(value) {
-    if (value == null) return null;
+    if (value == null) {
+      return null;
+    }
     if (value is String) {
       return DateTime.tryParse(value);
     }
@@ -107,14 +105,13 @@ class SupportTicketModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        subject,
-        message,
-        attachments,
-        status,
-        createdAt,
-        updatedAt,
-        ticketNumber,
-      ];
+    id,
+    subject,
+    message,
+    attachments,
+    status,
+    createdAt,
+    updatedAt,
+    ticketNumber,
+  ];
 }
-

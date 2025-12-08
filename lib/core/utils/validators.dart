@@ -1,91 +1,71 @@
 /// File: lib/core/utils/validators.dart
-/// Purpose: Form validation utilities
+/// Purpose: Validation utilities for forms and data
 /// Belongs To: shared
 /// Customization Guide:
-///    - Add new validation methods as needed
+///    - Add new validators as needed
 library;
 
-import '../constants/app_constants.dart';
+/// Validator class with static methods for form validation.
+class Validators {
+  Validators._();
 
-/// Form validation utilities.
-abstract final class Validators {
-  /// Validate email format.
+  /// Required field validator.
+  static String? required(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'This field is required';
+    }
+    return null;
+  }
+
+  /// Email validator.
   static String? email(String? value) {
     if (value == null || value.isEmpty) {
       return 'Email is required';
     }
-    if (!AppConstants.emailRegex.hasMatch(value)) {
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    if (!emailRegex.hasMatch(value)) {
       return 'Please enter a valid email';
     }
     return null;
   }
 
-  /// Validate password.
+  /// Password validator.
   static String? password(String? value) {
     if (value == null || value.isEmpty) {
       return 'Password is required';
     }
-    if (value.length < AppConstants.minPasswordLength) {
-      return 'Password must be at least ${AppConstants.minPasswordLength} characters';
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters';
     }
     return null;
+  }
+}
+
+/// Validator functions for common use cases (legacy support).
+
+/// Validate email address.
+String? validateEmail(String? value) {
+  return Validators.email(value);
   }
 
-  /// Validate password confirmation.
-  static String? confirmPassword(String? value, String password) {
-    if (value == null || value.isEmpty) {
-      return 'Please confirm your password';
-    }
-    if (value != password) {
-      return 'Passwords do not match';
-    }
-    return null;
+/// Validate password.
+String? validatePassword(String? value) {
+  return Validators.password(value);
   }
 
-  /// Validate required field.
-  static String? required(String? value, [String fieldName = 'This field']) {
-    if (value == null || value.isEmpty) {
-      return '$fieldName is required';
+/// Validate latitude.
+bool isValidLatitude(double lat) {
+  return lat >= -90 && lat <= 90;
     }
-    return null;
+
+/// Validate longitude.
+bool isValidLongitude(double lng) {
+  return lng >= -180 && lng <= 180;
   }
 
-  /// Validate phone number.
-  static String? phone(String? value) {
-    if (value == null || value.isEmpty) {
-      return null; // Phone is optional
-    }
-    if (!AppConstants.phoneRegex.hasMatch(value)) {
-      return 'Please enter a valid phone number';
-    }
-    return null;
-  }
-
-  /// Validate name.
-  static String? name(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Name is required';
-    }
-    if (value.length < AppConstants.minNameLength) {
-      return 'Name must be at least ${AppConstants.minNameLength} characters';
-    }
-    if (value.length > AppConstants.maxNameLength) {
-      return 'Name must be less than ${AppConstants.maxNameLength} characters';
-    }
-    return null;
-  }
-
-  /// Validate OTP code.
-  static String? otp(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'OTP is required';
-    }
-    if (value.length != AppConstants.otpLength) {
-      return 'OTP must be ${AppConstants.otpLength} digits';
-    }
-    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-      return 'OTP must contain only numbers';
-    }
-    return null;
-  }
+/// Validate coordinate pair.
+bool isValidCoordinate(double lat, double lng) {
+  return isValidLatitude(lat) && isValidLongitude(lng);
 }

@@ -23,7 +23,6 @@ class ValuePackDetailCubit extends Cubit<ValuePackDetailState> {
   Future<void> load(String id) async {
     emit(state.copyWith(
       status: ValuePackDetailStatus.loading,
-      error: null,
     ));
 
     try {
@@ -45,7 +44,6 @@ class ValuePackDetailCubit extends Cubit<ValuePackDetailState> {
         status: ValuePackDetailStatus.loaded,
         pack: pack,
         relatedPacks: relatedPacks,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(

@@ -23,15 +23,12 @@ class ValuePacksListCubit extends Cubit<ValuePacksListState> {
       filter: filter,
       sort: sort,
       page: 1,
-      error: null,
     ));
 
     try {
       final packs = await _getValuePacks(
         filter: filter,
         sort: sort,
-        page: 1,
-        limit: 20,
       );
 
       emit(state.copyWith(
@@ -39,7 +36,6 @@ class ValuePacksListCubit extends Cubit<ValuePacksListState> {
         packs: packs,
         page: 1,
         hasMore: packs.length >= 20,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -53,15 +49,12 @@ class ValuePacksListCubit extends Cubit<ValuePacksListState> {
   Future<void> refresh() async {
     emit(state.copyWith(
       status: ValuePacksListStatus.refreshing,
-      error: null,
     ));
 
     try {
       final packs = await _getValuePacks(
         filter: state.filter,
         sort: state.sort,
-        page: 1,
-        limit: 20,
       );
 
       emit(state.copyWith(
@@ -69,7 +62,6 @@ class ValuePacksListCubit extends Cubit<ValuePacksListState> {
         packs: packs,
         page: 1,
         hasMore: packs.length >= 20,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -93,7 +85,6 @@ class ValuePacksListCubit extends Cubit<ValuePacksListState> {
         filter: state.filter,
         sort: state.sort,
         page: nextPage,
-        limit: 20,
       );
 
       emit(state.copyWith(
@@ -101,7 +92,6 @@ class ValuePacksListCubit extends Cubit<ValuePacksListState> {
         packs: [...state.packs, ...packs],
         page: nextPage,
         hasMore: packs.length >= 20,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(

@@ -36,7 +36,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   final _ratingController = TextEditingController();
   final _titleController = TextEditingController();
   final _messageController = TextEditingController();
-  double _selectedRating = 5.0;
+  double _selectedRating = 5;
   bool _showReviewForm = false;
 
   @override

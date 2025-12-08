@@ -63,7 +63,6 @@ class CompletedTripBatteryChart extends StatelessWidget {
           minY: 0,
           maxY: 100,
           gridData: FlGridData(
-            show: true,
             horizontalInterval: 20,
             verticalInterval: maxDistance > 0 ? maxDistance / 5 : 100,
             getDrawingHorizontalLine: (value) {
@@ -80,12 +79,11 @@ class CompletedTripBatteryChart extends StatelessWidget {
             },
           ),
           titlesData: FlTitlesData(
-            show: true,
             rightTitles: const AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
+              
             ),
             topTitles: const AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
+              
             ),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
@@ -148,7 +146,6 @@ class CompletedTripBatteryChart extends StatelessWidget {
               barWidth: 3,
               isStrokeCapRound: true,
               dotData: FlDotData(
-                show: true,
                 getDotPainter: (spot, percent, barData, index) {
                   if (index < timeline.length) {
                     final point = timeline[index];

@@ -14,7 +14,7 @@ class GetValuePackDetail {
 
   /// Execute the use case.
   Future<ValuePack?> call(String id) async {
-    return await _repository.getValuePackDetail(id);
+    return _repository.getValuePackDetail(id);
   }
 }
 

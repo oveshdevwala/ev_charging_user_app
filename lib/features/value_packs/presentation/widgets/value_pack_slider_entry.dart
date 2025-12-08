@@ -43,7 +43,6 @@ class ValuePackSliderEntry extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
             color: colors.primaryContainer.withOpacity(0.3),
-            width: 1,
           ),
         ),
         child: Column(

@@ -318,7 +318,10 @@ class _HomePageContent extends StatelessWidget {
       case HomeCategory.myBookings:
         context.go(AppRoutes.userBookings.path);
       case HomeCategory.myVehicles:
-        _showSnackBar(context, 'My Vehicles');
+        context.push(
+          AppRoutes.vehicleList.path,
+          extra: 'user_abc', // TODO: Get actual userId from auth
+        );
       case HomeCategory.chargingHistory:
         context.push(AppRoutes.activityDetails.path);
       case HomeCategory.tripPlanner:

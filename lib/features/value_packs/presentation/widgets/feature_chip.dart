@@ -32,7 +32,6 @@ class FeatureChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.r),
         border: Border.all(
           color: colors.outline.withOpacity(0.2),
-          width: 1,
         ),
       ),
       child: Row(

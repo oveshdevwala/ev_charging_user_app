@@ -31,7 +31,7 @@ Future<T?> showAppBottomSheet<T>({
       maxChildSize: maxChildSize,
       minChildSize: minChildSize,
       builder: (context, scrollController) {
-        return Container(
+        return DecoratedBox(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),

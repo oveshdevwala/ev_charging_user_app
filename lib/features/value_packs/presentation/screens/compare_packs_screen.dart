@@ -33,7 +33,7 @@ class ComparePacksScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: colors.background,
-      appBar: AppAppBar(
+      appBar: const AppAppBar(
         title: AppStrings.valuePackCompare,
       ),
       body: packs.isEmpty
@@ -89,7 +89,6 @@ class _ComparisonTable extends StatelessWidget {
     return Table(
       border: TableBorder.all(
         color: colors.outline.withOpacity(0.2),
-        width: 1,
       ),
       children: [
         // Header row

@@ -24,7 +24,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   // Load environment variables from .env file
   try {
-    await dotenv.load(fileName: '.env');
+    await dotenv.load();
   } catch (e) {
     // .env file not found or error loading - app can still run
     // but Pexels API will not work until .env is configured

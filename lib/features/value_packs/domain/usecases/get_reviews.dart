@@ -14,7 +14,7 @@ class GetReviews {
 
   /// Execute the use case.
   Future<List<Review>> call(String packId, {int page = 1, int limit = 20}) async {
-    return await _repository.getReviews(packId, page: page, limit: limit);
+    return _repository.getReviews(packId, page: page, limit: limit);
   }
 }
 

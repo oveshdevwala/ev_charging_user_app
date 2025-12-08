@@ -20,7 +20,7 @@ class SubmitReview {
     required String message,
     List<String>? images,
   }) async {
-    return await _repository.submitReview(
+    return _repository.submitReview(
       packId: packId,
       rating: rating,
       title: title,

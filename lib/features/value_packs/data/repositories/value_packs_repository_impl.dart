@@ -203,7 +203,7 @@ class ValuePacksRepositoryImpl implements ValuePacksRepository {
 
   @override
   Future<Map<String, dynamic>> comparePacks(List<String> packIds) async {
-    return await _remoteDataSource.comparePacks(packIds);
+    return _remoteDataSource.comparePacks(packIds);
   }
 
   @override
@@ -219,12 +219,12 @@ class ValuePacksRepositoryImpl implements ValuePacksRepository {
 
   @override
   Future<List<Map<String, String>>> getFAQ() async {
-    return await _remoteDataSource.getFAQ();
+    return _remoteDataSource.getFAQ();
   }
 
   @override
   Future<String> getInvoiceUrl(String receiptId) async {
-    return await _remoteDataSource.getInvoiceUrl(receiptId);
+    return _remoteDataSource.getInvoiceUrl(receiptId);
   }
 }
 
