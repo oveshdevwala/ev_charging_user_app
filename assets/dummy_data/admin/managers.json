@@ -1,0 +1,55 @@
+[
+  {
+    "id": "mgr_001",
+    "name": "John Smith",
+    "email": "john.smith@evcharging.com",
+    "phone": "+1 555-2001",
+    "status": "active",
+    "avatarUrl": "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "assignedStations": ["st_001", "st_005"],
+    "totalStations": 2,
+    "createdAt": "2023-06-15T09:00:00Z",
+    "lastLoginAt": "2024-12-08T08:00:00Z",
+    "updatedAt": "2024-12-08T08:00:00Z"
+  },
+  {
+    "id": "mgr_002",
+    "name": "Sarah Johnson",
+    "email": "sarah.johnson@evcharging.com",
+    "phone": "+1 555-2002",
+    "status": "active",
+    "avatarUrl": "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "assignedStations": ["st_002"],
+    "totalStations": 1,
+    "createdAt": "2023-09-20T11:30:00Z",
+    "lastLoginAt": "2024-12-07T17:45:00Z",
+    "updatedAt": "2024-12-07T17:45:00Z"
+  },
+  {
+    "id": "mgr_003",
+    "name": "Michael Chen",
+    "email": "michael.chen@evcharging.com",
+    "phone": "+1 555-2003",
+    "status": "active",
+    "avatarUrl": "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "assignedStations": ["st_003"],
+    "totalStations": 1,
+    "createdAt": "2024-01-10T14:00:00Z",
+    "lastLoginAt": "2024-12-08T10:30:00Z",
+    "updatedAt": "2024-12-08T10:30:00Z"
+  },
+  {
+    "id": "mgr_004",
+    "name": "Lisa Anderson",
+    "email": "lisa.anderson@evcharging.com",
+    "phone": "+1 555-2004",
+    "status": "inactive",
+    "avatarUrl": null,
+    "assignedStations": [],
+    "totalStations": 0,
+    "createdAt": "2024-04-05T08:45:00Z",
+    "lastLoginAt": "2024-08-15T09:00:00Z",
+    "updatedAt": "2024-08-15T09:00:00Z"
+  }
+]
+

@@ -1,0 +1,81 @@
+[
+  {
+    "id": "txn_001",
+    "userId": "usr_001",
+    "userName": "Alex Thompson",
+    "type": "charge",
+    "amount": 15.93,
+    "status": "completed",
+    "description": "Charging session at Downtown EV Hub",
+    "paymentMethod": "wallet",
+    "sessionId": "ses_001",
+    "referenceId": "REF-20241208-001",
+    "createdAt": "2024-12-08T09:15:00Z"
+  },
+  {
+    "id": "txn_002",
+    "userId": "usr_002",
+    "userName": "Emily Davis",
+    "type": "charge",
+    "amount": 28.26,
+    "status": "completed",
+    "description": "Charging session at Westside Shopping Center",
+    "paymentMethod": "wallet",
+    "sessionId": "ses_003",
+    "referenceId": "REF-20241207-001",
+    "createdAt": "2024-12-07T15:05:00Z"
+  },
+  {
+    "id": "txn_003",
+    "userId": "usr_001",
+    "userName": "Alex Thompson",
+    "type": "charge",
+    "amount": 20.98,
+    "status": "completed",
+    "description": "Charging session at Beach Boulevard Charging",
+    "paymentMethod": "card",
+    "sessionId": "ses_004",
+    "referenceId": "REF-20241206-001",
+    "createdAt": "2024-12-06T17:10:00Z"
+  },
+  {
+    "id": "txn_004",
+    "userId": "usr_005",
+    "userName": "David Brown",
+    "type": "charge",
+    "amount": 0.74,
+    "status": "refunded",
+    "description": "Cancelled session refund",
+    "paymentMethod": "wallet",
+    "sessionId": "ses_005",
+    "referenceId": "REF-20241205-001",
+    "createdAt": "2024-12-05T10:35:00Z"
+  },
+  {
+    "id": "txn_005",
+    "userId": "usr_001",
+    "userName": "Alex Thompson",
+    "type": "recharge",
+    "amount": 100.00,
+    "status": "completed",
+    "description": "Wallet recharge via credit card",
+    "paymentMethod": "card",
+    "sessionId": null,
+    "referenceId": "REF-20241204-001",
+    "createdAt": "2024-12-04T12:30:00Z"
+  },
+  {
+    "id": "txn_006",
+    "userId": "usr_003",
+    "userName": "Robert Wilson",
+    "type": "recharge",
+    "amount": 250.00,
+    "status": "completed",
+    "description": "Wallet recharge via Apple Pay",
+    "paymentMethod": "apple_pay",
+    "sessionId": null,
+    "referenceId": "REF-20241203-001",
+    "createdAt": "2024-12-03T09:00:00Z"
+  }
+]
+

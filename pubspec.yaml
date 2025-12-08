@@ -84,6 +84,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/lottie/
+    - assets/dummy_data/admin/
     - .env
 
 
