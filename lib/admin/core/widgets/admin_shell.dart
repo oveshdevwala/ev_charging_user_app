@@ -145,14 +145,22 @@ class AdminPageContent extends StatelessWidget {
     final contentPadding = padding ?? getContentPadding(context);
     final effectiveMaxWidth = maxWidth ?? AdminConfig.contentMaxWidth;
 
+    // Check if we're in a modal/dialog context by checking if parent is Dialog
+    final isInDialog = context.findAncestorWidgetOfExactType<Dialog>() != null;
+
     Widget content = Padding(
       padding: contentPadding,
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: effectiveMaxWidth),
-          child: child,
-        ),
-      ),
+      child: isInDialog
+          ? ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: effectiveMaxWidth),
+              child: child,
+            )
+          : Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: effectiveMaxWidth),
+                child: child,
+              ),
+            ),
     );
 
     if (scrollable) {

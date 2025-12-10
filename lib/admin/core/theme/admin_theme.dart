@@ -66,6 +66,8 @@ class AdminThemeService extends ChangeNotifier {
   }
 
   Future<void> toggleTheme() async {
+    // Toggle between light and dark mode
+    // If currently light, switch to dark; otherwise switch to light
     final newMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     await setThemeMode(newMode);
   }
@@ -75,5 +77,33 @@ class AdminThemeService extends ChangeNotifier {
   Future<void> setDarkMode() async => setThemeMode(ThemeMode.dark);
   
   Future<void> setSystemMode() async => setThemeMode(ThemeMode.system);
+}
+
+/// InheritedWidget to provide AdminThemeService to the widget tree.
+class AdminThemeProvider extends InheritedWidget {
+  const AdminThemeProvider({
+    required this.themeService,
+    required super.child,
+    super.key,
+  });
+
+  final AdminThemeService themeService;
+
+  /// Get AdminThemeService from context.
+  static AdminThemeService of(BuildContext context) {
+    final provider = context.dependOnInheritedWidgetOfExactType<AdminThemeProvider>();
+    if (provider == null) {
+      throw StateError(
+        'AdminThemeProvider not found in widget tree. '
+        'Ensure AdminApp wraps MaterialApp with AdminThemeProvider.',
+      );
+    }
+    return provider.themeService;
+  }
+
+  @override
+  bool updateShouldNotify(AdminThemeProvider oldWidget) {
+    return themeService != oldWidget.themeService;
+  }
 }
 

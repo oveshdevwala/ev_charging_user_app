@@ -3,6 +3,8 @@
 /// Belongs To: admin/features/stations
 library;
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -61,6 +63,8 @@ class _StationEditViewState extends State<_StationEditView> {
 
   AdminStationStatus _status = AdminStationStatus.active;
   bool _isLoading = false;
+  File? _imageFile;
+  String? _initialImageUrl;
 
   bool get isEditing => widget.stationId != null;
 
@@ -100,6 +104,7 @@ class _StationEditViewState extends State<_StationEditView> {
     _longitudeController.text = station.longitude.toString();
     _operatingHoursController.text = station.operatingHours ?? '24/7';
     _status = station.status;
+    _initialImageUrl = station.imageUrl;
   }
 
   Future<void> _saveStation() async {
@@ -183,6 +188,23 @@ class _StationEditViewState extends State<_StationEditView> {
                         flex: 2,
                         child: Column(
                           children: [
+                            _ImageCard(
+                              imageFile: _imageFile,
+                              imageUrl: _initialImageUrl,
+                              onImagePicked: (file) {
+                                setState(() {
+                                  _imageFile = file;
+                                  _initialImageUrl = null; // Clear URL when new file is picked
+                                });
+                              },
+                              onImageRemoved: () {
+                                setState(() {
+                                  _imageFile = null;
+                                  _initialImageUrl = null;
+                                });
+                              },
+                            ),
+                            SizedBox(height: 16.h),
                             _BasicInfoCard(
                               nameController: _nameController,
                               addressController: _addressController,
@@ -229,6 +251,36 @@ class _StationEditViewState extends State<_StationEditView> {
           );
         },
       );
+  }
+}
+
+class _ImageCard extends StatelessWidget {
+  const _ImageCard({
+    required this.imageFile,
+    required this.imageUrl,
+    required this.onImagePicked,
+    required this.onImageRemoved,
+  });
+
+  final File? imageFile;
+  final String? imageUrl;
+  final ValueChanged<File> onImagePicked;
+  final VoidCallback onImageRemoved;
+
+  @override
+  Widget build(BuildContext context) {
+    return AdminCardWithHeader(
+      title: 'Station Image',
+      child: AdminImagePicker(
+        imageFile: imageFile,
+        imageUrl: imageUrl,
+        onImagePicked: onImagePicked,
+        onImageRemoved: onImageRemoved,
+        height: 240.h,
+        label: null, // Header already has label
+        helperText: 'Upload a high-quality image of the charging station (recommended: 1920x1080px)',
+      ),
+    );
   }
 }
 

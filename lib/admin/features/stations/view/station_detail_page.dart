@@ -59,8 +59,10 @@ class _StationDetailView extends StatelessWidget {
         }
 
         return AdminPageContent(
+          scrollable: false,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               // Header with breadcrumbs
               AdminPageHeader(
@@ -105,36 +107,62 @@ class _StationDetailView extends StatelessWidget {
               SizedBox(height: 24.h),
 
               // Content
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Main info
-                  Expanded(
-                    flex: 2,
-                    child: Column(
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isWide = constraints.maxWidth > 900;
+                  if (isWide) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Main info
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _StationOverviewCard(station: station),
+                              SizedBox(height: 16.h),
+                              _StationChargersCard(station: station),
+                              SizedBox(height: 16.h),
+                              _StationAmenitiesCard(station: station),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 24.w),
+                        // Side info
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _StationStatsCard(station: station),
+                              SizedBox(height: 16.h),
+                              _StationManagerCard(station: station),
+                              SizedBox(height: 16.h),
+                              _StationContactCard(station: station),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         _StationOverviewCard(station: station),
                         SizedBox(height: 16.h),
-                        _StationChargersCard(station: station),
-                        SizedBox(height: 16.h),
-                        _StationAmenitiesCard(station: station),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 24.w),
-                  // Side info
-                  Expanded(
-                    child: Column(
-                      children: [
                         _StationStatsCard(station: station),
+                        SizedBox(height: 16.h),
+                        _StationChargersCard(station: station),
                         SizedBox(height: 16.h),
                         _StationManagerCard(station: station),
                         SizedBox(height: 16.h),
+                        _StationAmenitiesCard(station: station),
+                        SizedBox(height: 16.h),
                         _StationContactCard(station: station),
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  }
+                },
               ),
             ],
           ),

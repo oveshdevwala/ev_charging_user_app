@@ -96,40 +96,43 @@ class AdminModalSheet extends StatelessWidget {
         color: colors.surface,
         borderRadius: BorderRadius.circular(16.r),
         child: Container(
-          width: width ?? maxWidth.w,
-          height: height ?? maxHeight.h,
           constraints: BoxConstraints(
             maxWidth: maxWidth.w,
             maxHeight: maxHeight.h,
+            minWidth: width ?? 400.w,
           ),
           decoration: BoxDecoration(
+            color: colors.surface,
             borderRadius: BorderRadius.circular(16.r),
             boxShadow: [
               BoxShadow(
-                color: colors.shadow.withOpacity(0.1),
+                color: colors.shadow.withValues(alpha: 0.1),
                 blurRadius: 24.r,
                 offset: Offset(0, 8.h),
               ),
             ],
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               // Header
               if (title != null || showCloseButton)
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24.w,
+                    vertical: 16.h,
+                  ),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
                         color: colors.divider,
-                        width: 1,
                       ),
                     ),
                   ),
                   child: Row(
                     children: [
                       if (title != null) ...[
-                        Expanded(
+                        Flexible(
                           child: Text(
                             title!,
                             style: TextStyle(
@@ -137,6 +140,7 @@ class AdminModalSheet extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                               color: colors.textPrimary,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -154,10 +158,10 @@ class AdminModalSheet extends StatelessWidget {
                 ),
 
               // Content with Material wrapper and padding
-              Expanded(
+              Flexible(
                 child: Material(
                   color: Colors.transparent,
-                  child: Padding(
+                  child: SingleChildScrollView(
                     padding: EdgeInsets.all(24.w),
                     child: child,
                   ),

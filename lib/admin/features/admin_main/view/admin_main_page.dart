@@ -13,15 +13,17 @@ import 'package:go_router/go_router.dart';
 import '../../../core/core.dart';
 import '../../../routes/admin_routes.dart';
 import '../../dashboard/view/dashboard_page.dart';
+import '../../managers/managers.dart';
+import '../../sessions/presentation/screens/sessions_list_screen.dart';
 import '../../stations/view/stations_list_page.dart';
+import '../../users/users.dart';
 
 /// Main admin page that manages tab switching within AdminShell.
 /// Uses IndexedStack for instant tab switching while maintaining URL sync for browser navigation.
 /// Widget instance persists across tab changes - only IndexedStack index updates.
 class AdminMainPage extends StatefulWidget {
   const AdminMainPage({
-    super.key,
-    required this.initialRoute,
+    required this.initialRoute, super.key,
   });
 
   final AdminRoutes initialRoute;
@@ -59,9 +61,9 @@ class _AdminMainPageState extends State<AdminMainPage> {
   final List<Widget> _views = [
     const DashboardPage(),
     const StationsListPage(),
-    const _PlaceholderView(title: AdminStrings.navManagers),
-    const _PlaceholderView(title: AdminStrings.navUsers),
-    const _PlaceholderView(title: AdminStrings.navSessions),
+    const ManagersView(),
+    const UsersView(),
+    const SessionsListScreen(),
     const _PlaceholderView(title: AdminStrings.navPayments),
     const _PlaceholderView(title: AdminStrings.navWallets),
     const _PlaceholderView(title: AdminStrings.navOffers),

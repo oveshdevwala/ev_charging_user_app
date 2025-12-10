@@ -3,12 +3,12 @@
 /// Belongs To: admin
 library;
 
-// Blocs exports
-export 'blocs/blocs.dart';
 // Core exports
 export 'core/core.dart';
 // Features exports
 export 'features/features.dart';
+// Blocs exports
+export 'features/managers/blocs/blocs.dart';
 // Models exports
 export 'models/models.dart';
 // Repositories exports

@@ -140,5 +140,84 @@
     "totalRevenue": 54680.00,
     "updatedAt": "2024-12-08T07:30:00Z"
   }
+,
+  {
+    "id": "st_006",
+    "name": "Demo Downtown Hub",
+    "address": "1001 Demo Street, Downtown, CA 90001",
+    "latitude": 34.0500,
+    "longitude": -118.2500,
+    "status": "active",
+    "createdAt": "2024-06-15T10:00:00Z",
+    "description": "Demo station for manager assignment showcase.",
+    "phone": "+1 555-1101",
+    "email": "demo1001@evcharging.com",
+    "imageUrl": "https://images.pexels.com/photos/9799995/pexels-photo-9799995.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "chargers": [
+      { "id": "ch_1001", "type": "ccs", "powerKw": 150, "status": "available", "connectorId": "CCS-1", "pricePerKwh": 0.35 },
+      { "id": "ch_1002", "type": "type2", "powerKw": 22, "status": "available", "connectorId": "T2-1", "pricePerKwh": 0.25 }
+    ],
+    "amenities": ["WiFi", "Restroom", "Covered Parking"],
+    "operatingHours": "24/7",
+    "managerId": "mgr_01",
+    "managerName": "Asha Kulkarni",
+    "rating": 4.6,
+    "totalReviews": 42,
+    "totalSessions": 320,
+    "totalRevenue": 8200.00,
+    "updatedAt": "2024-12-10T09:00:00Z"
+  },
+  {
+    "id": "st_007",
+    "name": "Demo Westside Mall",
+    "address": "1002 Commerce Blvd, Demo City, CA 90025",
+    "latitude": 34.0390,
+    "longitude": -118.4500,
+    "status": "active",
+    "createdAt": "2024-07-12T12:00:00Z",
+    "description": "Demo station near shopping area for testing.",
+    "phone": "+1 555-1102",
+    "email": "demo1002@evcharging.com",
+    "imageUrl": "https://images.pexels.com/photos/9800009/pexels-photo-9800009.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "chargers": [
+      { "id": "ch_1003", "type": "ccs", "powerKw": 200, "status": "available", "connectorId": "CCS-1", "pricePerKwh": 0.40 },
+      { "id": "ch_1004", "type": "tesla", "powerKw": 250, "status": "occupied", "connectorId": "TSL-1", "pricePerKwh": 0.42 }
+    ],
+    "amenities": ["WiFi", "Restroom", "Shopping Mall"],
+    "operatingHours": "6:00 AM - 11:00 PM",
+    "managerId": "mgr_01",
+    "managerName": "Asha Kulkarni",
+    "rating": 4.4,
+    "totalReviews": 36,
+    "totalSessions": 210,
+    "totalRevenue": 6400.00,
+    "updatedAt": "2024-12-11T15:30:00Z"
+  },
+  {
+    "id": "st_008",
+    "name": "Demo Airport Express",
+    "address": "1003 Terminal Way, Demo Airport, CA 90045",
+    "latitude": 33.9400,
+    "longitude": -118.4080,
+    "status": "active",
+    "createdAt": "2024-08-01T08:30:00Z",
+    "description": "Demo airport-adjacent station for quick tests.",
+    "phone": "+1 555-1103",
+    "email": "demo1003@evcharging.com",
+    "imageUrl": "https://images.pexels.com/photos/9799970/pexels-photo-9799970.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "chargers": [
+      { "id": "ch_1005", "type": "ccs", "powerKw": 300, "status": "available", "connectorId": "CCS-1", "pricePerKwh": 0.45 },
+      { "id": "ch_1006", "type": "chademo", "powerKw": 100, "status": "available", "connectorId": "CHD-1", "pricePerKwh": 0.38 }
+    ],
+    "amenities": ["WiFi", "Restroom", "Shuttle Service"],
+    "operatingHours": "24/7",
+    "managerId": "mgr_02",
+    "managerName": "Ravi Sharma",
+    "rating": 4.5,
+    "totalReviews": 28,
+    "totalSessions": 180,
+    "totalRevenue": 5200.00,
+    "updatedAt": "2024-12-12T10:00:00Z"
+  }
 ]
 

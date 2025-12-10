@@ -79,11 +79,11 @@ class StationsRepository {
     if (_cachedStations.isEmpty) {
       await _loadStations();
     }
-    try {
-      return _cachedStations.firstWhere((s) => s.id == id);
-    } catch (e) {
+    final matches = _cachedStations.where((s) => s.id == id);
+    if (matches.isEmpty) {
       return null;
     }
+    return matches.first;
   }
 
   /// Create a new station.

@@ -11,8 +11,6 @@ import 'package:iconsax/iconsax.dart';
 import '../../../core/core.dart';
 import '../../../models/admin_station_model.dart';
 import '../stations.dart';
-import 'station_detail_page.dart';
-import 'station_edit_page.dart';
 
 /// Stations list page.
 class StationsListPage extends StatelessWidget {

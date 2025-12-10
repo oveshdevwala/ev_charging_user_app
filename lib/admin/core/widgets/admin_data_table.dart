@@ -37,10 +37,7 @@ class AdminDataColumn<T> {
 
 /// Sort state.
 class SortState {
-  const SortState({
-    this.columnId,
-    this.ascending = true,
-  });
+  const SortState({this.columnId, this.ascending = true});
 
   final String? columnId;
   final bool ascending;
@@ -104,18 +101,11 @@ class AdminDataTable<T> extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Iconsax.document,
-                size: 48.r,
-                color: colors.textTertiary,
-              ),
+              Icon(Iconsax.document, size: 48.r, color: colors.textTertiary),
               SizedBox(height: 16.h),
               Text(
                 emptyMessage ?? AdminStrings.tableNoResults,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: colors.textSecondary,
-                ),
+                style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
               ),
             ],
           ),
@@ -144,7 +134,9 @@ class AdminDataTable<T> extends StatelessWidget {
                     SizedBox(
                       width: 48.w,
                       child: Checkbox(
-                        value: selectedItems?.length == items.length && items.isNotEmpty,
+                        value:
+                            selectedItems?.length == items.length &&
+                            items.isNotEmpty,
                         tristate: true,
                         onChanged: (value) {
                           if (value ?? false) {
@@ -155,7 +147,7 @@ class AdminDataTable<T> extends StatelessWidget {
                         },
                       ),
                     ),
-                  
+
                   // Column headers
                   ...columns.map((column) => _buildHeaderCell(context, column)),
                 ],
@@ -178,7 +170,9 @@ class AdminDataTable<T> extends StatelessWidget {
                     onTap: onRowTap != null ? () => onRowTap!(item) : null,
                     onSelectionChanged: onSelectionChanged != null
                         ? (selected) {
-                            final newSelection = Set<T>.from(selectedItems ?? {});
+                            final newSelection = Set<T>.from(
+                              selectedItems ?? {},
+                            );
                             if (selected) {
                               newSelection.add(item);
                             } else {
@@ -210,8 +204,8 @@ class AdminDataTable<T> extends StatelessWidget {
         mainAxisAlignment: column.alignment == Alignment.centerRight
             ? MainAxisAlignment.end
             : column.alignment == Alignment.center
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.start,
+            ? MainAxisAlignment.center
+            : MainAxisAlignment.start,
         children: [
           Flexible(
             child: Text(
@@ -252,7 +246,7 @@ class AdminDataTable<T> extends StatelessWidget {
     if (column.width != null) {
       return SizedBox(width: column.width, child: cell);
     }
-    return Expanded(flex: column.flex ?? 1, child: cell);
+    return Flexible(flex: column.flex ?? 1, fit: FlexFit.tight, child: cell);
   }
 }
 
@@ -297,15 +291,11 @@ class _DataRowState<T> extends State<_DataRow<T>> {
             color: widget.isSelected
                 ? colors.primaryContainer.withValues(alpha: 0.3)
                 : _isHovered
-                    ? colors.tableRowHover
-                    : colors.surface,
+                ? colors.tableRowHover
+                : colors.surface,
             border: widget.isLast
                 ? null
-                : Border(
-                    bottom: BorderSide(
-                      color: colors.tableBorder,
-                    ),
-                  ),
+                : Border(bottom: BorderSide(color: colors.tableBorder)),
           ),
           child: Row(
             children: [
@@ -320,7 +310,7 @@ class _DataRowState<T> extends State<_DataRow<T>> {
                     },
                   ),
                 ),
-              
+
               // Data cells
               ...widget.columns.map(_buildDataCell),
             ],
@@ -342,7 +332,7 @@ class _DataRowState<T> extends State<_DataRow<T>> {
     if (column.width != null) {
       return SizedBox(width: column.width, child: cell);
     }
-    return Expanded(flex: column.flex ?? 1, child: cell);
+    return Flexible(flex: column.flex ?? 1, fit: FlexFit.tight, child: cell);
   }
 }
 
@@ -376,9 +366,7 @@ class AdminTablePagination extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: colors.divider),
-        ),
+        border: Border(top: BorderSide(color: colors.divider)),
       ),
       child: Row(
         children: [
@@ -386,10 +374,7 @@ class AdminTablePagination extends StatelessWidget {
           if (onPageSizeChanged != null) ...[
             Text(
               AdminStrings.tableItemsPerPage,
-              style: TextStyle(
-                fontSize: 13.sp,
-                color: colors.textSecondary,
-              ),
+              style: TextStyle(fontSize: 13.sp, color: colors.textSecondary),
             ),
             SizedBox(width: 8.w),
             DropdownButton<int>(
@@ -397,10 +382,7 @@ class AdminTablePagination extends StatelessWidget {
               underline: const SizedBox.shrink(),
               isDense: true,
               items: pageSizeOptions.map((size) {
-                return DropdownMenuItem(
-                  value: size,
-                  child: Text('$size'),
-                );
+                return DropdownMenuItem(value: size, child: Text('$size'));
               }).toList(),
               onChanged: (value) {
                 if (value != null) {
@@ -414,10 +396,7 @@ class AdminTablePagination extends StatelessWidget {
           // Showing X to Y of Z
           Text(
             'Showing $startItem to $endItem of $totalItems',
-            style: TextStyle(
-              fontSize: 13.sp,
-              color: colors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 13.sp, color: colors.textSecondary),
           ),
 
           const Spacer(),
@@ -426,9 +405,7 @@ class AdminTablePagination extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                onPressed: currentPage > 1
-                    ? () => onPageChanged(1)
-                    : null,
+                onPressed: currentPage > 1 ? () => onPageChanged(1) : null,
                 icon: Icon(Icons.first_page, size: 20.r),
                 visualDensity: VisualDensity.compact,
               ),
@@ -442,10 +419,7 @@ class AdminTablePagination extends StatelessWidget {
               SizedBox(width: 8.w),
               Text(
                 'Page $currentPage of $totalPages',
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  color: colors.textPrimary,
-                ),
+                style: TextStyle(fontSize: 13.sp, color: colors.textPrimary),
               ),
               SizedBox(width: 8.w),
               IconButton(
@@ -469,4 +443,3 @@ class AdminTablePagination extends StatelessWidget {
     );
   }
 }
-

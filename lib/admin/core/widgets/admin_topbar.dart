@@ -91,8 +91,8 @@ class _TopbarIconButton extends StatelessWidget {
   const _TopbarIconButton({
     required this.icon,
     required this.onPressed,
-    this.badge,
     this.tooltip,
+    this.badge = 0,
   });
 
   final IconData icon;
@@ -151,13 +151,13 @@ class _ThemeToggleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = context.isDark;
     final colors = context.adminColors;
+    final themeService = context.adminThemeService;
 
     return Tooltip(
       message: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
       child: IconButton(
         onPressed: () {
-          // Toggle theme
-          // This would typically be handled by a ThemeService
+          themeService.toggleTheme();
         },
         icon: Icon(
           isDark ? Iconsax.sun_1 : Iconsax.moon,

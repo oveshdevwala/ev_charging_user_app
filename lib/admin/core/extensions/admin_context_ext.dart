@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../routes/admin_routes.dart';
+import '../theme/admin_theme.dart';
 import '../theme/admin_theme_extensions.dart';
 import '../widgets/admin_modal_sheet.dart';
 
@@ -395,5 +396,15 @@ extension AdminContextFocusExt on BuildContext {
 
   /// Whether any field has focus.
   bool get hasFocus => FocusScope.of(this).hasFocus;
+}
+
+// ============================================================
+// Theme Service Extension
+// ============================================================
+
+/// Extension for accessing AdminThemeService.
+extension AdminContextThemeServiceExt on BuildContext {
+  /// Access to AdminThemeService for theme switching.
+  AdminThemeService get adminThemeService => AdminThemeProvider.of(this);
 }
 

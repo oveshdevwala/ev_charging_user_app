@@ -12,6 +12,7 @@ export 'admin_dialog.dart';
 export 'admin_empty_state.dart';
 export 'admin_filter_panel.dart';
 export 'admin_form_field.dart';
+export 'admin_image_picker.dart';
 export 'admin_loading.dart';
 export 'admin_metric_card.dart';
 export 'admin_modal_sheet.dart';

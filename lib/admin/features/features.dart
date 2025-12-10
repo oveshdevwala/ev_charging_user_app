@@ -5,3 +5,5 @@ library;
 
 export 'dashboard/dashboard.dart';
 export 'stations/stations.dart';
+export 'users/users.dart';
+export 'sessions/sessions.dart';

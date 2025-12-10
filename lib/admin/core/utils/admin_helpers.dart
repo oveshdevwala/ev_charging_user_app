@@ -84,7 +84,7 @@ abstract final class AdminHelpers {
   }
 
   /// Check if value is null or empty.
-  static bool isNullOrEmpty(dynamic value) {
+  static bool isNullOrEmpty(value) {
     if (value == null) return true;
     if (value is String) return value.isEmpty;
     if (value is List) return value.isEmpty;
@@ -104,7 +104,7 @@ abstract final class AdminHelpers {
   }
 
   /// Parse date from various formats.
-  static DateTime? parseDate(dynamic value) {
+  static DateTime? parseDate(value) {
     if (value == null) return null;
     if (value is DateTime) return value;
     if (value is String) {

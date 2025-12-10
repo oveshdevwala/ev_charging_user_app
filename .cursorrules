@@ -287,7 +287,9 @@
 # - Detail views: Show in right-side modal/panel
 # - Edit/Create: Show in right-side modal/panel
 # - Full-screen on mobile, side panel on desktop
-# - Use AdminModal.show() helper
+# - Use AdminModalSheet.show() via context.showAdminModal() helper
+# - ALWAYS use modal sheets for sub-screens (detail, edit, create)
+# - NEVER navigate to separate full screens for sub-screens
 
 # ===============================
 # CURSOR RULES - AUTOMATED CHECKS
@@ -386,8 +388,11 @@
 # - Use Equatable + copyWith for states
 # - Keep UI code clean (no business logic)
 # - Show detail/edit views in modals/panels, not full screens
+# - Use context.showAdminModal() for ALL sub-screens (detail, edit, create)
 # - Keep AdminShell structure with sidebar + topbar
 # - Use responsive breakpoints for mobile/tablet/desktop
+# - Use AdminModalSheet for consistent sub-screen presentation
+# - Ensure modal sheets provide Material context for form fields
 
 # ===============================
 # ADMIN SHELL NAVIGATION PATTERN
@@ -411,8 +416,94 @@
 # )
 #
 # Sidebar items call onViewChanged(index) instead of context.go()
-# Detail/Edit views show in AdminModal or right-side panel
+# Detail/Edit views show in AdminModalSheet via context.showAdminModal()
 # Only use go_router for deep links or external navigation
+
+# ===============================
+# ADMIN MODAL SHEET NAVIGATION (CRITICAL)
+# ===============================
+
+# ALL sub-screens MUST use AdminModalSheet via context.showAdminModal():
+# - Detail pages (e.g., StationDetailPage, UserDetailPage)
+# - Edit pages (e.g., StationEditPage, UserEditPage)
+# - Create pages (e.g., StationCreatePage, UserCreatePage)
+# - Any secondary screen that is not a main tab
+
+# Pattern:
+# context.showAdminModal(
+#   title: AdminStrings.stationsDetailTitle,
+#   maxWidth: 1200,  // Desktop max width
+#   child: StationDetailPage(stationId: station.id),
+# )
+
+# Rules:
+# - NEVER use context.push() or context.go() for sub-screens
+# - ALWAYS use context.showAdminModal() for detail/edit/create screens
+# - Modal sheets are adaptive: full-screen on mobile/tablet, centered dialog on desktop
+# - Modal sheets automatically provide Material context for form fields
+# - Modal sheets include proper padding (24.w on desktop, 16.w on mobile)
+# - Modal sheets handle close button and dismissible behavior
+# - Use consistent maxWidth: 800-1000 for forms, 1200+ for detail views
+
+# Examples:
+# 
+# // ✅ CORRECT: Opening detail page in modal
+# AdminButton(
+#   label: 'View Details',
+#   onPressed: () => context.showAdminModal(
+#     title: AdminStrings.stationsDetailTitle,
+#     maxWidth: 1200,
+#     child: StationDetailPage(stationId: station.id),
+#   ),
+# )
+#
+# // ✅ CORRECT: Opening edit page in modal
+# AdminButton(
+#   label: 'Edit',
+#   onPressed: () => context.showAdminModal(
+#     title: AdminStrings.stationsEditTitle,
+#     maxWidth: 1000,
+#     child: StationEditPage(stationId: station.id),
+#   ),
+# )
+#
+# // ✅ CORRECT: Opening create page in modal
+# AdminButton(
+#   label: 'Create',
+#   onPressed: () => context.showAdminModal(
+#     title: AdminStrings.stationsAddTitle,
+#     maxWidth: 1000,
+#     child: const StationEditPage(),
+#   ),
+# )
+#
+# // ❌ WRONG: Navigating to separate screen
+# AdminButton(
+#   label: 'View Details',
+#   onPressed: () => context.push(AdminRoutes.stationDetail.path),
+# )
+#
+# // ❌ WRONG: Using go_router for sub-screens
+# AdminButton(
+#   label: 'Edit',
+#   onPressed: () => context.go(AdminRoutes.stationEdit.id(stationId)),
+# )
+
+# Modal Sheet Implementation:
+# - AdminModalSheet automatically handles Material widget wrapping
+# - Provides proper Material context for TextField, DropdownButton, etc.
+# - Includes responsive behavior (full-screen mobile, centered desktop)
+# - Handles padding, scrolling, and close button
+# - All sub-screen pages should NOT wrap themselves in AdminShell
+# - Sub-screen pages should be pure content widgets
+
+# When creating new sub-screens:
+# 1. Create the page widget (e.g., StationDetailPage, StationEditPage)
+# 2. Do NOT wrap in AdminShell (modal sheet provides the shell)
+# 3. Do NOT use context.push() or context.go() to open
+# 4. Always use context.showAdminModal() from parent screen
+# 5. Ensure page content has proper Material context (modal provides it)
+# 6. Use AdminPageContent for consistent padding if needed
 
 # ===============================
 # END OF ADMIN RULES

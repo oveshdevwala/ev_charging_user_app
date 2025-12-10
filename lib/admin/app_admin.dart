@@ -43,21 +43,23 @@ class _AdminAppState extends State<AdminApp> {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return ListenableBuilder(
-          listenable: _themeService,
-          builder: (context, _) {
-            return MaterialApp.router(
-              title: 'EV Charging Admin',
-              debugShowCheckedModeBanner: false,
-              theme: AdminTheme.light,
-              darkTheme: AdminTheme.dark,
-              themeMode: _themeService.themeMode,
-              routerConfig: AdminRouter.router,
-            );
-          },
+        return AdminThemeProvider(
+          themeService: _themeService,
+          child: ListenableBuilder(
+            listenable: _themeService,
+            builder: (context, _) {
+              return MaterialApp.router(
+                title: 'EV Charging Admin',
+                debugShowCheckedModeBanner: false,
+                theme: AdminTheme.light,
+                darkTheme: AdminTheme.dark,
+                themeMode: _themeService.themeMode,
+                routerConfig: AdminRouter.router,
+              );
+            },
+          ),
         );
       },
     );
   }
 }
-
