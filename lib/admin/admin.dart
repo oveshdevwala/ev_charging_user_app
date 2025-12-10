@@ -5,8 +5,8 @@ library;
 
 // Core exports
 export 'core/core.dart';
-// Features exports
-export 'features/features.dart';
+// Features exports, hiding SortState from admin_data_table to avoid conflict
+// export 'features/features.dart';
 // Blocs exports
 export 'features/managers/blocs/blocs.dart';
 // Models exports

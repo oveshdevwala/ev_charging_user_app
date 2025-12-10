@@ -87,6 +87,8 @@ abstract final class AdminStrings {
   static const String statusRejected = 'Rejected';
   static const String statusCompleted = 'Completed';
   static const String statusCancelled = 'Cancelled';
+  static const String statusRefunded = 'Refunded';
+  static const String statusFailed = 'Failed';
   static const String statusOnline = 'Online';
   static const String statusOffline = 'Offline';
   static const String statusMaintenance = 'Maintenance';
@@ -183,6 +185,26 @@ abstract final class AdminStrings {
   static const String paymentsListTitle = 'All Payments';
   static const String paymentsDetailTitle = 'Payment Details';
   static const String paymentsEmptyState = 'No payments found';
+  static const String paymentsSearchHint = 'Search payments';
+  static const String paymentsFilterStatus = 'Payment status';
+  static const String paymentsFilterMethod = 'Payment method';
+  static const String paymentsMethodCard = 'Card';
+  static const String paymentsMethodWallet = 'Wallet';
+  static const String paymentsMethodUpi = 'UPI';
+  static const String paymentsRefundAction = 'Refund';
+  static const String paymentsRefundProcessing = 'Processing refund...';
+  static const String paymentsRefundSuccess = 'Refund completed';
+  static const String paymentsRefundFailed = 'Refund failed';
+  static const String paymentsAmountLabel = 'Amount paid';
+  static const String paymentsMethodLabel = 'Method';
+  static const String paymentsStatusLabel = 'Payment status';
+  static const String paymentsStationLabel = 'Station';
+  static const String paymentsUserLabel = 'User';
+  static const String paymentsReferenceLabel = 'Reference ID';
+  static const String paymentsSessionLabel = 'Session';
+  static const String paymentsTimelineTitle = 'Payment timeline';
+  static const String paymentsRefresh = 'Refresh payments';
+  static const String paymentsFiltersReset = 'Reset filters';
 
   // ============ Wallets ============
   static const String walletsTitle = 'Wallet Management';
@@ -190,7 +212,40 @@ abstract final class AdminStrings {
   static const String walletsDetailTitle = 'Wallet Details';
   static const String walletsEmptyState = 'No wallets found';
   static const String walletsBalance = 'Balance';
+  static const String walletsReserved = 'Reserved';
+  static const String walletsAvailable = 'Available';
   static const String walletsTransactions = 'Transactions';
+  static const String walletsSearchHint = 'Search wallets';
+  static const String walletsFilterStatus = 'Wallet status';
+  static const String walletsFilterCurrency = 'Currency';
+  static const String walletsStatusActive = 'Active';
+  static const String walletsStatusFrozen = 'Frozen';
+  static const String walletsAdjustBalance = 'Adjust Balance';
+  static const String walletsFreeze = 'Freeze Wallet';
+  static const String walletsUnfreeze = 'Unfreeze Wallet';
+  static const String walletsRefund = 'Refund';
+  static const String walletsExportCsv = 'Export CSV';
+  static const String walletsRefresh = 'Refresh wallets';
+  static const String walletsFiltersReset = 'Reset filters';
+  static const String walletsUserLabel = 'User';
+  static const String walletsCurrencyLabel = 'Currency';
+  static const String walletsStatusLabel = 'Status';
+  static const String walletsCreatedAtLabel = 'Created At';
+  static const String walletsLastActivityLabel = 'Last Activity';
+  static const String walletsAmountLabel = 'Amount';
+  static const String walletsMemoLabel = 'Memo';
+  static const String walletsConfirmAdjust = 'Confirm Balance Adjustment';
+  static const String walletsConfirmFreeze = 'Confirm Freeze Wallet';
+  static const String walletsConfirmUnfreeze = 'Confirm Unfreeze Wallet';
+  static const String walletsConfirmRefund = 'Confirm Refund';
+  static const String walletsTypeCredit = 'Credit';
+  static const String walletsTypeDebit = 'Debit';
+  static const String walletsTypeRefund = 'Refund';
+  static const String walletsTypeAdjust = 'Adjustment';
+  static const String walletsAdjustSuccess = 'Balance adjusted successfully';
+  static const String walletsFreezeSuccess = 'Wallet frozen successfully';
+  static const String walletsUnfreezeSuccess = 'Wallet unfrozen successfully';
+  static const String walletsRefundSuccess = 'Refund processed successfully';
 
   // ============ Offers ============
   static const String offersTitle = 'Offers Management';
@@ -203,14 +258,109 @@ abstract final class AdminStrings {
   static const String offersValidUntil = 'Valid Until';
   static const String offersDiscountType = 'Discount Type';
   static const String offersDiscountValue = 'Discount Value';
+  static const String offersSearchHint = 'Search offers';
+  static const String offersRefresh = 'Refresh offers';
+  static const String offersFiltersReset = 'Reset filters';
+  static const String offersCodeLabel = 'Promo Code';
+  static const String offersDescriptionLabel = 'Description';
+  static const String offersMaxUsesLabel = 'Max Uses';
+  static const String offersCurrentUsesLabel = 'Current Uses';
+  static const String offersMinPurchaseLabel = 'Min Purchase';
+  static const String offersApplicableStationsLabel = 'Applicable Stations';
+  static const String offersTermsLabel = 'Terms & Conditions';
+  static const String offersCreatedByLabel = 'Created By';
+  static const String offersDaysLeft = 'days left';
+  static const String offersRemainingUses = 'remaining';
 
   // ============ Partners ============
   static const String partnersTitle = 'Partner Management';
   static const String partnersListTitle = 'All Partners';
   static const String partnersAddTitle = 'Add New Partner';
+  static const String partnersCreateTitle = 'Create Partner';
   static const String partnersEditTitle = 'Edit Partner';
   static const String partnersDetailTitle = 'Partner Details';
   static const String partnersEmptyState = 'No partners found';
+  static const String partnersSearchHint = 'Search partners';
+  static const String partnersFilterStatus = 'Status';
+  static const String partnersFilterType = 'Type';
+  static const String partnersFilterCountry = 'Country';
+  static const String partnersRefresh = 'Refresh partners';
+  static const String partnersFiltersReset = 'Reset filters';
+  static const String partnersExportCsv = 'Export CSV';
+  static const String partnersNameLabel = 'Partner Name';
+  static const String partnersTypeLabel = 'Type';
+  static const String partnersEmailLabel = 'Email';
+  static const String partnersPhoneLabel = 'Phone';
+  static const String partnersCountryLabel = 'Country';
+  static const String partnersStatusLabel = 'Status';
+  static const String partnersRatingLabel = 'Rating';
+  static const String partnersLogoLabel = 'Logo';
+  static const String partnersPrimaryContactLabel = 'Primary Contact';
+  static const String partnersCreatedAtLabel = 'Created At';
+  static const String partnersUpdatedAtLabel = 'Updated At';
+  static const String partnersStatusPending = 'Pending';
+  static const String partnersStatusActive = 'Active';
+  static const String partnersStatusSuspended = 'Suspended';
+  static const String partnersStatusRejected = 'Rejected';
+  static const String partnersTypeOwner = 'Owner';
+  static const String partnersTypeOperator = 'Operator';
+  static const String partnersTypeReseller = 'Reseller';
+  static const String partnersApprove = 'Approve Partner';
+  static const String partnersReject = 'Reject Partner';
+  static const String partnersSuspend = 'Suspend Partner';
+  static const String partnersActivate = 'Activate Partner';
+  static const String partnersBulkApprove = 'Bulk Approve';
+  static const String partnersBulkReject = 'Bulk Reject';
+  static const String partnersApproveSuccess = 'Partner approved successfully';
+  static const String partnersRejectSuccess = 'Partner rejected successfully';
+  static const String partnersSuspendSuccess = 'Partner suspended successfully';
+  static const String partnersActivateSuccess = 'Partner activated successfully';
+  static const String partnersCreatedSuccess = 'Partner created successfully';
+  static const String partnersUpdatedSuccess = 'Partner updated successfully';
+  static const String partnersConfirmApprove = 'Confirm Approve Partner';
+  static const String partnersConfirmReject = 'Confirm Reject Partner';
+  static const String partnersConfirmSuspend = 'Confirm Suspend Partner';
+  static const String partnersRejectReason = 'Rejection Reason';
+  static const String partnersContracts = 'Contracts';
+  static const String partnersLocations = 'Locations';
+  static const String partnersAuditLogs = 'Audit History';
+  static const String partnersAddContract = 'Add Contract';
+  static const String partnersManageLocations = 'Manage Locations';
+  static const String partnersViewAuditLogs = 'View Audit History';
+  static const String partnersNoContracts = 'No contracts yet';
+  static const String partnersNoLocations = 'No locations yet';
+  static const String partnersNoAuditLogs = 'No audit history';
+  static const String partnersAddContractTitle = 'Add Contract';
+  static const String partnersManageLocationsTitle = 'Manage Locations';
+  static const String partnersAuditLogsTitle = 'Audit History';
+  // Contract fields
+  static const String contractTitleLabel = 'Contract Title';
+  static const String contractStartDateLabel = 'Start Date';
+  static const String contractEndDateLabel = 'End Date';
+  static const String contractAmountLabel = 'Amount';
+  static const String contractCurrencyLabel = 'Currency';
+  static const String contractNotesLabel = 'Notes';
+  static const String contractStatusLabel = 'Status';
+  static const String contractStatusActive = 'Active';
+  static const String contractStatusExpired = 'Expired';
+  static const String contractStatusTerminated = 'Terminated';
+  static const String contractAddedSuccess = 'Contract added successfully';
+  static const String contractUpdatedSuccess = 'Contract updated successfully';
+  // Location fields
+  static const String locationLabel = 'Location Label';
+  static const String locationAddressLabel = 'Address';
+  static const String locationCityLabel = 'City';
+  static const String locationCountryLabel = 'Country';
+  static const String locationCoordinatesLabel = 'Coordinates';
+  static const String locationAddedSuccess = 'Location added successfully';
+  static const String locationUpdatedSuccess = 'Location updated successfully';
+  static const String locationRemovedSuccess = 'Location removed successfully';
+  static const String locationConfirmRemove = 'Confirm Remove Location';
+  // Audit fields
+  static const String auditActionLabel = 'Action';
+  static const String auditAdminUserLabel = 'Admin User';
+  static const String auditTimestampLabel = 'Timestamp';
+  static const String auditMemoLabel = 'Memo';
 
   // ============ Reviews ============
   static const String reviewsTitle = 'Review Management';
@@ -252,7 +402,8 @@ abstract final class AdminStrings {
   static const String msgError = 'An error occurred';
   static const String msgNoData = 'No data available';
   static const String msgConfirmDelete = 'Are you sure you want to delete?';
-  static const String msgConfirmDeactivate = 'Are you sure you want to deactivate?';
+  static const String msgConfirmDeactivate =
+      'Are you sure you want to deactivate?';
   static const String msgSaveChanges = 'Save changes?';
   static const String msgUnsavedChanges = 'You have unsaved changes';
   static const String msgExportSuccess = 'Export completed successfully';
@@ -260,7 +411,8 @@ abstract final class AdminStrings {
 
   // ============ Table ============
   static const String tableNoResults = 'No results found';
-  static const String tableShowingEntries = 'Showing {start} to {end} of {total} entries';
+  static const String tableShowingEntries =
+      'Showing {start} to {end} of {total} entries';
   static const String tableItemsPerPage = 'Items per page';
   static const String tableSelectAll = 'Select All';
   static const String tableSelected = '{count} selected';
@@ -283,4 +435,3 @@ abstract final class AdminStrings {
   static const String validationNumber = 'Please enter a valid number';
   static const String validationPositive = 'Please enter a positive number';
 }
-

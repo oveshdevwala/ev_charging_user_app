@@ -6,8 +6,8 @@
 ///    - Keep usecases thin wrappers over repository
 library;
 
-import 'sessions_repository.dart';
 import '../data/session_models.dart';
+import 'sessions_repository.dart';
 
 /// Fetch paginated sessions list.
 class GetSessionsUseCase {

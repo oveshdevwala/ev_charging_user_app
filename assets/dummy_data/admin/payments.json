@@ -1,0 +1,238 @@
+[
+  {
+    "id": "pay_001",
+    "transactionId": "txn_101",
+    "userId": "usr_001",
+    "userName": "Alex Thompson",
+    "stationName": "Downtown EV Hub",
+    "amount": 18.75,
+    "currency": "USD",
+    "status": "completed",
+    "method": "card",
+    "sessionId": "ses_011",
+    "referenceId": "REF-20241209-001",
+    "createdAt": "2024-12-09T10:05:00Z",
+    "updatedAt": "2024-12-09T10:06:00Z",
+    "notes": "Standard charging session completed",
+    "imageUrl": "https://images.pexels.com/photos/7431283/pexels-photo-7431283.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "timeline": [
+      {
+        "title": "Authorization",
+        "description": "Visa **** 4242 authorized",
+        "timestamp": "2024-12-09T10:03:00Z",
+        "status": "completed"
+      },
+      {
+        "title": "Capture",
+        "description": "Payment captured successfully",
+        "timestamp": "2024-12-09T10:05:30Z",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "id": "pay_002",
+    "transactionId": "txn_102",
+    "userId": "usr_002",
+    "userName": "Emily Davis",
+    "stationName": "Westside Shopping Center",
+    "amount": 32.40,
+    "currency": "USD",
+    "status": "pending",
+    "method": "wallet",
+    "sessionId": "ses_013",
+    "referenceId": "REF-20241208-002",
+    "createdAt": "2024-12-08T15:15:00Z",
+    "updatedAt": "2024-12-08T15:16:00Z",
+    "notes": "Awaiting wallet confirmation",
+    "imageUrl": "https://images.pexels.com/photos/3771839/pexels-photo-3771839.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "timeline": [
+      {
+        "title": "Initiated",
+        "description": "Wallet debit requested",
+        "timestamp": "2024-12-08T15:15:05Z",
+        "status": "pending"
+      }
+    ]
+  },
+  {
+    "id": "pay_003",
+    "transactionId": "txn_103",
+    "userId": "usr_003",
+    "userName": "Robert Wilson",
+    "stationName": "Airport Supercharge",
+    "amount": 45.10,
+    "currency": "USD",
+    "status": "failed",
+    "method": "upi",
+    "sessionId": "ses_014",
+    "referenceId": "REF-20241207-003",
+    "createdAt": "2024-12-07T18:45:00Z",
+    "updatedAt": "2024-12-07T18:46:30Z",
+    "notes": "UPI mandate timeout",
+    "imageUrl": "https://images.pexels.com/photos/5327920/pexels-photo-5327920.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "timeline": [
+      {
+        "title": "Authorization",
+        "description": "UPI collect requested",
+        "timestamp": "2024-12-07T18:45:10Z",
+        "status": "pending"
+      },
+      {
+        "title": "Failure",
+        "description": "User did not approve in time",
+        "timestamp": "2024-12-07T18:46:30Z",
+        "status": "failed"
+      }
+    ]
+  },
+  {
+    "id": "pay_004",
+    "transactionId": "txn_104",
+    "userId": "usr_004",
+    "userName": "Sophia Martinez",
+    "stationName": "Harborfront Chargers",
+    "amount": 22.90,
+    "currency": "USD",
+    "status": "refunded",
+    "method": "card",
+    "sessionId": "ses_015",
+    "referenceId": "REF-20241206-004",
+    "createdAt": "2024-12-06T09:30:00Z",
+    "updatedAt": "2024-12-06T09:42:00Z",
+    "notes": "Session cancelled mid-way",
+    "imageUrl": "https://images.pexels.com/photos/3815585/pexels-photo-3815585.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "timeline": [
+      {
+        "title": "Authorization",
+        "description": "Mastercard **** 5521 authorized",
+        "timestamp": "2024-12-06T09:29:00Z",
+        "status": "completed"
+      },
+      {
+        "title": "Refunded",
+        "description": "Full refund issued to card",
+        "timestamp": "2024-12-06T09:42:00Z",
+        "status": "refunded"
+      }
+    ]
+  },
+  {
+    "id": "pay_005",
+    "transactionId": "txn_105",
+    "userId": "usr_005",
+    "userName": "David Brown",
+    "stationName": "City Mall EV Deck",
+    "amount": 12.60,
+    "currency": "USD",
+    "status": "completed",
+    "method": "wallet",
+    "sessionId": "ses_016",
+    "referenceId": "REF-20241205-005",
+    "createdAt": "2024-12-05T14:10:00Z",
+    "updatedAt": "2024-12-05T14:11:20Z",
+    "notes": "Wallet balance deducted",
+    "imageUrl": "https://images.pexels.com/photos/3861964/pexels-photo-3861964.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "timeline": [
+      {
+        "title": "Initiated",
+        "description": "Wallet debit requested",
+        "timestamp": "2024-12-05T14:10:10Z",
+        "status": "completed"
+      },
+      {
+        "title": "Capture",
+        "description": "Wallet payment captured",
+        "timestamp": "2024-12-05T14:11:00Z",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "id": "pay_006",
+    "transactionId": "txn_106",
+    "userId": "usr_006",
+    "userName": "Liam Johnson",
+    "stationName": "Tech Park EV Row",
+    "amount": 64.20,
+    "currency": "USD",
+    "status": "completed",
+    "method": "upi",
+    "sessionId": "ses_017",
+    "referenceId": "REF-20241204-006",
+    "createdAt": "2024-12-04T08:55:00Z",
+    "updatedAt": "2024-12-04T08:56:30Z",
+    "notes": "UPI mandate approved",
+    "imageUrl": "https://images.pexels.com/photos/4482900/pexels-photo-4482900.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "timeline": [
+      {
+        "title": "Authorization",
+        "description": "UPI collect approved",
+        "timestamp": "2024-12-04T08:55:30Z",
+        "status": "completed"
+      },
+      {
+        "title": "Capture",
+        "description": "Payment settled",
+        "timestamp": "2024-12-04T08:56:30Z",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "id": "pay_007",
+    "transactionId": "txn_107",
+    "userId": "usr_007",
+    "userName": "Mia Chen",
+    "stationName": "Lakeside Chargers",
+    "amount": 27.85,
+    "currency": "USD",
+    "status": "pending",
+    "method": "card",
+    "sessionId": "ses_018",
+    "referenceId": "REF-20241203-007",
+    "createdAt": "2024-12-03T19:20:00Z",
+    "updatedAt": "2024-12-03T19:22:00Z",
+    "notes": "Awaiting 3DS confirmation",
+    "imageUrl": "https://images.pexels.com/photos/2760243/pexels-photo-2760243.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "timeline": [
+      {
+        "title": "3DS Challenge",
+        "description": "Cardholder challenge pending",
+        "timestamp": "2024-12-03T19:21:00Z",
+        "status": "pending"
+      }
+    ]
+  },
+  {
+    "id": "pay_008",
+    "transactionId": "txn_108",
+    "userId": "usr_008",
+    "userName": "Noah Patel",
+    "stationName": "Coastal Superchargers",
+    "amount": 54.90,
+    "currency": "USD",
+    "status": "refunded",
+    "method": "wallet",
+    "sessionId": "ses_019",
+    "referenceId": "REF-20241202-008",
+    "createdAt": "2024-12-02T07:40:00Z",
+    "updatedAt": "2024-12-02T07:55:00Z",
+    "notes": "Partial refund after dispute",
+    "imageUrl": "https://images.pexels.com/photos/6991229/pexels-photo-6991229.jpeg?auto=compress&cs=tinysrgb&w=800",
+    "timeline": [
+      {
+        "title": "Captured",
+        "description": "Wallet payment captured",
+        "timestamp": "2024-12-02T07:41:00Z",
+        "status": "completed"
+      },
+      {
+        "title": "Refunded",
+        "description": "Partial refund processed",
+        "timestamp": "2024-12-02T07:55:00Z",
+        "status": "refunded"
+      }
+    ]
+  }
+]

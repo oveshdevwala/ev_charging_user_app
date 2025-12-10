@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../admin.dart';
+import '../../sessions.dart';
 
 /// KPI row for sessions dashboard.
 class SessionsKpiRow extends StatelessWidget {
@@ -125,16 +126,19 @@ class SessionsTable extends StatelessWidget {
         AdminDataColumn(
           id: 'id',
           label: AdminStrings.labelId,
-          width: 120.w,
+          width: 130.w,
           cellBuilder: (session) => Row(
             children: [
               Checkbox(
                 value: selectedIds.contains(session.id),
                 onChanged: (_) => onToggleSelect(session.id),
               ),
-              Text(
-                session.id,
-                style: TextStyle(fontSize: 12.sp, color: colors.textPrimary),
+              Expanded(
+                child: Text(
+                  session.id,
+                  style: TextStyle(fontSize: 12.sp, color: colors.textPrimary),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),
@@ -171,15 +175,15 @@ class SessionsTable extends StatelessWidget {
         AdminDataColumn(
           id: 'station',
           label: AdminStrings.navStations,
-          flex: 2,
+          width: 160.w,
           cellBuilder: (session) => Row(
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
                 child: Image.network(
                   SessionsPexelsHelper.stationThumb,
-                  width: 36.r,
-                  height: 36.r,
+                  width: 32.r,
+                  height: 32.r,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -190,7 +194,7 @@ class SessionsTable extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 13.sp,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -201,12 +205,12 @@ class SessionsTable extends StatelessWidget {
         AdminDataColumn(
           id: 'user',
           label: AdminStrings.navUsers,
-          flex: 2,
+          width: 140.w,
           cellBuilder: (session) => Row(
             children: [
               AdminAvatar(
                 imageUrl: session.userAvatar ?? SessionsPexelsHelper.userAvatar,
-                size: 32,
+                size: 28,
               ),
               SizedBox(width: 8.w),
               Expanded(
@@ -214,7 +218,7 @@ class SessionsTable extends StatelessWidget {
                   session.userName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 13.sp),
+                  style: TextStyle(fontSize: 12.sp),
                 ),
               ),
             ],
@@ -248,21 +252,28 @@ class SessionsTable extends StatelessWidget {
         AdminDataColumn(
           id: 'actions',
           label: AdminStrings.labelActions,
-          width: 140.w,
-          cellBuilder: (session) => Row(
-            children: [
-              AdminIconButton(
-                icon: Iconsax.eye,
-                tooltip: AdminStrings.actionViewDetails,
-                onPressed: () => onViewDetail(session),
-              ),
-              SizedBox(width: 8.w),
-              AdminIconButton(
-                icon: Iconsax.flag,
-                tooltip: AdminStrings.sessionsFlag,
-                onPressed: () {},
-              ),
-            ],
+          width: 100.w,
+          cellBuilder: (session) => FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AdminIconButton(
+                  icon: Iconsax.eye,
+                  size: 28,
+                  tooltip: AdminStrings.actionViewDetails,
+                  onPressed: () => onViewDetail(session),
+                ),
+                SizedBox(width: 4.w),
+                AdminIconButton(
+                  icon: Iconsax.flag,
+                  size: 28,
+                  tooltip: AdminStrings.sessionsFlag,
+                  onPressed: () {},
+                ),
+              ],
+            ),
           ),
         ),
       ],

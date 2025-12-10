@@ -74,7 +74,10 @@ class AdminMetricCard extends StatelessWidget {
                 if (change != null)
                   Flexible(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 4.h,
+                      ),
                       decoration: BoxDecoration(
                         color: (isPositiveChange ?? true)
                             ? colors.successContainer
@@ -146,10 +149,7 @@ class AdminMetricCard extends StatelessWidget {
               SizedBox(height: 4.h),
               Text(
                 subtitle ?? changeLabel ?? '',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: colors.textTertiary,
-                ),
+                style: TextStyle(fontSize: 11.sp, color: colors.textTertiary),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -189,36 +189,38 @@ class AdminMiniMetricCard extends StatelessWidget {
       child: Row(
         children: [
           if (icon != null) ...[
-            Icon(
-              icon,
-              size: 18.r,
-              color: iconColor ?? colors.primary,
-            ),
+            Icon(icon, size: 18.r, color: iconColor ?? colors.primary),
             SizedBox(width: 10.w),
           ],
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                  color: colors.textPrimary,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w700,
+                    color: colors.textPrimary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: colors.textSecondary,
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    color: colors.textSecondary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 }
-

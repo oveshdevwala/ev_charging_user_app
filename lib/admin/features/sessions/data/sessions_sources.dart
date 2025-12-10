@@ -40,7 +40,7 @@ class AdminSessionsRemoteSource {
           .map((e) => AdminSessionSummaryDto.fromJson(e as Map<String, dynamic>))
           .toList();
       final sliced = items.take(limit).toList();
-      return AdminSessionsPageDto(items: sliced, nextCursor: null, hasMore: false);
+      return AdminSessionsPageDto(items: sliced);
     }
 
     final response = await dio.get<Map<String, dynamic>>(

@@ -196,7 +196,6 @@ class UserDetailView extends StatelessWidget {
                           icon: Iconsax.edit_2,
                           onPressed: () => context.showAdminModal<void>(
                             title: AdminStrings.usersEditTitle,
-                            maxWidth: 800,
                             child: UserEditView(
                               user: user,
                               onSaved: (updated) {

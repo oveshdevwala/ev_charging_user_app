@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../admin.dart';
+import '../../sessions.dart';
 
 /// Detail screen to be shown inside AdminModalSheet.
 class SessionDetailScreen extends StatelessWidget {

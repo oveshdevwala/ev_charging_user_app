@@ -291,7 +291,7 @@ class _ManagerFormViewState extends State<ManagerFormView> {
                               ),
                               SizedBox(height: 8.h),
                               DropdownButtonFormField<List<String>>(
-                                value: _roles,
+                                initialValue: _roles,
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(
                                     horizontal: 12.w,
@@ -342,7 +342,7 @@ class _ManagerFormViewState extends State<ManagerFormView> {
                               ),
                               SizedBox(height: 8.h),
                               DropdownButtonFormField<String>(
-                                value: _status,
+                                initialValue: _status,
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(
                                     horizontal: 12.w,

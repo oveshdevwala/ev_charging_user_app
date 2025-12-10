@@ -14,7 +14,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   UsersBloc({
     LocalUserRepository? repository,
   })  : _repository = repository ?? LocalUserRepository(),
-        super(UsersState()) {
+        super(const UsersState()) {
     on<LoadUsers>(_onLoadUsers);
     on<UpdateUserEvent>(_onUpdateUser);
     on<DeleteUserEvent>(_onDeleteUser);
@@ -56,7 +56,6 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
         isLoading: false,
         users: users,
         totalUsers: total,
-        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(

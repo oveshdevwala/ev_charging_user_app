@@ -14,7 +14,10 @@ abstract final class AdminHelpers {
   static String generateId({int length = 16}) {
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
     final random = Random.secure();
-    return List.generate(length, (_) => chars[random.nextInt(chars.length)]).join();
+    return List.generate(
+      length,
+      (_) => chars[random.nextInt(chars.length)],
+    ).join();
   }
 
   /// Generate a UUID-like string.
@@ -23,19 +26,50 @@ abstract final class AdminHelpers {
     final bytes = List<int>.generate(16, (_) => random.nextInt(256));
     bytes[6] = (bytes[6] & 0x0f) | 0x40;
     bytes[8] = (bytes[8] & 0x3f) | 0x80;
-    
+
     final hex = bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
     return '${hex.substring(0, 8)}-${hex.substring(8, 12)}-${hex.substring(12, 16)}-${hex.substring(16, 20)}-${hex.substring(20)}';
   }
 
   /// Load JSON from assets.
+  /// Handles both mobile and web asset loading.
+  ///
+  /// Tries multiple path formats to ensure compatibility across platforms:
+  /// 1. Path without 'assets/' prefix (Flutter Web may add it automatically)
+  /// 2. Path with 'assets/' prefix (for mobile platforms)
+  /// 3. Path as-is (normalized - removes leading slash)
   static Future<dynamic> loadJsonAsset(String path) async {
-    try {
-      final jsonString = await rootBundle.loadString(path);
-      return json.decode(jsonString);
-    } catch (e) {
-      throw Exception('Failed to load JSON from $path: $e');
+    // Normalize path - remove leading slash if present
+    var normalizedPath = path.startsWith('/') ? path.substring(1) : path;
+
+    // Remove 'assets/' prefix if present to avoid duplication on web
+    if (normalizedPath.startsWith('assets/')) {
+      normalizedPath = normalizedPath.substring(7);
     }
+
+    // List of paths to try (in order of likelihood)
+    final pathsToTry = <String>[
+      normalizedPath, // Try without 'assets/' first (for web)
+      'assets/$normalizedPath', // Try with 'assets/' (for mobile)
+    ];
+
+    // Try each path until one works
+    Exception? lastException;
+    for (final tryPath in pathsToTry) {
+      try {
+        final jsonString = await rootBundle.loadString(tryPath);
+        return json.decode(jsonString);
+      } catch (e) {
+        lastException = e is Exception ? e : Exception(e.toString());
+        // Continue to next path
+      }
+    }
+
+    // If all paths failed, throw with helpful message
+    throw Exception(
+      'Failed to load JSON asset. Tried paths: ${pathsToTry.join(", ")}. '
+      'Last error: $lastException',
+    );
   }
 
   /// Deep copy a map.
@@ -129,7 +163,10 @@ abstract final class AdminHelpers {
   }
 
   /// Group list by key.
-  static Map<K, List<T>> groupBy<T, K>(List<T> list, K Function(T) keySelector) {
+  static Map<K, List<T>> groupBy<T, K>(
+    List<T> list,
+    K Function(T) keySelector,
+  ) {
     final map = <K, List<T>>{};
     for (final item in list) {
       final key = keySelector(item);
@@ -148,7 +185,10 @@ abstract final class AdminHelpers {
   }
 
   /// Remove duplicates from list.
-  static List<T> removeDuplicates<T>(List<T> list, {bool Function(T, T)? equals}) {
+  static List<T> removeDuplicates<T>(
+    List<T> list, {
+    bool Function(T, T)? equals,
+  }) {
     if (equals == null) {
       return list.toSet().toList();
     }
@@ -194,7 +234,7 @@ abstract final class AdminHelpers {
 /// Debouncer class for use with search inputs.
 class Debouncer {
   Debouncer({this.delay = const Duration(milliseconds: 300)});
-  
+
   final Duration delay;
   Function? _action;
   DateTime? _lastRun;
@@ -219,4 +259,3 @@ class Debouncer {
     _action = null;
   }
 }
-

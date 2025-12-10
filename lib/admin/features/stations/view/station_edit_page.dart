@@ -277,7 +277,6 @@ class _ImageCard extends StatelessWidget {
         onImagePicked: onImagePicked,
         onImageRemoved: onImageRemoved,
         height: 240.h,
-        label: null, // Header already has label
         helperText: 'Upload a high-quality image of the charging station (recommended: 1920x1080px)',
       ),
     );

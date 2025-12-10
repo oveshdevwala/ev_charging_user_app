@@ -136,10 +136,10 @@ class AdminButton extends StatelessWidget {
             child: CircularProgressIndicator(
               strokeWidth: 2,
               valueColor: AlwaysStoppedAnimation(
-                foregroundColor ?? 
-                  (variant == AdminButtonVariant.filled 
-                    ? colors.onPrimary 
-                    : colors.primary),
+                foregroundColor ??
+                    (variant == AdminButtonVariant.filled
+                        ? colors.onPrimary
+                        : colors.primary),
               ),
             ),
           )
@@ -151,11 +151,15 @@ class AdminButton extends StatelessWidget {
                 Icon(icon, size: iconSize),
                 SizedBox(width: 8.w),
               ],
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: fontSize,
-                  fontWeight: FontWeight.w600,
+              Flexible(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
               if (icon != null && iconPosition == IconPosition.right) ...[
@@ -197,8 +201,8 @@ class AdminButton extends StatelessWidget {
             padding: padding,
             minimumSize: Size(isFullWidth ? double.infinity : 0, height),
             side: BorderSide(
-              color: effectiveOnPressed == null 
-                  ? colors.outline 
+              color: effectiveOnPressed == null
+                  ? colors.outline
                   : backgroundColor ?? colors.primary,
             ),
             shape: RoundedRectangleBorder(borderRadius: borderRadius),
@@ -291,20 +295,14 @@ class AdminIconButton extends StatelessWidget {
       style: IconButton.styleFrom(
         backgroundColor: backgroundColor ?? colors.surfaceVariant,
         fixedSize: Size(size.r, size.r),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
       ),
     );
 
     if (tooltip != null) {
-      button = Tooltip(
-        message: tooltip,
-        child: button,
-      );
+      button = Tooltip(message: tooltip, child: button);
     }
 
     return button;
   }
 }
-

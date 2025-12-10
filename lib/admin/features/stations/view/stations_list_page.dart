@@ -31,78 +31,78 @@ class _StationsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StationsBloc, StationsState>(
-        builder: (context, state) {
-          return AdminPageContent(
-            scrollable: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header
-                AdminPageHeader(
-                  title: AdminStrings.stationsListTitle,
-                  subtitle: '${state.totalStations} stations total',
-                  actions: [
-                    AdminButton(
-                      label: AdminStrings.actionExport,
-                      variant: AdminButtonVariant.outlined,
-                      icon: Iconsax.document_download,
-                      onPressed: () {
-                        context.showSuccessSnackBar(
-                          'Exporting stations to CSV...',
-                        );
-                      },
-                    ),
-                    AdminButton(
-                      label: AdminStrings.actionCreate,
-                      icon: Iconsax.add,
-                      onPressed: () => context.showAdminModal(
-                        title: AdminStrings.stationsAddTitle,
-                        maxWidth: 1000,
-                        child: const StationEditPage(),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 24.h),
-
-                // Stats cards
-                if (state.stats != null) ...[
-                  _StationStats(stats: state.stats!),
-                  SizedBox(height: 24.h),
-                ],
-
-                // Filters and search
-                _StationsFilters(state: state),
-                SizedBox(height: 16.h),
-
-                // Table with constrained height
-                Expanded(
-                  child: AdminCard(
-                    padding: EdgeInsets.zero,
-                    child: Column(
-                      children: [
-                        Expanded(child: _StationsTable(state: state)),
-                        // Pagination
-                        AdminTablePagination(
-                          currentPage: state.currentPage,
-                          totalPages: state.totalPages,
-                          totalItems: state.totalStations,
-                          pageSize: state.pageSize,
-                          onPageChanged: (page) {
-                            context.read<StationsBloc>().add(
-                              StationsPageChanged(page),
-                            );
-                          },
-                        ),
-                      ],
+      builder: (context, state) {
+        return AdminPageContent(
+          scrollable: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header
+              AdminPageHeader(
+                title: AdminStrings.stationsListTitle,
+                subtitle: '${state.totalStations} stations total',
+                actions: [
+                  AdminButton(
+                    label: AdminStrings.actionExport,
+                    variant: AdminButtonVariant.outlined,
+                    icon: Iconsax.document_download,
+                    onPressed: () {
+                      context.showSuccessSnackBar(
+                        'Exporting stations to CSV...',
+                      );
+                    },
+                  ),
+                  AdminButton(
+                    label: AdminStrings.actionCreate,
+                    icon: Iconsax.add,
+                    onPressed: () => context.showAdminModal(
+                      title: AdminStrings.stationsAddTitle,
+                      maxWidth: 1000,
+                      child: const StationEditPage(),
                     ),
                   ),
-                ),
+                ],
+              ),
+              SizedBox(height: 24.h),
+
+              // Stats cards
+              if (state.stats != null) ...[
+                _StationStats(stats: state.stats!),
+                SizedBox(height: 24.h),
               ],
-            ),
-          );
-        },
-      );
+
+              // Filters and search
+              _StationsFilters(state: state),
+              SizedBox(height: 16.h),
+
+              // Table with constrained height
+              Expanded(
+                child: AdminCard(
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      Expanded(child: _StationsTable(state: state)),
+                      // Pagination
+                      AdminTablePagination(
+                        currentPage: state.currentPage,
+                        totalPages: state.totalPages,
+                        totalItems: state.totalStations,
+                        pageSize: state.pageSize,
+                        onPageChanged: (page) {
+                          context.read<StationsBloc>().add(
+                            StationsPageChanged(page),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -164,48 +164,35 @@ class _StationsFilters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        // Search
-        Expanded(
-          flex: 2,
-          child: AdminSearchBar(
-            hint: 'Search stations...',
-            onChanged: (query) {
-              context.read<StationsBloc>().add(StationsSearchChanged(query));
-            },
-            showFilterButton: true,
-            filterCount: state.filterStatus != null ? 1 : 0,
-          ),
-        ),
-        SizedBox(width: 16.w),
-        // Status filter
-        SizedBox(
-          width: 160.w,
-          child: DropdownButtonFormField<AdminStationStatus?>(
-            initialValue: state.filterStatus,
-            decoration: InputDecoration(
-              labelText: 'Status',
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 12.w,
-                vertical: 8.h,
+    return AdminResponsiveFilterBar(
+      searchHint: 'Search stations...',
+      onSearchChanged: (query) {
+        context.read<StationsBloc>().add(StationsSearchChanged(query));
+      },
+      filterCount: state.filterStatus != null ? 1 : 0,
+      filterItems: [
+        AdminFilterItem<AdminStationStatus?>(
+          id: 'status',
+          label: 'Status',
+          value: state.filterStatus,
+          width: 150.w,
+          items: [
+            const DropdownMenuItem<AdminStationStatus?>(child: Text('All')),
+            ...AdminStationStatus.values.map(
+              (status) => DropdownMenuItem<AdminStationStatus?>(
+                value: status,
+                child: Text(status.name.capitalize),
               ),
             ),
-            items: [
-              const DropdownMenuItem(child: Text('All')),
-              ...AdminStationStatus.values.map(
-                (status) => DropdownMenuItem(
-                  value: status,
-                  child: Text(status.name.capitalize),
-                ),
-              ),
-            ],
-            onChanged: (status) {
-              context.read<StationsBloc>().add(StationsFilterChanged(status));
-            },
-          ),
+          ],
+          onChanged: (status) {
+            context.read<StationsBloc>().add(StationsFilterChanged(status));
+          },
         ),
       ],
+      onReset: () {
+        context.read<StationsBloc>().add(const StationsFilterChanged(null));
+      },
     );
   }
 }
@@ -350,34 +337,38 @@ class _StationsTable extends StatelessWidget {
         AdminDataColumn(
           id: 'actions',
           label: '',
-          width: 120.w,
+          width: 90.w,
           alignment: Alignment.centerRight,
-          cellBuilder: (station) => Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              AdminIconButton(
-                icon: Iconsax.eye,
-                size: 32,
-                tooltip: 'View',
-                onPressed: () => context.showAdminModal(
-                  title: AdminStrings.stationsDetailTitle,
-                  maxWidth: 1200,
-                  child: StationDetailPage(stationId: station.id),
+          cellBuilder: (station) => FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerRight,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                AdminIconButton(
+                  icon: Iconsax.eye,
+                  size: 32,
+                  tooltip: 'View',
+                  onPressed: () => context.showAdminModal(
+                    title: AdminStrings.stationsDetailTitle,
+                    maxWidth: 1200,
+                    child: StationDetailPage(stationId: station.id),
+                  ),
                 ),
-              ),
-              SizedBox(width: 4.w),
-              AdminIconButton(
-                icon: Iconsax.edit_2,
-                size: 32,
-                tooltip: 'Edit',
-                onPressed: () => context.showAdminModal(
-                  title: AdminStrings.stationsEditTitle,
-                  maxWidth: 1000,
-                  child: StationEditPage(stationId: station.id),
+                SizedBox(width: 4.w),
+                AdminIconButton(
+                  icon: Iconsax.edit_2,
+                  size: 32,
+                  tooltip: 'Edit',
+                  onPressed: () => context.showAdminModal(
+                    title: AdminStrings.stationsEditTitle,
+                    maxWidth: 1000,
+                    child: StationEditPage(stationId: station.id),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

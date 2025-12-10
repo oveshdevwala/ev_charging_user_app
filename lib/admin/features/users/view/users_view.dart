@@ -265,103 +265,68 @@ class _UsersFilters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            // Search
-            Expanded(
-              flex: 2,
-              child: AdminSearchBar(
-                hint: 'Search users by name, email, phone, or ID...',
-                onChanged: viewModel.search,
-                showFilterButton: true,
-                filterCount: state.filters != null ? state.filters!.length : 0,
-              ),
+    return AdminResponsiveFilterBar(
+      searchHint: 'Search users by name, email, phone, or ID...',
+      onSearchChanged: viewModel.search,
+      filterCount: state.filters != null ? state.filters!.length : 0,
+      showResetButton: false,
+      filterItems: [
+        AdminFilterItem<String?>(
+          id: 'status',
+          label: AdminStrings.filterStatus,
+          value: state.filters?['status'] as String?,
+          width: 150.w,
+          items: const [
+            DropdownMenuItem<String?>(child: Text('All Status')),
+            DropdownMenuItem<String?>(value: 'active', child: Text('Active')),
+            DropdownMenuItem<String?>(
+              value: 'inactive',
+              child: Text('Inactive'),
             ),
-            SizedBox(width: 16.w),
-            // Status filter
-            SizedBox(
-              width: 160.w,
-              child: DropdownButtonFormField<String>(
-                initialValue: state.filters?['status'] as String?,
-                decoration: InputDecoration(
-                  labelText: AdminStrings.filterStatus,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 12.h,
-                  ),
-                ),
-                items: const [
-                  DropdownMenuItem(child: Text('All Status')),
-                  DropdownMenuItem(value: 'active', child: Text('Active')),
-                  DropdownMenuItem(value: 'inactive', child: Text('Inactive')),
-                  DropdownMenuItem(
-                    value: 'suspended',
-                    child: Text('Suspended'),
-                  ),
-                  DropdownMenuItem(value: 'blocked', child: Text('Blocked')),
-                ],
-                onChanged: (value) {
-                  final filters = Map<String, dynamic>.from(
-                    state.filters ?? {},
-                  );
-                  if (value == null) {
-                    filters.remove('status');
-                  } else {
-                    filters['status'] = value;
-                  }
-                  viewModel.applyFilters(filters.isEmpty ? null : filters);
-                },
-              ),
+            DropdownMenuItem<String?>(
+              value: 'suspended',
+              child: Text('Suspended'),
             ),
-            SizedBox(width: 16.w),
-            // Role filter
-            SizedBox(
-              width: 140.w,
-              child: DropdownButtonFormField<String>(
-                initialValue: state.filters?['role'] as String?,
-                decoration: InputDecoration(
-                  labelText: 'Role',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 12.h,
-                  ),
-                ),
-                items: const [
-                  DropdownMenuItem(child: Text('All Roles')),
-                  DropdownMenuItem(value: 'user', child: Text('User')),
-                  DropdownMenuItem(value: 'premium', child: Text('Premium')),
-                  DropdownMenuItem(value: 'vip', child: Text('VIP')),
-                ],
-                onChanged: (value) {
-                  final filters = Map<String, dynamic>.from(
-                    state.filters ?? {},
-                  );
-                  if (value == null) {
-                    filters.remove('role');
-                  } else {
-                    filters['role'] = value;
-                  }
-                  viewModel.applyFilters(filters.isEmpty ? null : filters);
-                },
-              ),
-            ),
-            SizedBox(width: 16.w),
-            // Advanced Filters Toggle
-            AdminButton(
-              label: showAdvancedFilters ? 'Hide Filters' : 'More Filters',
-              variant: AdminButtonVariant.outlined,
-              icon: showAdvancedFilters ? Iconsax.arrow_up_2 : Iconsax.filter,
-              onPressed: onAdvancedFiltersToggle,
-            ),
+            DropdownMenuItem<String?>(value: 'blocked', child: Text('Blocked')),
           ],
+          onChanged: (value) {
+            final filters = Map<String, dynamic>.from(state.filters ?? {});
+            if (value == null) {
+              filters.remove('status');
+            } else {
+              filters['status'] = value;
+            }
+            viewModel.applyFilters(filters.isEmpty ? null : filters);
+          },
+        ),
+        AdminFilterItem<String?>(
+          id: 'role',
+          label: 'Role',
+          value: state.filters?['role'] as String?,
+          width: 140.w,
+          items: const [
+            DropdownMenuItem<String?>(child: Text('All Roles')),
+            DropdownMenuItem<String?>(value: 'user', child: Text('User')),
+            DropdownMenuItem<String?>(value: 'premium', child: Text('Premium')),
+            DropdownMenuItem<String?>(value: 'vip', child: Text('VIP')),
+          ],
+          onChanged: (value) {
+            final filters = Map<String, dynamic>.from(state.filters ?? {});
+            if (value == null) {
+              filters.remove('role');
+            } else {
+              filters['role'] = value;
+            }
+            viewModel.applyFilters(filters.isEmpty ? null : filters);
+          },
+        ),
+      ],
+      actions: [
+        AdminButton(
+          label: showAdvancedFilters ? 'Hide Filters' : 'More Filters',
+          variant: AdminButtonVariant.outlined,
+          icon: showAdvancedFilters ? Iconsax.arrow_up_2 : Iconsax.filter,
+          onPressed: onAdvancedFiltersToggle,
         ),
       ],
     );
@@ -773,39 +738,43 @@ class _UsersTable extends StatelessWidget {
       AdminDataColumn(
         id: 'actions',
         label: '',
-        width: isMobile ? 100.w : 120.w,
+        width: 90.w,
         alignment: Alignment.centerRight,
-        cellBuilder: (user) => Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            AdminIconButton(
-              icon: Iconsax.eye,
-              size: 32,
-              tooltip: 'View',
-              onPressed: () => context.showAdminModal<void>(
-                title: AdminStrings.usersDetailTitle,
-                maxWidth: 1200,
-                child: UserDetailView(user: user, viewModel: viewModel),
-              ),
-            ),
-            SizedBox(width: 4.w),
-            AdminIconButton(
-              icon: Iconsax.edit_2,
-              size: 32,
-              tooltip: 'Edit',
-              onPressed: () => context.showAdminModal<void>(
-                title: AdminStrings.usersEditTitle,
-                child: UserEditView(
-                  user: user,
-                  onSaved: (updated) {
-                    viewModel.update(updated);
-                    Navigator.of(context).pop();
-                  },
+        cellBuilder: (user) => FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerRight,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              AdminIconButton(
+                icon: Iconsax.eye,
+                size: 32,
+                tooltip: 'View',
+                onPressed: () => context.showAdminModal<void>(
+                  title: AdminStrings.usersDetailTitle,
+                  maxWidth: 1200,
+                  child: UserDetailView(user: user, viewModel: viewModel),
                 ),
               ),
-            ),
-          ],
+              SizedBox(width: 4.w),
+              AdminIconButton(
+                icon: Iconsax.edit_2,
+                size: 32,
+                tooltip: 'Edit',
+                onPressed: () => context.showAdminModal<void>(
+                  title: AdminStrings.usersEditTitle,
+                  child: UserEditView(
+                    user: user,
+                    onSaved: (updated) {
+                      viewModel.update(updated);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ];

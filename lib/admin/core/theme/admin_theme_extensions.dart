@@ -174,6 +174,8 @@ class AdminAppColors extends ThemeExtension<AdminAppColors> {
     tableBorder: AdminColors.tableBorderDark,
   );
 
+  get dropdownButtonTheme => null;
+
   @override
   AdminAppColors copyWith({
     Color? background,

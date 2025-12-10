@@ -39,10 +39,9 @@ class SessionsListBloc extends Bloc<SessionsListEvent, SessionsListState> {
     SessionsLoadRequested event,
     Emitter<SessionsListState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
     try {
       final result = await getSessions(
-        cursor: null,
         limit: state.pageSize,
         filters: state.filters,
       );

@@ -4,6 +4,10 @@
 library;
 
 export 'dashboard/dashboard.dart';
+export 'offers/offers.dart';
+export 'partners/partners.dart';
+export 'payments/payments.dart';
+export 'sessions/sessions.dart';
 export 'stations/stations.dart';
 export 'users/users.dart';
-export 'sessions/sessions.dart';
+export 'wallets/wallets.dart';

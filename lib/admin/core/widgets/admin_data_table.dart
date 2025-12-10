@@ -148,8 +148,14 @@ class AdminDataTable<T> extends StatelessWidget {
                       ),
                     ),
 
-                  // Column headers
-                  ...columns.map((column) => _buildHeaderCell(context, column)),
+                  // Column headers - wrap in Expanded to prevent overflow
+                  Expanded(
+                    child: Row(
+                      children: columns
+                          .map((column) => _buildHeaderCell(context, column))
+                          .toList(),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -311,8 +317,12 @@ class _DataRowState<T> extends State<_DataRow<T>> {
                   ),
                 ),
 
-              // Data cells
-              ...widget.columns.map(_buildDataCell),
+              // Data cells - wrap in Expanded to prevent overflow
+              Expanded(
+                child: Row(
+                  children: widget.columns.map(_buildDataCell).toList(),
+                ),
+              ),
             ],
           ),
         ),

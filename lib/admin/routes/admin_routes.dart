@@ -11,6 +11,8 @@ import 'package:go_router/go_router.dart';
 
 import '../core/widgets/no_transition_page.dart';
 import '../features/admin_main/view/admin_main_page.dart';
+import '../features/payments/payments_bindings.dart';
+import '../features/payments/payments_router.dart';
 import '../features/stations/view/station_detail_page.dart';
 import '../features/stations/view/station_edit_page.dart';
 
@@ -390,6 +392,7 @@ class AdminRouter {
           child: AdminMainPage(initialRoute: AdminRoutes.settings),
         ),
       ),
+      ...PaymentsRouter.routes(PaymentsBindings.instance),
       // Redirect root /admin to dashboard
       GoRoute(
         path: '/admin',

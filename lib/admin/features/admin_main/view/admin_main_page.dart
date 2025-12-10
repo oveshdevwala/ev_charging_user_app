@@ -14,17 +14,19 @@ import '../../../core/core.dart';
 import '../../../routes/admin_routes.dart';
 import '../../dashboard/view/dashboard_page.dart';
 import '../../managers/managers.dart';
+import '../../offers/views/offers_list_page.dart';
+import '../../partners/views/partners_list_page.dart';
+import '../../payments/views/payments_list_view.dart';
 import '../../sessions/presentation/screens/sessions_list_screen.dart';
 import '../../stations/view/stations_list_page.dart';
 import '../../users/users.dart';
+import '../../wallets/views/wallets_list_page.dart';
 
 /// Main admin page that manages tab switching within AdminShell.
 /// Uses IndexedStack for instant tab switching while maintaining URL sync for browser navigation.
 /// Widget instance persists across tab changes - only IndexedStack index updates.
 class AdminMainPage extends StatefulWidget {
-  const AdminMainPage({
-    required this.initialRoute, super.key,
-  });
+  const AdminMainPage({required this.initialRoute, super.key});
 
   final AdminRoutes initialRoute;
 
@@ -64,10 +66,10 @@ class _AdminMainPageState extends State<AdminMainPage> {
     const ManagersView(),
     const UsersView(),
     const SessionsListScreen(),
-    const _PlaceholderView(title: AdminStrings.navPayments),
-    const _PlaceholderView(title: AdminStrings.navWallets),
-    const _PlaceholderView(title: AdminStrings.navOffers),
-    const _PlaceholderView(title: AdminStrings.navPartners),
+    PaymentsListView(),
+    WalletsListPage(),
+    OffersListPage(),
+     PartnersListPage(),
     const _PlaceholderView(title: AdminStrings.navReviews),
     const _PlaceholderView(title: AdminStrings.navReports),
     const _PlaceholderView(title: AdminStrings.navContent),
@@ -121,10 +123,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
       title: _getTitleForRoute(currentRoute),
       onViewChanged: _onViewChanged,
       currentViewIndex: _currentIndex,
-      child: IndexedStack(
-        index: _currentIndex,
-        children: _views,
-      ),
+      child: IndexedStack(index: _currentIndex, children: _views),
     );
   }
 
@@ -181,11 +180,7 @@ class _PlaceholderView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.construction,
-              size: 64.r,
-              color: colors.textTertiary,
-            ),
+            Icon(Icons.construction, size: 64.r, color: colors.textTertiary),
             SizedBox(height: 16.h),
             Text(
               title,
@@ -198,10 +193,7 @@ class _PlaceholderView extends StatelessWidget {
             SizedBox(height: 8.h),
             Text(
               'This feature will be implemented in the next phase',
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: colors.textSecondary,
-              ),
+              style: TextStyle(fontSize: 14.sp, color: colors.textSecondary),
             ),
           ],
         ),
@@ -209,4 +201,3 @@ class _PlaceholderView extends StatelessWidget {
     );
   }
 }
-

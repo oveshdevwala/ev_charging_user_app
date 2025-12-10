@@ -16,9 +16,10 @@ export 'admin_image_picker.dart';
 export 'admin_loading.dart';
 export 'admin_metric_card.dart';
 export 'admin_modal_sheet.dart';
+export 'admin_responsive_filter_bar.dart';
+export 'admin_scrollable_table.dart';
 export 'admin_search_bar.dart';
 export 'admin_shell.dart';
 export 'admin_sidebar.dart';
 export 'admin_status_badge.dart';
 export 'admin_topbar.dart';
-

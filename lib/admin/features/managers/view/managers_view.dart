@@ -133,42 +133,32 @@ class _ManagersFilters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        // Search
-        Expanded(
-          flex: 2,
-          child: AdminSearchBar(
-            hint: 'Search managers...',
-            onChanged: viewModel.search,
-            showFilterButton: true,
-            filterCount: state.filters != null ? 1 : 0,
-          ),
-        ),
-        SizedBox(width: 16.w),
-        // Status filter
-        SizedBox(
-          width: 160.w,
-          child: DropdownButtonFormField<String?>(
-            initialValue: state.filters?['status'] as String?,
-            decoration: InputDecoration(
-              labelText: AdminStrings.labelStatus,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 12.w,
-                vertical: 8.h,
-              ),
+    return AdminResponsiveFilterBar(
+      searchHint: 'Search managers...',
+      onSearchChanged: viewModel.search,
+      filterCount: state.filters != null ? 1 : 0,
+      filterItems: [
+        AdminFilterItem<String?>(
+          id: 'status',
+          label: AdminStrings.labelStatus,
+          value: state.filters?['status'] as String?,
+          width: 150.w,
+          items: const [
+            DropdownMenuItem<String?>(child: Text('All')),
+            DropdownMenuItem<String?>(value: 'active', child: Text('Active')),
+            DropdownMenuItem<String?>(
+              value: 'inactive',
+              child: Text('Inactive'),
             ),
-            items: const [
-              DropdownMenuItem(child: Text('All')),
-              DropdownMenuItem(value: 'active', child: Text('Active')),
-              DropdownMenuItem(value: 'inactive', child: Text('Inactive')),
-            ],
-            onChanged: (status) {
-              viewModel.filter(status != null ? {'status': status} : null);
-            },
-          ),
+          ],
+          onChanged: (status) {
+            viewModel.filter(status != null ? {'status': status} : null);
+          },
         ),
       ],
+      onReset: () {
+        viewModel.filter(null);
+      },
     );
   }
 }
@@ -314,89 +304,95 @@ class _ManagersTable extends StatelessWidget {
         AdminDataColumn(
           id: 'actions',
           label: '',
-          width: 220.w,
+          width: 180.w,
           alignment: Alignment.centerRight,
-          cellBuilder: (manager) => Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              AdminIconButton(
-                icon: Iconsax.eye,
-                size: 32,
-                tooltip: 'View',
-                onPressed: () => context.showAdminModal(
-                  title: AdminStrings.managersDetailTitle,
-                  maxWidth: 1200,
-                  child: ManagerDetailView(
-                    manager: manager,
-                    viewModel: viewModel,
+          cellBuilder: (manager) => FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerRight,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                AdminIconButton(
+                  icon: Iconsax.eye,
+                  size: 28,
+                  tooltip: 'View',
+                  onPressed: () => context.showAdminModal(
+                    title: AdminStrings.managersDetailTitle,
+                    maxWidth: 1200,
+                    child: ManagerDetailView(
+                      manager: manager,
+                      viewModel: viewModel,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(width: 4.w),
-              AdminIconButton(
-                icon: Iconsax.edit_2,
-                size: 32,
-                tooltip: 'Edit',
-                onPressed: () => context.showAdminModal(
-                  title: AdminStrings.managersEditTitle,
-                  maxWidth: 600,
-                  child: ManagerFormView(
-                    manager: manager,
-                    onSaved: (updated) {
-                      viewModel.update(updated);
-                      Navigator.of(context).pop();
-                    },
+                SizedBox(width: 2.w),
+                AdminIconButton(
+                  icon: Iconsax.edit_2,
+                  size: 28,
+                  tooltip: 'Edit',
+                  onPressed: () => context.showAdminModal(
+                    title: AdminStrings.managersEditTitle,
+                    maxWidth: 600,
+                    child: ManagerFormView(
+                      manager: manager,
+                      onSaved: (updated) {
+                        viewModel.update(updated);
+                        Navigator.of(context).pop();
+                      },
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(width: 4.w),
-              AdminIconButton(
-                icon: Iconsax.location,
-                size: 32,
-                tooltip: 'Assign Stations',
-                onPressed: () => context.showAdminModal(
-                  title: 'Assign Stations',
-                  maxWidth: 600,
-                  child: ManagerAssignModal(
-                    managerId: manager.id,
-                    currentStationIds: manager.assignedStationIds,
-                    viewModel: viewModel,
+                SizedBox(width: 2.w),
+                AdminIconButton(
+                  icon: Iconsax.location,
+                  size: 28,
+                  tooltip: 'Assign Stations',
+                  onPressed: () => context.showAdminModal(
+                    title: 'Assign Stations',
+                    maxWidth: 600,
+                    child: ManagerAssignModal(
+                      managerId: manager.id,
+                      currentStationIds: manager.assignedStationIds,
+                      viewModel: viewModel,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(width: 4.w),
-              AdminIconButton(
-                icon: manager.status == 'active'
-                    ? Iconsax.close_circle
-                    : Iconsax.tick_circle,
-                size: 32,
-                tooltip: manager.status == 'active' ? 'Deactivate' : 'Activate',
-                onPressed: () {
-                  final newStatus = manager.status == 'active'
-                      ? 'inactive'
-                      : 'active';
-                  viewModel.toggleStatus(manager.id, newStatus);
-                },
-              ),
-              SizedBox(width: 4.w),
-              AdminIconButton(
-                icon: Iconsax.trash,
-                size: 32,
-                tooltip: 'Delete',
-                onPressed: () async {
-                  final confirmed = await showAdminConfirmDialog(
-                    context,
-                    title: AdminStrings.actionDelete,
-                    message: AdminStrings.msgConfirmDelete,
-                    isDanger: true,
-                  );
-                  if (confirmed ?? false) {
-                    viewModel.delete(manager.id);
-                  }
-                },
-              ),
-            ],
+                SizedBox(width: 2.w),
+                AdminIconButton(
+                  icon: manager.status == 'active'
+                      ? Iconsax.close_circle
+                      : Iconsax.tick_circle,
+                  size: 28,
+                  tooltip: manager.status == 'active'
+                      ? 'Deactivate'
+                      : 'Activate',
+                  onPressed: () {
+                    final newStatus = manager.status == 'active'
+                        ? 'inactive'
+                        : 'active';
+                    viewModel.toggleStatus(manager.id, newStatus);
+                  },
+                ),
+                SizedBox(width: 2.w),
+                AdminIconButton(
+                  icon: Iconsax.trash,
+                  size: 28,
+                  tooltip: 'Delete',
+                  onPressed: () async {
+                    final confirmed = await showAdminConfirmDialog(
+                      context,
+                      title: AdminStrings.actionDelete,
+                      message: AdminStrings.msgConfirmDelete,
+                      isDanger: true,
+                    );
+                    if (confirmed ?? false) {
+                      viewModel.delete(manager.id);
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],

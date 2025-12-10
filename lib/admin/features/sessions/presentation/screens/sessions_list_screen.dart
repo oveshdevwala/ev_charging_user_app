@@ -13,7 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../admin.dart';
-import '../../data/session_models.dart';
+import '../../sessions.dart';
 
 /// Sessions list screen that bundles dashboard KPIs, table, and live feed.
 class SessionsListScreen extends StatelessWidget {
@@ -118,68 +118,51 @@ class _SessionsListView extends StatelessWidget {
                     .length,
               ),
               SizedBox(height: 16.h),
-              // Search and filters row - same structure as users tab
-              Row(
-                children: [
-                  // Search bar
-                  Expanded(
-                    flex: 2,
-                    child: AdminSearchBar(
-                      hint: AdminStrings.sessionsSearchHint,
-                      onChanged: (query) => context
-                          .read<SessionsListBloc>()
-                          .add(SessionsSearchChanged(query)),
-                    ),
-                  ),
-                  SizedBox(width: 16.w),
-                  // Status filter dropdown
-                  SizedBox(
+              // Search and filters row - responsive layout
+              AdminResponsiveFilterBar(
+                searchHint: AdminStrings.sessionsSearchHint,
+                onSearchChanged: (query) => context
+                    .read<SessionsListBloc>()
+                    .add(SessionsSearchChanged(query)),
+                filterCount: state.filters.isNotEmpty
+                    ? state.filters.length
+                    : 0,
+                filterItems: [
+                  AdminFilterItem<AdminSessionStatusDto?>(
+                    id: 'status',
+                    label: AdminStrings.filterStatus,
+                    value: state.filters['status'] != null
+                        ? AdminSessionStatusDto.values.firstWhere(
+                            (s) => s.name == state.filters['status'],
+                            orElse: () => AdminSessionStatusDto.active,
+                          )
+                        : null,
                     width: 160.w,
-                    child: DropdownButtonFormField<AdminSessionStatusDto?>(
-                      initialValue: state.filters['status'] != null
-                          ? AdminSessionStatusDto.values.firstWhere(
-                              (s) => s.name == state.filters['status'],
-                              orElse: () => AdminSessionStatusDto.active,
-                            )
-                          : null,
-                      decoration: InputDecoration(
-                        labelText: AdminStrings.filterStatus,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16.w,
-                          vertical: 12.h,
+                    items: [
+                      const DropdownMenuItem<AdminSessionStatusDto?>(
+                        child: Text('All Status'),
+                      ),
+                      ...AdminSessionStatusDto.values.map(
+                        (status) => DropdownMenuItem<AdminSessionStatusDto?>(
+                          value: status,
+                          child: Text(status.name.toUpperCase()),
                         ),
                       ),
-                      items: [
-                        const DropdownMenuItem<AdminSessionStatusDto?>(
-                          child: Text('All Status'),
-                        ),
-                        ...AdminSessionStatusDto.values.map(
-                          (status) => DropdownMenuItem<AdminSessionStatusDto?>(
-                            value: status,
-                            child: Text(status.name.toUpperCase()),
-                          ),
-                        ),
-                      ],
-                      onChanged: (value) {
-                        final filters = Map<String, dynamic>.from(
-                          state.filters,
-                        );
-                        if (value == null) {
-                          filters.remove('status');
-                        } else {
-                          filters['status'] = value.name;
-                        }
-                        context.read<SessionsListBloc>().add(
-                          SessionsFiltersChanged(filters),
-                        );
-                      },
-                    ),
+                    ],
+                    onChanged: (value) {
+                      final filters = Map<String, dynamic>.from(state.filters);
+                      if (value == null) {
+                        filters.remove('status');
+                      } else {
+                        filters['status'] = value.name;
+                      }
+                      context.read<SessionsListBloc>().add(
+                        SessionsFiltersChanged(filters),
+                      );
+                    },
                   ),
-                  SizedBox(width: 16.w),
-                  // Refresh button
+                ],
+                actions: [
                   AdminButton(
                     label: AdminStrings.actionRefresh,
                     icon: Iconsax.refresh,
@@ -188,6 +171,11 @@ class _SessionsListView extends StatelessWidget {
                     ),
                   ),
                 ],
+                onReset: () {
+                  context.read<SessionsListBloc>().add(
+                    const SessionsFiltersChanged({}),
+                  );
+                },
               ),
               SizedBox(height: 16.h),
               // Sessions table - full width with fixed height
@@ -203,7 +191,7 @@ class _SessionsListView extends StatelessWidget {
                           onToggleSelect: (id) => context
                               .read<SessionsListBloc>()
                               .add(SessionsSelectionToggled(id)),
-                          onViewDetail: (session) =>
+                          onViewDetail: (AdminSessionSummaryDto session) =>
                               context.showAdminModal<void>(
                                 title: AdminStrings.sessionsDetailTitle,
                                 maxWidth: 1100,

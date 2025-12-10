@@ -4,6 +4,8 @@
 /// Customization Guide:
 ///    - Add actions via actions parameter
 ///    - Modify notification/profile dropdowns
+// ignore_for_file: unused_element_parameter
+
 library;
 
 import 'package:flutter/material.dart';
@@ -92,7 +94,7 @@ class _TopbarIconButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     this.tooltip,
-    this.badge = 0,
+    this.badge,
   });
 
   final IconData icon;
@@ -156,9 +158,7 @@ class _ThemeToggleButton extends StatelessWidget {
     return Tooltip(
       message: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
       child: IconButton(
-        onPressed: () {
-          themeService.toggleTheme();
-        },
+        onPressed: themeService.toggleTheme,
         icon: Icon(
           isDark ? Iconsax.sun_1 : Iconsax.moon,
           size: 20.r,

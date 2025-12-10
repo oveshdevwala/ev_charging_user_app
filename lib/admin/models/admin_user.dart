@@ -14,7 +14,7 @@ part 'admin_user.g.dart';
 /// Admin User model for admin panel.
 @JsonSerializable()
 class AdminUser extends Equatable {
-  AdminUser({
+  const AdminUser({
     required this.id,
     required this.name,
     required this.email,

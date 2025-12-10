@@ -37,15 +37,15 @@ class UserActivityLogsView extends StatelessWidget {
         type: ActivityLogType.chargingSession,
         description: 'Started charging session at Station ST_001',
         timestamp: DateTime.now().subtract(const Duration(days: 1)),
-        metadata: {'stationId': 'ST_001', 'duration': '45 minutes'},
+        metadata: const {'stationId': 'ST_001', 'duration': '45 minutes'},
       ),
       UserActivityLog(
         id: 'log_003',
         userId: userId,
         type: ActivityLogType.walletTopup,
-        description: 'Wallet topped up with \$50.00',
+        description: r'Wallet topped up with $50.00',
         timestamp: DateTime.now().subtract(const Duration(days: 2)),
-        metadata: {'amount': 50.00, 'method': 'Credit Card'},
+        metadata: const {'amount': 50.00, 'method': 'Credit Card'},
       ),
       UserActivityLog(
         id: 'log_004',
@@ -53,7 +53,7 @@ class UserActivityLogsView extends StatelessWidget {
         type: ActivityLogType.offerRedeemed,
         description: 'Redeemed offer: 20% off charging',
         timestamp: DateTime.now().subtract(const Duration(days: 3)),
-        metadata: {'offerId': 'OFF_001', 'discount': '20%'},
+        metadata: const {'offerId': 'OFF_001', 'discount': '20%'},
       ),
       UserActivityLog(
         id: 'log_005',
@@ -68,7 +68,7 @@ class UserActivityLogsView extends StatelessWidget {
         type: ActivityLogType.vehicleAdded,
         description: 'Added new vehicle: Tesla Model 3',
         timestamp: DateTime.now().subtract(const Duration(days: 7)),
-        metadata: {'vehicleId': 'VH_001', 'model': 'Tesla Model 3'},
+        metadata: const {'vehicleId': 'VH_001', 'model': 'Tesla Model 3'},
       ),
     ];
   }

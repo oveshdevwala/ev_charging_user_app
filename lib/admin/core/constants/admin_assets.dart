@@ -29,22 +29,32 @@ abstract final class AdminAssets {
   static const String jsonStations = '$_dummyDataPath/stations.json';
   static const String jsonUsers = '$_dummyDataPath/users.json';
   static const String jsonSessions = '$_dummyDataPath/sessions.json';
+  static const String jsonPayments = '$_dummyDataPath/payments.json';
   static const String jsonTransactions = '$_dummyDataPath/transactions.json';
   static const String jsonOffers = '$_dummyDataPath/offers.json';
   static const String jsonReviews = '$_dummyDataPath/reviews.json';
   static const String jsonLogs = '$_dummyDataPath/logs.json';
   static const String jsonManagers = '$_dummyDataPath/managers.json';
   static const String jsonPartners = '$_dummyDataPath/partners.json';
+  static const String jsonWallets = '$_dummyDataPath/wallets.json';
 
   // ============ Pexels Placeholder Images ============
-  static const String placeholderStation = 'https://images.pexels.com/photos/9799995/pexels-photo-9799995.jpeg?auto=compress&cs=tinysrgb&w=800';
-  static const String placeholderStation2 = 'https://images.pexels.com/photos/9800009/pexels-photo-9800009.jpeg?auto=compress&cs=tinysrgb&w=800';
-  static const String placeholderStation3 = 'https://images.pexels.com/photos/9799970/pexels-photo-9799970.jpeg?auto=compress&cs=tinysrgb&w=800';
-  static const String placeholderUser = 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=800';
-  static const String placeholderUser2 = 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=800';
-  static const String placeholderUser3 = 'https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=800';
-  static const String placeholderManager = 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=800';
-  static const String placeholderOffer = 'https://images.pexels.com/photos/1435752/pexels-photo-1435752.jpeg?auto=compress&cs=tinysrgb&w=800';
-  static const String placeholderPartner = 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800';
+  static const String placeholderStation =
+      'https://images.pexels.com/photos/9799995/pexels-photo-9799995.jpeg?auto=compress&cs=tinysrgb&w=800';
+  static const String placeholderStation2 =
+      'https://images.pexels.com/photos/9800009/pexels-photo-9800009.jpeg?auto=compress&cs=tinysrgb&w=800';
+  static const String placeholderStation3 =
+      'https://images.pexels.com/photos/9799970/pexels-photo-9799970.jpeg?auto=compress&cs=tinysrgb&w=800';
+  static const String placeholderUser =
+      'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=800';
+  static const String placeholderUser2 =
+      'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=800';
+  static const String placeholderUser3 =
+      'https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=800';
+  static const String placeholderManager =
+      'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=800';
+  static const String placeholderOffer =
+      'https://images.pexels.com/photos/1435752/pexels-photo-1435752.jpeg?auto=compress&cs=tinysrgb&w=800';
+  static const String placeholderPartner =
+      'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800';
 }
-

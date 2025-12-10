@@ -38,7 +38,7 @@ class SessionDetailBloc extends Bloc<SessionDetailEvent, SessionDetailState> {
     SessionDetailLoadRequested event,
     Emitter<SessionDetailState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
     try {
       final detail = await getDetail(event.sessionId);
       emit(state.copyWith(isLoading: false, detail: detail));
